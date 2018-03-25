@@ -1,5 +1,9 @@
 # envizon - the network visualization tool
 
+## Version 2.1
+
+Fancy shields: Coming Soon™
+
 <img src="https://evait-security.github.io/envizon/envizon-wide-export-blue.svg" width="400px" />
 
 This tool is designed, developed and supported by evait security. In order to give something back to the security community, we publish our internally used and developed, state of the art network visualization and organization tool, 'envizon'. We hope your feedback will help to improve and hone it even further.
