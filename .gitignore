@@ -22,7 +22,6 @@
 
 .byebug_history
 vendor/bundle
-*.svg
 tags
 .yardoc
 public/api
