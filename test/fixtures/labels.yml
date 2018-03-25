@@ -1,0 +1,18 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+    name: 'Null Session'
+    description: 'Null Sessions are fun'
+    priority: 'orange darken-1 white-text'
+two:
+    name: 'SMB Signing'
+    description: 'Message signing for SMB is disabled'
+    priority: 'red darken-1 white-text'
+three:
+    name: 'Anonymous FTP'
+    description: 'Anonymous FTP login allowed'
+    priority: 'orange darken-1 white-text'
+four:
+    name: 'MS17-010'
+    description: 'A critical remote code execution vulnerability exists in Microsoft SMBv1'
+    priority: 'red darken-1 white-text'

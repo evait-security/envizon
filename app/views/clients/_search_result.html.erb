@@ -1,0 +1,41 @@
+<% random_id = (0...15).map { ('a'..'z').to_a[rand(26)] }.join %>
+<div class="row group-box scale-transition" id="box_<%= random_id %>">
+   <div class="col s12" id="group_content_<%= random_id %>">
+     <div class="card material-table">
+       <div class="table-header">
+         <span class="table-title"><i class="fa fa-search" aria-hidden="true"></i><span style="margin-left: 14px;"><%= "#{@search_name}" %></span></span>
+         <div class="actions group-actions" id="<%= random_id %>">
+           <a href="#" data-position="bottom" data-delay="50" data-tooltip="Export selected clients" class="btn-flat nopadding tooltipped grp_export"><i class="material-icons">file_download</i></a>
+           <a href="#" data-position="bottom" data-delay="50" data-tooltip="Select all visible clients in group" class="btn-flat nopadding tooltipped grp_mark_all"><i class="material-icons">check_box</i></a>
+           <a href="#" data-position="bottom" data-delay="50" data-tooltip="Unselect all visible clients in group" class="btn-flat nopadding tooltipped grp_unmark_all"><i class="material-icons">check_box_outline_blank</i></a>
+           <a href="#" data-position="bottom" data-delay="50" data-tooltip="Delete selected clients" class="btn-flat nopadding tooltipped grp_delete_clients"><i class="material-icons red-text text-darken-4">delete</i></a>
+           <a href="#" data-position="bottom" data-delay="50" data-tooltip="Move selected clients to another group" class="btn-flat nopadding tooltipped grp_move"><i class="material-icons blue-text text-darken-2">forward</i></a>
+           <a href="#" data-position="bottom" data-delay="50" data-tooltip="Copy selected clients to another group" class="btn-flat nopadding tooltipped grp_copy"><i class="material-icons blue-text text-darken-2">content_copy</i></a>
+           <a href="#" data-position="bottom" data-delay="50" data-tooltip="Add new group with selected clients" class="btn-flat nopadding tooltipped grp_new"><i class="material-icons green-text text-darken-2">group_add</i></a>
+           <a href="#" data-position="bottom" data-delay="50" data-tooltip="Search in group" class="btn-flat nopadding tooltipped grp_search-toggle"><i class="material-icons yellow-text text-darken-4">search</i></a>
+           <a href="#" data-position="bottom" data-delay="50" data-tooltip="Close group" class="btn-flat nopadding tooltipped grp_close"><i class="material-icons">close</i></a>
+         </div>
+       </div>
+       <table id="datatable-<%= random_id %>" class="dt_init">
+         <thead>
+         <tr>
+           <th>IP</th>
+           <th>Hostname</th>
+           <th>Operating System</th>
+           <th>Ports</th>
+         </tr>
+         </thead>
+         <tbody>
+            <% @clients.order(:ip).to_a.each do |current_client| %>
+              <tr>
+                <td><%= link_to "#{current_client.ip}", client_path(current_client.id), :remote => true, :id => current_client.id %></td>
+                <td><%= "#{current_client.hostname}" %></td>
+                <td><%= "#{current_client.os}" %></td>
+                <td><%= "#{current_client.ports.count}" %></td>
+              </tr>
+            <%  end %>
+         </tbody>
+       </table>
+     </div>
+   </div>
+</div>

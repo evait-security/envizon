@@ -1,0 +1,28 @@
+// refresh sidebar
+$("#group_list").html("<%= escape_javascript(render partial: 'pages/group_list') %>");
+$("#group_tables").html("<%= escape_javascript(render partial: 'pages/group_tables') %>");
+
+
+// close modal if needed
+<% if defined?(close) %>
+$(".modal").modal("close");
+<% end %>
+
+// remove deleted groups from view
+<% if defined?(delete) %>
+$("#box_" + <%= delete %>).fadeOut(400);
+$("#box_" + <%= delete %>).addClass("hidden");
+$("#box_" + <%= delete %>).appendTo("#group_tables");
+$("#box_" + <%= delete %>).promise().done(function(){
+    // Show placeholder if all groups are hidden
+    if ($(".group-box").filter(".hidden").length == $(".group-box").length) {
+        $("#group-placeholder").removeClass("hidden");
+        $("#box_" + <%= delete %>).remove();
+    }
+});
+
+<% end %>
+
+<% if message != "empty" %>
+    <%= render(:template => 'pages/notify', :handlers => [:erb], :formats => [:js], locals:{message: message, type: type}) %>
+<% end %>

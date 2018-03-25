@@ -1,0 +1,113 @@
+<style>
+  .chip-icon {
+    cursor: pointer;
+    float: right;
+    font-size: 16px;
+    line-height: 32px;
+    padding-left: 8px;
+  }
+  .hostview_copy_ip {
+    font-size: 18px;
+    margin-left: 10px;
+  }
+  .hostview_link {
+    font-size: 22px;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+</style>
+<span class="card-title"><span id="hostview_ip"><%= "#{client.ip}" %></span><a href="#" id="hostview_copy_ip" onclick=""><i class="material-icons hostview_copy_ip">content_copy</i></a></span>
+<table class="responsive-table">
+  <thead>
+    <tr>
+      <th>Hostname</th>
+      <th>MAC</th>
+      <th>Labels</th>
+      <th>Groups</th>
+    </tr>
+  <thead>
+  <tbody>
+    <tr>
+      <td><%= "#{client.hostname}" %></td>
+      <td><%= "#{client.mac}" %>
+        <% if client.vendor.to_s.length > 0 %>
+            <br />(<%= "#{client.vendor}" %>)
+        <% end %>
+      </td>
+      <td>
+        <% client.labels.to_a.each do |label|%>
+            <div class="chip <%= label.priority%>"><%= label.name%></div>
+        <% end %>
+      </td>
+      <td>
+        <% client.groups.to_a.each do |group|%>
+            <div class="chip"><%= group.name%></div>
+        <% end %>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div class="valign-wrapper" style="padding-bottom: 10px; padding-top: 20px">
+  <i class="material-icons grey-text text-darken-2" style="margin-right: 5px;">settings</i><b>Operating System</b>
+</div>
+<p style="padding-bottom: 20px;"><%= "#{client.os}" %></p>
+<table class="responsive-table">
+  <thead>
+    <tr>
+      <th>Port</th>
+      <th>Desc</th>
+      <th>Content</th>
+    </tr>
+  <thead>
+  <tbody>
+    <% client.ports.all.order(:number).to_a.each do |port| %>
+        <tr>
+          <td>
+            <span><%= "#{port.number}" %></span>
+            <% if port.service.include? "http" %>
+                  <a href="<% if port.service.include? "https" or port.number.to_s.include? "443" %>https<% else %>http<% end %>://<%= "#{port.client.ip}" %>:<%= "#{port.number}" %>" target="_blank"><i class="material-icons hostview_link ">link</i></a>
+            <% end %>
+          </td>
+          <td><%= "#{port.service}" %></td>
+          <td><%= "#{port.description}" %></td>
+        </tr>
+        <% if port.outputs.count > 0 %>
+            <tr>
+              <td colspan="3">
+                <ul class="collapsible" data-collapsible="expandable">
+                  <% port.outputs.to_a.each do |output| %>
+                    <li>
+                      <div class="collapsible-header"><i class="material-icons">short_text</i><%= "#{output.name}" %></div>
+                      <div class="collapsible-body">
+                        <% output.value.split(/\n/).each do |line| %>
+                            <span><%= "#{line}"%></span>
+                        <% end%>
+                      </div>
+                    </li>
+                  <% end%>
+                </ul>
+              </td>
+            </tr>
+        <% end %>
+    <% end %>
+  </tbody>
+</table>
+<% if client.outputs.count > 0 %>
+  <div class="valign-wrapper" style="padding-bottom: 20px; padding-top: 20px">
+    <i class="material-icons grey-text text-darken-2" style="margin-right: 5px;">extension</i><b>Hostscripts</b>
+    <span class="badge"><%= "#{client.outputs.count}"%></span>
+  </div>
+  <ul class="collapsible" data-collapsible="expandable">
+    <% client.outputs.to_a.each do |output| %>
+      <li>
+        <div class="collapsible-header"><i class="material-icons">short_text</i><%= "#{output.name}" %></div>
+        <div class="collapsible-body">
+          <% output.value.split(/\n/).to_a.each do |cur_line| %>
+              <span><%= "#{cur_line}"%></span>
+          <% end%>
+        </div>
+      </li>
+    <% end%>
+  </ul>
+  </div>
+<% end %>

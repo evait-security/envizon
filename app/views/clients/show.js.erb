@@ -1,0 +1,18 @@
+$("#hostview").html("<%= j(render('show', :client=> client)) %>");
+$("#hostview_copy_ip").click(function () {
+    copyToClipboard('#hostview_ip');
+    Materialize.toast('IP address copied to clipboard!', 2000, 'green');
+});
+
+function copyToClipboard(element) {
+    var $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val($(element).text()).select();
+    document.execCommand("copy");
+    $temp.remove();
+}
+
+$(document).ready(function(){
+    $('.collapsible').collapsible();
+});
+

@@ -1,0 +1,100 @@
+one:
+  ip: 12.168.1.1
+  mac: 123
+  hostname: somehost
+  os: win
+  cpe: cpe:/o:linux:linux_kernel:3
+  icon: MyString
+  vendor: MyString
+  ostype: MyString
+
+two:
+  ip: MyString
+  mac: MyString
+  hostname: MyString
+  os: MyString
+  cpe: cpe:/o:linux:linux_kernel:3
+  icon: MyString
+  vendor: MyString
+  ostype: MyString
+
+partofone:
+  ip: 12.168.1.1
+  mac: 123
+  hostname: somehost
+  os: win
+  cpe: cpe:/o:openbsd:openbsd:4.0
+  icon: MyString
+  vendor: MyString
+  ostype: MyString
+  icon: MyString2
+
+msw10:
+  ip: 12.168.1.1
+  mac: 123
+  hostname: somehost
+  os: win
+  cpe: cpe:/o:microsoft:windows_10
+  icon: MyString
+  vendor: MyString
+  ostype: MyString
+
+msw:
+  ip: 12.168.1.1
+  mac: 123
+  hostname: somehost
+  os: win
+  cpe: cpe:/o:microsoft:windows
+  icon: MyString
+  vendor: MyString
+  ostype: MyString
+
+msexchange:
+  ip: 12.168.1.1
+  mac: 123
+  hostname: somehost
+  os: win
+  cpe: cpe:/a:microsoft:exchange_server:2010
+  icon: MyString
+  vendor: MyString
+  ostype: MyString
+
+iphone:
+  ip: 12.168.1.1
+  mac: 123
+  hostname: somehost
+  os: win
+  cpe: cpe:/o:apple:iphone_os:8
+  icon: MyString
+  vendor: MyString
+  ostype: MyString
+
+osx:
+  ip: 12.168.1.1
+  mac: 123
+  hostname: somehost
+  os: win
+  cpe: cpe:/o:apple:mac_os_x:10.8
+  icon: MyString
+  vendor: MyString
+  ostype: MyString
+
+bsd:
+  ip: 12.168.1.1
+  mac: 123
+  hostname: somehost
+  os: win
+  cpe: cpe:/o:openbsd:openbsd:4.0
+  icon: MyString
+  vendor: MyString
+  ostype: MyString
+
+linux:
+  ip: 12.168.1.1
+  mac: 123
+  hostname: somehost
+  os: win
+  cpe: cpe:/o:linux:linux_kernel:3
+  icon: MyString
+  vendor: MyString
+  ostype: MyString

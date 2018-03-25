@@ -1,0 +1,424 @@
+<style>
+  .collection {
+    border: none !important;
+  }
+  .collection.with-header .collection-header {
+    background-color: transparent !important;
+  }
+  .collection .collection-item {
+    background-color: transparent !important;
+  }
+  #group_list {
+    padding-top: 10px;
+    position: fixed;
+    overflow-y: auto;
+    max-height: calc(100vh - 140px);
+    min-height: calc(100vh - 64px);
+  }
+  #single_group_view {
+    padding-top: 10px;
+    position: fixed;
+    overflow-y: auto;
+    max-height: calc(100vh - 140px);
+    min-height: calc(100vh - 64px);
+  }
+  #single_host_view {
+    padding-top: 10px;
+    position: fixed;
+    overflow-y: auto;
+    max-height: calc(100vh - 140px);
+    min-height: calc(100vh - 64px);
+  }
+  .collection .collection-item {
+    border-bottom: none !important;
+  }
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  .collection a.collection-item:not(.active):hover {
+    background-color: rgba(0,0,0,.05) !important;
+  }
+  .collection a.collection-item {
+    color: #2E2F30 !important;
+    font-weight: 500;
+  }
+  .secondary-content {
+    color: #616161 !important;
+  }
+  .fa {
+    font-size: 24px;
+    color: #878284;
+  }
+  .group-icon-collection {
+    float: left;
+  }
+  .hidden {
+    display: none;
+  }
+  #single_host_view_card {
+    min-height: calc(100vh - 8em);
+  }
+  .fixed-action-btn {
+    right: 35px !important;
+    bottom: 15px !important;
+  }
+  .btn-small {
+    height: 28px;
+    line-height: 28px;
+    padding: 0 1.2rem;
+  }
+  .btn-small i {
+    font-size: 1rem;
+  }
+  #wide-modal {
+    width: 90% !important;
+  }
+  #medium-modal {
+    width: 50% !important;
+    z-index: 10000000 !important;
+  }
+  #generic-modal {
+    z-index: 10000000 !important;  
+  }
+  .ui-selected{
+    background: #edf4fd;
+  }
+  .ui-selecting{
+    background: #edf4fd;
+  }
+  .table-header-groups {
+    height: unset !important;
+    display: grid !important;
+  }
+  .collapsible {
+      box-shadow: none !important;
+      border-right: none !important;
+      border-left: none !important;
+  }
+
+</style>
+<div class="row">
+    <div class="col s2" id="group_list">
+      <%= render partial: "group_list" %>
+    </div>
+    <div class="col s5 offset-s2" id="single_group_view">
+      <div class="row" id="group-placeholder">
+        <div class="col s12 m12">
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title">No group selected</span>
+              <a class="btn-floating btn-large halfway-fab red group_add_float"><i class="material-icons">group_add</i></a>
+              <p>Please select a group or create a new one.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="group_tables">
+        <%= render partial: "group_tables" %>
+      </div>
+    </div>
+    <div class="col s5 offset-s7" id="single_host_view">
+      <div class="row" id="group-placeholder">
+        <div class="col s12 m12">
+          <div class="card">
+            <div class="card-content" id="single_host_view_card">
+              <div id="hostview">
+                <span class="card-title">Single Host View</span>
+                <p>Please select a client to view the details.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!-- Modal (generic) -->
+<div id="generic-modal" class="modal modal-fixed-footer">
+  <div id="modal-content">
+  </div>
+</div>
+
+<!-- Modal (medium) -->
+<div id="medium-modal" class="modal modal-fixed-footer">
+  <div id="medium-modal-content">
+  </div>
+</div>
+
+<!-- Modal (wide) -->
+<div id="wide-modal" class="modal modal-fixed-footer">
+  <div id="wide-modal-content">
+  </div>
+</div>
+
+<div class="fixed-action-btn vertical">
+  <a class="btn-floating btn-large blue darken-3">
+    <i class="material-icons">menu</i>
+  </a>
+  <ul>
+    <li><a class="btn-floating blue tooltipped group_refresh_float" data-position="left" data-delay="50" data-tooltip="Refresh group content"><i class="material-icons">refresh</i></a></li>
+    <li><a class="btn-floating red tooltipped group_add_float" data-position="left" data-delay="50" data-tooltip="Add a group"><i class="material-icons">group_add</i></a></li>
+    <li><a class="btn-floating green darken-2 tooltipped search_float" data-position="left" data-delay="50" data-tooltip="Global search"><i class="material-icons">search</i></a></li>
+  </ul>
+</div>
+
+<script>
+  // Display group on click (sidebar)
+  $(document).on("click", '.group-collection-item', function() {
+      $("#group-placeholder").addClass("hidden");
+      var id = this.id.split("_")[1];
+      $("#box_" + id).prependTo("#single_group_view");
+      $("#box_" + id).fadeIn(400);
+      $("#box_" + id).removeClass("hidden");
+      $(this).blur();
+  });
+
+  // Datatable Search toogle with more than one datatables
+  $(document).on("click", '.grp_search-toggle', function() {
+      if ($(this).parents(".table-header").siblings(".dataTables_wrapper").find(".hiddensearch").css('display') == 'none')
+          $(this).parents(".table-header").siblings(".dataTables_wrapper").find(".hiddensearch").slideDown();
+      else
+          $(this).parents(".table-header").siblings(".dataTables_wrapper").find(".hiddensearch").slideUp();
+
+      $(this).blur();
+  });
+
+  // Close Group Box
+  $(document).on("click", '.grp_close', function() {
+      var id = $(this).parents(".group-actions").attr('id');
+      $(this).blur();
+      $("#box_" + id).fadeOut(400, function() {
+          $("#box_" + id).addClass("hidden");
+          $("#box_" + id).appendTo("#group_tables");
+          $("#box_" + id).promise().done(function(){
+              // Show placeholder if all groups are hidden
+              if ($(".group-box").filter(".hidden").length == $(".group-box").length)
+                  $("#group-placeholder").removeClass("hidden");
+          });
+      });
+  });
+
+  // new group add - group header
+  $(document).on("click", '.grp_new', function() {
+      var search = false;
+      var clients = new Array();
+      var id = $(this).parent().attr("id");
+      $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
+          if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
+              clients.push($(this).attr("id"));
+          }
+      });
+
+      // check if source group is search result
+      if (id.length == 15) { search = true; }
+
+      if(clients.length == 0){
+          $.ajax({
+            url: "<%= new_group_path %>",
+              dataType : "script",
+              cache: true
+          });
+      } else {
+          $("#medium-modal").modal('open');
+          $.ajax({
+              url: "<%= groups_create_form_path %>",
+              dataType : "script",
+              cache: true,
+              method: "post",
+              data: {
+                  clients: clients,
+                  source_group: id,
+                  search: search
+              }
+          });
+      }
+      $(this).blur();
+  });
+
+  // copy selected clients - group header
+  $(document).on("click", '.grp_copy', function() {
+      var search = false;
+      var clients = new Array();
+      var id = $(this).parent().attr("id");
+      $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
+          if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
+              clients.push($(this).attr("id"));
+          }
+      });
+
+      // check if source group is search result
+      if (id.length == 15) { search = true; }
+
+      $.ajax({
+          url: "<%= groups_copy_form_path %>",
+          dataType : "script",
+          cache: true,
+          method: "post",
+          data: {
+              clients: clients,
+              source_group: id,
+              search: search
+          }
+      });
+
+      $(this).blur();
+  });
+
+  // move selected clients - group header
+  $(document).on("click", '.grp_move', function() {
+      var search = false;
+      var clients = new Array();
+      var id = $(this).parent().attr("id");
+      $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
+          if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
+              clients.push($(this).attr("id"));
+          }
+      });
+
+      // check if source group is search result
+      if (id.length == 15) { search = true; }
+
+      $.ajax({
+          url: "<%= groups_move_form_path %>",
+          dataType : "script",
+          cache: true,
+          method: "post",
+          data: {
+              clients: clients,
+              source_group: id,
+              search: search
+          }
+      });
+
+      $(this).blur();
+  });
+
+  // delete selected clients - group header
+  $(document).on("click", '.grp_delete_clients', function() {
+      var search = false;
+      var clients = new Array();
+      var id = $(this).parent().attr("id");
+      $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
+          if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
+              clients.push($(this).attr("id"));
+          }
+      });
+
+      // check if source group is search result
+      if (id.length == 15) { search = true; }
+
+      $.ajax({
+          url: "<%= groups_delete_clients_form_path %>",
+          dataType : "script",
+          cache: true,
+          method: "post",
+          data: {
+              clients: clients,
+              source_group: id,
+              search: search
+          }
+      });
+
+      $(this).blur();
+  });
+
+  // delete group with all clients containing - group header
+  $(document).on("click", '.grp_delete', function() {
+      var clients = new Array();
+      var id = $(this).parent().attr("id");
+      $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
+          if($(this).parents(".ui-selectee")) {
+              clients.push($(this).attr("id"));
+          }
+      });
+
+      $.ajax({
+        url: "<%= groups_delete_form_path %>",
+          dataType : "script",
+          cache: true,
+          method: "post",
+          data: {
+              clients: clients,
+              source_group: id
+          }
+      });
+
+      $(this).blur();
+  });
+
+  // export selected clients - group header
+  $(document).on("click", '.grp_export', function() {
+      var clients = new Array();
+      var id = $(this).parent().attr("id");
+      $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
+          if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
+              clients.push($(this).attr("id"));
+          }
+      });
+
+      $.ajax({
+          url: "<%= groups_export_form_path %>",
+          dataType : "script",
+          cache: true,
+          method: "post",
+          data: {
+              clients: clients
+          }
+      });
+
+      $(this).blur();
+  });
+
+  // mark all clients in group - group header
+  $(document).on("click", '.grp_mark_all', function() {
+      var id = $(this).parent().attr("id");
+
+      $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
+          $(this).parents(".ui-selectee").addClass("ui-selected");
+
+      });
+      //$(this).blur();
+  });
+
+  // unmark all clients in group - group header
+  $(document).on("click", '.grp_unmark_all', function() {
+      var id = $(this).parent().attr("id");
+
+      $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
+          $(this).parents(".ui-selectee").removeClass("ui-selected");
+
+      });
+      $(this).blur();
+  });
+
+  // search -> button float & header
+  $(".search_float, .search_header").click(function () {
+      $("#wide-modal").modal('open');
+      $.ajax({
+        url: "<%= global_search_view_path %>",
+          dataType : "script",
+          cache: true
+      });
+  });
+
+  // new group add -> button float
+  $(".group_add_float").click(function () {
+      $("#generic-modal").modal('open');
+
+      $.ajax({
+          url: "<%= new_group_path %>",
+          dataType : "script",
+          cache: true
+      });
+  });
+
+  // new group add -> button float
+  $(".group_refresh_float").click(function () {
+      $.ajax({
+        url: "<%= group_refresh_path %>",
+          dataType : "script",
+          cache: true
+      });
+  });
+
+</script>

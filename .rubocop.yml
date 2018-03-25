@@ -1,0 +1,11 @@
+Metrics/LineLength:
+  # This will disable the rule completely, regardless what other options you put
+  # Enabled: false
+  # Change the default 80 chars limit value
+  Max: 120
+  # If you want the rule only apply to a specific folder/file
+  # Include:
+  #   - 'app/**/*'
+  # If you want the rule not to apply to a specific folder/file
+  # Exclude:
+  #   - 'db/schema.rb'

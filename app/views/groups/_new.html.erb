@@ -1,0 +1,43 @@
+<style>
+  .iconsholder {
+    box-sizing: unset;
+  }
+  .howl-iconpicker-close {
+    width: 260px;
+  }
+  .srchicons {
+    text-align: center !important;
+  }
+  .howl-iconpicker {
+    background: #fff;
+  }
+  .selectedicon {
+    background: #1976D2!important;
+    border-color: #1976D2!important;
+    color: #fff;
+  }
+</style>
+<%= simple_form_for :group, url: groups_path, remote: true do |f| %>
+<div class="modal-content">
+  <div class="modal-header" style="border-bottom: 1px solid rgba(0, 0, 0, 0.1); padding-bottom: 20px; margin-bottom: 50px;">
+    <h5 class="center-align">Create an empty group</h5>
+  </div>
+  <div class="row">
+    <div class="col s6">
+      <%= f.input :name, :wrapper_html => { :class => "s12" } %>
+    </div>
+    <div class="col s6">
+      <%= f.input :icon, :input_html => {:class => "iconpicker"}, :wrapper_html => { :class => "s12" } %>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <%= f.button :submit, 'Create', :class => 'modal-action green darken-2' %>
+  <a href="#" class="modal-action modal-close waves-effect waves-red btn-flat">Close</a>
+</div>
+<% end %>
+
+<script>
+    $('.iconpicker').iconpicker(".iconpicker");
+</script>

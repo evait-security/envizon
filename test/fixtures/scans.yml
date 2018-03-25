@@ -1,0 +1,8 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  command: -sS localhost
+  startdate: 2017-10-04 09:25:47
+  enddate: 2017-10-04 09:25:47
+  user: john
+

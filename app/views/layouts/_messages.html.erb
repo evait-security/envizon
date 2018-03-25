@@ -1,0 +1,15 @@
+<% flash.each do |key, value| %>
+  <script>
+      <%
+        case key
+          when  'alert'
+            toast_color = 'red'
+          when 'notice'
+            toast_color = 'blue'
+          else
+            toast_color = 'blue'
+        end
+      %>
+    Materialize.toast('<%= value %>', 3000, '<%= toast_color %>');
+  </script>
+<% end %>

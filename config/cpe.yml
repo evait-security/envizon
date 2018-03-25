@@ -1,0 +1,82 @@
+---
+:name:
+  :_default: Unknown
+  :cpe:
+    :/a: App
+    :/d: Device
+    :/o:
+      :_default: Unknown Operating System
+      :microsoft:
+        :_default: Microsoft Operating System
+        :windows_95: Microsoft Windows 95
+        :windows_98: Microsoft Windows 98
+        :windows_2000: Microsoft Windows 2000
+        :windows_xp: Microsoft Windows XP
+        :windows_vista: Microsoft Windows Vista
+        :windows_7: Microsoft Windows 7
+        :windows_8: Microsoft Windows 8
+        :windows_8.1: Microsoft Windows 8.1
+        :windows_10: Microsoft Windows 10
+      :linux: Linux
+      :cyanogenmod:
+        :cyanogenmod: Android
+      :google:
+        :android: Android
+      :apple:
+        :_default: Apple Operating System
+        :mac_os_x: macOS
+        :iphone_os: iOS
+      :openbsd:
+        :openbsd: OpenBSD
+:icon:
+  :_default: desktop
+  :cpe:
+    :/d:
+      :apple: mobile
+      :softbank:
+        :softbank:
+          :windows_mobile_smartphone: mobile
+    :/o:
+      :_default: desktop
+      :microsoft:
+        :_default: windows
+        :windows_mobile: mobile
+      :linux:
+        :_default: linux
+      :apple:
+        :_default: apple
+        :iphone: mobile
+        :iphone_os: mobile
+        :ipad: mobile
+        :ipad_mini: mobile
+        :ipad_2: mobile
+      :google:
+        :android: mobile
+      :cyanogenmod:
+        :cyanogenmod: mobile
+:group:
+  :_default: Unknown
+  :cpe:
+    :/d: Network Devices
+    :/o:
+      :microsoft:
+        :_default: Windows
+        :windows_mobile: Windows Mobile
+      :linux:
+        :_default: Linux
+      :apple:
+        :_default: Apple
+        :iphone: Apple Mobile
+        :iphone_os: Apple Mobile
+        :ipad: Apple Mobile
+        :ipad_mini: Apple Mobile
+        :ipad_2: Apple Mobile
+      :google:
+        :android: Android
+      :cyanogenmod:
+        :cyanogenmod: Android
+    :/h:
+      :apple: Apple Mobile
+      :softbank:
+        :softbank:
+          :windows_mobile_smartphone: Windows Mobile

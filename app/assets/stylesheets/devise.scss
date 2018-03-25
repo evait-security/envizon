@@ -1,0 +1,53 @@
+.login-form {
+  margin: auto !important;
+
+  .card {
+    max-width: 500px;
+    width: 500px;
+
+    .form-errors {
+      margin-bottom: 10px;
+      padding: 15px;
+
+      ul {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+    }
+
+    .form-inputs {
+      .input-field {
+        label {
+          &.active::after {
+            content: attr(data-hint) !important;
+            opacity: 1;
+          }
+        }
+      }
+    }
+
+    .card-title {
+      font-size: 40px;
+      line-height: 50px !important;
+    }
+
+    .card-action {
+      a {
+        text-transform: none !important;
+      }
+
+      .devise-links {
+        text-align: right;
+      }
+    }
+
+    .divider {
+      margin-bottom: 10px;
+    }
+  }
+
+  abbr {
+    border-bottom: 0 !important;
+    color: #f00;
+  }
+}

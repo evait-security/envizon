@@ -1,0 +1,3 @@
+<% if params['message'].present? %>
+    Materialize.toast('<%= params['message'] %>', 3000, 'green');
+<% end %>

@@ -1,0 +1,43 @@
+<style>
+  #form-margin {
+    margin-top: 20%;
+    padding: 40px;
+    background-color: white;
+  }
+  .form_logo {
+    width: 50%;
+    margin-bottom: 30px;
+    margin-top: 30px;
+  }
+</style>
+
+<div class="container">
+  <div class="row">
+    <div class="col s4"></div>
+    <div class="col s4" >
+      <div class="row z-depth-3" id="form-margin">
+        <div class="row center-align" id="logo">
+          <%= image_tag("logo/envizon-wide-export-blue.svg", class:"form_logo") %>
+        </div>
+        <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+            <div class="row right-align" >
+              <div class="chip ">Please sign up</div>
+            </div>
+            <input type="hidden" name="user[username]" value="root">
+            <div class="row">
+              <%= f.input :password, required: true, hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length), :wrapper_html => { :class => 's12' } %>
+            </div>
+            <div class="row">
+              <%= f.input :password_confirmation, required: true, :wrapper_html => { :class => 's12' } %>
+            </div>
+            <div class="row">
+              <div class="form-actions">
+                <%= f.button :submit, "Set password" %><div class="right"><%= render "devise/shared/links" %></div>
+              </div>
+            </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="col s4"></div>
+</div>

@@ -1,0 +1,52 @@
+<style>
+  .iconsholder {
+    box-sizing: unset;
+  }
+  .howl-iconpicker-close {
+    width: 260px;
+  }
+  .srchicons {
+    text-align: center !important;
+  }
+  .howl-iconpicker {
+    background: #fff;
+  }
+  .selectedicon {
+    background: #1976D2!important;
+    border-color: #1976D2!important;
+    color: #fff;
+  }
+</style>
+<%= simple_form_for :group, url: groups_export_path do |f| %>
+  <div class="modal-content">
+    <div class="modal-header" style="border-bottom: 1px solid rgba(0, 0, 0, 0.1); padding-bottom: 20px; margin-bottom: 50px;">
+      <h5 class="center-align">Export selected clients to text file</h5>
+    </div>
+    <div class="row">
+      <div class="col s12">
+        <%= f.input :file_name, :wrapper_html => { :class => "s12" } %>
+      </div>
+      <div class="row center-align" >
+        <div class="col s12" style="margin-bottom: 13px;">
+          <label>Selected Clients</label>
+        </div>
+        <div class="col s12">
+          <% clients.each do | temp_client | %>
+              <div class="chip"><%= temp_client.ip %></div>
+              <input type="hidden" name="selected_clients[]" value="<%= temp_client.id %>" />
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <%= f.button :submit, 'Export', :class => 'modal-action', :onclick => "close_modal();" %>
+    <a href="#" class="modal-action modal-close waves-effect waves-red btn-flat">Close</a>
+  </div>
+<% end %>
+
+<script>
+  function close_modal() {
+      $(".modal").modal("close");
+  }
+</script>

@@ -1,0 +1,144 @@
+<style>
+  .form-margin {
+    margin-top: 4em;
+    padding: 40px;
+    background-color: white;
+  }
+</style>
+
+<div class="container">
+  <div class="row" style="padding-top: 2em;">
+    <div class="col s4">
+      <div class="row">
+        <div class="col s12">
+          <ul class="tabs tabs-fixed-width">
+            <li class="tab col s12"><a href="#settings">Quick settings</a></li>
+          </ul>
+        </div>
+        <div id="parallel" class="col s12">
+          <div class="white">
+            <div class="container">
+              <div class="row" style="padding: 2em;">
+                <div class="row" style="padding-top: 2em;">
+                  <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
+                    <%= f.error_notification %>
+                    <div class="col s4">
+                      <p class="grey-text text-darken-2 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Set number of scans running simultaneously">Paralell scans</p>
+                    </div>
+                    <div class="col s6">
+                      <p class="range-field">
+                        <input type="range" id="parallel_scans" name="parallel_scans" min="1" max="10" value="<%= User.first.settings.find_by_name('parallel_scans').value %>"/>
+                      </p>
+                    </div>
+                    <div class="input-field form-actions col s2" >
+                      <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Update paralell scans" type="submit" name="action"><i class="fa fa-refresh"></i></button>
+                    </div>
+                  <% end %>
+                </div>
+                <div class="row" style="padding-top: 2em;">
+                  <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
+                    <%= f.error_notification %>
+                    <div class="col s4">
+                      <p class="grey-text text-darken-2 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Import database">Import</p>
+                    </div>
+                    <div class="col s6">
+                      <div class="file-field">
+                        <input id="import_db" name="import_db[]" type="file" accept=".yml">
+                        <div class="file-path-wrapper">
+                          <input class="file-path validate" type="text" placeholder="Select a database file">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="input-field form-actions col s2" >
+                      <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Import database" type="submit" name="action"><i class="fa fa-upload"></i></button>
+                    </div>
+                  <% end %>
+                </div>
+                <div class="row" style="padding-top: 2em;">
+                  <%= simple_form_for :settings, url: update_settings_path do |f| %>
+                    <%= f.error_notification %>
+                    <div class="col s4">
+                      <p class="grey-text text-darken-2 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Export / download current database">Export</p>
+                    </div>
+                    <div class="col s6">
+                      <input type="hidden" name="export_db" value="true">
+                    </div>
+                    <div class="input-field form-actions col s2" >
+                        <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Export / download database" type="submit" name="action"><i class="fa fa-download"></i></button>
+                    </div>
+                  <% end %>
+                </div>
+                <div class="row" style="padding-top: 2em;">
+                  <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
+                    <%= f.error_notification %>
+                    <div class="col s4">
+                      <p class="grey-text text-darken-2 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Enable / disable global notifications for scan progress">Scan notify</p>
+                    </div>
+                    <div class="col s6">
+                    <p class="centesr-align">
+                      <input type="hidden" name="global_notify" value="true">
+                      <input type="checkbox" id="global_notify_setting" name="global_notify_setting"  <%= 'checked' if current_user.settings.find_by_name('global_notify').value %>/>
+                      <label for="global_notify_setting"></label>
+                    </p>
+                    </div>
+                    <div class="input-field form-actions col s2" >
+                      <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Update global scan notification settings" type="submit" name="action"><i class="fa fa-refresh"></i></button>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col s4">
+      <div class="row">
+        <div class="col s12">
+          <ul class="tabs tabs-fixed-width">
+            <li class="tab col s12"><a href="#saved_scans">Saved Scans</a></li>
+          </ul>
+        </div>
+        <div id="saved_scans" class="col s12">
+          <div class="white">
+            <div class="container" id="settings_scans_list">
+              <%= render partial: "settings_scans" %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col s4">
+      <div class="row">
+        <div class="col s12">
+          <ul class="tabs tabs-fixed-width">
+            <li class="tab col s12"><a href="#exclude">Hosts to exclude</a></li>
+          </ul>
+        </div>
+        <div id="exclude" class="col s12">
+          <div class="white">
+            <div class="container">
+              <div class="row" style="padding: 2em;">
+                <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
+                  <%= f.error_notification %>
+                  <div class="row">
+                    <div class="input-field col s10">
+                        <%
+                        hosts = YAML.safe_load(current_user.settings.where(name: 'exclude_hosts').first_or_create.value)
+                        hosts ||= ''
+                        %>
+                      <textarea id="hosts" class="materialize-textarea" name="hosts"><%= hosts.strip %></textarea>
+                    </div>
+                    <div class="input-field form-actions col s2" style="margin-top: 4em;">
+                      <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Update excluded hosts" type="submit" name="action"><i class="fa fa-refresh"></i></button>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

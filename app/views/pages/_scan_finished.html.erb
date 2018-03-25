@@ -1,0 +1,14 @@
+<% Scan.where.not(enddate: nil).order(:id).each do |scan|%>
+    <tr>
+        <td class="custom-truncate" style="max-width: 5em;"><%= "#{scan.name}"%></td>
+        <td class="custom-truncate tooltipped" style="max-width: 15em;" data-position="bottom" data-delay="50" data-tooltip="<%= "#{scan.command}"%>"><%= "#{scan.command}"%></td>
+        <td><%= scan.startdate.blank? ? "": "#{scan.startdate.strftime('%Y-%m-%d %H:%M:%S')}"%></td>
+        <td><%= scan.enddate.blank? ? "": "#{scan.enddate.strftime('%Y-%m-%d %H:%M:%S')}"%></td>
+    </tr>
+<% end%>
+
+<script>
+ $(document).ready(function(){
+    $('.tooltipped').tooltip({delay: 50});
+  });
+</script>

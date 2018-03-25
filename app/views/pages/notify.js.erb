@@ -1,0 +1,34 @@
+// close modal if needed
+
+<% if defined?(close) %>
+  $(".modal").modal("close");
+<% end %>
+
+<%
+  if defined?(type).nil?
+    toast_color = 'blue'
+  else
+    case type
+      when  'alert'
+        toast_color = 'red'
+      when 'notice'
+        toast_color = 'blue'
+      when 'success'
+        toast_color = 'green'
+      else
+        toast_color = 'blue'
+    end
+  end
+%>
+
+Materialize.toast('<%= message %>', 3000, '<%= toast_color %>');
+
+// rerender stuff
+
+<% if defined?(partial_render) %>
+  $('.tooltipped').tooltip('remove');
+  $("#<%= partial_render_id %>").html("<%= j(render(partial_render)) %>");
+  Materialize.updateTextFields();
+  $('.tooltipped').tooltip({delay: 50});
+<% end %>
+

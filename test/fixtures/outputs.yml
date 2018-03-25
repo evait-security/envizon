@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  client: one
+  port: one
+  name: MyString
+  value: MyString
+
+two:
+  client: two
+  port: two
+  name: MyString
+  value: MyString

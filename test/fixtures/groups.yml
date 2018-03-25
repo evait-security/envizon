@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: whatevgroup
+  icon: MyString
+  clients: [partofone]
+
+two:
+  name: whatevgroup2
+  icon: MyString
+

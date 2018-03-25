@@ -1,0 +1,13 @@
+development:
+  adapter: async
+
+test:
+  adapter: async
+
+# let's skip redis for now
+production:
+  adapter: async
+# production:
+#   adapter: redis
+#   url: redis://localhost:6379/1
+#   channel_prefix: envizon_production

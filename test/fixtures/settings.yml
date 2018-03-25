@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# not needed anymore because of run_callbacks
+# one:
+#   name: remote
+#   value: true
+#   user: :john
+#
+# two:
+#   name: localPath
+#   value: /root
+#   user: :john
+
+
+one:
+  name: MyString
+  value: MyString
+  user: one
+
+two:
+  name: MyString
+  value: MyString
+  user: two

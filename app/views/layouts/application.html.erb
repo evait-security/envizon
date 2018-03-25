@@ -1,0 +1,133 @@
+<style>
+
+  .icon-block {
+    padding: 0 15px;
+  }
+  .icon-block .material-icons {
+    font-size: inherit;
+  }
+  .svg_logo {
+    width: 170px;
+  }
+  nav .brand-logo {
+    height: 100%;
+  }
+  /* full screen layout overwrite */
+  .container {
+    width: 95% !important;
+    max-width: none !important;
+  }
+  #user-drop-menu {
+    margin-top: 65px;
+    min-width: 15em;
+  }
+  #main-container {
+    width: 99% !important;
+  }
+  html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    min-height: 200px;
+  }
+  #generic-modal {
+    width: 30% !important;
+  }
+  #modal-header {
+    margin-bottom: 40px;
+  }
+  .tabs .tab {
+    text-transform: none !important;
+  }
+  .custom-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .card {
+    box-shadow: none !important;
+  }
+  .preloader-background {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #eee;
+
+    position: fixed;
+    z-index: 100;
+    top: 66px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+</style>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>envizon by evait security</title>
+  <%= favicon_link_tag 'favicon.ico' %>
+  <%= action_cable_meta_tag %>
+  <%= csrf_meta_tags %>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+</head>
+<body style="background: #f7f7f7">
+  <nav class="" role="navigation" >
+  <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo"><div class="valign-wrapper" style="height: 100%"><%= image_tag("logo/envizon-wide-export-white.svg", class:"svg_logo") %></div></a>
+    <ul class="right">
+      <% if user_signed_in? %>
+        <li><a href="<%= "#{pages_groups_path}" %>"><i class="material-icons left">devices</i>Groups</a></li>
+        <% if current_page?('/pages/groups') %>
+          <li><a href="#" class="search_header"><i class="material-icons left">search</i>Search</a></li>
+        <% end %>
+        <li><a href="<%= "#{scans_path}" %>"><i class="material-icons left">gps_fixed</i>Scans</a></li>
+        <!-- Dropdown Structure -->
+        <ul id="user-drop-menu" class="dropdown-content">
+          <li><%= link_to '<i class="material-icons">settings</i>Settings'.html_safe, global_settings_path %></li>
+          <li><%= link_to '<i class="material-icons">mode_edit</i>Change password'.html_safe, edit_user_registration_path %></li>
+          <li class="divider"></li>
+          <li><%= link_to '<i class="material-icons">lock_outline</i>Sign out'.html_safe, destroy_user_session_path, method: :delete, class: "red-text text-darken-2" %></li>
+        </ul>
+        <li><a href="#" class="dropdown-button" data-activates="user-drop-menu"><i class="material-icons left">account_circle</i><%= current_user.username %></a></li>
+      <% else %>
+        <li><a href="/"><i class="material-icons left">account_circle</i>Please sign in</a></li>
+      <% end %>
+    </ul>
+  </div>
+</nav>
+<div class="section no-pad">
+  <div class="container" id="main-container">
+    <div class="preloader-background">
+      <div class="preloader-wrapper big active">
+        <div class="spinner-layer spinner-blue-only">
+          <div class="circle-clipper left">
+            <div class="circle"></div>
+          </div><div class="gap-patch">
+            <div class="circle"></div>
+          </div><div class="circle-clipper right">
+            <div class="circle"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%= yield %>
+  </div>
+</div>
+</body>
+<%= render 'layouts/messages' %>
+<%= render 'notifications/new' %>
+</html>
+
+<script>
+  $(document).on('ready page:load',function(){
+    $('.modal').modal();
+    $(".dropdown-button").dropdown();
+    Materialize.updateTextFields();
+  });
+  document.addEventListener("DOMContentLoaded", function(){
+    $('.preloader-background').delay(500).fadeOut();
+  });
+</script>

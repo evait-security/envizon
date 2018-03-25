@@ -1,0 +1,5 @@
+<% group_ids.each do |group_id| %>
+    // update the group content
+    $("#group_content_<%= group_id %>").html("<%= j(render('groups/group_content', :group_id => group_id, :message => message)) %>");
+<% end %>
+

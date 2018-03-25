@@ -1,0 +1,18 @@
+<% Scan.where(enddate: nil).order(:id).each do |scan|%>
+    <tr>
+        <td class="custom-truncate" style="max-width: 5em;"><%= "#{scan.name}"%></td>
+        <td class="custom-truncate"><%= "#{scan.command}"%></td>
+        <td><%= scan.startdate.blank? ? "": "#{scan.startdate.strftime('%Y-%m-%d %H:%M:%S')}"%></td>
+        <td>
+        <div class="progress">
+            <div class="determinate" style="width: <%= scan.status.blank? ? "0": "#{scan.status}"%>%"></div>
+        </div>
+        </td>
+    </tr>
+<% end%>
+
+<script>
+ $(document).ready(function(){
+    $('.tooltipped').tooltip({delay: 50});
+  });
+</script>

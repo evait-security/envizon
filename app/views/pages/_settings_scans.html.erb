@@ -1,0 +1,41 @@
+<div style="padding-top: 2em;">
+    <% SavedScan.order(:id).all.to_a.each do | saved_scan | %>
+        <div class="row" style="padding-left: 2em; padding-right: 2em;">
+            <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
+            <%= f.error_notification %>
+            <div class="row">
+                <input type="hidden" name="saved_scan_id" value="<%= saved_scan.id %>">
+                <div class="input-field col s5">
+                    <input id="saved_scan" name="saved_scan_name" type="text" class="validate" value="<%= saved_scan.name %>">
+                    <label for="scan_name">Scan name</label>
+                </div>
+                <div class="input-field col s5">
+                    <input id="scan_param" name="saved_scan_param" type="text" class="validate" value="<%= saved_scan.parameter %>">
+                    <label for="scan_param">Scan parameters</label>
+                </div>
+                <div class="input-field form-actions col s2">
+                    <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Update saved scan" type="submit" name="action"><i class="fa fa-refresh"></i></button>
+                </div>
+            </div>
+            <% end %>
+        </div>
+    <% end %>
+    <div class="row" style="padding-left: 2em; padding-right: 2em;">
+        <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
+            <%= f.error_notification %>
+            <div class="row">
+                <div class="input-field col s5">
+                    <input id="scan_name" name="saved_scan_name" placeholder="e.g. smb-vuln-scan" type="text" class="validate">
+                    <label for="scan_name">Scan name</label>
+                </div>
+                <div class="input-field col s5">
+                    <input id="scan_param" name="saved_scan_param" placeholder="e.g. -sV -p 8000,252,447 -n" type="text" class="validate">
+                    <label for="scan_param">Scan parameters</label>
+                </div>
+                <div class="input-field form-actions col s2">
+                    <button class="btn tooltipped green" data-position="bottom" data-delay="50" data-tooltip="Add saved scan" type="submit" name="action"><i class="fa fa-plus"></i></button>
+                </div>
+            </div>
+        <% end %>
+    </div>
+</div>

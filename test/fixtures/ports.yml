@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  client: one
+  number: 1
+  service: MyString
+  description: MyText
+  sv: false
+
+two:
+  client: two
+  number: 1
+  service: MyString
+  description: MyText
+  sv: false
