@@ -7,6 +7,13 @@ GIT
       rake (>= 0.8.7)
 
 GIT
+  remote: https://github.com/evs-ch/yard-restful.git
+  revision: 5f797a3dd1b85355e8031d7c246700f30252691e
+  specs:
+    yard-restful (1.2.4)
+      yard (~> 0.9.12)
+
+GIT
   remote: https://github.com/represent/coverband.git
   revision: e4354c77e022316bc59ac05ecab1262eaca377df
   specs:
@@ -155,7 +162,7 @@ GEM
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
       ruby_dep (~> 1.2)
-    loofah (2.2.0)
+    loofah (2.2.2)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.0)
@@ -329,9 +336,7 @@ GEM
     websocket-extensions (0.1.3)
     xpath (2.1.0)
       nokogiri (~> 1.3)
-    yard (0.8.7.6)
-    yard-restful (1.2.4)
-      yard (~> 0.8.3)
+    yard (0.9.12)
 
 PLATFORMS
   ruby
@@ -379,8 +384,8 @@ DEPENDENCIES
   uglifier (>= 1.3.0)
   web-console
   yaml_db!
-  yard
-  yard-restful
+  yard (>= 0.9.12)
+  yard-restful!
 
 BUNDLED WITH
    1.16.1
