@@ -23,5 +23,6 @@ if Label.all.empty?
   Label.create([{ name: 'Null Session', description: 'Null Sessions are fun', priority: 'orange darken-1 white-text' },
                 { name: 'SMB Signing', description: 'Message signing for SMB is disabled', priority: 'red darken-1 white-text' },
                 { name: 'Anonymous FTP', description: 'Anonymous FTP login allowed', priority: 'orange darken-1 white-text' },
-                { name: 'MS17-010', description: 'A critical remote code execution vulnerability exists in Microsoft SMBv1', priority: 'red darken-1 white-text' }])
+                { name: 'MS17-010', description: 'A critical remote code execution vulnerability exists in Microsoft SMBv1', priority: 'red darken-1 white-text' },
+                { name: 'MS08-067', description: 'A critical remote code execution vulnerability exists in Microsoft SMBv1', priority: 'red darken-1 white-text' }])
 end
