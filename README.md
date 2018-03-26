@@ -77,11 +77,15 @@ You need to create a secret and SSL certificates, as described above.
 Then, run it with:
 
 ```zsh
+RAILS_ENV=production
+export RAILS_ENV
+SECRET_KEY_BASE=YOUR_SECRET
+export SECRET_KEY_BASE
 bundle exec rails db:setup
 bundle exec rails db:migrate
 bundle exec rails db:seed
 bundle exec rails assets:precompile
-RAILS_FORCE_SSL=true RAILS_SERVE_STATIC_FILES=true SECRET_KEY_BASE=YOUR_SECRET RAILS_ENV=production bundle exec rails s
+RAILS_FORCE_SSL=true RAILS_SERVE_STATIC_FILES=true bundle exec rails s
 ```
 #### Development
 
@@ -91,10 +95,12 @@ Databases for development and testing are called `envizon_test` and `envizon_dev
 git clone https://github.com/evait-security/envizon
 cd envizon
 bundle install --path vendor/bundle
-RAILS_ENV=development bundle exec rails db:setup
-RAILS_ENV=development bundle exec rails db:migrate
-RAILS_ENV=development bundle exec rails db:seed
-RAILS_ENV=development bundle exec rails s
+RAILS_ENV=development
+export RAILS_ENV
+bundle exec rails db:setup
+bundle exec rails db:migrate
+bundle exec rails db:seed
+bundle exec rails s
 ```
 
 To run the tests:

@@ -52,7 +52,7 @@ environment ENV.fetch('RAILS_ENV') { 'development' }
 #
 
 if ENV.fetch('RAILS_ENV') == 'production'
-  ssl_bind '127.0.0.1', '3000',
+  ssl_bind '0.0.0.0', '3000',
            key: ENV.fetch('SSL_KEY_PATH') { '.ssl/localhost.key' },
            cert: ENV.fetch('SSL_CERT_PATH') { '.ssl/localhost.crt' },
            verify_mode: 'none'
