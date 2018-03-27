@@ -40,6 +40,13 @@ If you want to update the image or pull it manually, you can do so with `docker 
 
 If you want to provide your own SSL-certificates and/or RAILS_SECRET, modify the `docker-compose.yml` according to your needs, otherwise both will be generated.
 
+For the lazy ones
+
+```zsh
+wget https://raw.githubusercontent.com/evait-security/envizon/master/docker/docker-compose.yml
+docker-compose up
+```
+
 ##### Running from local git checkout
 
 ```zsh
