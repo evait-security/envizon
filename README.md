@@ -113,10 +113,6 @@ RAILS_ENV=test db:setup
 bundle exec rails test
 ```
 
-### Start with prebuilt images and postgresql docker image
-
-Coming Soon™
-
 ### Set a password
 
 After starting the docker images go to: https://localhost:3000/ (or http://localhost:3000 if not using SSL)
