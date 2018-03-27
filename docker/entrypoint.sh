@@ -20,12 +20,12 @@ then
   if [[ -f config/secret ]]
   then
     echo "Found a previous secret in 'config/secret:'"
-    export SECRET_KEY_BASE=$(<config/secret)
+    export SECRET_KEY_BASE=$(cat config/secret)
     echo "$SECRET_KEY_BASE"
   else
     echo "Generating one for you and placing it in 'config/secret':"
     export SECRET_KEY_BASE=$(rails secret)
-    echo "$SECRET_KEY_BASE" > config/.secret
+    echo "$SECRET_KEY_BASE" > config/secret
     echo "$SECRET_KEY_BASE"
   fi
 fi
