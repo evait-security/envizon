@@ -12,9 +12,9 @@ services:
       POSTGRES_DB: 'envizon'
   envizon:
     image: evait/envizon
-    build:
-      context: .
-      dockerfile: ./Dockerfile
+#    build:
+#      context: .
+#      dockerfile: ./Dockerfile
     depends_on:
       - postgres
     network_mode: 'host'
