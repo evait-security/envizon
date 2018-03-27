@@ -15,22 +15,22 @@ services:
       POSTGRES_TEST_DB: 'envizon_test'
   envizon:
     build:
-      context: .
-      dockerfile: ./Dockerfile
+      context: ../
+      dockerfile: docker/Dockerfile_local
     depends_on:
       - postgres
     network_mode: 'host'
     ports:
       - 3000:3000
     volumes:
-      - ./:/usr/src/app/envizon
+      - ../:/usr/src/app/envizon
       - socket-volume:/var/run
     environment:
       POSTGRES_PASSWORD: 'envizon'
       POSTGRES_USER: 'envizon'
       POSTGRES_HOST: '/var/run/postgresql'
       RAILS_ENV: 'development'
-    entrypoint: /entrypoint-development.sh
+    entrypoint: /entrypoint_development.sh
     # uncomment if using byebug:
     # docker-compose up -d, then attach to running container
     # stdin_open: true

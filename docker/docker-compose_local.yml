@@ -15,25 +15,25 @@ services:
       POSTGRES_TEST_DB: 'envizon_test'
   envizon:
     build:
-      context: .
-      dockerfile: ./Dockerfile
+      context: ..
+      dockerfile: docker/Dockerfile_local
     depends_on:
       - postgres
     network_mode: 'host'
     ports:
       - 3000:3000
     volumes:
-      - ./:/usr/src/app/envizon
+      - ../:/usr/src/app/envizon
       - socket-volume:/var/run
     environment:
       POSTGRES_PASSWORD: 'envizon'
       POSTGRES_USER: 'envizon'
       POSTGRES_DB: 'envizon'
       POSTGRES_HOST: '/var/run/postgresql'
-      SECRET_KEY_BASE: 'YOUR_SECRET_HERE_PLZ'
+      SECRET_KEY_BASE:
       RAILS_ENV: 'production'
       RAILS_FORCE_SSL: 'true'
       RAILS_SERVE_STATIC_FILES: 'true'
-      SSL_KEY_PATH: '.ssl/localhost.key'
-      SSL_CERT_PATH: '.ssl/localhost.crt'
-    entrypoint: /entrypoint.sh
+      SSL_KEY_PATH:
+      SSL_CERT_PATH:
+    entrypoint: /entrypoint_local.sh

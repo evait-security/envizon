@@ -30,29 +30,32 @@ To avoid compatibility and dependency issues, and to make it easy to set up, we 
 
 Docker and Docker Compose are required.
 
+#### Prebuilt Docker Images
+
+Use the `docker-compose.yml` from the `docker/` directory and run it with `docker-compose up`.
+
+The Docker image will be pulled from `evait/envizon`.
+
+If you want to update the image or pull it manually, you can do so with `docker pull evait/envizon`.
+
+If you want to provide your own SSL-certificates and/or RAILS_SECRET, modify the `docker-compose.yml` according to your needs, otherwise both will be generated.
+
+##### Running from local git checkout
+
 ```zsh
 git clone https://github.com/evait-security/envizon
-cd envizon
-# Create self-signed certificates:
-mkdir .ssl
-openssl req -x509 -sha256 -nodes -newkey rsa:2048 -days 365 -keyout .ssl/localhost.key -out .ssl/localhost.crt
-# If you want to use certificates located elsewhere, provide their pathes with SSL_CERT_PATH and SSL_KEY_PATH
-# Create a secret, if you have rails installed locally you can just use:
-rails secret
-# otherwise, use openssl:
-openssl rand -hex 64
-# this needs to be provided either as an environment variable (SECRET_KEY_BASE), or added in the docker-compose.yml
-sudo docker-compose up
+cd envizon/docker
+sudo docker-compose -f docker-compose_local.yml up
 ```
 
-#### Development
+###### Development
 
 _If, for whatever reason, you want to run the development environment in production, you should probably consider changing the secrets in `config/secrets.yml`, and maybe even manually activate SSL._
 
 ```zsh
 git clone https://github.com/evait-security/envizon
-cd envizon
-sudo docker-compose -f docker-compose-development.yml up
+cd envizon/docker
+sudo docker-compose -f docker-compose_development.yml up
 ```
 
 Running tests:
@@ -89,7 +92,7 @@ RAILS_FORCE_SSL=true RAILS_SERVE_STATIC_FILES=true bundle exec rails s
 ```
 #### Development
 
-Databases for development and testing are called `envizon_test` and `envizon_development`, with the same requirements as above. Different database names and credentials can be provided via environment variables or directly modified in ```config/database.yml```
+Databases for development and testing are called `envizon_test` and `envizon_development`, with the same requirements as above. Different database names and credentials can be provided via environment variables or directly modified in `config/database.yml`
 
 ```zsh
 git clone https://github.com/evait-security/envizon

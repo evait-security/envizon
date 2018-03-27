@@ -29,7 +29,6 @@ RUN \
   cd /usr/src/app && \
   git clone https://github.com/evait-security/envizon.git && \
   cd envizon && \
-  # git checkout docker-rewrite && \
   mkdir .ssl && \
   bundle install
 
