@@ -57,6 +57,8 @@ gem 'materialize-sass'
 # (redis would be used for ActionCable anyway, so..)
 gem 'sucker_punch'
 
+# db import/export
+gem 'yaml_db', git: 'https://github.com/evs-ch/yaml_db.git'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -82,7 +84,6 @@ group :development do
   # documentation
   gem 'jeweler'
   gem 'redcarpet'
-  gem 'yaml_db', git: 'https://github.com/evs-ch/yaml_db.git'
   gem 'yard', '>= 0.9.12'
   gem 'yard-restful', git: 'https://github.com/evs-ch/yard-restful.git'
 
