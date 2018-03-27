@@ -32,4 +32,4 @@ services:
       SECRET_KEY_BASE:
       SSL_KEY_PATH:
       SSL_CERT_PATH:
-        entrypoint: /entrypoint.sh
+    entrypoint: /entrypoint.sh

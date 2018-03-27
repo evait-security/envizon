@@ -6,7 +6,9 @@ then
     echo "Certificates found in .ssl/."
   else
     echo "No certificates provided and none in .ssl/, generating some for you"
-    openssl req -x509 -sha256 -nodes -newkey rsa:2048 -days 365 -keyout .ssl/localhost.key -out .ssl/localhost.crt
+    openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 \
+      -subj "/C=DE/ST=None/L=None/O=evait/CN=None" \
+      -keyout .ssl/localhost.key  -out .ssl/localhost.crt
   fi
 else
   echo "Using certificates provided by environment variables."
@@ -18,13 +20,13 @@ then
   if [[ -f config/secret ]]
   then
     echo "Found a previous secret in 'config/secret:'"
-    SECRET_KEY_BASE=$(<config/secret)
+    export SECRET_KEY_BASE=$(<config/secret)
     echo "$SECRET_KEY_BASE"
   else
     echo "Generating one for you and placing it in 'config/secret':"
-    SECRET_KEY_BASE=$(rails secret)
-    echo "$SECRET_KEY_BASE"
+    export SECRET_KEY_BASE=$(rails secret)
     echo "$SECRET_KEY_BASE" > config/.secret
+    echo "$SECRET_KEY_BASE"
   fi
 fi
 

@@ -29,9 +29,12 @@ RUN \
   cd /usr/src/app && \
   git clone https://github.com/evait-security/envizon.git && \
   cd envizon && \
-  cp docker/entrypoint.sh /entrypoint
+  git checkout docker-rewrite && \
   mkdir .ssl && \
-  bundle install && \
+  bundle install
+
+RUN \
+  cp /usr/src/app/envizon/docker/entrypoint.sh /entrypoint.sh && \
   chmod +x /entrypoint.sh
 
 WORKDIR /usr/src/app/envizon
