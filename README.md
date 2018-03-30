@@ -1,5 +1,23 @@
 # envizon - the network visualization tool
 
+## TOC
+
+* [Use Case](#use-case)
+* [Core Features](#core-features)
+* [How to start?!](#how-to-start)
+  + [Using Docker](#using-docker)
+    - [Prebuilt Docker Images](#prebuilt-docker-images)
+  + [Without Docker](#without-docker)
+    - [Arch Linux](#arch-linux)
+    - [Manually](#manually)
+* [Usage](#usage)
+  + [Set a password](#set-a-password)
+  + [Scan interface](#scan-interface)
+  + [Groups](#groups)
+  + [Global Search](#global-search)
+* [FAQ](#faq)
+* [Frameworks and tools used](#what-frameworks-and-tools-were-used)
+
 ## Version 2.1
 
 Fancy shields: Coming Soon™
@@ -8,7 +26,7 @@ Fancy shields: Coming Soon™
 
 This tool is designed, developed and supported by evait security. In order to give something back to the security community, we publish our internally used and developed, state of the art network visualization and organization tool, 'envizon'. We hope your feedback will help to improve and hone it even further.
 
-## Usecase
+## Use Case
 
 We use envizon for our pentests in order to get an overview of a network and quickly identify the most promising targets.
 
@@ -72,6 +90,13 @@ docker exec -it envizon_container_name_1 /bin/ash -c 'rails test'
 
 ### Without Docker
 
+#### Arch Linux
+
+If you use Arch Linux, there is now a `PKGBUILD` available in the AUR, as well as in the `/PKGBUILD`-directory, including a simple script to generate the database and database user.
+Currently it uses bundler to install the required Ruby Gems in `/usr/share/envizon`, as many Ruby packages are not available in the AUR or the upstream repos. We might improve this situation soon by providing our own, internally used Arch repository.
+
+#### Manually
+
 Requires a PostgreSQL server.
 
 Create a database `envizon` with a user `envizon`. Password and socket location can be modified in the `docker-compose.yml`. Your user needs SUPERUSER privileges; otherwise database import (and tests) won't work, because of foreign key constraints: use `ALTER USER user WITH SUPERUSER;`.
@@ -91,7 +116,6 @@ RAILS_ENV=production
 export RAILS_ENV
 SECRET_KEY_BASE=YOUR_SECRET
 export SECRET_KEY_BASE
-bundle exec rails db:setup
 bundle exec rails db:migrate
 bundle exec rails db:seed
 bundle exec rails assets:precompile
@@ -107,7 +131,6 @@ cd envizon
 bundle install --path vendor/bundle
 RAILS_ENV=development
 export RAILS_ENV
-bundle exec rails db:setup
 bundle exec rails db:migrate
 bundle exec rails db:seed
 bundle exec rails s
@@ -119,6 +142,8 @@ To run the tests:
 RAILS_ENV=test db:setup
 bundle exec rails test
 ```
+
+## Usage
 
 ### Set a password
 

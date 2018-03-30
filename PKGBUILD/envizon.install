@@ -1,0 +1,39 @@
+post_install() {
+  cd /usr/share/envizon || exit
+  bundle config --local build.nokogiri --use-system-libraries
+  bundle install --path vendor/bundle --without development test
+  mkdir -p .ssl
+  openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 \
+    -subj "/C=DE/ST=None/L=None/O=evait/CN=None" \
+    -keyout .ssl/localhost.key  -out .ssl/localhost.crt
+  openssl rand -hex 64 > config/secret
+  systemd-sysusers envizon.conf
+  post_group "$@"
+  post_common "$@"
+}
+
+post_upgrade() {
+  post_group "$@"
+  post_common "$@"
+}
+
+post_remove() {
+  rm -r /usr/share/envizon
+}
+
+post_group() {
+  chown -R :envizon /usr/share/envizon
+  chmod -R g+w /usr/share/envizon
+  chmod -R g+r /usr/share/envizon/.ssl
+}
+
+post_common() {
+  echo ">>"
+  echo ">>    To run envizon, you need to be a member of the envizon group."
+  echo ">>    You can add your user to the group with 'sudo usermod -a -G envizon your_user'."
+  echo ">>    Afterwards, you can apply the group changes immediately"
+  echo '>>    with '\''exec sg envizon newgrp `id -gn`'\''.'
+  echo ">>"
+  echo ">>    A running and initialized PostgreSQL instance is required. If you haven't done so yet,"
+  echo ">>    run sudo -u postgres /usr/share/envizon/db_setup.sh to create a database and the database user."
+}
