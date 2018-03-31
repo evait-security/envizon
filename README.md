@@ -92,8 +92,8 @@ docker exec -it envizon_container_name_1 /bin/ash -c 'rails test'
 
 #### Arch Linux
 
-If you use Arch Linux, there is now a `PKGBUILD` available in the AUR, as well as in the `/PKGBUILD`-directory, including a simple script to generate the database and database user.
-Currently it uses bundler to install the required Ruby Gems in `/usr/share/envizon`, as many Ruby packages are not available in the AUR or the upstream repos. We might improve this situation soon by providing our own, internally used Arch repository.
+If you use Arch Linux, there is now a `PKGBUILD` available in the AUR, as well as in the `/PKGBUILD`-directory, also including a simple script to generate the database and database user.
+Currently it uses bundler to install the required Ruby Gems in `/opt/envizon`, as many Ruby packages are not available in the AUR or the upstream repos. We might improve this situation soon by providing our own, internally used Arch repository.
 
 #### Manually
 
@@ -107,7 +107,17 @@ cd envizon
 bundle install --path vendor/bundle
 ```
 
-You need to create a secret and SSL certificates, as described above.
+You need to create a secret and SSL certificates:
+
+```zsh
+mkdir .ssl
+openssl req -x509 -sha256 -nodes -newkey rsa:2048 -days 365 -keyout .ssl/localhost.key -out .ssl/localhost.crt
+# If you want to use certificates located elsewhere, provide their pathes with SSL_CERT_PATH and SSL_KEY_PATH
+# Create a secret:
+RAILS_ENV=production bundle exec rails secret
+```
+
+The secret needs to be provided as an environment variable (SECRET_KEY_BASE), or be put in `config/secrets.yml`.
 
 Then, run it with:
 
