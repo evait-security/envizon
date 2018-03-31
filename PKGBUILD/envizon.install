@@ -1,8 +1,5 @@
 post_install() {
-  cd /usr/share/envizon || exit
-  bundle config --local build.nokogiri --use-system-libraries
-  bundle install --path vendor/bundle --without development test
-  mkdir -p .ssl
+  cd /opt/envizon || exit
   openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 \
     -subj "/C=DE/ST=None/L=None/O=evait/CN=None" \
     -keyout .ssl/localhost.key  -out .ssl/localhost.crt
@@ -13,18 +10,23 @@ post_install() {
 }
 
 post_upgrade() {
+  if [ -d /usr/share/envizon ]; then
+    echo ">>    Found directory '/usr/share/envizon'. This might be left over"
+    echo ">>    from a previous installation. You should check if you still need it,"
+    echo ">>    otherwise it can probably be removed."
+  fi
   post_group "$@"
   post_common "$@"
 }
 
 post_remove() {
-  rm -r /usr/share/envizon
+  rm -r /opt/envizon
 }
 
 post_group() {
-  chown -R :envizon /usr/share/envizon
-  chmod -R g+w /usr/share/envizon
-  chmod -R g+r /usr/share/envizon/.ssl
+  chown -R :envizon /opt/envizon
+  chmod -R g+w /opt/envizon
+  chmod -R g+r /opt/envizon/.ssl
 }
 
 post_common() {
@@ -35,5 +37,5 @@ post_common() {
   echo '>>    with '\''exec sg envizon newgrp `id -gn`'\''.'
   echo ">>"
   echo ">>    A running and initialized PostgreSQL instance is required. If you haven't done so yet,"
-  echo ">>    run sudo -u postgres /usr/share/envizon/db_setup.sh to create a database and the database user."
+  echo ">>    run sudo -u postgres /opt/envizon/db_setup.sh to create a database and the database user."
 }

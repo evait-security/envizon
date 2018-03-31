@@ -1,6 +1,6 @@
 pkgname='envizon-git'
 _pkgname='envizon'
-pkgver=37.24d86d4
+pkgver=38.810f89c
 pkgrel=1
 pkgdesc='network visualization tool with focus on red / blue team requirements'
 url='https://evait-security.github.io/envizon/'
@@ -24,26 +24,33 @@ pkgver() {
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-package() {
-  cd "$srcdir"
+build() {
+  cd "$srcdir/${_pkgname}"
+  bundle config --local build.nokogiri --use-system-libraries
+  bundle install --path vendor/bundle --without development test -j"$(nproc)" --no-cache
+  mkdir -p .ssl
+}
 
+package() {
   mkdir -p "$pkgdir/usr/lib/sysusers.d/" \
                    "$pkgdir/usr/bin" \
-                   "$pkgdir/usr/share"
+                   "$pkgdir/opt"
 
   install -m644 "${_pkgname}.sysusers.conf"\
     "$pkgdir/usr/lib/sysusers.d/${_pkgname}.conf"
 
-  cp -ar "${_pkgname}" "$pkgdir/usr/share/${_pkgname}"
-  cp db_setup.sh "$pkgdir/usr/share/${_pkgname}/"
-  chmod +x "$pkgdir/usr/share/${_pkgname}/"
+  cp -ar "${_pkgname}" "$pkgdir/opt/${_pkgname}"
+  cp db_setup.sh "$pkgdir/opt/${_pkgname}/"
+  chmod +x "$pkgdir/opt/${_pkgname}/"
 
-  rm -rf "$pkgdir/usr/share/${_pkgname}/docker"
-  rm -rf "$pkgdir/usr/share/${_pkgname}/.github"
+  rm -rf "$pkgdir/opt/${_pkgname}/docker"
+  rm -rf "$pkgdir/opt/${_pkgname}/.github"
+
+  chmod -R g+w "$pkgdir/opt/${_pkgname}"
 
   cat > "$pkgdir/usr/bin/${_pkgname}" << EOF
 #!/bin/sh
-cd /usr/share/${_pkgname}
+cd /opt/${_pkgname}
 export SECRET_KEY_BASE=\$(cat config/secret)
 RAILS_ENV=production
 export RAILS_ENV
