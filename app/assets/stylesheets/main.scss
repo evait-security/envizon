@@ -7,5 +7,9 @@ $primary-color: color("blue", "darken-3") !default;
 $secondary-color: color("blue", "darken-2") !default;
 @import 'materialize';
 @import "font-awesome";
-
-
+@font-face {
+    font-family: 'Fira Mono';
+    src:font-url('FiraMono-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: monospace;
+}

@@ -78,7 +78,7 @@
                   <% port.outputs.to_a.each do |output| %>
                     <li>
                       <div class="collapsible-header"><i class="material-icons">short_text</i><%= "#{output.name}" %></div>
-                      <div class="collapsible-body">
+                      <div class="collapsible-body mono">
                         <% output.value.split(/\n/).each do |line| %>
                             <span><%= "#{line}"%></span>
                         <% end%>
@@ -101,7 +101,7 @@
     <% client.outputs.to_a.each do |output| %>
       <li>
         <div class="collapsible-header"><i class="material-icons">short_text</i><%= "#{output.name}" %></div>
-        <div class="collapsible-body">
+        <div class="collapsible-body mono">
           <% output.value.split(/\n/).to_a.each do |cur_line| %>
               <span><%= "#{cur_line}"%></span>
           <% end%>

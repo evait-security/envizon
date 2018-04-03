@@ -62,7 +62,7 @@ For the lazy ones
 
 ```zsh
 wget https://raw.githubusercontent.com/evait-security/envizon/master/docker/docker-compose.yml
-docker-compose up
+sudo docker-compose up
 ```
 
 ##### Running from local git checkout
