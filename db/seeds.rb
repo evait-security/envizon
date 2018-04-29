@@ -10,13 +10,16 @@ if SavedScan.all.empty?
   SavedScan.create([{ name: 'ARP scan', parameter: '-sP -PR' },
                     { name: 'Enumerate devices only', parameter: '-sn -T4' },
                     { name: 'Quick OS SMB detection', parameter: '-sU -sS --script=smb-os-discovery.nse -p U:137,T:139 -T4' },
-                    { name: 'Quick OS-discovery, variant', parameter: '-O --top-ports 100 --script=smb-os-discovery -T4' },
                     { name: 'Default scripts, top ports, OS detection', parameter: '-O -sC -T4' },
                     { name: 'Default scripts, top 300 ports, OS detection, service detection', parameter: '--top-ports 300 -O -sC -sV -T4' },
                     { name: 'Scan all ports', parameter: '-p- -T4' },
                     { name: 'Full scan', parameter: '-O -p- -sC -sV -T4' },
                     { name: 'Vuln all', parameter: '-Pn --script=vuln' },
-                    { name: 'Vuln: Exploit', parameter: '-Pn --script=exploit' }])
+                    { name: 'Vuln: Exploit', parameter: '-Pn --script=exploit' },
+                    { name: 'Fast scan', parameter: '-F -T4 --max-retries 1' },
+                    { name: 'Fast scan with OS-Discovery', parameter: '-F -T4 --max-retries 1 -O --version-light --script=smb-os-discovery' },
+                    { name: 'Scripts: Web', parameter: '-p 80,443,3000 -sV --script "http-* and not(dos or brute)"'},
+                    { name: 'Scripts: SMB', parameter: '--script "smb* and not(dos or brute)" -p 139,445 -sU -sT' }])
 end
 
 if Label.all.empty?
