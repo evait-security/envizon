@@ -18,10 +18,16 @@ class ScansController < ApplicationController
       scan.command = 'Scan in progress…'
       scan.save
       ScanJob.perform_async(command, scan, current_user)
+      
       respond_to do |format|
         format.html { redirect_to scans_path }
         # that's used because otherwise multipart-file-upload-js-async-things won't work as they should.
-        format.js { render(js: %(window.location.href='#{scans_path}')) and return }
+        if params[:fromGroupView].present?
+          locals = { message: "Scan '#{scan.name}' created", type: 'success', close: true }
+          format.js { render 'pages/notify', locals: locals }
+        else
+          format.js { render(js: %(window.location.href='#{scans_path}')) and return }
+        end
       end
     else
       locals = { message: 'You need to specify name and target for your scan!',
