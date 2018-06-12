@@ -33,6 +33,7 @@ Rails.application.routes.draw do
 
   get '/pages/groups' => 'pages#groups'
   get '/pages/settings' => 'pages#settings', as: :global_settings
+  get '/pages/changelog' => 'pages#changelog', as: :changelog
   post '/clients/global_search' => 'clients#global_search', as: :global_search
 
   get '/clients/search' => 'clients#search'
@@ -52,10 +53,4 @@ Rails.application.routes.draw do
   post 'scans/upload' => 'scans#upload'
 
   resources :clients
-
-  # TODO: still used somewhere?
-  post 'groups/scan_form' => 'groups#scan_form'
-  post 'groups/scan' => 'groups#scan'
-
-
 end

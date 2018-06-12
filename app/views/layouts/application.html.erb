@@ -1,5 +1,4 @@
 <style>
-
   .icon-block {
     padding: 0 15px;
   }
@@ -75,7 +74,6 @@
   <%= csrf_meta_tags %>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-
 </head>
 <body style="background: #f7f7f7">
   <nav class="" role="navigation" >
@@ -90,7 +88,9 @@
         <!-- Dropdown Structure -->
         <ul id="user-drop-menu" class="dropdown-content">
           <li><%= link_to '<i class="material-icons">settings</i>Settings'.html_safe, global_settings_path %></li>
-          <li><%= link_to '<i class="material-icons">mode_edit</i>Change password'.html_safe, edit_user_registration_path %></li>
+          <li><%= link_to '<i class="material-icons">verified_user</i>Set password'.html_safe, edit_user_registration_path %></li>
+          <li><%= link_to '<i class="material-icons">new_releases</i>Changelog'.html_safe, changelog_path %></li>
+          <li><%= link_to '<i class="material-icons">build</i>Version: 2.1.3'.html_safe, "javascript:void(0)" %></li>
           <li class="divider"></li>
           <li><%= link_to '<i class="material-icons">lock_outline</i>Sign out'.html_safe, destroy_user_session_path, method: :delete, class: "red-text text-darken-2" %></li>
         </ul>
