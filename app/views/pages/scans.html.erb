@@ -170,4 +170,18 @@
   function setSavedScanLabel(saved_scan){
     $("#savedScanLabel")[0].innerHTML = "Scan Parameter* ( " + saved_scan + " )";
   }
+    // download scan
+  $(document).on("click", '.download_scan', function() {
+      $.ajax({
+          url: "<%= download_scan_path %>",
+          headers: { Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"},
+          dataType : "script",
+          cache: true,
+          method: "post",
+          data: {
+              id: $(this).parent().attr("id")
+          }
+      });
+      $(this).blur();
+  });
 </script>

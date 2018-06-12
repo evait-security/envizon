@@ -51,6 +51,7 @@ Rails.application.routes.draw do
   get 'scans/reload_status' => 'scans#reload_status'
   get 'scans/reload_finished' => 'scans#reload_finished'
   post 'scans/upload' => 'scans#upload'
+  post 'scans/download' => 'scans#download', as: :download_scan
 
   resources :clients
 end

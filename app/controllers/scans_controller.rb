@@ -67,6 +67,14 @@ class ScansController < ApplicationController
     end
   end
 
+  def download
+    # ToDo: Error: file send back in raw to client without download instructions
+    # ToDo: Filename col has to be add to db model of scans and content has to be returned back with send_file
+    data = "This is a test"
+    file_name = "test.txt"
+    send_data data, filename: file_name, type: 'text/plain'
+  end
+
   def reload_status
     render partial: 'pages/scan_status'
   end

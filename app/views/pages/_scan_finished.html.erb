@@ -1,9 +1,10 @@
 <% Scan.where.not(enddate: nil).order(:id).each do |scan|%>
     <tr>
-        <td class="custom-truncate" style="max-width: 5em;"><%= "#{scan.name}"%></td>
-        <td class="custom-truncate tooltipped" style="max-width: 15em;" data-position="bottom" data-delay="50" data-tooltip="<%= "#{scan.command}"%>"><%= "#{scan.command}"%></td>
+        <td class="custom-truncate" style="max-width: 8em;"><%= "#{scan.name}"%></td>
+        <td><i class="material-icons tooltipped" data-position="bottom" data-delay="50" data-tooltip="<%= "#{scan.command}"%>">code</i></td>
         <td><%= scan.startdate.blank? ? "": "#{scan.startdate.strftime('%Y-%m-%d %H:%M:%S')}"%></td>
         <td><%= scan.enddate.blank? ? "": "#{scan.enddate.strftime('%Y-%m-%d %H:%M:%S')}"%></td>
+        <td id="<%= scan.id %>"><a href="#" data-position="bottom" data-delay="50" data-tooltip="Download scan" class="tooltipped download_scan"><i class="material-icons blue-text text-darken-2">get_app</i></a></td>
     </tr>
 <% end%>
 
