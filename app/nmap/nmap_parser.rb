@@ -95,9 +95,14 @@ class NmapParser
       db_port.client_id = client.id
       db_port.number = port.number
       if port.service
-        db_port.service = port.service.name
-        db_port.description = port.service.product.present? ? port.service.product : 'Unknown Product'
-        db_port.description += ' ' + port.service.version if port.service.version.present?
+        unless db_port.sv
+          db_port.service = port.service.name
+        end
+        if port.service.product.present?
+          db_port.description = port.service.product 
+          db_port.description += ' ' + port.service.version if port.service.version.present?
+          db_port.sv = true
+        end
       end
       port_scripts(db_port, port) if port.scripts
       db_port.save
