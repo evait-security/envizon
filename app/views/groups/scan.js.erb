@@ -1,2 +1,6 @@
-$("#modal-content").html("<%= j(render('scan', :clients=> clients)) %>");
+$("#medium-modal").modal('open');
+$("#medium-modal-content").html("<%= j(render('scan', :clients=> clients)) %>");
 Materialize.updateTextFields();
+$(document).ready(function(){
+    $('ul.tabs').tabs();
+});

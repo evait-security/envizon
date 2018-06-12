@@ -23,8 +23,11 @@ Rails.application.routes.draw do
 
   post 'groups/delete_form' => 'groups#delete_form'
   post 'groups/delete' => 'groups#delete'
+
   post 'groups/delete_clients_form' => 'groups#delete_clients_form'
   post 'groups/delete_clients' => 'groups#delete_clients'
+
+  post 'groups/scan_form' => 'groups#scan_form'
 
   get 'pages/refresh' => 'pages#refresh', as: :group_refresh
 

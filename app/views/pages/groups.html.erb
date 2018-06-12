@@ -293,6 +293,32 @@
       $(this).blur();
   });
 
+  // start new scan with selected clients - group header
+  $(document).on("click", '.grp_scan', function() {
+      var search = false;
+      var clients = new Array();
+      var id = $(this).parent().attr("id");
+      $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
+          if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
+              clients.push($(this).attr("id"));
+          }
+      });
+
+      $.ajax({
+          url: "<%= groups_scan_form_path %>",
+          dataType : "script",
+          cache: true,
+          method: "post",
+          data: {
+              clients: clients,
+              source_group: id,
+              search: search
+          }
+      });
+
+      $(this).blur();
+  });
+  
   // delete selected clients - group header
   $(document).on("click", '.grp_delete_clients', function() {
       var search = false;
