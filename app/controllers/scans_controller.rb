@@ -18,7 +18,7 @@ class ScansController < ApplicationController
       scan.command = 'Scan in progress…'
       scan.save
       ScanJob.perform_async(command, scan, current_user)
-      
+
       respond_to do |format|
         format.html { redirect_to scans_path }
         # that's used because otherwise multipart-file-upload-js-async-things won't work as they should.
@@ -68,11 +68,10 @@ class ScansController < ApplicationController
   end
 
   def download
-    # ToDo: Error: file send back in raw to client without download instructions
-    # ToDo: Filename col has to be add to db model of scans and content has to be returned back with send_file
-    data = "This is a test"
-    file_name = "test.txt"
-    send_data data, filename: file_name, type: 'text/plain'
+    return unless params[:id].present?
+    file = Scan.find(params[:id]).file
+    filename = File.basename(file)
+    send_file file, type: 'text/xml', filename: filename, disposition: 'attachment'
   end
 
   def reload_status

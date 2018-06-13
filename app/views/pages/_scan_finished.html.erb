@@ -4,7 +4,10 @@
         <td><i class="material-icons tooltipped" data-position="bottom" data-delay="50" data-tooltip="<%= "#{scan.command}"%>">code</i></td>
         <td><%= scan.startdate.blank? ? "": "#{scan.startdate.strftime('%Y-%m-%d %H:%M:%S')}"%></td>
         <td><%= scan.enddate.blank? ? "": "#{scan.enddate.strftime('%Y-%m-%d %H:%M:%S')}"%></td>
-        <td id="<%= scan.id %>"><a href="#" data-position="bottom" data-delay="50" data-tooltip="Download scan" class="tooltipped download_scan"><i class="material-icons blue-text text-darken-2">get_app</i></a></td>
+        <%= simple_form_for :scans, url: download_scan_path do |f| %>
+          <input type="hidden" name="id" value="<%= scan.id %>" />
+          <td id="<%= scan.id %>"><%= f.button :submit, 'get_app', class: 'material-icons blue-text text-darken-2' %></td>
+        <% end %>
     </tr>
 <% end%>
 
