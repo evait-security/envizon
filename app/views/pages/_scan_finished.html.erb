@@ -1,9 +1,13 @@
 <% Scan.where.not(enddate: nil).order(:id).each do |scan|%>
     <tr>
-        <td class="custom-truncate" style="max-width: 5em;"><%= "#{scan.name}"%></td>
-        <td class="custom-truncate tooltipped" style="max-width: 15em;" data-position="bottom" data-delay="50" data-tooltip="<%= "#{scan.command}"%>"><%= "#{scan.command}"%></td>
+        <td class="custom-truncate" style="max-width: 8em;"><%= "#{scan.name}"%></td>
+        <td><i class="material-icons tooltipped" data-position="bottom" data-delay="50" data-tooltip="<%= "#{scan.command}"%>">code</i></td>
         <td><%= scan.startdate.blank? ? "": "#{scan.startdate.strftime('%Y-%m-%d %H:%M:%S')}"%></td>
         <td><%= scan.enddate.blank? ? "": "#{scan.enddate.strftime('%Y-%m-%d %H:%M:%S')}"%></td>
+        <%= simple_form_for :scans, url: download_scan_path do |f| %>
+          <input type="hidden" name="id" value="<%= scan.id %>" />
+          <td><button class="btn btn-icon" type="submit" name="action"><i class="material-icons">get_app</i></button></td>
+        <% end %>
     </tr>
 <% end%>
 

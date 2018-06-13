@@ -10,6 +10,7 @@ class ScanParseJob
       nmap.parse
       scan.command, scan.startdate = *nmap.result
       scan.enddate = scan.startdate if scan.enddate.blank?
+      scan.file = xmlpath
       scan.save
       user.scans << scan
       user.save

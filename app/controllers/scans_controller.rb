@@ -18,7 +18,7 @@ class ScansController < ApplicationController
       scan.command = 'Scan in progress…'
       scan.save
       ScanJob.perform_async(command, scan, current_user)
-      
+
       respond_to do |format|
         format.html { redirect_to scans_path }
         # that's used because otherwise multipart-file-upload-js-async-things won't work as they should.
@@ -65,6 +65,13 @@ class ScansController < ApplicationController
                  type: 'alert' }
       respond_with_notify(locals)
     end
+  end
+
+  def download
+    return unless params[:id].present?
+    file = Scan.find(params[:id]).file
+    filename = File.basename(file)
+    send_file file, type: 'text/xml', filename: filename, disposition: 'attachment'
   end
 
   def reload_status
