@@ -210,7 +210,7 @@ Why so salty on github issue discussion?
 + Ruby on Rails
 + ruby-nmap (https://github.com/sophsec/ruby-nmap)
 + Materialize CSS (http://materializecss.com/)
-+ Fontawsome Icons (https://fontawesome.com/)
++ Font Awesome Icons (https://fontawesome.com/)
 + Material Icons (https://material.io/icons/)
 + Many, many helpful gems
 
