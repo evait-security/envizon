@@ -75,11 +75,15 @@ class ScansController < ApplicationController
   end
 
   def reload_status
-    render partial: 'pages/scan_status'
+    respond_to do |format|
+      format.js { render 'pages/reload_status' }
+    end
   end
 
   def reload_finished
-    render partial: 'pages/scan_finished'
+    respond_to do |format|
+      format.js { render 'pages/reload_finished' }
+    end
   end
 
   private

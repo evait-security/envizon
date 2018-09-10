@@ -168,9 +168,8 @@
   $(document).ready(
     function() {
     setInterval(function() {
-      $('.tooltipped').tooltip('remove');
-      $('.reload_status').load('/scans/reload_status');
-      $('.reload_finished').load('/scans/reload_finished');
+      $.ajax({url: "/scans/reload_status"});
+      $.ajax({url: "/scans/reload_finished"});
     }, 10000);
   });
   function setSavedScanLabel(saved_scan){
