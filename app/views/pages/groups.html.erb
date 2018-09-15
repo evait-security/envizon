@@ -102,7 +102,7 @@
       <%= render partial: "group_list" %>
     </div>
     <div class="col s5 offset-s2" id="single_group_view">
-      <div id="selected-group"></div>
+      <div class="selected-group"></div>
       <div class="row" id="group-placeholder">
         <div class="col s12 m12">
           <div class="card">
@@ -164,7 +164,7 @@
     // Display group on click (sidebar)
     $(document).on("click", '.group-collection-item', function() {
         $("#group-placeholder").addClass("hidden");
-        var id = this.id.split("_")[1];
+        var id = this.getAttribute("gid");
         $.ajax({
             url: "<%= single_group_html_path %>",
             dataType : "script",
@@ -189,7 +189,7 @@
 
     // Close Group Box
     $(document).on("click", '.grp_close', function() {
-        var id = $(this).parents(".group-actions").attr('id');
+        var id = $('.selected-group').attr('gid');
         $(this).blur();
         $("#box_" + id).fadeOut(400, function() {
             $("#box_" + id).remove() ;
@@ -205,7 +205,7 @@
     $(document).on("click", '.grp_new', function() {
         var search = false;
         var clients = new Array();
-        var id = $(this).parent().attr("id");
+        var id = $('.selected-group').attr('gid');
         $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
             if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
                 clients.push($(this).attr("id"));
@@ -213,7 +213,7 @@
         });
 
         // check if source group is search result
-        if (id.length == 15) { search = true; }
+        if (id == "-1") { search = true; }
 
         if(clients.length == 0){
             $.ajax({
@@ -242,7 +242,7 @@
     $(document).on("click", '.grp_copy', function() {
         var search = false;
         var clients = new Array();
-        var id = $(this).parent().attr("id");
+        var id = $('.selected-group').attr('gid');
         $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
             if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
                 clients.push($(this).attr("id"));
@@ -250,7 +250,7 @@
         });
 
         // check if source group is search result
-        if (id.length == 15) { search = true; }
+        if (id == "-1") { search = true; }
 
         $.ajax({
             url: "<%= groups_copy_form_path %>",
@@ -271,7 +271,7 @@
     $(document).on("click", '.grp_move', function() {
         var search = false;
         var clients = new Array();
-        var id = $(this).parent().attr("id");
+        var id = $('.selected-group').attr('gid');
         $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
             if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
                 clients.push($(this).attr("id"));
@@ -279,7 +279,7 @@
         });
 
         // check if source group is search result
-        if (id.length == 15) { search = true; }
+        if (id == "-1") { search = true; }
 
         $.ajax({
             url: "<%= groups_move_form_path %>",
@@ -300,7 +300,7 @@
     $(document).on("click", '.grp_scan', function() {
         var search = false;
         var clients = new Array();
-        var id = $(this).parent().attr("id");
+        var id = $('.selected-group').attr('gid');
         $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
             if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
                 clients.push($(this).attr("id"));
@@ -326,7 +326,7 @@
     $(document).on("click", '.grp_delete_clients', function() {
         var search = false;
         var clients = new Array();
-        var id = $(this).parent().attr("id");
+        var id = $('.selected-group').attr('gid');
         $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
             if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
                 clients.push($(this).attr("id"));
@@ -334,7 +334,7 @@
         });
 
         // check if source group is search result
-        if (id.length == 15) { search = true; }
+        if (id == "-1") { search = true; }
 
         $.ajax({
             url: "<%= groups_delete_clients_form_path %>",
@@ -354,7 +354,7 @@
     // delete group with all clients containing - group header
     $(document).on("click", '.grp_delete', function() {
         var clients = new Array();
-        var id = $(this).parent().attr("id");
+        var id = $('.selected-group').attr('gid');
         $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
             if($(this).parents(".ui-selectee")) {
                 clients.push($(this).attr("id"));
@@ -378,7 +378,7 @@
     // export selected clients - group header
     $(document).on("click", '.grp_export', function() {
         var clients = new Array();
-        var id = $(this).parent().attr("id");
+        var id = $('.selected-group').attr('gid');
         $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
             if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
                 clients.push($(this).attr("id"));
@@ -400,22 +400,18 @@
 
     // mark all clients in group - group header
     $(document).on("click", '.grp_mark_all', function() {
-        var id = $(this).parent().attr("id");
-
+        var id = $('.selected-group').attr('gid');
         $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
             $(this).parents(".ui-selectee").addClass("ui-selected");
-
         });
         $(this).blur();
     });
 
     // unmark all clients in group - group header
     $(document).on("click", '.grp_unmark_all', function() {
-        var id = $(this).parent().attr("id");
-
+        var id = $('.selected-group').attr('gid');
         $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
             $(this).parents(".ui-selectee").removeClass("ui-selected");
-
         });
         $(this).blur();
     });
@@ -433,7 +429,6 @@
     // new group add -> button float
     $(".group_add_float").click(function () {
         $("#generic-modal").modal('open');
-
         $.ajax({
             url: "<%= new_group_path %>",
             dataType : "script",
@@ -449,5 +444,4 @@
             cache: true
         });
     });
-
 </script>
