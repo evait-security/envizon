@@ -6,7 +6,7 @@ $("#search_result").html("<%= j(render('search_result')) %>");
 
 
 $('#add_to_group_view').click(function () {
-    $('#search_result .group-box').prependTo("#single_group_view");
+    $("#selected-group").html($("#search_result .group-box"));
     $("#group-placeholder").addClass("hidden");
     $("#wide-modal").modal('close');
 });
