@@ -34,7 +34,7 @@
     <!-- All groups without clients (Sidebar) -->
     <% clientlessGroups.each do | current_group | %>
         <% unless current_group.clients.count > 0 %>
-            <a href="#" class="collection-item group-collection-item" id="info_<%= "#{current_group.id}" %>"> 
+            <a href="#" class="collection-item group-collection-item" id="info_<%= "#{current_group.id}" %>" gid="<%= "#{current_group.id}" %>"> 
                 <span style="font-weight: 300 !important;" class="collection-item-title truncate"><%= "#{current_group.name}" %><% unless current_group.mod %>&nbsp;*<% end %></span>
                 <div class="secondary-content">
                     <span style="float: left;" class="chip"><%= "#{current_group.clients.count}" %></span>
