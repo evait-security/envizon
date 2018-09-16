@@ -1,15 +1,49 @@
-<%  Group.all.order(mod: :desc, name: :asc).to_a.each do |current_group| %>
-    <script type="application/javascript">
-        if(!(($('#box_<%= "#{current_group.id}" %>').length) && !$('#box_<%= "#{current_group.id}" %>').hasClass("hidden"))) {
-            var groupSkeleton =
-                '<div class="row hidden group-box scale-transition" id="box_<%= "#{current_group.id}" %>">\n' +
-                '   <div class="col s12" id="group_content_<%= "#{current_group.id}" %>"></div>\n' +
-                '</div>'
-            $(groupSkeleton).appendTo("#group_tables");
-        }
-    </script>
-    <%= javascript_tag(render(:template => 'groups/group_content', :handlers => [:erb], :formats => [:js], locals:{group_ids: Array.new(1, current_group.id), message: "empty"})) %>
-<%  end %>
+<% current_group = Group.find(group_id) %>
+<div class="row group-box scale-transition" id="box_<%= "#{current_group.id}" %>">
+    <div class="col s12" id="group_content_<%= "#{current_group.id}" %>">
+        <div class="card material-table">
+            <div class="table-header table-header-groups">
+            <span class="table-title truncate" style="margin-top: 15px; margin-bottom: 10px;"><%= "#{current_group.name}" %></span>
+            <div>
+                <div style="float: left;"><%= "#{current_group.icon}".html_safe %></div>
+                <div style="float: right;" class="actions group-actions" id="<%= "#{current_group.id}" %>">
+                <a href="#" data-position="bottom" data-delay="50" data-tooltip="Export selected clients" class="btn-flat nopadding tooltipped grp_export"><i class="material-icons">file_download</i></a>
+                <a href="#" data-position="bottom" data-delay="50" data-tooltip="Select all visible clients in group" class="btn-flat nopadding tooltipped grp_mark_all"><i class="material-icons">check_box</i></a>
+                <a href="#" data-position="bottom" data-delay="50" data-tooltip="Unselect all visible clients in group" class="btn-flat nopadding tooltipped grp_unmark_all"><i class="material-icons">check_box_outline_blank</i></a>
+                <a href="#" data-position="bottom" data-delay="50" data-tooltip="Delete whole group" class="btn-flat nopadding tooltipped grp_delete"><i class="material-icons red-text text-darken-4">delete_forever</i></a>
+                <a href="#" data-position="bottom" data-delay="50" data-tooltip="Delete selected clients" class="btn-flat nopadding tooltipped grp_delete_clients"><i class="material-icons red-text text-darken-4">delete</i></a>
+                <a href="#" data-position="bottom" data-delay="50" data-tooltip="Move selected clients to another group" class="btn-flat nopadding tooltipped grp_move"><i class="material-icons blue-text text-darken-2">forward</i></a>
+                <a href="#" data-position="bottom" data-delay="50" data-tooltip="Copy selected clients to another group" class="btn-flat nopadding tooltipped grp_copy"><i class="material-icons blue-text text-darken-2">content_copy</i></a>
+                <a href="#" data-position="bottom" data-delay="50" data-tooltip="Add new group with selected clients" class="btn-flat nopadding tooltipped grp_new"><i class="material-icons green-text text-darken-2">group_add</i></a>
+                <a href="#" data-position="bottom" data-delay="50" data-tooltip="Start scan with selected client" class="btn-flat nopadding tooltipped grp_scan"><i class="material-icons blue-text text-darken-2">gps_fixed</i></a>
+                <a href="#" data-position="bottom" data-delay="50" data-tooltip="Search in group" class="btn-flat nopadding tooltipped grp_search-toggle"><i class="material-icons yellow-text text-darken-4">search</i></a>
+                <a href="#" data-position="bottom" data-delay="50" data-tooltip="Close group" class="btn-flat nopadding tooltipped grp_close"><i class="material-icons">close</i></a>
+                </div>
+            </div>
+            </div>
+            <table id="datatable-<%= "#{current_group.id}" %>" class="dt_init">
+            <thead>
+                <tr>
+                <th>IP</th>
+                <th>Hostname</th>
+                <th>Operating System</th>
+                <th>Ports</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% current_group.clients.order(:ip).to_a.each do |current_client| %>
+                <tr class="ui-selectee">
+                    <td><%= link_to "#{current_client.ip}", client_path(current_client.id), :remote => true, :id => current_client.id, :class => 'blue-text text-darken-2' %></td>
+                    <td><%= "#{current_client.hostname}" %></td>
+                    <td><%= "#{current_client.os}" %></td>
+                    <td><%= "#{current_client.ports.count}" %></td>
+                </tr>
+                <% end %>
+            </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 <script>
     function init_datatables() {
@@ -184,4 +218,3 @@
         cancel: 'a'
     });
 </script>
-

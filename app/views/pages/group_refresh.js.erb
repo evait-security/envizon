@@ -1,6 +1,19 @@
 // refresh sidebar
 $("#group_list").html("<%= escape_javascript(render partial: 'pages/group_list') %>");
-$("#group_tables").html("<%= escape_javascript(render partial: 'pages/group_tables') %>");
+
+// refresh selected group
+var selected_group = $('.selected-group').attr('gid');
+if(selected_group != "-1"){
+    $.ajax({
+        url: "<%= single_group_html_path %>",
+        dataType : "script",
+        cache: true,
+        method: "post",
+        data: {
+            group_id: selected_group
+        }
+    });
+}
 
 
 // close modal if needed

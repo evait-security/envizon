@@ -102,6 +102,7 @@
       <%= render partial: "group_list" %>
     </div>
     <div class="col s5 offset-s2" id="single_group_view">
+      <div class="selected-group"></div>
       <div class="row" id="group-placeholder">
         <div class="col s12 m12">
           <div class="card">
@@ -112,9 +113,6 @@
             </div>
           </div>
         </div>
-      </div>
-      <div id="group_tables">
-        <%= render partial: "group_tables" %>
       </div>
     </div>
     <div class="col s5 offset-s7" id="single_host_view">
@@ -163,288 +161,287 @@
 </div>
 
 <script>
-  // Display group on click (sidebar)
-  $(document).on("click", '.group-collection-item', function() {
-      $("#group-placeholder").addClass("hidden");
-      var id = this.id.split("_")[1];
-      $("#box_" + id).prependTo("#single_group_view");
-      $("#box_" + id).fadeIn(400);
-      $("#box_" + id).removeClass("hidden");
-      $(this).blur();
-  });
+    // Display group on click (sidebar)
+    $(document).on("click", '.group-collection-item', function() {
+        $("#group-placeholder").addClass("hidden");
+        var id = this.getAttribute("gid");
+        $.ajax({
+            url: "<%= single_group_html_path %>",
+            dataType : "script",
+            cache: true,
+            method: "post",
+            data: {
+                group_id: id
+            }
+        });
+        $(this).blur();
+    });
 
-  // Datatable Search toogle with more than one datatables
-  $(document).on("click", '.grp_search-toggle', function() {
-      if ($(this).parents(".table-header").siblings(".dataTables_wrapper").find(".hiddensearch").css('display') == 'none')
-          $(this).parents(".table-header").siblings(".dataTables_wrapper").find(".hiddensearch").slideDown();
-      else
-          $(this).parents(".table-header").siblings(".dataTables_wrapper").find(".hiddensearch").slideUp();
+    // Datatable Search toogle with more than one datatables
+    $(document).on("click", '.grp_search-toggle', function() {
+        if ($(this).parents(".table-header").siblings(".dataTables_wrapper").find(".hiddensearch").css('display') == 'none')
+            $(this).parents(".table-header").siblings(".dataTables_wrapper").find(".hiddensearch").slideDown();
+        else
+            $(this).parents(".table-header").siblings(".dataTables_wrapper").find(".hiddensearch").slideUp();
 
-      $(this).blur();
-  });
+        $(this).blur();
+    });
 
-  // Close Group Box
-  $(document).on("click", '.grp_close', function() {
-      var id = $(this).parents(".group-actions").attr('id');
-      $(this).blur();
-      $("#box_" + id).fadeOut(400, function() {
-          $("#box_" + id).addClass("hidden");
-          $("#box_" + id).appendTo("#group_tables");
-          $("#box_" + id).promise().done(function(){
-              // Show placeholder if all groups are hidden
-              if ($(".group-box").filter(".hidden").length == $(".group-box").length)
-                  $("#group-placeholder").removeClass("hidden");
-          });
-      });
-  });
+    // Close Group Box
+    $(document).on("click", '.grp_close', function() {
+        var id = $('.selected-group').attr('gid');
+        $(this).blur();
+        $("#box_" + id).fadeOut(400, function() {
+            $("#box_" + id).remove() ;
+            $("#box_" + id).promise().done(function(){
+                // Show placeholder if all groups are hidden
+                if ($(".group-box").length <= 0)
+                    $("#group-placeholder").removeClass("hidden");
+            });
+        });
+    });
 
-  // new group add - group header
-  $(document).on("click", '.grp_new', function() {
-      var search = false;
-      var clients = new Array();
-      var id = $(this).parent().attr("id");
-      $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
-          if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
-              clients.push($(this).attr("id"));
-          }
-      });
+    // new group add - group header
+    $(document).on("click", '.grp_new', function() {
+        var search = false;
+        var clients = new Array();
+        var id = $('.selected-group').attr('gid');
+        $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
+            if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
+                clients.push($(this).attr("id"));
+            }
+        });
 
-      // check if source group is search result
-      if (id.length == 15) { search = true; }
+        // check if source group is search result
+        if (id == "-1") { search = true; }
 
-      if(clients.length == 0){
-          $.ajax({
+        if(clients.length == 0){
+            $.ajax({
             url: "<%= new_group_path %>",
-              dataType : "script",
-              cache: true
-          });
-      } else {
-          $("#medium-modal").modal('open');
-          $.ajax({
-              url: "<%= groups_create_form_path %>",
-              dataType : "script",
-              cache: true,
-              method: "post",
-              data: {
-                  clients: clients,
-                  source_group: id,
-                  search: search
-              }
-          });
-      }
-      $(this).blur();
-  });
+                dataType : "script",
+                cache: true
+            });
+        } else {
+            $("#medium-modal").modal('open');
+            $.ajax({
+                url: "<%= groups_create_form_path %>",
+                dataType : "script",
+                cache: true,
+                method: "post",
+                data: {
+                    clients: clients,
+                    source_group: id,
+                    search: search
+                }
+            });
+        }
+        $(this).blur();
+    });
 
-  // copy selected clients - group header
-  $(document).on("click", '.grp_copy', function() {
-      var search = false;
-      var clients = new Array();
-      var id = $(this).parent().attr("id");
-      $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
-          if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
-              clients.push($(this).attr("id"));
-          }
-      });
+    // copy selected clients - group header
+    $(document).on("click", '.grp_copy', function() {
+        var search = false;
+        var clients = new Array();
+        var id = $('.selected-group').attr('gid');
+        $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
+            if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
+                clients.push($(this).attr("id"));
+            }
+        });
 
-      // check if source group is search result
-      if (id.length == 15) { search = true; }
+        // check if source group is search result
+        if (id == "-1") { search = true; }
 
-      $.ajax({
-          url: "<%= groups_copy_form_path %>",
-          dataType : "script",
-          cache: true,
-          method: "post",
-          data: {
-              clients: clients,
-              source_group: id,
-              search: search
-          }
-      });
+        $.ajax({
+            url: "<%= groups_copy_form_path %>",
+            dataType : "script",
+            cache: true,
+            method: "post",
+            data: {
+                clients: clients,
+                source_group: id,
+                search: search
+            }
+        });
 
-      $(this).blur();
-  });
+        $(this).blur();
+    });
 
-  // move selected clients - group header
-  $(document).on("click", '.grp_move', function() {
-      var search = false;
-      var clients = new Array();
-      var id = $(this).parent().attr("id");
-      $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
-          if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
-              clients.push($(this).attr("id"));
-          }
-      });
+    // move selected clients - group header
+    $(document).on("click", '.grp_move', function() {
+        var search = false;
+        var clients = new Array();
+        var id = $('.selected-group').attr('gid');
+        $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
+            if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
+                clients.push($(this).attr("id"));
+            }
+        });
 
-      // check if source group is search result
-      if (id.length == 15) { search = true; }
+        // check if source group is search result
+        if (id == "-1") { search = true; }
 
-      $.ajax({
-          url: "<%= groups_move_form_path %>",
-          dataType : "script",
-          cache: true,
-          method: "post",
-          data: {
-              clients: clients,
-              source_group: id,
-              search: search
-          }
-      });
+        $.ajax({
+            url: "<%= groups_move_form_path %>",
+            dataType : "script",
+            cache: true,
+            method: "post",
+            data: {
+                clients: clients,
+                source_group: id,
+                search: search
+            }
+        });
 
-      $(this).blur();
-  });
+        $(this).blur();
+    });
 
-  // start new scan with selected clients - group header
-  $(document).on("click", '.grp_scan', function() {
-      var search = false;
-      var clients = new Array();
-      var id = $(this).parent().attr("id");
-      $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
-          if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
-              clients.push($(this).attr("id"));
-          }
-      });
+    // start new scan with selected clients - group header
+    $(document).on("click", '.grp_scan', function() {
+        var search = false;
+        var clients = new Array();
+        var id = $('.selected-group').attr('gid');
+        $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
+            if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
+                clients.push($(this).attr("id"));
+            }
+        });
 
-      $.ajax({
-          url: "<%= groups_scan_form_path %>",
-          dataType : "script",
-          cache: true,
-          method: "post",
-          data: {
-              clients: clients,
-              source_group: id,
-              search: search
-          }
-      });
+        $.ajax({
+            url: "<%= groups_scan_form_path %>",
+            dataType : "script",
+            cache: true,
+            method: "post",
+            data: {
+                clients: clients,
+                source_group: id,
+                search: search
+            }
+        });
 
-      $(this).blur();
-  });
-  
-  // delete selected clients - group header
-  $(document).on("click", '.grp_delete_clients', function() {
-      var search = false;
-      var clients = new Array();
-      var id = $(this).parent().attr("id");
-      $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
-          if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
-              clients.push($(this).attr("id"));
-          }
-      });
+        $(this).blur();
+    });
 
-      // check if source group is search result
-      if (id.length == 15) { search = true; }
+    // delete selected clients - group header
+    $(document).on("click", '.grp_delete_clients', function() {
+        var search = false;
+        var clients = new Array();
+        var id = $('.selected-group').attr('gid');
+        $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
+            if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
+                clients.push($(this).attr("id"));
+            }
+        });
 
-      $.ajax({
-          url: "<%= groups_delete_clients_form_path %>",
-          dataType : "script",
-          cache: true,
-          method: "post",
-          data: {
-              clients: clients,
-              source_group: id,
-              search: search
-          }
-      });
+        // check if source group is search result
+        if (id == "-1") { search = true; }
 
-      $(this).blur();
-  });
+        $.ajax({
+            url: "<%= groups_delete_clients_form_path %>",
+            dataType : "script",
+            cache: true,
+            method: "post",
+            data: {
+                clients: clients,
+                source_group: id,
+                search: search
+            }
+        });
 
-  // delete group with all clients containing - group header
-  $(document).on("click", '.grp_delete', function() {
-      var clients = new Array();
-      var id = $(this).parent().attr("id");
-      $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
-          if($(this).parents(".ui-selectee")) {
-              clients.push($(this).attr("id"));
-          }
-      });
+        $(this).blur();
+    });
 
-      $.ajax({
+    // delete group with all clients containing - group header
+    $(document).on("click", '.grp_delete', function() {
+        var clients = new Array();
+        var id = $('.selected-group').attr('gid');
+        $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
+            if($(this).parents(".ui-selectee")) {
+                clients.push($(this).attr("id"));
+            }
+        });
+
+        $.ajax({
         url: "<%= groups_delete_form_path %>",
-          dataType : "script",
-          cache: true,
-          method: "post",
-          data: {
-              clients: clients,
-              source_group: id
-          }
-      });
+            dataType : "script",
+            cache: true,
+            method: "post",
+            data: {
+                clients: clients,
+                source_group: id
+            }
+        });
 
-      $(this).blur();
-  });
+        $(this).blur();
+    });
 
-  // export selected clients - group header
-  $(document).on("click", '.grp_export', function() {
-      var clients = new Array();
-      var id = $(this).parent().attr("id");
-      $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
-          if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
-              clients.push($(this).attr("id"));
-          }
-      });
+    // export selected clients - group header
+    $(document).on("click", '.grp_export', function() {
+        var clients = new Array();
+        var id = $('.selected-group').attr('gid');
+        $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
+            if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
+                clients.push($(this).attr("id"));
+            }
+        });
 
-      $.ajax({
-          url: "<%= groups_export_form_path %>",
-          dataType : "script",
-          cache: true,
-          method: "post",
-          data: {
-              clients: clients
-          }
-      });
+        $.ajax({
+            url: "<%= groups_export_form_path %>",
+            dataType : "script",
+            cache: true,
+            method: "post",
+            data: {
+                clients: clients
+            }
+        });
 
-      $(this).blur();
-  });
+        $(this).blur();
+    });
 
-  // mark all clients in group - group header
-  $(document).on("click", '.grp_mark_all', function() {
-      var id = $(this).parent().attr("id");
+    // mark all clients in group - group header
+    $(document).on("click", '.grp_mark_all', function() {
+        var id = $('.selected-group').attr('gid');
+        $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
+            $(this).parents(".ui-selectee").addClass("ui-selected");
+        });
+        $(this).blur();
+    });
 
-      $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
-          $(this).parents(".ui-selectee").addClass("ui-selected");
+    // unmark all clients in group - group header
+    $(document).on("click", '.grp_unmark_all', function() {
+        var id = $('.selected-group').attr('gid');
+        $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
+            $(this).parents(".ui-selectee").removeClass("ui-selected");
+        });
+        $(this).blur();
+    });
 
-      });
-      $(this).blur();
-  });
-
-  // unmark all clients in group - group header
-  $(document).on("click", '.grp_unmark_all', function() {
-      var id = $(this).parent().attr("id");
-
-      $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
-          $(this).parents(".ui-selectee").removeClass("ui-selected");
-
-      });
-      $(this).blur();
-  });
-
-  // search -> button float & header
-  $(".search_float, .search_header").click(function () {
-      $("#wide-modal").modal('open');
-      $.ajax({
+    // search -> button float & header
+    $(".search_float, .search_header").click(function () {
+        $("#wide-modal").modal('open');
+        $.ajax({
         url: "<%= global_search_view_path %>",
-          dataType : "script",
-          cache: true
-      });
-  });
+            dataType : "script",
+            cache: true
+        });
+    });
 
-  // new group add -> button float
-  $(".group_add_float").click(function () {
-      $("#generic-modal").modal('open');
+    // new group add -> button float
+    $(".group_add_float").click(function () {
+        $("#generic-modal").modal('open');
+        $.ajax({
+            url: "<%= new_group_path %>",
+            dataType : "script",
+            cache: true
+        });
+    });
 
-      $.ajax({
-          url: "<%= new_group_path %>",
-          dataType : "script",
-          cache: true
-      });
-  });
-
-  // new group add -> button float
-  $(".group_refresh_float").click(function () {
-      $.ajax({
+    // new group add -> button float
+    $(".group_refresh_float").click(function () {
+        $.ajax({
         url: "<%= group_refresh_path %>",
-          dataType : "script",
-          cache: true
-      });
-  });
-
+            dataType : "script",
+            cache: true
+        });
+    });
 </script>

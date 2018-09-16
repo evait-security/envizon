@@ -92,6 +92,17 @@ class GroupsController < ApplicationController
     prepare_form(:copy)
   end
 
+  # @url /groups/group
+  # @action POST
+  #
+  # Render a single group html datatable
+  def group
+    respond_to do |format|
+      format.html {}
+      format.js { render 'groups/group', locals: { group_id: params[:group_id] } }
+    end
+  end
+
   # @url /groups/copy
   # @action POST
   #

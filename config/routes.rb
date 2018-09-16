@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   # index ever used, ever?
   resources :groups, only: %i[create new]
 
+  post 'groups/group' => 'groups#group', as: :single_group_html
+
   post 'groups/create_form' => 'groups#create_form'
 
   post 'groups/copy_form' => 'groups#copy_form'
