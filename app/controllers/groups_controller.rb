@@ -31,6 +31,8 @@ class GroupsController < ApplicationController
     destination_group.name = name.blank? ? 'Unknown' : name
     destination_group.icon = '<i class="fa ' + params[:group][:icon] + '"></i>'
     destination_group.mod = true
+
+    affected_group = "-2"
     
     render(:create_custom) && return unless destination_group.save # warn instead?
     message = "New empty group '#{destination_group.name}' created"
@@ -38,6 +40,7 @@ class GroupsController < ApplicationController
 
     if params[:move].present? && params[:move].casecmp('true').zero?
       move_do(selected_clients, destination_group, source_group, search)
+      affected_group = source_group.id
     else
       selected_clients.each { |selected| destination_group.clients << Client.find(selected) }
     end
@@ -45,7 +48,7 @@ class GroupsController < ApplicationController
     destination_group.save
 
     message = "New group '#{destination_group.name}' with #{selected_clients.length} clients saved."
-    respond_with_refresh(message, "-2,-2", "-2")
+    respond_with_refresh(message, "#{affected_group},-2", "-2")
   end
 
   # @url /groups/create_form
