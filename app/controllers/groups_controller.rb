@@ -31,10 +31,10 @@ class GroupsController < ApplicationController
     destination_group.name = name.blank? ? 'Unknown' : name
     destination_group.icon = '<i class="fa ' + params[:group][:icon] + '"></i>'
     destination_group.mod = true
-
+    
     render(:create_custom) && return unless destination_group.save # warn instead?
-
-    respond_with_refresh('New empty group created') && return unless selected_clients.present?
+    message = "New empty group '#{destination_group.name}' created"
+    respond_with_refresh(message, "-2,-2", "-2") && return unless selected_clients.present?
 
     if params[:move].present? && params[:move].casecmp('true').zero?
       move_do(selected_clients, destination_group, source_group, search)
@@ -45,7 +45,7 @@ class GroupsController < ApplicationController
     destination_group.save
 
     message = "New group '#{destination_group.name}' with #{selected_clients.length} clients saved."
-    respond_with_refresh(message)
+    respond_with_refresh(message, "-2,-2", "-2")
   end
 
   # @url /groups/create_form
@@ -81,7 +81,7 @@ class GroupsController < ApplicationController
     move_do(params[:selected_clients], destination_group, source_group, search)
 
     message = "Moved #{params[:selected_clients].length} clients to group '#{destination_group.name}'"
-    respond_with_refresh(message)
+    respond_with_refresh(message, "#{destination_group.id},#{source_group.id}", "-2")
   end
 
   # @url /groups/copy_form
@@ -116,7 +116,7 @@ class GroupsController < ApplicationController
     params[:selected_clients].each { |selected| destination_group.clients << Client.find(selected) }
 
     message = "Copied #{params[:selected_clients].length} clients to group '#{destination_group.name}'"
-    respond_with_refresh(message)
+    respond_with_refresh(message, "#{destination_group.id},-2", "-2")
   end
 
   # @url /groups/delete_clients_form
@@ -151,14 +151,11 @@ class GroupsController < ApplicationController
 
     source_group.clients.each { |client| client.destroy if client.groups.length == 1 }
 
-    message = "Deleted Group '#{source_group.name}'"
+    message = "Deleted group '#{source_group.name}'"
     deleted = source_group.id
     source_group.destroy
 
-    respond_to do |format|
-      format.html {}
-      format.js { render 'pages/group_refresh', locals: { message: message, close: true, delete: deleted, type: 'notice' } }
-    end
+    respond_with_refresh(message, "#{source_group.id},-2", source_group.id)
   end
 
   # @url /groups/delete_clients
@@ -190,7 +187,7 @@ class GroupsController < ApplicationController
       message = "Deleted #{selected_clients.length} clients from group '#{source_group.name}'"
     end
 
-    respond_with_refresh(message)
+    respond_with_refresh(message, "#{source_group.id},-2", "-2")
   end
 
   def scan_form
@@ -249,10 +246,14 @@ class GroupsController < ApplicationController
 
   private
 
-  def respond_with_refresh(message, type = 'notice')
+  def respond_with_refresh(message, mod_gids, delete, type = 'notice')
+    if current_user.settings.find_by_name('global_notify').value
+      ActionCable.server.broadcast 'notification_channel', message: message
+    end
+    ActionCable.server.broadcast 'update_channel', ids: mod_gids
     respond_to do |format|
       format.html { redirect_to root_path }
-      format.js { render 'pages/group_refresh', locals: { message: message, close: true, type: type } }
+      format.js { render 'pages/group_refresh', locals: {  message: message, delete: delete, close: true, type: type } }
     end
   end
 

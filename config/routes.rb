@@ -12,6 +12,8 @@ Rails.application.routes.draw do
 
   post 'groups/group' => 'groups#group', as: :single_group_html
 
+  get 'pages/group_list' => 'pages#group_list', as: :sidebar_html
+
   post 'groups/create_form' => 'groups#create_form'
 
   post 'groups/copy_form' => 'groups#copy_form'

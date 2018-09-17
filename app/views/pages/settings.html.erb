@@ -72,7 +72,7 @@
                   <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
                     <%= f.error_notification %>
                     <div class="col s4">
-                      <p class="grey-text text-darken-2 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Enable / disable global notifications for scan progress">Scan notify</p>
+                      <p class="grey-text text-darken-2 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Enable / disable global notifications">Global notifications</p>
                     </div>
                     <div class="col s6">
                     <p class="centesr-align">
@@ -82,7 +82,7 @@
                     </p>
                     </div>
                     <div class="input-field form-actions col s2" >
-                      <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Update global scan notification settings" type="submit" name="action"><i class="fa fa-refresh"></i></button>
+                      <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Update global notification settings" type="submit" name="action"><i class="fa fa-refresh"></i></button>
                     </div>
                   <% end %>
                 </div>
