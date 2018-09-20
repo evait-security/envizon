@@ -8,7 +8,7 @@ class PagesController < ApplicationController
   def refresh
     respond_to do |format|
       format.html {}
-      format.js { render 'pages/group_refresh', locals: { message: 'Group content has been refreshed', type: 'success' } }
+      format.js { render 'pages/group_refresh', locals: { message: 'Group content has been refreshed', type: 'success', delete: '-2' } }
     end
   end
 
