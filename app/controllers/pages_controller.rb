@@ -12,7 +12,6 @@ class PagesController < ApplicationController
     end
   end
 
-
   # @url /pages/group_list
   # @action POST
   #

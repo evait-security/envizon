@@ -33,7 +33,6 @@ App.notification = App.cable.subscriptions.create("UpdateChannel", {
         $(".grp_update").removeClass("hidden");
       }
     }
-
   },
 
   notify: function() {
