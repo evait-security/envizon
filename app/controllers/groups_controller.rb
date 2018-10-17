@@ -310,7 +310,7 @@ class GroupsController < ApplicationController
     if params.key?(:clients)
       params[:clients].each do |tmpclient|
         unless Client.exists?(tmpclient)
-          respond_with_notify("The database not contains the requested client.")
+          respond_with_notify("One of the selected clients is removed from the database.")
           return
         end
       end
