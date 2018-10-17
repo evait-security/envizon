@@ -308,6 +308,12 @@ class GroupsController < ApplicationController
     end
 
     if params.key?(:clients)
+      params[:clients].each do |tmpclient|
+        unless Client.exists?(tmpclient)
+          respond_with_notify("The database not contains the requested client.")
+          return
+        end
+      end
       clients = Client.find(params[:clients])
       source_group ||= Group.find(params[:source_group]) unless params[:source_group].nil?
     end
