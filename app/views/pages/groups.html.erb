@@ -187,18 +187,32 @@
         $(this).blur();
     });
 
-    // Close Group Box
+    // close Group Box
     $(document).on("click", '.grp_close', function() {
         var id = $('.selected-group').attr('gid');
         $(this).blur();
         $("#box_" + id).fadeOut(400, function() {
-            $("#box_" + id).remove() ;
+            $("#box_" + id).remove();
             $("#box_" + id).promise().done(function(){
-                // Show placeholder if all groups are hidden
-                if ($(".group-box").length <= 0)
-                    $("#group-placeholder").removeClass("hidden");
+                $("#group-placeholder").removeClass("hidden");
             });
         });
+    });
+
+    // update group content
+    $(document).on("click", '.grp_update', function() {
+        var id = $('.selected-group').attr('gid');
+         $('.grp_update').tooltip('remove');
+         $.ajax({
+            url: "<%= single_group_html_path %>",
+            dataType : "script",
+            cache: true,
+            method: "post",
+            data: {
+                group_id: id
+            }
+        });
+        $(this).blur();
     });
 
     // new group add - group header
@@ -222,7 +236,6 @@
                 cache: true
             });
         } else {
-            $("#medium-modal").modal('open');
             $.ajax({
                 url: "<%= groups_create_form_path %>",
                 dataType : "script",

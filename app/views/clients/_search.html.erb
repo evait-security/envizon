@@ -52,7 +52,7 @@
     <div class="row">
       <div class="col s4">
         <%= simple_form_for :search, url: global_search_path, remote: true, multipart: true, :html => { :onsubmit => 'pre_load();', :id => 'global_search_form' } do |f| %>
-            <div id="end_of_form"></div>
+          <div id="end_of_form"></div>
         <% end %>
       </div>
       <div class="col s8">
@@ -178,4 +178,11 @@
     search_name_input = `<input type="hidden" name="search_name" value="${sname}" type="text" class="validate">`;
     $(search_name_input).insertBefore("#end_of_form");
   }
+
+  $('#add_to_group_view').click(function () {
+    $(".selected-group").html($("#search_result .group-box"));
+    $(".selected-group").attr('gid', '-1');
+    $("#group-placeholder").addClass("hidden");
+    $("#wide-modal").modal('close');
+  });
 </script>

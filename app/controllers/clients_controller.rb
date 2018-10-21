@@ -10,9 +10,13 @@ class ClientsController < ApplicationController
   #
   # renders client details
   def show
-    respond_to do |format|
-      format.html { redirect_to root_path }
-      format.js { render :show, locals: { client: Client.find(params[:id]) } }
+    unless Client.exists?(params[:id])
+      respond_with_notify("The database not contains the requested client.")
+    else
+      respond_to do |format|
+        format.html { redirect_to root_path }
+          format.js { render :show, locals: { client: Client.find(params[:id]) } }
+      end
     end
   end
 
@@ -151,4 +155,10 @@ class ClientsController < ApplicationController
     result.nil? ? input : @clients.where(id: result.pluck(:id)).or(@clients.where(id: input.pluck(:id))).group(:id)
   end
 
+  def respond_with_notify(message = 'Please make a selection', type = 'alert')
+    respond_to do |format|
+      format.html { redirect_to root_path }
+      format.js { render 'pages/notify', locals: { message: message, type: type } }
+    end
+  end
 end

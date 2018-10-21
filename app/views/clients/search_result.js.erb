@@ -4,14 +4,6 @@ $('#submit-search').removeClass("disabled");
 // replace search result div with data table
 $("#search_result").html("<%= j(render('search_result')) %>");
 
-
-$('#add_to_group_view').click(function () {
-    $(".selected-group").html($("#search_result .group-box"));
-    $(".selected-group").attr('gid', '-1');
-    $("#group-placeholder").addClass("hidden");
-    $("#wide-modal").modal('close');
-});
-
 // Custom JS File for Datatables with Material Design
 // Credits: https://codepen.io/anon/pen/BddNxJ
 

@@ -32,20 +32,23 @@ class GroupsController < ApplicationController
     destination_group.icon = '<i class="fa ' + params[:group][:icon] + '"></i>'
     destination_group.mod = true
 
+    affected_group = "-2"
+    
     render(:create_custom) && return unless destination_group.save # warn instead?
-
-    respond_with_refresh('New empty group created') && return unless selected_clients.present?
+    message = "New empty group '#{destination_group.name}' created"
+    respond_with_refresh(message, "-2,-2", "-2") && return unless selected_clients.present?
 
     if params[:move].present? && params[:move].casecmp('true').zero?
       move_do(selected_clients, destination_group, source_group, search)
+      affected_group = source_group.id
     else
       selected_clients.each { |selected| destination_group.clients << Client.find(selected) }
     end
 
     destination_group.save
 
-    message = "New group '#{destination_group.name}' with #{selected_clients.length} clients saved."
-    respond_with_refresh(message)
+    message = "New group '#{destination_group.name}' with #{selected_clients.length} client(s) saved."
+    respond_with_refresh(message, "#{affected_group},-2", "-2")
   end
 
   # @url /groups/create_form
@@ -74,14 +77,34 @@ class GroupsController < ApplicationController
   # @required [Array<Integer>] :selected_clients IDs of selected clients
   # @optional [String] :search true/false, indicator if :selected_clients are a result of a search
   def move
-    destination_group = Group.find(params[:destination_group])
-    source_group = Group.find(params[:source_group]) unless params[:source_group] == '-1'
     search = ActiveModel::Type::Boolean.new.cast params[:search]
+    destination_group = Group.find(params[:destination_group])
 
-    move_do(params[:selected_clients], destination_group, source_group, search)
+    search ? source_group = "-2" : source_group = Group.find(params[:source_group])
+    edited_groups = move_do(params[:selected_clients], destination_group, source_group, search)
+    edited_groups << destination_group.id
+    
+    message = "Moved #{params[:selected_clients].length} client(s) to group '#{destination_group.name}'"
+    respond_with_refresh(message, "#{edited_groups.join(',')}", "-2")
+  end
 
-    message = "Moved #{params[:selected_clients].length} clients to group '#{destination_group.name}'"
-    respond_with_refresh(message)
+  def move_do(selected_clients, destination_group, source_group, search)
+    edited_groups = Array.new
+    selected_clients.each do |selected|
+      client = Client.find(selected)
+      destination_group.clients << client
+      next unless destination_group.save
+      if search
+        client.groups.each do |group|
+          group.clients.delete client unless group == destination_group
+          edited_groups << group.id
+        end
+      else
+        source_group.clients.delete client
+        edited_groups << source_group.id
+      end
+    end
+    return edited_groups
   end
 
   # @url /groups/copy_form
@@ -115,8 +138,8 @@ class GroupsController < ApplicationController
 
     params[:selected_clients].each { |selected| destination_group.clients << Client.find(selected) }
 
-    message = "Copied #{params[:selected_clients].length} clients to group '#{destination_group.name}'"
-    respond_with_refresh(message)
+    message = "Copied #{params[:selected_clients].length} client(s) to group '#{destination_group.name}'"
+    respond_with_refresh(message, "#{destination_group.id},-2", "-2")
   end
 
   # @url /groups/delete_clients_form
@@ -151,14 +174,11 @@ class GroupsController < ApplicationController
 
     source_group.clients.each { |client| client.destroy if client.groups.length == 1 }
 
-    message = "Deleted Group '#{source_group.name}'"
+    message = "Deleted group '#{source_group.name}'"
     deleted = source_group.id
     source_group.destroy
 
-    respond_to do |format|
-      format.html {}
-      format.js { render 'pages/group_refresh', locals: { message: message, close: true, delete: deleted, type: 'notice' } }
-    end
+    respond_with_refresh(message, "#{source_group.id},-2", source_group.id)
   end
 
   # @url /groups/delete_clients
@@ -170,27 +190,33 @@ class GroupsController < ApplicationController
   # @required [Array<Integer>] :selected_clients IDs of selected clients
   # @optional [String] :search true/false, indicator if :selected_clients are a result of a search
   def delete_clients
+    edited_groups = Array.new
     search = ActiveModel::Type::Boolean.new.cast params[:search]
-    source_group = Group.find(params[:source_group]) unless search
+
+    search ? source_group = "-2" : source_group = Group.find(params[:source_group])
     selected_clients = params[:selected_clients]
 
     if search
       selected_clients.each do |selected|
         client = Client.find(selected)
-        client.groups.each { |group| group.clients.delete(client) }
+        client.groups.each do |group|
+          group.clients.delete(client)
+          edited_groups << group.id
+        end
         client.destroy
       end
-      message = "Deleted #{selected_clients.length} clients."
+      message = "Deleted #{selected_clients.length} client(s)."
     else
       selected_clients.each do |selected|
         client = Client.find(selected)
         source_group.clients.delete(client)
         client.destroy if client.groups.empty?
       end
-      message = "Deleted #{selected_clients.length} clients from group '#{source_group.name}'"
+      edited_groups << source_group.id
+      message = "Deleted #{selected_clients.length} client(s) from group '#{source_group.name}'"
     end
 
-    respond_with_refresh(message)
+    respond_with_refresh(message, "#{edited_groups.join(',')}", "-2")
   end
 
   def scan_form
@@ -249,10 +275,14 @@ class GroupsController < ApplicationController
 
   private
 
-  def respond_with_refresh(message, type = 'notice')
+  def respond_with_refresh(message, mod_gids, delete, type = 'notice')
+    if current_user.settings.find_by_name('global_notify').value
+      ActionCable.server.broadcast 'notification_channel', message: message
+    end
+    ActionCable.server.broadcast 'update_channel', ids: mod_gids
     respond_to do |format|
       format.html { redirect_to root_path }
-      format.js { render 'pages/group_refresh', locals: { message: message, close: true, type: type } }
+      format.js { render 'pages/group_refresh', locals: {  message: message, delete: delete, close: true, type: type } }
     end
   end
 
@@ -278,6 +308,12 @@ class GroupsController < ApplicationController
     end
 
     if params.key?(:clients)
+      params[:clients].each do |tmpclient|
+        unless Client.exists?(tmpclient)
+          respond_with_notify("One of the selected clients is removed from the database.")
+          return
+        end
+      end
       clients = Client.find(params[:clients])
       source_group ||= Group.find(params[:source_group]) unless params[:source_group].nil?
     end
@@ -286,19 +322,6 @@ class GroupsController < ApplicationController
     else
       locals = { source_group: source_group, clients: clients, search: search }
       respond_root_path_js(sym, locals)
-    end
-  end
-
-  def move_do(selected_clients, destination_group, source_group, search)
-    selected_clients.each do |selected|
-      client = Client.find(selected)
-      destination_group.clients << client
-      next unless destination_group.save
-      if search
-        client.groups.each { |group| group.clients.delete client unless group == destination_group }
-      else
-        source_group.clients.delete client
-      end
     end
   end
 end
