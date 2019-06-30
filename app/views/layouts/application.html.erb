@@ -1,84 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <title>envizon by evait security</title>
-  <%= favicon_link_tag 'favicon.ico' %>
-  <%= action_cable_meta_tag %>
-  <%= csrf_meta_tags %>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-</head>
-<body style="background: #f7f7f7">
-  <nav class="" role="navigation" >
-  <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo"><div class="valign-wrapper" style="height: 100%"><%= image_tag("logo/envizon-wide-export-white.svg", class:"svg_logo") %></div></a>
-    <ul class="right">
-      <% if user_signed_in? %>
-        <li>
-          <%= link_to groups_path do %>
-            <i class="material-icons left">devices</i>Groups
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <title>envizon by evait security</title>
+    <%= favicon_link_tag 'favicon.ico' %>
+    <%= action_cable_meta_tag %>
+    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+  <body style="background: #f7f7f7">
+    <nav>
+      <div class="nav-wrapper container">
+        <a id="logo-container" href="/" class="brand-logo"><div class="valign-wrapper" style="height: 100%"><%= image_tag("logo/envizon-wide-export-white.svg", class:"svg_logo") %></div></a>
+        <ul class="right">
+          <% if user_signed_in? %>
+            <li class="<%= 'active' if current_page?(groups_path) %>">
+              <%= link_to groups_path do %>
+                <i class="material-icons left">devices</i>Groups
+              <% end %>
+            </li>
+            <% if current_page?('/groups') %>
+              <li><a href="#" class="search_header"><i class="material-icons left">search</i>Search</a></li>
+            <% end %>
+            <li class="<%= 'active' if current_page?(images_path) %>">
+              <%= link_to images_path do %>
+                <i class="material-icons left">camera</i>Images
+              <% end %>
+            </li>
+            <li class="<%= 'active' if current_page?(scans_path) %>">
+              <%= link_to scans_path do %>
+                <i class="material-icons left">gps_fixed</i>Scans
+              <% end %>        
+            </li>
+            <li><a href="#" id="user-drop-menu-trigger" class="dropdown-trigger no-autoinit" data-target="user-drop-menu"><i class="material-icons left">account_circle</i><%= current_user.username %></a></li>
+          <% else %>
+            <li><a href="/"><i class="material-icons left">account_circle</i>Please sign in</a></li>
           <% end %>
-        </li>
-        <% if current_page?('/groups') %>
-          <li><a href="#" class="search_header"><i class="material-icons left">search</i>Search</a></li>
-        <% end %>
-        <li>
-          <%= link_to images_path do %>
-            <i class="material-icons left">camera</i>Images
-          <% end %>
-        </li>
-        <li>
-          <%= link_to scans_path do %>
-            <i class="material-icons left">gps_fixed</i>Scans
-          <% end %>        
-        </li>
-        <!-- Dropdown Structure -->
-        <ul id="user-drop-menu" class="dropdown-content">
-          <li><%= link_to '<i class="material-icons">settings</i>Settings'.html_safe, global_settings_path %></li>
-          <li><%= link_to '<i class="material-icons">verified_user</i>Set password'.html_safe, edit_user_registration_path %></li>
-          <li><%= link_to '<i class="material-icons">new_releases</i>Changelog'.html_safe, changelog_path %></li>
-          <li><%= link_to '<i class="material-icons">build</i>Version: 2.1.4'.html_safe, "javascript:void(0)" %></li>
-          <li class="divider"></li>
-          <li><%= link_to '<i class="material-icons">lock_outline</i>Sign out'.html_safe, destroy_user_session_path, method: :delete, class: "red-text text-darken-2" %></li>
         </ul>
-        <li><a href="#" class="dropdown-button" data-activates="user-drop-menu"><i class="material-icons left">account_circle</i><%= current_user.username %></a></li>
-      <% else %>
-        <li><a href="/"><i class="material-icons left">account_circle</i>Please sign in</a></li>
-      <% end %>
+      </div>
+    </nav>
+    <!-- Dropdown Structure -->
+    <ul id="user-drop-menu" class="dropdown-content">
+      <li><%= link_to '<i class="material-icons">settings</i>Settings'.html_safe, global_settings_path %></li>
+      <li><%= link_to '<i class="material-icons">verified_user</i>Set password'.html_safe, edit_user_registration_path %></li>
+      <li><%= link_to '<i class="material-icons">new_releases</i>Changelog'.html_safe, changelog_path %></li>
+      <li><%= link_to '<i class="material-icons">build</i>Version: 2.1.4'.html_safe, "javascript:void(0)" %></li>
+      <li class="divider"></li>
+      <li><%= link_to '<i class="material-icons">lock_outline</i>Sign out'.html_safe, destroy_user_session_path, method: :delete, class: "red-text text-darken-2" %></li>
     </ul>
-  </div>
-</nav>
-<div class="section no-pad">
-  <div class="container" id="main-container">
-    <div class="preloader-background">
-      <div class="preloader-wrapper big active">
-        <div class="spinner-layer spinner-blue-only">
-          <div class="circle-clipper left">
-            <div class="circle"></div>
-          </div><div class="gap-patch">
-            <div class="circle"></div>
-          </div><div class="circle-clipper right">
-            <div class="circle"></div>
+    <div class="section no-pad">
+      <div class="container" id="main-container">
+        <div class="preloader-background">
+          <div class="preloader-wrapper big active">
+            <div class="spinner-layer spinner-blue-only">
+              <div class="circle-clipper left">
+                <div class="circle"></div>
+              </div><div class="gap-patch">
+                <div class="circle"></div>
+              </div><div class="circle-clipper right">
+                <div class="circle"></div>
+              </div>
+            </div>
           </div>
         </div>
+        <%= yield %>
       </div>
     </div>
-    <%= yield %>
-  </div>
-</div>
-</body>
-<%= render 'layouts/messages' %>
-<%= render 'notifications/new' %>
+  </body>
 </html>
 
-<script>
-  $(document).on('ready page:load',function(){
-    $('.modal').modal();
-    $(".dropdown-button").dropdown();
-    Materialize.updateTextFields();
-  });
+<%= javascript_tag do %>
+  M.AutoInit();
+  $("#user-drop-menu-trigger").dropdown({ constrainWidth: false });
+
   document.addEventListener("DOMContentLoaded", function(){
     $('.preloader-background').delay(500).fadeOut();
   });
-</script>
+<% end %>

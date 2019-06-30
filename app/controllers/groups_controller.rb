@@ -298,7 +298,7 @@ class GroupsController < ApplicationController
   private
 
   def respond_with_refresh(message, mod_gids, delete, type = 'notice')
-    if current_user.settings.find_by_name('global_notify').value
+    if current_user.settings.find_by_name('global_notify').value.include? "true"
       ActionCable.server.broadcast 'notification_channel', message: message
     end
     ActionCable.server.broadcast 'update_channel', ids: mod_gids

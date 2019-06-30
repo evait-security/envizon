@@ -81,7 +81,7 @@ class NmapCommand
           c = m.captures.first
           scan.status = c.match(/\A(\d+)\.\d+\%\Z/).captures.first.to_i
           scan.save
-          next unless User.first.settings.where(name: 'global_notify').first.value
+          next unless User.first.settings.where(name: 'global_notify').first.value.include? "true"
           message = "Scan #{scan.name} is #{c} done."
           ActionCable.server.broadcast 'notification_channel', message: message
         end

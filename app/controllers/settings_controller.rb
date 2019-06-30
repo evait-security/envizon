@@ -86,7 +86,11 @@ class SettingsController < ApplicationController
 
   def global_notify(_global_notify)
     setting = current_user.settings.where(name: 'global_notify').first_or_create
-    setting.value = params[:global_notify_setting]
+    if params[:global_notify_setting].present?
+      setting.value = "true"
+    else
+      setting.value = "false"
+    end
     setting.save
     { message: 'Notication settings updated', type: 'success' }
   end

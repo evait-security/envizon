@@ -11,14 +11,7 @@ App.notification = App.cable.subscriptions.create("NotificationChannel", {
     // Called when there's incoming data on the websocket for this channel
     // alert(data['message']);
     // Materialize.toast(data['message'], 3000, 'blue');
-    $.ajax({
-      url: "/notifications/new",
-      dataType: "script",
-      data: data,
-      cache: true
-    });
-    //alert('Hallo')
-    //$("#main-notification-menu").html("<%= j(render('layouts/notifications')) %>");
+    M.toast({html: "Global: " + data['message'], displayLength: 4000});
   },
 
   notify: function() {

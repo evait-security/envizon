@@ -5,7 +5,6 @@ Rails.application.routes.draw do
   root to: redirect(path: '/scans')
 
   get '/scans' => 'pages#scans'
-  get 'notifications/new'
 
   # index ever used, ever?
   resources :groups, only: %i[create new]
@@ -32,6 +31,7 @@ Rails.application.routes.draw do
   post 'groups/scan_form' => 'groups#scan_form'
 
   get 'groups/refresh' => 'groups#refresh', as: :group_refresh
+  get 'groups/group_list' => 'groups#group_list', as: :group_list
 
   get '/groups' => 'groups#index'
   get '/pages/settings' => 'pages#settings', as: :global_settings

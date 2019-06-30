@@ -18,7 +18,7 @@ class User < ApplicationRecord
     exclude_hosts.save
 
     notify_scan_status = Setting.where(user_id: id, name: 'global_notify').first_or_create
-    notify_scan_status.assign_attributes(user_id: id, name: 'global_notify', value: nil)
+    notify_scan_status.assign_attributes(user_id: id, name: 'global_notify', value: "true")
     notify_scan_status.save
   end
 

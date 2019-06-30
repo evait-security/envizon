@@ -3,7 +3,7 @@
     <tr style="padding-bottom: 20px;">
       <td>
         <!-- Dropdown Trigger -->
-        <a class='dropdown-button btn' href='#' data-activates='client'>Client</a>
+        <a class='dropdown-trigger btn' href='#' data-target='client'>Client</a>
         <!-- Dropdown Structure -->
         <ul id='client' class='dropdown-content'>
           <li><a href="#" onclick="addSearchOption('Client', 'Hostname');">Hostname</a></li>
@@ -15,7 +15,7 @@
       </td>
       <td>
         <!-- Dropdown Trigger -->
-        <a class='dropdown-button btn' href='#' data-activates='port'>Port</a>
+        <a class='dropdown-trigger btn' href='#' data-target='port'>Port</a>
         <!-- Dropdown Structure -->
         <ul id='port' class='dropdown-content'>
           <li><a href="#" onclick="addSearchOption('Port', 'Number');">Number</a></li>
@@ -31,7 +31,7 @@
       </td>
       <td>
         <!-- Dropdown Trigger -->
-        <a class='dropdown-button btn' href='#' data-activates='label'>Label</a>
+        <a class='dropdown-trigger btn' href='#' data-target='label'>Label</a>
         <!-- Dropdown Structure -->
         <ul id='label' class='dropdown-content'>
           <% Label.all.to_a.each do |lbl| %>
@@ -47,7 +47,6 @@
       </td>
     </tr>
   </table>
-  <div class="divider" style="margin-top: 10px; margin-bottom: 10px;"></div>
   <div class="section">
     <div class="row">
       <div class="col s4">
@@ -67,14 +66,12 @@
   <a href="#" class="modal-action modal-close waves-effect waves-red btn-flat">Close</a>
 </div>
 
-<script language="JavaScript">
+<script>
   // global form counter
   var forms = 1;
 
   // init dropdown button
-  $('.dropdown-button').dropdown({
-      constrainWidth: false, // Does not change width of dropdown to that of the activator
-  });
+  $('.dropdown-trigger').dropdown({ constrainWidth: false });
 
   function addSearchOption(model, name) {
       var raw = `<div class="form_row">

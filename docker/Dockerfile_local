@@ -1,4 +1,4 @@
-FROM ruby:2.5-alpine
+FROM ruby:rc-alpine
 
 MAINTAINER evait security GmbH <tech@evait.de>
 

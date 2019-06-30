@@ -16,7 +16,7 @@
     vertical-align: middle;
   }
 </style>
-<span class="card-title"><span id="hostview_ip"><%= "#{client.ip}" %></span><a href="#" id="hostview_copy_ip" onclick=""><i class="material-icons hostview_copy_ip">content_copy</i></a></span>
+<span class="card-title"><span id="hostview_ip"><%= "#{client.ip}" %></span><a href="#" id="hostview_copy_ip"><i class="material-icons hostview_copy_ip">content_copy</i></a></span>
 <table class="responsive-table">
   <thead>
     <tr>
@@ -110,4 +110,8 @@
     <% end%>
   </ul>
   </div>
+<% end %>
+
+<%= javascript_tag do %>
+  $('.collapsible').collapsible();
 <% end %>
