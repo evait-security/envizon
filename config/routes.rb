@@ -38,6 +38,8 @@ Rails.application.routes.draw do
   get '/pages/changelog' => 'pages#changelog', as: :changelog
   post '/clients/global_search' => 'clients#global_search', as: :global_search
 
+  get '/images' => 'images#index', as: :images
+
   get '/clients/search' => 'clients#search'
   post '/clients/search' => 'clients#search', as: :global_search_view
   #

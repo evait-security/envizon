@@ -20,9 +20,14 @@
             <i class="material-icons left">devices</i>Groups
           <% end %>
         </li>
-        <% if current_page?('/pages/groups') %>
+        <% if current_page?('/groups') %>
           <li><a href="#" class="search_header"><i class="material-icons left">search</i>Search</a></li>
         <% end %>
+        <li>
+          <%= link_to images_path do %>
+            <i class="material-icons left">camera</i>Images
+          <% end %>
+        </li>
         <li>
           <%= link_to scans_path do %>
             <i class="material-icons left">gps_fixed</i>Scans
