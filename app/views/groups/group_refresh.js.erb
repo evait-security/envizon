@@ -1,5 +1,5 @@
 // refresh sidebar
-$("#group_list").html("<%= escape_javascript(render partial: 'pages/group_list') %>");
+$("#group_list").html("<%= escape_javascript(render partial: 'groups/group_list') %>");
 
 // refresh selected group
 if( $('.selected-group').attr('gid') !== undefined )

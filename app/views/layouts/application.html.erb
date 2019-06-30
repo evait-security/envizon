@@ -1,68 +1,3 @@
-<style>
-  .icon-block {
-    padding: 0 15px;
-  }
-  .icon-block .material-icons {
-    font-size: inherit;
-  }
-  .svg_logo {
-    width: 170px;
-  }
-  nav .brand-logo {
-    height: 100%;
-  }
-  /* full screen layout overwrite */
-  .container {
-    width: 95% !important;
-    max-width: none !important;
-  }
-  #user-drop-menu {
-    margin-top: 65px;
-    min-width: 15em;
-  }
-  #main-container {
-    width: 99% !important;
-  }
-  html, body {
-    max-width: 100%;
-    overflow-x: hidden;
-    min-height: 200px;
-  }
-  #generic-modal {
-    width: 30% !important;
-  }
-  #modal-header {
-    margin-bottom: 40px;
-  }
-  .tabs .tab {
-    text-transform: none !important;
-  }
-  .custom-truncate {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .card {
-    box-shadow: none !important;
-  }
-  .preloader-background {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #eee;
-
-    position: fixed;
-    z-index: 100;
-    top: 66px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-  }
-  .mono {
-    font-family: 'Fira Mono';
-  }
-</style>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -80,11 +15,19 @@
   <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo"><div class="valign-wrapper" style="height: 100%"><%= image_tag("logo/envizon-wide-export-white.svg", class:"svg_logo") %></div></a>
     <ul class="right">
       <% if user_signed_in? %>
-        <li><a href="<%= "#{pages_groups_path}" %>"><i class="material-icons left">devices</i>Groups</a></li>
+        <li>
+          <%= link_to groups_path do %>
+            <i class="material-icons left">devices</i>Groups
+          <% end %>
+        </li>
         <% if current_page?('/pages/groups') %>
           <li><a href="#" class="search_header"><i class="material-icons left">search</i>Search</a></li>
         <% end %>
-        <li><a href="<%= "#{scans_path}" %>"><i class="material-icons left">gps_fixed</i>Scans</a></li>
+        <li>
+          <%= link_to scans_path do %>
+            <i class="material-icons left">gps_fixed</i>Scans
+          <% end %>        
+        </li>
         <!-- Dropdown Structure -->
         <ul id="user-drop-menu" class="dropdown-content">
           <li><%= link_to '<i class="material-icons">settings</i>Settings'.html_safe, global_settings_path %></li>

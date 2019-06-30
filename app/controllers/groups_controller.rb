@@ -12,6 +12,28 @@ class GroupsController < ApplicationController
     end
   end
 
+  # @url /pages/refresh
+  # @action GET
+  #
+  # Refreshes group view
+  def refresh
+    respond_to do |format|
+      format.html {}
+      format.js { render 'groups/group_refresh', locals: { message: 'Group content has been refreshed', type: 'success', delete: '-2' } }
+    end
+  end
+
+  # @url /pages/group_list
+  # @action POST
+  #
+  # Render the sidebar in the group view
+  def group_list
+    respond_to do |format|
+      format.html {}
+      format.js { render 'groups/group_list' }
+    end
+  end
+
   # @url /groups
   # @action POST
   #
@@ -282,7 +304,7 @@ class GroupsController < ApplicationController
     ActionCable.server.broadcast 'update_channel', ids: mod_gids
     respond_to do |format|
       format.html { redirect_to root_path }
-      format.js { render 'pages/group_refresh', locals: {  message: message, delete: delete, close: true, type: type } }
+      format.js { render 'groups/group_refresh', locals: {  message: message, delete: delete, close: true, type: type } }
     end
   end
 

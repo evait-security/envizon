@@ -12,8 +12,6 @@ Rails.application.routes.draw do
 
   post 'groups/group' => 'groups#group', as: :single_group_html
 
-  get 'pages/group_list' => 'pages#group_list', as: :sidebar_html
-
   post 'groups/create_form' => 'groups#create_form'
 
   post 'groups/copy_form' => 'groups#copy_form'
@@ -33,9 +31,9 @@ Rails.application.routes.draw do
 
   post 'groups/scan_form' => 'groups#scan_form'
 
-  get 'pages/refresh' => 'pages#refresh', as: :group_refresh
+  get 'groups/refresh' => 'groups#refresh', as: :group_refresh
 
-  get '/pages/groups' => 'pages#groups'
+  get '/groups' => 'groups#index'
   get '/pages/settings' => 'pages#settings', as: :global_settings
   get '/pages/changelog' => 'pages#changelog', as: :changelog
   post '/clients/global_search' => 'clients#global_search', as: :global_search

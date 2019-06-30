@@ -12,7 +12,7 @@ App.notification = App.cable.subscriptions.create("UpdateChannel", {
 
     // refresh sidebar
     $.ajax({
-      url: "/pages/group_list",
+      url: "/groups/group_list",
       dataType : "script",
       cache: true,
       method: "get"
