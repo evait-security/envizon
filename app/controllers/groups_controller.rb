@@ -61,8 +61,14 @@ class GroupsController < ApplicationController
     respond_with_refresh(message, "-2,-2", "-2") && return unless selected_clients.present?
 
     if params[:move].present? && params[:move].casecmp('true').zero?
+      if search
+        tmp_array = []
+        selected_clients.each { |client| Client.find(client).groups.each { |group| tmp_array << group.id}}
+        affected_group = tmp_array.uniq.join(",")
+      else
+        affected_group = source_group.id
+      end
       move_do(selected_clients, destination_group, source_group, search)
-      affected_group = source_group.id
     else
       selected_clients.each { |selected| destination_group.clients << Client.find(selected) }
     end
