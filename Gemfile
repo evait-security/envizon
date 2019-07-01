@@ -50,6 +50,9 @@ gem 'jquery-datatables-rails'
 gem 'jquery-ui-rails'
 gem 'materialize-sass'
 
+# screenshots
+gem 'selenium-webdriver'
+
 # jobs
 # (maybe use sidekiq or whatever in prod?)
 # (redis would be used for ActionCable anyway, so..)
@@ -74,7 +77,6 @@ group :development, :test do
   gem 'rails_best_practices'
   gem 'rake'
   gem 'rubocop'
-  gem 'selenium-webdriver'
 end
 
 group :development do

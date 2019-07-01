@@ -19,6 +19,7 @@ services:
       dockerfile: docker/Dockerfile_local
     depends_on:
       - postgres_local
+      - selenium
     network_mode: 'host'
     ports:
       - 3000:3000
@@ -35,3 +36,9 @@ services:
     # docker-compose up -d, then attach to running container
     # stdin_open: true
     # tty: true
+  selenium:
+    image: selenium/standalone-chrome
+    ports:
+      - 4444:4444
+    volumes:
+      - /dev/shm:/dev/shm
