@@ -2,21 +2,27 @@
 
 ## TOC
 
-* [Use Case](#use-case)
-* [Core Features](#core-features)
-* [How to start?!](#how-to-start)
-  + [Using Docker](#using-docker)
-    - [Prebuilt Docker Images](#prebuilt-docker-images)
-  + [Without Docker](#without-docker)
-    - [Arch Linux](#arch-linux)
-    - [Manually](#manually)
-* [Usage](#usage)
-  + [Set a password](#set-a-password)
-  + [Scan interface](#scan-interface)
-  + [Groups](#groups)
-  + [Global Search](#global-search)
-* [FAQ](#faq)
-* [Frameworks and tools used](#what-frameworks-and-tools-were-used)
+- [envizon - the network visualization tool](#envizon---the-network-visualization-tool)
+  - [TOC](#TOC)
+  - [Version 2.1](#Version-21)
+  - [Use Case](#Use-Case)
+  - [Core Features:](#Core-Features)
+  - [How to start?!](#How-to-start)
+    - [Using Docker](#Using-Docker)
+      - [Prebuilt Docker Images](#Prebuilt-Docker-Images)
+        - [Running from local git checkout](#Running-from-local-git-checkout)
+          - [Development](#Development)
+    - [Without Docker](#Without-Docker)
+      - [Manually](#Manually)
+      - [Development](#Development-1)
+  - [Usage](#Usage)
+    - [Set a password](#Set-a-password)
+    - [Scan interface](#Scan-interface)
+    - [Groups](#Groups)
+    - [Global Search](#Global-Search)
+  - [FAQ](#FAQ)
+  - [What frameworks and tools were used?](#What-frameworks-and-tools-were-used)
+  - [Help?](#Help)
 
 ## Version 2.1
 
@@ -90,11 +96,6 @@ docker exec -it envizon_container_name_1 /bin/ash -c 'rails test'
 
 ### Without Docker
 
-#### Arch Linux
-
-If you use Arch Linux, there is now a `PKGBUILD` available in the AUR, as well as in the `/PKGBUILD`-directory, also including a simple script to generate the database and database user.
-Currently it uses bundler to install the required Ruby Gems in `/opt/envizon`, as many Ruby packages are not available in the AUR or the upstream repos. We might improve this situation soon by providing our own, internally used Arch repository.
-
 #### Manually
 
 Requires a PostgreSQL server.
@@ -131,6 +132,13 @@ bundle exec rails db:seed
 bundle exec rails assets:precompile
 RAILS_FORCE_SSL=true RAILS_SERVE_STATIC_FILES=true bundle exec rails s
 ```
+
+Also you need to run selenium in a container on the same system
+
+```
+docker run --rm -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome
+```
+
 #### Development
 
 Databases for development and testing are called `envizon_test` and `envizon_development`, with the same requirements as above. Different database names and credentials can be provided via environment variables or directly modified in `config/database.yml`
@@ -144,6 +152,12 @@ export RAILS_ENV
 bundle exec rails db:migrate
 bundle exec rails db:seed
 bundle exec rails s
+```
+
+Also you need to run selenium in a container on the same system
+
+```
+docker run --rm -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome
 ```
 
 To run the tests:
