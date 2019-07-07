@@ -1,0 +1,15 @@
+.images-container {
+    .placeholder {
+        margin: 4em;
+        border: 4px dashed #cce6ff;
+        border-radius: 5px;
+        cursor: pointer;
+        p {
+            font-size: 1.8em;
+        }
+        i {
+            font-size: 4em;
+            margin: 0.5em;
+        }
+    }  
+}

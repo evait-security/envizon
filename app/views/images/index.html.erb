@@ -1,3 +1,25 @@
-<div class="container images-container">
+<div class="images-container">
+    <!-- if no images available show placeholder -->
+    <div class="row">
+        <div class="col s2" id="group_list">
+        <%= render partial: "groups/group_list" %>
+        </div>
+        <div class="col s10 offset-s2 center" >
+            <div class="placeholder tooltipped modal-trigger" href="#scan-interface" data-position="top" data-tooltip="Start a new scan to get some fancy images">
+                <i class="material-icons blue-text text-lighten-4">add</i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- floating button -->
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large blue darken-3 tooltipped modal-trigger" href="#scan-interface" data-position="left" data-tooltip="Open Scan-Interface">
+        <i class="material-icons">add</i>
+    </a>
+</div>
+
+<!-- modal scan-interface -->
+<div id="scan-interface" class="modal modal-fixed-footer">
 
 </div>

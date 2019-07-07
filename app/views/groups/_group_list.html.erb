@@ -1,15 +1,7 @@
-<style>
-  .collection-item {
-    display: grid !important;
-  }
-  .collection-item-title {
-    margin-bottom: 6px;
-  }
-</style>
 <ul class="collection">
-  <% if Group.all.count == 0 %>
+<% if Group.all.count == 0 %>
     <li class="collection-item">No Groups available</li>
-  <% else %>
+<% else %>
     <!-- get all groups and cast to array -->
     <% 
         allGroups = Group.all.order(mod: :asc, name: :asc).to_a
@@ -45,4 +37,4 @@
             </a>
         <% end %>
     <% end %>
-  <% end %>
+<% end %>

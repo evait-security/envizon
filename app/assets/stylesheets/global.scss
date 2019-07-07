@@ -63,3 +63,8 @@ html, body {
 .mono {
   font-family: 'Fira Mono';
 }
+.collapsible li.active i.rotate{
+  -ms-transform: rotate(90deg); /* IE 9 */
+  -webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
+  transform: rotate(90deg);
+}

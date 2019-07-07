@@ -1,20 +1,4 @@
 <style>
-  .collection {
-    border: none !important;
-  }
-  .collection.with-header .collection-header {
-    background-color: transparent !important;
-  }
-  .collection .collection-item {
-    background-color: transparent !important;
-  }
-  #group_list {
-    padding-top: 10px;
-    position: fixed;
-    overflow-y: auto;
-    max-height: calc(100vh - 140px);
-    min-height: calc(100vh - 64px);
-  }
   #single_group_view {
     padding-top: 10px;
     position: fixed;
@@ -29,28 +13,8 @@
     max-height: calc(100vh - 140px);
     min-height: calc(100vh - 64px);
   }
-  .collection .collection-item {
-    border-bottom: none !important;
-  }
   ::-webkit-scrollbar {
     display: none;
-  }
-  .collection a.collection-item:not(.active):hover {
-    background-color: rgba(0,0,0,.05) !important;
-  }
-  .collection a.collection-item {
-    color: #2E2F30 !important;
-    font-weight: 500;
-  }
-  .secondary-content {
-    color: #616161 !important;
-  }
-  .fa {
-    font-size: 24px;
-    color: #878284;
-  }
-  .group-icon-collection {
-    float: left;
   }
   .hidden {
     display: none;
@@ -92,10 +56,8 @@
   }
   .collapsible {
       box-shadow: none !important;
-      border-right: none !important;
-      border-left: none !important;
+      border: none !important;
   }
-
 </style>
 <div class="row">
     <div class="col s2" id="group_list">
