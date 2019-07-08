@@ -4,10 +4,12 @@ class ImagesController < ApplicationController
     end
 
     def scan_all
+        ScreenshotJob.perform_async(false)
         respond_with_notify("Re-Scan started. Please refresh this page to get new results!", "notice", "true")
     end
 
     def scan_all_overwrite
+        ScreenshotJob.perform_async(true)
         respond_with_notify("Re-Scan with overwrite started. Please refresh this page to get new results!", "notice", "true")
     end
 
