@@ -12,7 +12,7 @@
             <% else %>
                 <div class="row images-row">
                     <% @images.each do | image | %>
-                        <div class="col s3">
+                        <div class="col s3 <%= image.record.client.groups.map {|g| g.id }.join(" ") %>">
                             <%= image_tag url_for(image), :class => "materialboxed", width: '100%' %>
                             <div class="images-meta">
                                 <% image_url_ip = image.record.url_ip %>
@@ -52,3 +52,18 @@
         <% end %>
     </div>
 </div>
+
+<script>
+    $(document).ready(function(){
+        $(".group-collection-item").each(function( index ) {
+            $(this).find(".fa").addClass("blue-text text-darken-2");
+        });
+    });
+    // Display group on click (sidebar)
+    $(document).on("click", '.group-collection-item', function() {        
+        var id = this.getAttribute("gid");
+         $(this).find(".fa").toggleClass("blue-text text-darken-2");
+        $('.' + id).fadeToggle( "slow", "linear" );
+        $(this).blur();
+    });
+</script>
