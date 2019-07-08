@@ -126,6 +126,12 @@
     $(document).on("click", '.group-collection-item', function() {
         $("#group-placeholder").addClass("hidden");
         var id = this.getAttribute("gid");
+
+        $(".group-collection-item").each(function( index ) {
+          $(this).find(".fa").removeClass("blue-text text-darken-2");
+        });
+         $(this).find(".fa").addClass("blue-text text-darken-2");
+
         $.ajax({
             url: "<%= single_group_html_path %>",
             dataType : "script",
