@@ -3,6 +3,6 @@ class Group < ApplicationRecord
   has_and_belongs_to_many :clients, -> { distinct }
   
   def images
-    clients.map{|c| c.images}.flatten
+    clients.map{|c| c.images}.flatten.sort{|i| i.created_at}.reverse
   end
 end

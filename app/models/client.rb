@@ -5,6 +5,6 @@ class Client < ApplicationRecord
   has_and_belongs_to_many :labels
   
   def images
-    ports.joins(:image_attachment).map{|p| p.image}
+    ports.joins(:image_attachment).map{|p| p.image}.sort{|i| i.created_at}.reverse
   end
 end
