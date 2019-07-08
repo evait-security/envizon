@@ -13,8 +13,13 @@ class Port < ApplicationRecord
     return nil
   end
 
-  def url
+  def url_ip
     "#{self.service_short}://#{self.client.ip}:#{self.number}/"
+  end
+
+  def url_host
+    return nil if self.client.hostname.empty?
+    "#{self.service_short}://#{self.client.hostname}:#{self.number}/"
   end
 
   def screenshot
@@ -22,7 +27,7 @@ class Port < ApplicationRecord
     when 'http', 'https'
       wd = Selenium::WebDriver.for :remote, url: 'http://localhost:4444/wd/hub', desired_capabilities: SELENIUM_CAPS
       wd.manage.timeouts.page_load = 10
-      wd.navigate.to self.url
+      wd.navigate.to self.url_ip
       wd.manage.window.resize_to(1920, 1080)
       img =  wd.screenshot_as(:png)
     end
