@@ -95,7 +95,7 @@ class NmapParser
       db_port.client_id = client.id
       db_port.number = port.number
       if port.service
-        db_port.service = port.service.name unless db_port.sv
+        db_port.service = "#{port.service.ssl? ? 'ssl/' : ''}#{port.service.name}" unless db_port.sv
         if port.service.product.present?
           db_port.description = port.service.product
           db_port.description += ' ' + port.service.version if port.service.version.present?
