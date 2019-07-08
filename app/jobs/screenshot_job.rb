@@ -7,7 +7,7 @@ class ScreenshotJob
       # if overwrite=false -> select only ports without image. 
       ports = ports.select{ |p| !p.image.attached? } unless overwrite
       ports.each{ |p| p.screenshot }
-      ActionCable.server.broadcast 'notification_channel', message: 'screenshot finished'
+      ActionCable.server.broadcast 'notification_channel', message: 'Global: Screenshot-Job finished'
     end
   end
 end

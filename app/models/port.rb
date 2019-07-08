@@ -37,6 +37,7 @@ class Port < ApplicationRecord
         wd = Selenium::WebDriver.for :remote, url: 'http://localhost:4444/wd/hub', desired_capabilities: SELENIUM_CAPS
         wd.manage.timeouts.page_load = 10
         wd.navigate.to self.url_ip
+        sleep 5
         wd.manage.window.resize_to(1920, 1080)
         img =  wd.screenshot_as(:png)
       end
