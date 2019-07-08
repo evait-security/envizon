@@ -52,6 +52,7 @@ gem 'materialize-sass'
 
 # screenshots
 gem 'selenium-webdriver'
+gem 'image_processing'
 
 # jobs
 # (maybe use sidekiq or whatever in prod?)

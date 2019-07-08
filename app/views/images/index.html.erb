@@ -1,13 +1,25 @@
 <div class="images-container">
-    <!-- if no images available show placeholder -->
     <div class="row">
         <div class="col s2" id="group_list">
         <%= render partial: "groups/group_list" %>
         </div>
-        <div class="col s10 offset-s2 center" >
-            <div class="placeholder tooltipped modal-trigger" href="#scan-interface" data-position="top" data-tooltip="Start a new scan to get some fancy images">
-                <i class="material-icons blue-text text-lighten-4">add</i>
-            </div>
+        <div class="col s10 offset-s2 center">
+            <!-- if no images available show placeholder -->
+            <% unless @ports_with_images.count > 0 %>
+                <div class="placeholder tooltipped modal-trigger" href="#scan-interface" data-position="top" data-tooltip="Start a new scan to get some fancy images">
+                    <i class="material-icons blue-text text-lighten-4">add</i>
+                </div>  
+            <% else %>
+                <div class="row images-row">
+                    <% @ports_with_images.each do | port_with_image | %>
+                        <div class="col s3">
+                            <%= image_tag url_for(port_with_image.image), :class => "materialboxed", width: '100%' %>
+                        </div>
+                    <% end %>                
+                </div>
+
+                
+            <% end %>
         </div>
     </div>
 </div>
