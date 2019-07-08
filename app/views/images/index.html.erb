@@ -15,13 +15,20 @@
                         <div class="col s3">
                             <%= image_tag url_for(image), :class => "materialboxed", width: '100%' %>
                             <div class="images-meta">
-                                <div class="chip white grey-text text-darken-4"><%= "#{image.record.client.ip} | #{ image.record.number}" %></div>
+                                <% image_url_ip = image.record.url_ip %>
+                                <%= link_to image_url_ip, target: "_blank" do %>
+                                    <div class="chip white grey-text text-darken-4"><%= "#{image_url_ip}" %></div>
+                                <% end %>
+                                <!-- show custom button for link with hostname if exists -->
+                                <% unless image.record.client.hostname.empty? %>
+                                    <%= link_to image.record.url_host, target: "_blank", class: "btn-floating" do %>
+                                        <i class="material-icons tooltipped" data-position="top" data-tooltip="Open link with hostname instead of IP">http</i>
+                                    <% end %>
+                                <% end %>
                             </div>
                         </div>
                     <% end %>                
                 </div>
-
-                
             <% end %>
         </div>
     </div>

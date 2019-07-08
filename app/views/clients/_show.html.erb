@@ -74,8 +74,14 @@
             <% if port.service_short %>
               <!-- HTTP Service -->
               <% if port.service_short.include? "http" %>
-                <%= link_to port.url, target: "_blank" do %>
-                  <i class="material-icons hostview_link ">link</i>
+                <%= link_to port.url_ip, target: "_blank" do %>
+                  <i class="material-icons hostview_link grey-text text-darken-2">link</i>
+                <% end %>
+                <!-- show custom button for link with hostname if exists -->
+                <% unless port.client.hostname.empty? %>
+                    <%= link_to port.url_host, target: "_blank" do %>
+                        <i class="material-icons hostview_link tooltipped" data-position="top" data-tooltip="Open link with hostname instead of IP">link</i>
+                    <% end %>
                 <% end %>
               <% end %>
             <% end %>
