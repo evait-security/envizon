@@ -53,4 +53,7 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   config.web_console.whitelisted_ips = %w[172.17.0.0/24 172.18.0.0/24]
+
+  # Store files for active storage.
+  config.active_storage.service = :local
 end

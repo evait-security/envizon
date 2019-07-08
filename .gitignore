@@ -36,3 +36,4 @@ public/assets
 
 /.ssl/*
 config/secret
+/storage/*
