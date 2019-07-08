@@ -4,6 +4,7 @@
         border: 4px dashed #cce6ff;
         border-radius: 5px;
         cursor: pointer;
+     
         p {
             font-size: 1.8em;
         }
@@ -15,5 +16,13 @@
     .images-row {
         padding-top: 10px;
         margin-top: 0.5rem;
+        
+        .images-meta {
+            position: relative;
+            bottom: 38px;
+            .chip {
+                opacity: 0.8;
+            }
+        }
     }
 }

@@ -5,15 +5,18 @@
         </div>
         <div class="col s10 offset-s2 center">
             <!-- if no images available show placeholder -->
-            <% unless @ports_with_images.count > 0 %>
+            <% unless @images.count > 0 %>
                 <div class="placeholder tooltipped modal-trigger" href="#scan-interface" data-position="top" data-tooltip="Start a new scan to get some fancy images">
                     <i class="material-icons blue-text text-lighten-4">add</i>
                 </div>  
             <% else %>
                 <div class="row images-row">
-                    <% @ports_with_images.each do | port_with_image | %>
+                    <% @images.each do | image | %>
                         <div class="col s3">
-                            <%= image_tag url_for(port_with_image.image), :class => "materialboxed", width: '100%' %>
+                            <%= image_tag url_for(image), :class => "materialboxed", width: '100%' %>
+                            <div class="images-meta">
+                                <div class="chip white grey-text text-darken-4"><%= "#{image.record.client.ip} | #{ image.record.number}" %></div>
+                            </div>
                         </div>
                     <% end %>                
                 </div>
