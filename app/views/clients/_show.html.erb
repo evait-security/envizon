@@ -15,6 +15,12 @@
     margin-left: 10px;
     vertical-align: middle;
   }
+  .collapsible-header {
+    border-bottom: none !important;
+  }
+  .collapsible-body {
+    border-bottom: none !important;
+  }
 </style>
 <span class="card-title"><span id="hostview_ip"><%= "#{client.ip}" %></span><a href="#" id="hostview_copy_ip"><i class="material-icons hostview_copy_ip">content_copy</i></a></span>
 <table class="responsive-table">
@@ -57,6 +63,7 @@
       <th>Port</th>
       <th>Desc</th>
       <th>Content</th>
+      <th></th>
     </tr>
   <thead>
   <tbody>
@@ -64,16 +71,26 @@
         <tr>
           <td>
             <span><%= "#{port.number}" %></span>
-            <% if port.service.include? "http" %>
-                  <a href="<% if port.service.include? "https" or port.number.to_s.include? "443" %>https<% else %>http<% end %>://<%= "#{port.client.ip}" %>:<%= "#{port.number}" %>" target="_blank"><i class="material-icons hostview_link ">link</i></a>
+            <% if port.service_short %>
+              <!-- HTTP Service -->
+              <% if port.service_short.include? "http" %>
+                <%= link_to port.url, target: "_blank" do %>
+                  <i class="material-icons hostview_link ">link</i>
+                <% end %>
+              <% end %>
             <% end %>
           </td>
           <td><%= "#{port.service}" %></td>
-          <td><%= "#{port.description}" %></td>
+          <% if port.image.attached? %>
+            <td><%= "#{port.description}" %></td>
+            <td><%= image_tag url_for(port.image), :class => "materialboxed", width: '120' %></td>
+          <% else %>
+            <td colspan="2"><%= "#{port.description}" %></td>
+          <% end %>
         </tr>
         <% if port.outputs.count > 0 %>
             <tr>
-              <td colspan="3">
+              <td colspan="4">
                 <ul class="collapsible" data-collapsible="expandable">
                   <% port.outputs.to_a.each do |output| %>
                     <li>
@@ -100,7 +117,7 @@
   <ul class="collapsible" data-collapsible="expandable">
     <% client.outputs.to_a.each do |output| %>
       <li>
-        <div class="collapsible-header"><i class="material-icons">short_text</i><%= "#{output.name}" %></div>
+        <div class="collapsible-header"><i class="material-icons rotate">keyboard_arrow_right</i><%= "#{output.name}" %></div>
         <div class="collapsible-body mono">
           <% output.value.split(/\n/).to_a.each do |cur_line| %>
               <span><%= "#{cur_line}"%></span>
