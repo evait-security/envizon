@@ -43,5 +43,12 @@
 
 <!-- modal scan-interface -->
 <div id="scan-interface" class="modal modal-fixed-footer">
-
+    <div class="modal-content">
+        <%= link_to images_scan_all_path, remote: true, class: "btn-large" do %>
+            <i class="material-icons right">cached</i>Re-Scan</a>
+        <% end %>
+        <%= link_to images_scan_all_overwrite_path, remote: true, class: "btn-large orange darken-2" do %>
+            <i class="material-icons right">update</i>Re-Scan with overwrite</a>
+        <% end %>
+    </div>
 </div>
