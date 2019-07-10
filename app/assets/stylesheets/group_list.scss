@@ -1,9 +1,12 @@
+::-webkit-scrollbar {
+  display: none;
+}
 #group_list {
     position: fixed;
     overflow-y: auto;
     max-height: calc(100vh - 140px);
     min-height: calc(100vh - 64px) !important;
-    
+  
     .collection-item {
         display: grid !important;
       }
