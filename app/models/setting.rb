@@ -5,6 +5,8 @@ class Setting < ApplicationRecord
     if name == 'parallel_scans'
       ScanJob.num_workers = value.to_i
       ScanParseJob.num_workers = value.to_i
+      ScreenshotJob.num_workers = value.to_i
+      #ScreenshotJob.workers(value.to_i)
     end
   end
 end

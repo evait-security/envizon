@@ -1,18 +1,24 @@
 class ScreenshotJob
   include SuckerPunch::Job
+  workers 3
 
-  def perform(overwrite)
+  def perform(port, user)
     ActiveRecord::Base.connection_pool.with_connection do
-      ports = Port.all.select{ |p| p.is_screenshotable?}
-      # if overwrite=false -> select only ports without image. 
-      ports = ports.select{ |p| !p.image.attached? } unless overwrite
-      ports.each do |p| 
-        begin
-          p.screenshot 
-        rescue => exception
-        end
+      #num_workers = user.settings.find_by_name('parallel_scans').value.to_i
+      begin
+        port.screenshot
+      rescue => exception
       end
-      ActionCable.server.broadcast 'notification_channel', message: 'Screenshot-Job finished'
     end
+  end
+
+  # result nil if job nox exist, or hash_array like
+  # => {"processed"=>400, "failed"=>0, "enqueued"=>0}
+  def self.wait_until_finish
+    return nil unless SuckerPunch::Queue.stats.has_key? self.to_s
+    begin
+      sleep 3
+    end while SuckerPunch::Queue.stats[self.to_s]['workers']['busy'] > 0
+    return SuckerPunch::Queue.stats[self.to_s]['jobs']
   end
 end
