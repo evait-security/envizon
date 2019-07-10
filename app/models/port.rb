@@ -26,7 +26,7 @@ class Port < ApplicationRecord
   end
 
   def url_host
-    return nil if self.client.hostname.empty?
+    return nil unless self.client.hostname.present?
     "#{self.service_short}://#{self.client.hostname}:#{self.number}/"
   end
 

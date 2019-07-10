@@ -29,8 +29,9 @@
                                             <div class="chip white grey-text text-darken-4"><%= "#{image_url_ip}" %></div>
                                         <% end %>
                                         <!-- show custom button for link with hostname if exists -->
-                                        <% unless image.record.client.hostname %>
-                                            <%= link_to image.record.url_host, target: "_blank", class: "btn-floating" do %>
+                                        <% image_url_host = image.record.url_host %>
+                                        <% if image_url_host %>
+                                            <%= link_to image_url_host, target: "_blank", class: "btn-floating" do %>
                                                 <i class="material-icons tooltipped" data-position="top" data-tooltip="Open link with hostname instead of IP">http</i>
                                             <% end %>
                                         <% end %>
