@@ -56,38 +56,40 @@
       border: none !important;
   }
 </style>
-<div class="row">
-    <div class="col s2" id="group_list">
-      <%= render partial: "group_list" %>
-    </div>
-    <div class="col s5 offset-s2" id="single_group_view">
-      <div class="selected-group"></div>
-      <div class="row" id="group-placeholder">
-        <div class="col s12 m12">
-          <div class="card">
-            <div class="card-content">
-              <span class="card-title">No group selected</span>
-              <a class="btn-floating btn-large halfway-fab red group_add_float"><i class="material-icons">group_add</i></a>
-              <p>Please select a group or create a new one.</p>
-            </div>
-          </div>
-        </div>
+<div class="groups-page">
+  <div class="row">
+      <div class="col s2" id="group_list">
+        <%= render partial: "group_list" %>
       </div>
-    </div>
-    <div class="col s5 offset-s7" id="single_host_view">
-      <div class="row">
-        <div class="col s12 m12">
-          <div class="card">
-            <div class="card-content" id="single_host_view_card">
-              <div id="hostview">
-                <span class="card-title">Single Host View</span>
-                <p>Please select a client to view the details.</p>
+      <div class="col s5 offset-s2" id="single_group_view">
+        <div class="selected-group"></div>
+        <div class="row" id="group-placeholder">
+          <div class="col s12 m12">
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title">No group selected</span>
+                <a class="btn-floating btn-large halfway-fab red group_add_float"><i class="material-icons">group_add</i></a>
+                <p>Please select a group or create a new one.</p>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      <div class="col s5 offset-s7" id="single_host_view">
+        <div class="row">
+          <div class="col s12 m12">
+            <div class="card">
+              <div class="card-content" id="single_host_view_card">
+                <div id="hostview">
+                  <span class="card-title">Single Host View</span>
+                  <p>Please select a client to view the details.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
 </div>
 
 <!-- Modal (generic) -->

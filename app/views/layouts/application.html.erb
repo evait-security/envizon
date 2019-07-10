@@ -21,7 +21,7 @@
                 <i class="material-icons left">devices</i>Groups
               <% end %>
             </li>
-            <% if current_page?('/groups') %>
+            <% if current_page?(groups_path) %>
               <li><a href="#" class="search_header"><i class="material-icons left">search</i>Search</a></li>
             <% end %>
             <li class="<%= 'active' if current_page?(images_path) %>">
