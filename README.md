@@ -241,6 +241,4 @@ Why so salty on github issue discussion?
 
 ## Help?
 
-You can get some information about the structure and usage on the official wiki.
-
-https://github.com/evait-security/envizon/wiki
+Of course you can open an issue and describe the problem you are facing with. Our team will try to response soon&trade;.
