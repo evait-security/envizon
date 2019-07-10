@@ -1,6 +1,12 @@
 <div class="images-page">
     <div class="row">
         <div class="col s2" id="group_list">
+            <p class="center checkbox-toogle">
+                <label>
+                    <input type="checkbox" class="filled-in select-all-none" checked="checked" />
+                    <span>Toogle select all/none groups</span>
+                </label>
+            </p>
             <%= render partial: "groups/group_list" %>
         </div>
         <div class="col s10 offset-s2 images-col">
@@ -66,8 +72,32 @@
     // Display group on click (sidebar)
     $(document).on("click", '.group-collection-item', function() {        
         var id = this.getAttribute("gid");
-         $(this).find(".fa").toggleClass("blue-text text-darken-2");
-        $('.' + id).fadeToggle( "slow", "linear" );
+
+        // get current state
+        $state = $(this).find(".fa").hasClass("blue-text")
+        $(this).find(".fa").toggleClass("blue-text text-darken-2");
+        if ($state){
+            $('.' + id).fadeOut( "slow", "linear" );
+        } else { 
+            $('.' + id).fadeIn( "slow", "linear" );
+        }
+        
         $(this).blur();
+    });
+    $(document).on("click", '.select-all-none', function() {
+        if (this.checked) {
+            $(".group-collection-item").each(function() {
+                var id = this.getAttribute("gid");
+                $(this).find(".fa").addClass("blue-text text-darken-2");
+                $('.' + id).fadeIn( "slow", "linear" );
+            });
+        } else {
+            $(".group-collection-item").each(function() {
+                var id = this.getAttribute("gid");
+                $(this).find(".fa").removeClass("blue-text text-darken-2");
+                $('.' + id).fadeOut( "slow", "linear" );
+            });
+        }
+       $(this).blur();
     });
 </script>
