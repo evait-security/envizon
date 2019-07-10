@@ -5,7 +5,7 @@ class ScanJob
 
   def perform(command, scan, user)
     ActiveRecord::Base.connection_pool.with_connection do
-      num_workers =  user.settings.find_by_name('parallel_scans').value.to_i
+      #num_workers =  user.settings.find_by_name('parallel_scans').value.to_i
       # rm? will be overwritten in parser
       scan.startdate = Time.now
       scan.save

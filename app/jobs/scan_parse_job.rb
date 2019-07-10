@@ -5,7 +5,7 @@ class ScanParseJob
 
   def perform(xmlpath, scan, user)
     ActiveRecord::Base.connection_pool.with_connection do
-      num_workers = user.settings.find_by_name('parallel_scans').value.to_i
+      #num_workers = user.settings.find_by_name('parallel_scans').value.to_i
       nmap = NmapParser.new(xmlpath)
       nmap.parse
       scan.command, scan.startdate = *nmap.result
