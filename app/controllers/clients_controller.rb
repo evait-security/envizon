@@ -29,7 +29,7 @@ class ClientsController < ApplicationController
     @clients = Client.all
 
     if params.key?(:search)
-      @search_name = (params[:search_name].empty? ? 'Custom Search' : params[:search_name])
+      @search_name = 'Custom Search'
 
       or_result = nil
       params[:search].each_pair do |_not_used, param|

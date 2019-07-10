@@ -1,4 +1,4 @@
-<div class="modal-content">
+<div class="modal-content global-search-content">
   <table class="responsive-table">
     <tr style="padding-bottom: 20px;">
       <td>
@@ -40,10 +40,7 @@
         </ul>
       </td>
       <td>
-        <input name="search-name" id="search-name" placeholder="Search name ..." type="text" class="validate">
-      </td>
-      <td>
-        <a class="btn green darken-2" id="submit-search" onclick="$('#global_search_form').submit();"><i class="material-icons">search</i></a>
+        <a class="btn green darken-2 submit-search right"><i class="material-icons">search</i></a>
       </td>
     </tr>
   </table>
@@ -61,7 +58,8 @@
   </div>
 </div>
 
-<div class="modal-footer">
+<div class="modal-footer global-search-footer">
+  <a class="btn green darken-2 left submit-search"><i class="material-icons">search</i></a>
   <a href="#" class="btn modal-action blue darken-2" id="add_to_group_view">Add to Group-View</a>
   <a href="#" class="modal-action modal-close waves-effect waves-red btn-flat">Close</a>
 </div>
@@ -155,7 +153,7 @@
 
   function pre_load() {
     // disable search button
-    $('#submit-search').addClass("disabled");
+    $('.submit-search').addClass("disabled");
 
     // add spinner until query is ready
     $("#search_result").html('<div class="text-center" style="padding-top: 50px;"><div class="preloader-wrapper big active">\n' +
@@ -169,11 +167,6 @@
         '      </div>\n' +
         '    </div>\n' +
         '  </div></div>');
-        
-    // add search name to form
-    var sname = $("#search-name").val();
-    search_name_input = `<input type="hidden" name="search_name" value="${sname}" type="text" class="validate">`;
-    $(search_name_input).insertBefore("#end_of_form");
   }
 
   $('#add_to_group_view').click(function () {
@@ -181,5 +174,9 @@
     $(".selected-group").attr('gid', '-1');
     $("#group-placeholder").addClass("hidden");
     $("#wide-modal").modal('close');
+  });
+
+  $(document).on("click", '.submit-search', function() {
+    $('#global_search_form').submit();
   });
 </script>
