@@ -20,6 +20,7 @@
     - [Scan interface](#Scan-interface)
     - [Groups](#Groups)
     - [Global Search](#Global-Search)
+    - [Images](#Images)
   - [FAQ](#FAQ)
   - [What frameworks and tools were used?](#What-frameworks-and-tools-were-used)
   - [Help?](#Help)
@@ -204,19 +205,29 @@ Perform simple queries for hostname, IP, open ports, etc. or create combined que
 
 <img src="https://evait-security.github.io/envizon/screenshots/search.png">
 
+### Images
+
+This page renders the images of all ports with visible/interactive content captured by starting a new scan on the images/scan-interface. Actually only web-services are converted into a PNG files using selenium and chrome-headless. The scan interface has two functions:
+- Re-Scan (check which port can be captured and add only new images)
+- Re-Scan with overwrite (delete all images from the database and take a screenshot from all possible ports) 
+
+Using the left groups sidebar you can filter all images by group. Please note, that any on-change updates (e.g. someone deletes a group) are disabled on this page to avoid any disturbance on the manual image reviewing process.
+
+<img src="https://evait-security.github.io/envizon/screenshots/images.png">
+
 ## FAQ
 
 API ?!
 + Currently not. We will work on it. Maybe.
 
 Which browsers are supported?
-+ Latest Chrome / Chromium / Inox & Firefox / Waterfox.
++ Latest Chrome / Chromium / Inox & Firefox / Waterfox / Librewolf.
 
 Why rails?!
 + Wanted to learn ruby. It's cool.
 
 Why so salty on github issue discussion?
-+ This is a community project. We are a full time pentesting company and will not go into / care about every open issue that doesn't match our template or guidelines. If you get a rough answer or picture, you probably deserved it.
++ This is a community project. We are a full time pentesting company and will not go into / care about every open issue that doesn't match our template or guidelines. If you get a rough answer or picture e.g. from a fully underwhelmed cat, you probably deserved it.
 
 
 ## What frameworks and tools were used?
