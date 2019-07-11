@@ -58,6 +58,7 @@ gem 'image_processing'
 # (maybe use sidekiq or whatever in prod?)
 # (redis would be used for ActionCable anyway, so..)
 gem 'sucker_punch'
+gem 'sidekiq'
 
 # db import/export
 gem 'yaml_db'

@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   #devise_for :users
   devise_for :users, controllers: { registrations: "registrations"}
@@ -58,6 +60,8 @@ Rails.application.routes.draw do
   get 'scans/reload_finished' => 'scans#reload_finished'
   post 'scans/upload' => 'scans#upload'
   post 'scans/download' => 'scans#download', as: :download_scan
+
+  mount Sidekiq::Web => '/sidekiq'
 
   resources :clients
 end

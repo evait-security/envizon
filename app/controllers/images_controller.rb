@@ -3,13 +3,19 @@ class ImagesController < ApplicationController
         @images = Port.joins(:image_attachment).map{|p| p.image}.sort{|i| i.created_at}
     end
 
+    def nuke
+        Port.joins(:image_attachment).map{|p| p.image}.sort{|i| i.created_at}.each{|i| i.purge}
+    end
+
     def scan_all
-        ScreenshotOperatorJob.perform_async(false, current_user)
+        args = {'overwrite' => false}
+        ScreenshotOperatorWorker.perform_async(args)
         respond_with_notify("Re-Scan started. Please refresh this page to get new results!", "notice", "true")
     end
 
     def scan_all_overwrite
-        ScreenshotOperatorJob.perform_async(true, current_user)
+        args = {'overwrite' => true}
+        ScreenshotOperatorWorker.perform_async(args)
         respond_with_notify("Re-Scan with overwrite started. Please refresh this page to get new results!", "notice", "true")
     end
 

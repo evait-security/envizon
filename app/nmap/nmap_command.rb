@@ -74,7 +74,6 @@ class NmapCommand
       cmd = 'sudo'
     end
     return_value = nil
-
     Open3.popen3(env, cmd, *@options) do |_stdin, stdout, _stderr, thread|
       stdout.each do |l|
         l.match(/About (.*) done/) do |m|

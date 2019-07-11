@@ -18,6 +18,6 @@ module Envizon
     config.assets.precompile << /\.(?:svg|eot|woff|ttf)$/
     # config.web_console.whitelisted_ips = %w[172.17.0.0/24 172.18.0.0/24]
     # config.web_console.development_only = false
-    config.active_job.queue_adapter = :sucker_punch
+    config.active_job.queue_adapter = :sidekiq
   end
 end

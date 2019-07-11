@@ -12,18 +12,19 @@ class ScansController < ApplicationController
   def create
     if %i[target name].all? { |key| params[key].present? }
       params[:command] ||= ''
-      name = params[:name]
-      command = NmapCommand.new(params[:command], current_user.id, params[:target])
-      scan = Scan.new(name: name, user_id: current_user.id)
-      scan.command = 'Scan in progress…'
-      scan.save
-      ScanJob.perform_async(command, scan, current_user)
+      args = {
+        'scan_name' => params[:name],
+        'user_id'   => current_user.id,
+        'command'   => params[:command],
+        'target'    => params[:target]
+      }
+      ScanWorker.perform_async(args)
 
       respond_to do |format|
         format.html { redirect_to scans_path }
         # that's used because otherwise multipart-file-upload-js-async-things won't work as they should.
         if params[:fromGroupView].present?
-          locals = { message: "Scan '#{scan.name}' created", type: 'success', close: true }
+          locals = { message: "Scan '#{args['scan_name']}' created", type: 'success', close: true }
           format.js { render 'pages/notify', locals: locals }
         else
           format.js { render(js: %(window.location.href='#{scans_path}')) and return }
@@ -54,7 +55,7 @@ class ScansController < ApplicationController
         scan.command = 'Scan in progress…'
         scan.save
 
-        ScanParseJob.perform_async(destination, scan, current_user)
+        ScanParseWorker.perform_async(destination, scan, current_user)
       end
       respond_to do |format|
         format.html { redirect_to scans_path }
