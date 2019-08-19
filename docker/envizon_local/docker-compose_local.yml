@@ -15,7 +15,7 @@ services:
       POSTGRES_TEST_DB: 'envizon_test'
   envizon_local:
     build:
-      context: ../
+      context: ..
       dockerfile: docker/Dockerfile_local
     depends_on:
       - postgres_local
@@ -29,16 +29,19 @@ services:
     environment:
       POSTGRES_PASSWORD: 'envizon'
       POSTGRES_USER: 'envizon'
+      POSTGRES_DB: 'envizon'
       POSTGRES_HOST: '/var/run/postgresql'
-      RAILS_ENV: 'development'
-    entrypoint: /entrypoint_development.sh
-    # uncomment if using byebug:
-    # docker-compose up -d, then attach to running container
-    # stdin_open: true
-    # tty: true
+      SECRET_KEY_BASE:
+      RAILS_ENV: 'production'
+      RAILS_FORCE_SSL: 'true'
+      RAILS_SERVE_STATIC_FILES: 'true'
+      SSL_KEY_PATH:
+      SSL_CERT_PATH:
+    entrypoint: /entrypoint_local.sh
   selenium:
     image: selenium/standalone-chrome
-    expose:
+    expose: 
       - "4444"
-    volumes:
+    volumes: 
       - /dev/shm:/dev/shm
+

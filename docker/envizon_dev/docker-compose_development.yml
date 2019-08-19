@@ -1,0 +1,62 @@
+version: '3'
+volumes:
+  socket-volume:
+services:
+  postgres:
+    build:
+      context: ../postgres
+    volumes:
+      - socket-volume:/var/run
+    environment:
+      POSTGRES_PASSWORD: 'envizon'
+      POSTGRES_USER: 'envizon'
+      POSTGRES_DB: 'envizon'
+      POSTGRES_DEVELOPMENT_DB: 'envizon_development'
+      POSTGRES_TEST_DB: 'envizon_test'
+      REDIS_URL: 'redis://localhost:6379/0'
+  envizon:
+    build:
+      context: ../../
+      dockerfile: docker/envizon_dev/Dockerfile_development
+    depends_on:
+      - postgres
+      - selenium
+      - redis
+    network_mode: 'host'
+    ports:
+      - 3000:3000
+    volumes:
+      - ../../:/usr/src/app/envizon
+      - socket-volume:/var/run
+    environment:
+      POSTGRES_PASSWORD: 'envizon'
+      POSTGRES_USER: 'envizon'
+      POSTGRES_HOST: '/var/run/postgresql'
+      RAILS_ENV: 'development'
+    entrypoint: /entrypoint_development.sh
+    # uncomment if using byebug:
+    # docker-compose up -d, then attach to running container
+    # stdin_open: true
+    # tty: true
+  sidekiq:
+    build:
+      context: ../../
+      dockerfile: docker/envizon_dev/Dockerfile_development
+    command: bundle exec sidekiq
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ../../:/usr/src/app/envizon
+    environment:
+      REDIS_URL: 'redis://redis:6379/0'
+  selenium:
+    image: selenium/standalone-chrome
+    expose:
+      - "4444"
+    volumes:
+      - /dev/shm:/dev/shm
+  redis:
+    image: redis:alpine
+    ports:
+      - 6379:6379
