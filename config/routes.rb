@@ -55,12 +55,11 @@ Rails.application.routes.draw do
   post 'settings/update' => 'settings#update', as: :update_settings
 
   post 'scans/create' => 'scans#create'
-  get 'scans/reload_status' => 'scans#reload_status'
-  get 'scans/reload_finished' => 'scans#reload_finished'
   post 'scans/upload' => 'scans#upload'
   post 'scans/download' => 'scans#download', as: :download_scan
-
-  mount Sidekiq::Web => '/sidekiq'
+  authenticate :user do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   resources :clients
 end

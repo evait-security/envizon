@@ -28,7 +28,7 @@ nav .brand-logo {
 html, body {
   max-width: 100%;
   overflow-x: hidden;
-  min-height: 600px;
+  min-height: 100vh;
 }
 #generic-modal {
   width: 30% !important;
@@ -77,3 +77,9 @@ html, body {
 .hidden {
   visibility: hidden;
 }
+#sidekiq-modal {
+  height: 65vh !important;
+  max-height: none !important;
+}
+.full-iframe-container {display: flex; width: 100%; height: 100%; flex-direction: column; overflow: hidden;}
+.full-iframe-row { flex-grow: 1; border: none; margin: 0; padding: 0; }

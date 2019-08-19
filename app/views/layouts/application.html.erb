@@ -34,6 +34,11 @@
                 <i class="material-icons left">gps_fixed</i>Scans
               <% end %>        
             </li>
+            <li>
+              <a class="modal-trigger" href="#sidekiq-modal">
+                <i class="material-icons left">playlist_play</i>Tasks
+              </a>
+            </li>
             <li><a href="#" id="user-drop-menu-trigger" class="dropdown-trigger no-autoinit" data-target="user-drop-menu"><i class="material-icons left">account_circle</i><%= current_user.username %></a></li>
           <% else %>
             <li><a href="/"><i class="material-icons left">account_circle</i>Please sign in</a></li>
@@ -46,7 +51,7 @@
       <li><%= link_to '<i class="material-icons">settings</i>Settings'.html_safe, global_settings_path %></li>
       <li><%= link_to '<i class="material-icons">verified_user</i>Set password'.html_safe, edit_user_registration_path %></li>
       <li><%= link_to '<i class="material-icons">new_releases</i>Changelog'.html_safe, changelog_path %></li>
-      <li><%= link_to '<i class="material-icons">build</i>Version: 2.1.4'.html_safe, "javascript:void(0)" %></li>
+      <li><%= link_to '<i class="material-icons">build</i>Version: 2.2'.html_safe, "javascript:void(0)" %></li>
       <li class="divider"></li>
       <li><%= link_to '<i class="material-icons">lock_outline</i>Sign out'.html_safe, destroy_user_session_path, method: :delete, class: "red-text text-darken-2" %></li>
     </ul>
@@ -71,6 +76,11 @@
       </div>
     </div>
   </body>
+  <div id="sidekiq-modal" class="modal bottom-sheet">
+    <div class="full-iframe-container">
+      <iframe src="sidekiq/busy?poll=true" frameborder="0" class="full-iframe-row"></iframe>
+    </div>
+  </div>
 </html>
 
 <%# This file is used by devise for notifications %>

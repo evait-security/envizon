@@ -80,18 +80,6 @@ class ScansController < ApplicationController
     send_file file, type: 'text/xml', filename: filename, disposition: 'attachment'
   end
 
-  def reload_status
-    respond_to do |format|
-      format.js { render 'pages/reload_status' }
-    end
-  end
-
-  def reload_finished
-    respond_to do |format|
-      format.js { render 'pages/reload_finished' }
-    end
-  end
-
   private
 
   def respond_with_notify(locals = nil)
