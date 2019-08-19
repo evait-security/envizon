@@ -37,15 +37,23 @@ class NmapParser
   end
 
   def os_info(host, client)
-    accuracy = 0
-    os = ''
-    host.os && host.os.each do |os_match|
-      next unless os_match.accuracy > accuracy
-      os = os_match.name
-      accuracy = os_match.accuracy
+    begin
+      accuracy = 0
+      os = ''
+      host.os && host.os.each do |os_match|
+        next unless os_match.accuracy > accuracy
+        os = os_match.name
+        accuracy = os_match.accuracy
+      end
+      client.os = os unless os.blank? || client.os.present?
+      client.save
+    rescue => exception
+      puts "Faild to get os_info ->"
+      puts "host => #{host}"
+      puts "client => #{client}"
+      puts "exception => #{e}"
     end
-    client.os = os unless os.blank? || client.os.present?
-    client.save
+      
   end
 
   def os_type(host, client)
