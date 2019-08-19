@@ -48,6 +48,7 @@ services:
       - redis
     volumes:
       - ../../:/usr/src/app/envizon
+      - socket-volume:/var/run
     environment:
       REDIS_URL: 'redis://redis:6379/0'
   selenium:
