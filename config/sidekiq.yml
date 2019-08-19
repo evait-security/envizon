@@ -1,0 +1,9 @@
+:concurrency: 5
+:queues:
+  - default
+  - [single, 1]
+  - [scan, 3]
+  - [background, 5]
+  
+  # make single qoute with different concurrency
+  # https://stackoverflow.com/questions/28792190/how-to-control-concurrency-per-queue

@@ -1,6 +1,7 @@
 class ScanParseWorker
   require 'nmap_parser'
   include Sidekiq::Worker
+  sidekiq_options queue: 'single'
 
   def perform(args)
     ActiveRecord::Base.connection_pool.with_connection do

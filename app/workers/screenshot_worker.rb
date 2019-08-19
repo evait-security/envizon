@@ -1,6 +1,7 @@
 class ScreenshotWorker
   include Sidekiq::Worker
-
+  sidekiq_options queue: 'background'
+  
   def perform(args)
     ActiveRecord::Base.connection_pool.with_connection do
       #num_workers = user.settings.find_by_name('parallel_scans').value.to_i
