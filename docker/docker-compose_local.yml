@@ -37,3 +37,10 @@ services:
       SSL_KEY_PATH:
       SSL_CERT_PATH:
     entrypoint: /entrypoint_local.sh
+  selenium:
+    image: selenium/standalone-chrome
+    expose: 
+      - "4444"
+    volumes: 
+      - /dev/shm:/dev/shm
+
