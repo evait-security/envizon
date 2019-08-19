@@ -83,15 +83,15 @@ class NmapParser
 
       case name
       when 'nbstat'
-        nbstat(client, data)
+        nbstat(client, data) if !data.empty?
       when 'smb-os-discovery'
-        smb_os(client, data)
+        smb_os(client, data) if !data.empty?
       when 'smb-security-mode'
-        set_label(client, 'SMB Signing') if data['message_signing'].casecmp('disabled').zero?
+        set_label(client, 'SMB Signing') if data['message_signing'].casecmp('disabled').zero? if !data.empty?
       when 'smb-vuln-ms17-010'
-        set_label(client, 'MS17-010') if data['CVE-2017-0143']['state'].casecmp('vulnerable').zero?
+        set_label(client, 'MS17-010') if data['CVE-2017-0143']['state'].casecmp('vulnerable').zero? if !data.empty?
       when 'smb-vuln-ms08-067'
-        set_label(client, 'MS08-067') if data['CVE-2008-4250']['state'].casecmp('vulnerable').zero?
+        set_label(client, 'MS08-067') if data['CVE-2008-4250']['state'].casecmp('vulnerable').zero? if !data.empty?
       end
     end
   end

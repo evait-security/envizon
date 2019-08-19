@@ -38,7 +38,7 @@ services:
     # tty: true
   selenium:
     image: selenium/standalone-chrome
-    ports:
-      - 4444:4444
+    expose:
+      - "4444"
     volumes:
       - /dev/shm:/dev/shm
