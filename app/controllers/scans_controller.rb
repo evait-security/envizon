@@ -55,7 +55,12 @@ class ScansController < ApplicationController
         scan.command = 'Scan in progress…'
         scan.save
 
-        ScanParseWorker.perform_async(destination, scan, current_user)
+        args_parse = {
+          'xmlpath' => destination, 
+          'scan_id' => scan.id, 
+          'user_id' => current_user.id
+        }
+        ScanParseWorker.perform_async(args_parse)
       end
       respond_to do |format|
         format.html { redirect_to scans_path }
