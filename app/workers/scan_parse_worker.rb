@@ -8,7 +8,7 @@ class ScanParseWorker
       user = Scan.find(args['user_id'])
       #num_workers = user.settings.find_by_name('parallel_scans').value.to_i
 
-      nmap = NmapParser.new(args['xmlpath')
+      nmap = NmapParser.new(args['xmlpath'])
       nmap.parse
       scan.command, scan.startdate = *nmap.result
       scan.enddate = scan.startdate if scan.enddate.blank?
