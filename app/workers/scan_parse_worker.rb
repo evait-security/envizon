@@ -17,7 +17,7 @@ class ScanParseWorker
       scan.save
       user.scans << scan
       user.save
-      ActionCable.server.broadcast 'notification_channel', message: 'Scan finished'
+      ActionCable.server.broadcast 'notification_channel', message: "Scan '#{scan.name}' finished"
     end
   end
 end
