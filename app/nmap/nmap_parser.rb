@@ -51,87 +51,119 @@ class NmapParser
       puts "Faild to get os_info ->"
       puts "host => #{host}"
       puts "client => #{client}"
-      puts "exception => #{e}"
+      puts "exception => #{exception}"
     end
       
   end
 
   def os_type(host, client)
-    cpe = ''
-    type = ''
-    accuracy = 0
-    host.os && host.os.classes.each do |os_class|
-      next unless os_class.accuracy > accuracy
-      cpe = os_class.cpe.first
-      type = os_class.type
-      accuracy = os_class.accuracy
+    begin
+      cpe = ''
+      type = ''
+      accuracy = 0
+      host.os && host.os.classes.each do |os_class|
+        next unless os_class.accuracy > accuracy
+        begin
+          cpe = os_class.cpe.first  
+        rescue => exception
+          puts "Faild to get cpe for os_type"
+        end
+        type = os_class.type
+        accuracy = os_class.accuracy
+      end
+      client.cpe = cpe unless cpe.blank?
+      client.ostype = type unless type.blank?
+      client.save
+    rescue => exception
+      puts "Faild to get os_type ->"
+      puts "host => #{host}"
+      puts "client => #{client}"
+      puts "exception => #{exception}"
     end
-    client.cpe = cpe unless cpe.blank?
-    client.ostype = type unless type.blank?
-    client.save
   end
 
   def scripts(host, client)
-    host.host_script.script_data.each_pair do |name, data|
-      data.default = '' if data.is_a?(Hash)
-      db_output = Output.where(client_id: client.id, name: name).first_or_create
-      db_output.client = client
-      db_output.name = name
-      # TODO: modify storage/display of data
-      db_output.value = YAML.dump(data)
-      db_output.save
+    begin
+      host.host_script.script_data.each_pair do |name, data|
+        data.default = '' if data.is_a?(Hash)
+        db_output = Output.where(client_id: client.id, name: name).first_or_create
+        db_output.client = client
+        db_output.name = name
+        # TODO: modify storage/display of data
+        db_output.value = YAML.dump(data)
+        db_output.save
 
-      case name
-      when 'nbstat'
-        nbstat(client, data) if !data.empty?
-      when 'smb-os-discovery'
-        smb_os(client, data) if !data.empty?
-      when 'smb-security-mode'
-        set_label(client, 'SMB Signing') if data['message_signing'].casecmp('disabled').zero? if !data.empty?
-      when 'smb-vuln-ms17-010'
-        set_label(client, 'MS17-010') if data['CVE-2017-0143']['state'].casecmp('vulnerable').zero? if !data.empty?
-      when 'smb-vuln-ms08-067'
-        set_label(client, 'MS08-067') if data['CVE-2008-4250']['state'].casecmp('vulnerable').zero? if !data.empty?
+        case name
+        when 'nbstat'
+          nbstat(client, data) if !data.empty?
+        when 'smb-os-discovery'
+          smb_os(client, data) if !data.empty?
+        when 'smb-security-mode'
+          set_label(client, 'SMB Signing') if data['message_signing'].casecmp('disabled').zero? if !data.empty?
+        when 'smb-vuln-ms17-010'
+          set_label(client, 'MS17-010') if data['CVE-2017-0143']['state'].casecmp('vulnerable').zero? if !data.empty?
+        when 'smb-vuln-ms08-067'
+          set_label(client, 'MS08-067') if data['CVE-2008-4250']['state'].casecmp('vulnerable').zero? if !data.empty?
+        end
       end
+    rescue => exception
+      puts "Faild to get scripts ->"
+      puts "host => #{host}"
+      puts "client => #{client}"
+      puts "exception => #{exception}"
     end
   end
 
   def ports(host, client)
-    host.ports.each do |port|
-      next unless port.state == :open
-      db_port = Port.where(client_id: client.id, number: port.number).first_or_create
-      db_port.client_id = client.id
-      db_port.number = port.number
-      if port.service
-        db_port.service = "#{port.service.ssl? ? 'ssl/' : ''}#{port.service.name}" unless db_port.sv
-        if port.service.product.present?
-          db_port.description = port.service.product
-          db_port.description += ' ' + port.service.version if port.service.version.present?
-          db_port.sv = true
+    begin
+      host.ports.each do |port|
+        next unless port.state == :open
+        db_port = Port.where(client_id: client.id, number: port.number).first_or_create
+        db_port.client_id = client.id
+        db_port.number = port.number
+        if port.service
+          db_port.service = "#{port.service.ssl? ? 'ssl/' : ''}#{port.service.name}" unless db_port.sv
+          if port.service.product.present?
+            db_port.description = port.service.product
+            db_port.description += ' ' + port.service.version if port.service.version.present?
+            db_port.sv = true
+          end
         end
+        port_scripts(db_port, port) if port.scripts
+        db_port.save
       end
-      port_scripts(db_port, port) if port.scripts
-      db_port.save
+    rescue => exception
+      puts "Faild to get ports ->"
+      puts "host => #{host}"
+      puts "client => #{client}"
+      puts "exception => #{exception}"
     end
   end
 
   def port_scripts(db_port, port)
-    port.script_data.each_pair do |name, data|
-      data.default = '' if data.is_a?(Hash)
-      output = Output.where(port_id: db_port.id, name: name).first_or_create
-      output.port_id = db_port.id
-      output.name = name
-      output.value = YAML.dump(data)
-      output.save
+    begin
+      port.script_data.each_pair do |name, data|
+        data.default = '' if data.is_a?(Hash)
+        output = Output.where(port_id: db_port.id, name: name).first_or_create
+        output.port_id = db_port.id
+        output.name = name
+        output.value = YAML.dump(data)
+        output.save
 
-      case name
-      when 'http-ntlm-info'
-        hostname = data['DNS_Computer_Name']
-        hostname = data['NetBIOS_Computer_Name'] if hostname.blank?
-        client.hostname = hostname unless hostname.blank?
-      when 'ftp-anon'
-        set_label(client, 'Anonymous FTP') if data.include? 'Anonymous FTP login allowed'
+        case name
+        when 'http-ntlm-info'
+          hostname = data['DNS_Computer_Name']
+          hostname = data['NetBIOS_Computer_Name'] if hostname.blank?
+          client.hostname = hostname unless hostname.blank?
+        when 'ftp-anon'
+          set_label(client, 'Anonymous FTP') if data.include? 'Anonymous FTP login allowed'
+        end
       end
+    rescue => exception
+      puts "Faild to get port_scripts ->"
+      puts "db_port => #{db_port}"
+      puts "port => #{port}"
+      puts "exception => #{exception}"
     end
   end
 
