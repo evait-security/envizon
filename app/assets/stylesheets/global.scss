@@ -74,3 +74,6 @@ html, body {
   -webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
   transform: rotate(90deg);
 }
+.hidden {
+  visibility: hidden;
+}
