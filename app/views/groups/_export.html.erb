@@ -19,6 +19,7 @@
 </style>
 <%= simple_form_for :group, url: groups_export_path do |f| %>
   <div class="modal-content">
+    <a href="#" class="modal-action modal-close red-text text-darken-2 right btn-flat"><i class="material-icons">close</i></a>
     <div class="modal-header" style="border-bottom: 1px solid rgba(0, 0, 0, 0.1); padding-bottom: 20px; margin-bottom: 50px;">
       <h5 class="center-align">Export selected clients to text file</h5>
     </div>
@@ -41,7 +42,6 @@
   </div>
   <div class="modal-footer">
     <%= f.button :submit, 'Export', :class => 'modal-action', :onclick => "close_modal();" %>
-    <a href="#" class="modal-action modal-close waves-effect waves-red btn-flat">Close</a>
   </div>
 <% end %>
 

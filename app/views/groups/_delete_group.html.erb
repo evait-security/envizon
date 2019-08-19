@@ -19,6 +19,7 @@
 </style>
 <%= simple_form_for :group, url: groups_delete_path, remote: true do |f| %>
   <div class="modal-content">
+    <a href="#" class="modal-action modal-close red-text text-darken-2 right btn-flat"><i class="material-icons">close</i></a>
     <div class="modal-header" style="border-bottom: 1px solid rgba(0, 0, 0, 0.1); padding-bottom: 20px; margin-bottom: 50px;">
       <h5 class="center-align">Delete whole group with selected clients</h5>
     </div>
@@ -45,6 +46,5 @@
   </div>
   <div class="modal-footer">
     <%= f.button :submit, 'Delete', :class => 'modal-action red darken-4' %>
-    <a href="#" class="modal-action modal-close waves-effect waves-red btn-flat">Close</a>
   </div>
 <% end %>
