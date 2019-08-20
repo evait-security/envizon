@@ -38,11 +38,24 @@ services:
     # docker-compose up -d, then attach to running container
     # stdin_open: true
     # tty: true
-  sidekiq:
+  sidekiq-default:
     build:
       context: ../../
       dockerfile: docker/envizon_dev/Dockerfile_development
-    command: bundle exec sidekiq
+    command: bundle exec sidekiq -q default -c 5 & bundle exec sidekiq -q scan -c 5 & bundle exec sidekiq -q background -c 5
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ../../:/usr/src/app/envizon
+      - socket-volume:/var/run
+    environment:
+      REDIS_URL: 'redis://redis:6379/0'
+  sidekiq-single:
+    build:
+      context: ../../
+      dockerfile: docker/envizon_dev/Dockerfile_development
+    command: bundle exec sidekiq -q single -c 1
     depends_on:
       - postgres
       - redis
