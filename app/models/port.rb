@@ -34,7 +34,7 @@ class Port < ApplicationRecord
     if is_screenshotable?
       case self.service_short
       when 'http', 'https'
-        wd = Selenium::WebDriver.for :remote, url: 'http://localhost:4444/wd/hub', desired_capabilities: SELENIUM_CAPS
+        wd = Selenium::WebDriver.for :remote, url: 'http://selenium:4444/wd/hub', desired_capabilities: SELENIUM_CAPS
         wd.manage.timeouts.page_load = 10
         wd.navigate.to self.url_ip
         sleep 5
