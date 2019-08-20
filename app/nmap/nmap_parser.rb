@@ -100,11 +100,9 @@ class NmapParser
           smb_os(client, data) if !data.empty?
         when 'smb-security-mode'
           set_label(client, 'SMB Signing') if data['message_signing'].casecmp('disabled').zero? if !data.empty?
-        when 'smb-vuln-ms17-010'
-          set_label(client, 'MS17-010') if data['CVE-2017-0143']['state'].casecmp('vulnerable').zero? if !data.empty?
-        when 'smb-vuln-ms08-067'
-          set_label(client, 'MS08-067') if data['CVE-2008-4250']['state'].casecmp('vulnerable').zero? if !data.empty?
         end
+
+        check_vuln(data)
       end
     rescue => exception
       puts "Faild to get scripts ->"
@@ -158,6 +156,8 @@ class NmapParser
         when 'ftp-anon'
           set_label(client, 'Anonymous FTP') if data.include? 'Anonymous FTP login allowed'
         end
+
+        check_vuln(data)
       end
     rescue => exception
       puts "Faild to get port_scripts ->"
@@ -181,6 +181,30 @@ class NmapParser
   def set_label(client, labeltext)
     client.labels << Label.find_by_name(labeltext) unless client.labels.find_by_name(labeltext).present?
     client.save
+  end
+
+  def check_vuln(script_values)
+    if script_values.is_a?(Hash) 
+      script_values.each do |script_vuln|
+        begin
+          if ['vulnerable', 'likely vulnerable'].include?(script_vuln[1]['state'].downcase)
+            set_vuln_label(client, script_vuln[0].to_s, (['likely vulnerable'].include? script_vuln[1]['state'].downcase))
+          end
+        rescue => exception
+          puts "Faild to state from host script ->"
+          puts "script_vuln => #{script_vuln}"
+        end
+      end
+    end
+  end
+
+  def set_vuln_label(client, labeltext, likely)
+    client.labels << Label.where(
+      :name => "#{labeltext}",
+      :description => "Autogeneratet Flag: #{likely ? 'Likely vulnerable' : 'Vulnerable'} to '#{labeltext}'",
+      :priority => likely ? 'orange darken-1 white-text' : 'red darken-1 white-text' ).first_or_create
+    client.save
+    Label.where( :name => "g: #{labeltext}", :description => "Autogeneratet Flag: #{likely ? 'Likely vulnerable' : 'Vulnerable'} to '#{labeltext}'", :priority => likely ? 'orange darken-1 white-text' : 'red darken-1 white-text' ).first_or_create
   end
 
   def nbstat(client, data)
