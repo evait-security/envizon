@@ -3,27 +3,27 @@
 ## TOC
 
 - [envizon - the network visualization tool](#envizon---the-network-visualization-tool)
-  - [TOC](#TOC)
-  - [Version 2.1](#Version-21)
-  - [Use Case](#Use-Case)
-  - [Core Features:](#Core-Features)
-  - [How to start?!](#How-to-start)
-    - [Using Docker](#Using-Docker)
-      - [Prebuilt Docker Images](#Prebuilt-Docker-Images)
-        - [Running from local git checkout](#Running-from-local-git-checkout)
-          - [Development](#Development)
-    - [Without Docker](#Without-Docker)
-      - [Manually](#Manually)
-      - [Development](#Development-1)
-  - [Usage](#Usage)
-    - [Set a password](#Set-a-password)
-    - [Scan interface](#Scan-interface)
-    - [Groups](#Groups)
-    - [Global Search](#Global-Search)
-    - [Images](#Images)
-  - [FAQ](#FAQ)
-  - [What frameworks and tools were used?](#What-frameworks-and-tools-were-used)
-  - [Help?](#Help)
+  - [TOC](#toc)
+  - [Version 2.1](#version-21)
+  - [Use Case](#use-case)
+  - [Core Features:](#core-features)
+  - [How to start?!](#how-to-start)
+    - [Using Docker](#using-docker)
+      - [Prebuilt Docker Images](#prebuilt-docker-images)
+        - [Running from local git checkout](#running-from-local-git-checkout)
+          - [Development](#development)
+    - [Without Docker](#without-docker)
+      - [Manually](#manually)
+      - [Development](#development-1)
+  - [Usage](#usage)
+    - [Set a password](#set-a-password)
+    - [Scan interface](#scan-interface)
+    - [Groups](#groups)
+    - [Global Search](#global-search)
+    - [Images](#images)
+  - [FAQ](#faq)
+  - [What frameworks and tools were used?](#what-frameworks-and-tools-were-used)
+  - [Help?](#help)
 
 ## Version 2.1
 
@@ -43,6 +43,7 @@ We use envizon for our pentests in order to get an overview of a network and qui
 + **Order** clients with preconfigured or custom groups
 + **Search** through all attributes of clients and create complex linked queries
 + **Get** an overview of your targets during pentests with predefined security labels
++ **Screenshot** Visualize all http-like applications of your targets using chrome-headless (selenium) - VNC soon&trade;
 + **Save** and reuse your most used nmap scans
 + **Collaborate** with your team on the project in realtime
 + **Export** selected clients in a text file to connect other tools fast
