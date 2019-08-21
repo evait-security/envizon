@@ -102,7 +102,7 @@ class NmapParser
           set_label(client, 'SMB Signing') if data['message_signing'].casecmp('disabled').zero? if !data.empty?
         end
 
-        check_vuln(data)
+        check_vuln(client, name, data)
       end
     rescue => exception
       puts "Faild to get scripts ->"
@@ -157,7 +157,7 @@ class NmapParser
           set_label(client, 'Anonymous FTP') if data.include? 'Anonymous FTP login allowed'
         end
 
-        check_vuln(data)
+        check_vuln(client, name, data)
       end
     rescue => exception
       puts "Faild to get port_scripts ->"
@@ -183,28 +183,41 @@ class NmapParser
     client.save
   end
 
-  def check_vuln(script_values)
+  def check_vuln(client, script_name, script_values)
     if script_values.is_a?(Hash) 
-      script_values.each do |script_vuln|
-        begin
-          if ['vulnerable', 'likely vulnerable'].include?(script_vuln[1]['state'].downcase)
-            set_vuln_label(client, script_vuln[0].to_s, (['likely vulnerable'].include? script_vuln[1]['state'].downcase))
+      begin
+        vuln = []
+        likely = []
+        script_values.each do |script_vuln|
+          begin
+            case script_vuln[1]['state'].downcase
+            when 'vulnerable'
+              vuln << script_vuln[0].to_s
+            when 'likely vulnerable'
+              likely << script_vuln[0].to_s
+            end
+          rescue => exception
+            puts "Faild to state from check_vuln single vuln ->"
+            puts "script_vuln => #{script_vuln}"
           end
-        rescue => exception
-          puts "Faild to state from host script ->"
-          puts "script_vuln => #{script_vuln}"
         end
+      rescue => exception
+        puts "Faild to state from check_vuln script ->"
+        puts "script_name => #{script_name}"
+        puts "script_values => #{script_values}"
       end
+      set_vuln_label(client, script_name, vuln, false)
+      set_vuln_label(client, script_name, likely, true)
     end
   end
 
-  def set_vuln_label(client, labeltext, likely)
+  def set_vuln_label(client, script_name, vulns, likely)
+    return if vulns.empty?
     client.labels << Label.where(
-      :name => "#{labeltext}",
-      :description => "Autogeneratet Flag: #{likely ? 'Likely vulnerable' : 'Vulnerable'} to '#{labeltext}'",
+      :name => "#{script_name}",
+      :description => "Autogeneratet Flag: #{likely ? 'Likely vulnerable' : 'Vulnerable'} to '#{vulns.join("', '")}'",
       :priority => likely ? 'orange darken-1 white-text' : 'red darken-1 white-text' ).first_or_create
     client.save
-    Label.where( :name => "g: #{labeltext}", :description => "Autogeneratet Flag: #{likely ? 'Likely vulnerable' : 'Vulnerable'} to '#{labeltext}'", :priority => likely ? 'orange darken-1 white-text' : 'red darken-1 white-text' ).first_or_create
   end
 
   def nbstat(client, data)
