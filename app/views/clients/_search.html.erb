@@ -6,11 +6,11 @@
         <a class='dropdown-trigger btn' href='#' data-target='client'>Client</a>
         <!-- Dropdown Structure -->
         <ul id='client' class='dropdown-content'>
-          <li><a href="#" onclick="addSearchOption('Client', 'Hostname');">Hostname</a></li>
-          <li><a href="#" onclick="addSearchOption('Client', 'IP');">IP Adress</a></li>
-          <li><a href="#" onclick="addSearchOption('Client', 'MAC');">MAC Adress</a></li>
-          <li><a href="#" onclick="addSearchOption('Client', 'OS');">Operating System</a></li>
-          <li><a href="#" onclick="addSearchOption('Client', 'CPE');">CPE</a></li>
+          <li><a href="#" onclick="addSearchOption('Client', 'Hostname', 0);">Hostname</a></li>
+          <li><a href="#" onclick="addSearchOption('Client', 'IP', 0);">IP Adress</a></li>
+          <li><a href="#" onclick="addSearchOption('Client', 'MAC', 0);">MAC Adress</a></li>
+          <li><a href="#" onclick="addSearchOption('Client', 'OS', 0);">Operating System</a></li>
+          <li><a href="#" onclick="addSearchOption('Client', 'CPE', 0);">CPE</a></li>
         </ul>
       </td>
       <td>
@@ -18,16 +18,21 @@
         <a class='dropdown-trigger btn' href='#' data-target='port'>Port</a>
         <!-- Dropdown Structure -->
         <ul id='port' class='dropdown-content'>
-          <li><a href="#" onclick="addSearchOption('Port', 'Number');">Number</a></li>
-          <li><a href="#" onclick="addSearchOption('Port', 'Service');">Service</a></li>
-          <li><a href="#" onclick="addSearchOption('Port', 'Description');">Description</a></li>
+          <li><a href="#" onclick="addSearchOption('Port', 'Number', 0);">Number</a></li>
+          <li><a href="#" onclick="addSearchOption('Port', 'Service', 0);">Service</a></li>
+          <li><a href="#" onclick="addSearchOption('Port', 'Description', 0);">Description</a></li>
         </ul>
       </td>
       <td>
-        <a class="btn" onclick="addSearchOption('Group', 'Name');">Group Name</a>
+        <a class='dropdown-trigger btn' href='#' data-target='dropdown_group_name'>Group Name</a>
+        <ul id='dropdown_group_name' class='dropdown-content'>
+          <% Group.all.pluck(:name).uniq.each do |grp| %>
+            <li><a href="#" onclick="this.blur(); addSearchOption('Group', '<%= grp %>', 1);"><%= grp %></a></li>
+          <% end %>
+        </ul>
       </td>
       <td>
-        <a class="btn" onclick="addSearchOption('Output', 'Value');">Script Output</a>
+        <a class="btn" onclick="addSearchOption('Output', 'Value', 0);">Script Output</a>
       </td>
       <td>
         <!-- Dropdown Trigger -->
@@ -35,7 +40,7 @@
         <!-- Dropdown Structure -->
         <ul id='label' class='dropdown-content'>
           <% Label.all.pluck(:name).uniq.each do |lbl| %>
-              <li><a href="#" onclick="this.blur(); addSearchOption('Label', '<%= lbl %>');"><%= lbl %></a></li>
+              <li><a href="#" onclick="this.blur(); addSearchOption('Label', '<%= lbl %>', 1);"><%= lbl %></a></li>
           <% end %>
         </ul>
       </td>
@@ -61,7 +66,7 @@
 <div class="modal-footer global-search-footer">
   <a class="btn green darken-2 left submit-search"><i class="material-icons">search</i></a>
   <a href="#" class="btn modal-action blue darken-2" id="add_to_group_view">Add to Group-View</a>
-  <a href="#" class="modal-action modal-close waves-effect waves-red btn-flat">Close</a>
+  <a href="#" class="modal-action modal-close red darken-2 btn">Close</a>
 </div>
 
 <script>
@@ -71,62 +76,58 @@
   // init dropdown button
   $('.dropdown-trigger').dropdown({ constrainWidth: false });
 
-  function addSearchOption(model, name) {
+  function addSearchOption(model, name, with_value) {
+    if(with_value == 0) {
       var raw = `<div class="form_row">
-          <div class="row">
-          <input name="search[val${forms}[table]]" value="${model.toLowerCase()}" type="hidden">
-          <input name="search[val${forms}[name]]" value="${name.toLowerCase()}" type="hidden">
-            <div class="col s3" style="margin-top: 2em;">
-              <a class="btn btn-small" onclick="reverse(this);">=</a>
-              <input type="hidden" name="search[val${forms}[not]]" class="not" value="false">
-            </div>
-            <div class="input-field col s6">
-              <input name="search[val${forms}[value]]" type="text" class="validate">
-              <label class="active">${model} -> ${name}</label>
-            </div>
-            <div class="col s3" style="margin-top: 2em;">
-              <a class="btn btn-small red darken-1 form_row_delete"><i class="material-icons">delete</i></a>
+        <div class="row">
+        <input name="search[val${forms}[table]]" value="${model.toLowerCase()}" type="hidden">
+        <input name="search[val${forms}[name]]" value="${name.toLowerCase()}" type="hidden">
+          <div class="col s3" style="margin-top: 2em;">
+            <a class="btn btn-small" onclick="reverse(this);">=</a>
+            <input type="hidden" name="search[val${forms}[not]]" class="not" value="false">
+          </div>
+          <div class="input-field col s6">
+            <input name="search[val${forms}[value]]" type="text" class="validate">
+            <label class="active">${model} -> ${name}</label>
+          </div>
+          <div class="col s3" style="margin-top: 2em;">
+            <a class="btn btn-small red darken-1 form_row_delete"><i class="material-icons">delete</i></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s11">
+            <div class="switch center-align">
+              <label>AND<input type="checkbox" name="search[val${forms}[or]]" value="true"><span class="lever"></span>OR</label>
             </div>
           </div>
-          <div class="row">
-            <div class="col s11">
-              <div class="switch center-align">
-                <label>AND<input type="checkbox" name="search[val${forms}[or]]" value="true"><span class="lever"></span>OR</label>
-              </div>
+        </div>
+      </div>`;
+    } else {
+      var raw = `<div class="form_row">
+        <div class="row">
+        <input name="search[val${forms}[table]]" value="${model.toLowerCase()}" type="hidden">
+        <input name="search[val${forms}[name]]" value="name" type="hidden">
+          <div class="col s3" style="margin-top: 2em;">
+            <a class="btn btn-small" onclick="reverse(this);">=</a>
+            <input type="hidden" name="search[val${forms}[not]]" class="not" value="false">
+          </div>
+          <div class="input-field col s6">
+            <input name="search[val${forms}[value]]" value="${name}" type="text" class="validate">
+            <label class="active">${model}</label>
+          </div>
+          <div class="col s3" style="margin-top: 2em;">
+            <a class="btn btn-small red darken-1 form_row_delete"><i class="material-icons">delete</i></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s11">
+            <div class="switch center-align">
+              <label>AND<input type="checkbox" name="search[val${forms}[or]]" value="true"><span class="lever"></span>OR</label>
             </div>
           </div>
-        </div>`;
-
-      var raw_label = `<div class="form_row">
-          <div class="row">
-          <input name="search[val${forms}[table]]" value="${model.toLowerCase()}" type="hidden">
-          <input name="search[val${forms}[name]]" value="name" type="hidden">
-            <div class="col s3" style="margin-top: 2em;">
-              <a class="btn btn-small" onclick="reverse(this);">=</a>
-              <input type="hidden" name="search[val${forms}[not]]" class="not" value="false">
-            </div>
-            <div class="input-field col s6">
-              <input name="search[val${forms}[value]]" value="${name}" type="text" class="validate" disabled>
-              <input name="search[val${forms}[value]]" value="${name.toLowerCase()}" type="hidden">
-              <label class="active">${model}</label>
-            </div>
-            <div class="col s3" style="margin-top: 2em;">
-              <a class="btn btn-small red darken-1 form_row_delete"><i class="material-icons">delete</i></a>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col s11">
-              <div class="switch center-align">
-                <label>AND<input type="checkbox" name="search[val${forms}[or]]" value="true"><span class="lever"></span>OR</label>
-              </div>
-            </div>
-          </div>
-        </div>`;
-
-      if (model == "Label") {
-          raw = raw_label;
-      }
-
+        </div>
+      </div>`;
+    }
       // insert form row
       $(raw).insertBefore("#end_of_form").hide().fadeIn(300);
 
