@@ -34,8 +34,8 @@
         <a class='dropdown-trigger btn' href='#' data-target='label'>Label</a>
         <!-- Dropdown Structure -->
         <ul id='label' class='dropdown-content'>
-          <% Label.all.to_a.each do |lbl| %>
-              <li><a href="#" onclick="this.blur(); addSearchOption('Label', '<%= lbl.name %>');"><%= lbl.name %></a></li>
+          <% Label.all.pluck(:name).uniq.each do |lbl| %>
+              <li><a href="#" onclick="this.blur(); addSearchOption('Label', '<%= lbl %>');"><%= lbl %></a></li>
           <% end %>
         </ul>
       </td>

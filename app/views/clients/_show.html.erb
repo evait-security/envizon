@@ -41,7 +41,7 @@
         <% end %>
       </td>
       <td>
-        <% client.labels.to_a.each do |label|%>
+        <% client.labels.uniq.to_a.each do |label|%>
             <div class="chip tooltipped <%= label.priority%>" data-tooltip="<%= label.description%>"><%= label.name%></div>
         <% end %>
       </td>
