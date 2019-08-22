@@ -1,54 +1,51 @@
 <div class="modal-content global-search-content">
-  <table class="responsive-table">
-    <tr style="padding-bottom: 20px;">
-      <td>
-        <!-- Dropdown Trigger -->
-        <a class='dropdown-trigger btn' href='#' data-target='client'>Client</a>
-        <!-- Dropdown Structure -->
-        <ul id='client' class='dropdown-content'>
-          <li><a href="#" onclick="addSearchOption('Client', 'Hostname', 0);">Hostname</a></li>
-          <li><a href="#" onclick="addSearchOption('Client', 'IP', 0);">IP Adress</a></li>
-          <li><a href="#" onclick="addSearchOption('Client', 'MAC', 0);">MAC Adress</a></li>
-          <li><a href="#" onclick="addSearchOption('Client', 'OS', 0);">Operating System</a></li>
-          <li><a href="#" onclick="addSearchOption('Client', 'CPE', 0);">CPE</a></li>
-        </ul>
-      </td>
-      <td>
-        <!-- Dropdown Trigger -->
-        <a class='dropdown-trigger btn' href='#' data-target='port'>Port</a>
-        <!-- Dropdown Structure -->
-        <ul id='port' class='dropdown-content'>
-          <li><a href="#" onclick="addSearchOption('Port', 'Number', 0);">Number</a></li>
-          <li><a href="#" onclick="addSearchOption('Port', 'Service', 0);">Service</a></li>
-          <li><a href="#" onclick="addSearchOption('Port', 'Description', 0);">Description</a></li>
-        </ul>
-      </td>
-      <td>
-        <a class='dropdown-trigger btn' href='#' data-target='dropdown_group_name'>Group Name</a>
-        <ul id='dropdown_group_name' class='dropdown-content'>
-          <% Group.all.pluck(:name).uniq.each do |grp| %>
-            <li><a href="#" onclick="this.blur(); addSearchOption('Group', '<%= grp %>', 1);"><%= grp %></a></li>
-          <% end %>
-        </ul>
-      </td>
-      <td>
-        <a class="btn" onclick="addSearchOption('Output', 'Value', 0);">Script Output</a>
-      </td>
-      <td>
-        <!-- Dropdown Trigger -->
-        <a class='dropdown-trigger btn' href='#' data-target='label'>Label</a>
-        <!-- Dropdown Structure -->
-        <ul id='label' class='dropdown-content'>
-          <% Label.all.pluck(:name).uniq.each do |lbl| %>
-              <li><a href="#" onclick="this.blur(); addSearchOption('Label', '<%= lbl %>', 1);"><%= lbl %></a></li>
-          <% end %>
-        </ul>
-      </td>
-      <td>
-        <a class="btn green darken-2 submit-search right"><i class="material-icons">search</i></a>
-      </td>
-    </tr>
-  </table>
+  <a href="#" class="modal-action modal-close red-text text-darken-2 right btn-flat"><i class="material-icons">close</i></a>
+  <div class="row">
+    <span>
+      <a class='dropdown-trigger btn-large btn-flat grey lighten-3 blue-text text-darken-3' href='#' data-target='client'><i class="material-icons left">laptop</i>Client</a>
+      <ul id='client' class='dropdown-content'>
+        <li><a href="#" onclick="addSearchOption('Client', 'Hostname', 0);">Hostname</a></li>
+        <li><a href="#" onclick="addSearchOption('Client', 'IP', 0);">IP Adress</a></li>
+        <li><a href="#" onclick="addSearchOption('Client', 'MAC', 0);">MAC Adress</a></li>
+        <li><a href="#" onclick="addSearchOption('Client', 'OS', 0);">Operating System</a></li>
+        <li><a href="#" onclick="addSearchOption('Client', 'CPE', 0);">CPE</a></li>
+      </ul>
+    </span>
+    <span class="pl-2">
+      <a class='dropdown-trigger btn-large btn-flat grey lighten-3 blue-text text-darken-3' href='#' data-target='port'><i class="material-icons left">select_all</i>Port</a>
+      <ul id='port' class='dropdown-content'>
+        <li><a href="#" onclick="addSearchOption('Port', 'Number', 0);">Number</a></li>
+        <li><a href="#" onclick="addSearchOption('Port', 'Service', 0);">Service</a></li>
+        <li><a href="#" onclick="addSearchOption('Port', 'Description', 0);">Description</a></li>
+      </ul>
+    </span>
+    <span class="pl-2">
+      <a class='dropdown-trigger btn-large btn-flat grey lighten-3 blue-text text-darken-3' href='#' data-target='dropdown_group_name'><i class="material-icons left">devices</i>Group</a>
+      <ul id='dropdown_group_name' class='dropdown-content'>
+        <% Group.all.pluck(:name).uniq.each do |grp| %>
+          <li><a href="#" onclick="this.blur(); addSearchOption('Group', '<%= grp %>', 1);"><%= grp %></a></li>
+        <% end %>
+      </ul>
+    </span>
+    <span class="pl-2">
+      <a class='dropdown-trigger btn-large btn-flat grey lighten-3 blue-text text-darken-3' href='#' data-target='label'><i class="material-icons left">label</i>Label</a>
+      <ul id='label' class='dropdown-content'>
+        <% Label.all.pluck(:name).uniq.each do |lbl| %>
+            <li><a href="#" onclick="this.blur(); addSearchOption('Label', '<%= lbl %>', 1);"><%= lbl %></a></li>
+        <% end %>
+      </ul>
+    </span>
+    <span class="pl-2">
+      <a class="btn-large btn-flat grey lighten-3 blue-text text-darken-3" onclick="addSearchOption('Script Output', 'Value', 0);"><i class="material-icons left">code</i>Script</a>
+    </span>
+  </div>
+       
+
+ 
+
+
+
+
   <div class="section">
     <div class="row">
       <div class="col s4">
@@ -66,7 +63,6 @@
 <div class="modal-footer global-search-footer">
   <a class="btn green darken-2 left submit-search"><i class="material-icons">search</i></a>
   <a href="#" class="btn modal-action blue darken-2" id="add_to_group_view">Add to Group-View</a>
-  <a href="#" class="modal-action modal-close red darken-2 btn">Close</a>
 </div>
 
 <script>
