@@ -140,6 +140,7 @@ class NmapParser
 
   def port_scripts(db_port, port)
     begin
+      client = db_port.client
       port.script_data.each_pair do |name, data|
         data.default = '' if data.is_a?(Hash)
         output = Output.where(port_id: db_port.id, name: name).first_or_create
