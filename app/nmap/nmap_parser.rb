@@ -215,7 +215,7 @@ class NmapParser
     return if vulns.empty?
     client.labels << Label.where(
       :name => "#{script_name}",
-      :description => "Autogeneratet Flag: #{likely ? 'Likely vulnerable' : 'Vulnerable'} to '#{vulns.join("', '")}'",
+      :description => "Generated label: #{likely ? 'Likely vulnerable' : 'Vulnerable'} to '#{vulns.join("', '")}'",
       :priority => likely ? 'orange darken-1 white-text' : 'red darken-1 white-text' ).first_or_create
     client.save
   end
