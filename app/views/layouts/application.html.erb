@@ -39,6 +39,16 @@
                 <i class="material-icons left">playlist_play</i>Tasks
               </a>
             </li>
+            <li class="<%= 'active' if current_page?(issue_templates_path) %>">
+              <%= link_to issue_templates_path do %>
+                <i class="material-icons left">bug_report</i>Issues
+              <% end %>        
+            </li>
+            <li>
+              <%= link_to root_path do %>
+                <i class="material-icons left">post_add</i>Reporting
+              <% end %>        
+            </li>
             <li><a href="#" id="user-drop-menu-trigger" class="dropdown-trigger no-autoinit" data-target="user-drop-menu"><i class="material-icons left">account_circle</i><%= current_user.username %></a></li>
           <% else %>
             <li><a href="/"><i class="material-icons left">account_circle</i>Please sign in</a></li>

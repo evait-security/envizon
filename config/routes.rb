@@ -7,6 +7,9 @@ Rails.application.routes.draw do
 
   get '/scans' => 'pages#scans'
 
+  resources :issue_templates
+  post '/issue_templates/search' => 'issue_templates#search', as: :issue_templates_search
+
   # index ever used, ever?
   resources :groups, only: %i[create new]
 

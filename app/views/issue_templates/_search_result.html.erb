@@ -1,0 +1,6 @@
+<% @issue_templates.each do |issue| %>
+    <li class="collection-item issue-template-collection-item">
+        <%= link_to issue.title, edit_issue_template_path(issue), remote: true %>        
+        <%= link_to '<i class="material-icons red-text text-darken-3">delete_forever</i>'.html_safe, issue, method: :delete, :class => "secondary-content", data: { confirm: 'Are you sure?' } %>
+    </li>
+<% end %>  

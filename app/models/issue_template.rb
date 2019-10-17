@@ -1,0 +1,2 @@
+class IssueTemplate < ApplicationRecord
+end

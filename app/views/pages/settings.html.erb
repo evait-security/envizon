@@ -12,66 +12,98 @@
       <div class="row">
         <div class="col s12">
           <ul class="tabs tabs-fixed-width">
-            <li class="tab col s12"><a href="#settings">Quick settings</a></li>
+            <li class="tab col s6"><a href="#quick_settings">Quick settings</a></li>
+            <li class="tab col s6"><a href="#issue_settings">Issue settings</a></li>
           </ul>
         </div>
-        <div id="parallel" class="col s12">
+        <div id="quick_settings" class="col s12">
           <div class="white">
-            <div class="container">
-              <div class="row" style="padding: 2em;">
-                <div class="row" style="padding-top: 2em;">
-                  <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
-                    <%= f.error_notification %>
-                    <div class="col s4">
-                      <p class="grey-text text-darken-2 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Import database">Import</p>
-                    </div>
-                    <div class="col s6">
-                      <div class="file-field">
-                        <input id="import_db" name="import_db[]" type="file" accept=".yml">
-                        <div class="file-path-wrapper">
-                          <input class="file-path validate" type="text" placeholder="Select a database file">
-                        </div>
+            <div class="container" style="padding: 2em;">
+              <div class="row">
+                <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
+                  <%= f.error_notification %>
+                  <div class="col s4">
+                    <p class="grey-text text-darken-2 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Import database">Import</p>
+                  </div>
+                  <div class="col s6">
+                    <div class="file-field">
+                      <input id="import_db" name="import_db[]" type="file" accept=".yml">
+                      <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" placeholder="Select a database file">
                       </div>
                     </div>
-                    <div class="input-field form-actions col s2" >
-                      <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Import database" type="submit" name="action"><i class="fa fa-upload"></i></button>
-                    </div>
-                  <% end %>
-                </div>
-                <div class="row" style="padding-top: 2em;">
-                  <%= simple_form_for :settings, url: update_settings_path do |f| %>
-                    <%= f.error_notification %>
-                    <div class="col s4">
-                      <p class="grey-text text-darken-2 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Export / download current database">Export</p>
-                    </div>
-                    <div class="col s6">
-                      <input type="hidden" name="export_db" value="true">
-                    </div>
-                    <div class="input-field form-actions col s2" >
-                        <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Export / download database" type="submit" name="action"><i class="fa fa-download"></i></button>
-                    </div>
-                  <% end %>
-                </div>
-                <div class="row" style="padding-top: 2em;">
-                  <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
-                    <%= f.error_notification %>
-                    <div class="col s4">
-                      <p class="grey-text text-darken-2 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Enable / disable global notifications">Global notifications</p>
-                    </div>
-                    <div class="col s6">
-                    <p>
-                      <input type="hidden" name="global_notify" value="true">
-                      <label>
-                        <input type="checkbox" id="global_notify_setting" name="global_notify_setting" <%= 'checked="checked"' if current_user.settings.find_by_name('global_notify').value.include? "true" %> />
-                        <span></span>
-                      </label>
-                    </p>
-                    </div>
-                    <div class="input-field form-actions col s2" >
-                      <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Update global notification settings" type="submit" name="action"><i class="fa fa-refresh"></i></button>
-                    </div>
-                  <% end %>
-                </div>
+                  </div>
+                  <div class="input-field form-actions col s2" >
+                    <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Import database" type="submit" name="action"><i class="fa fa-upload"></i></button>
+                  </div>
+                <% end %>
+              </div>
+              <div class="row" style="padding-top: 2em;">
+                <%= simple_form_for :settings, url: update_settings_path do |f| %>
+                  <%= f.error_notification %>
+                  <div class="col s4">
+                    <p class="grey-text text-darken-2 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Export / download current database">Export</p>
+                  </div>
+                  <div class="col s6">
+                    <input type="hidden" name="export_db" value="true">
+                  </div>
+                  <div class="input-field form-actions col s2" >
+                      <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Export / download database" type="submit" name="action"><i class="fa fa-download"></i></button>
+                  </div>
+                <% end %>
+              </div>
+              <div class="row" style="padding-top: 2em;">
+                <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
+                  <%= f.error_notification %>
+                  <div class="col s4">
+                    <p class="grey-text text-darken-2 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Enable / disable global notifications">Global notifications</p>
+                  </div>
+                  <div class="col s6">
+                  <p>
+                    <input type="hidden" name="global_notify" value="true">
+                    <label>
+                      <input type="checkbox" id="global_notify_setting" name="global_notify_setting" <%= 'checked="checked"' if current_user.settings.find_by_name('global_notify').value.include? "true" %> />
+                      <span></span>
+                    </label>
+                  </p>
+                  </div>
+                  <div class="input-field form-actions col s2" >
+                    <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Update global notification settings" type="submit" name="action"><i class="fa fa-refresh"></i></button>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="issue_settings" class="col s12">
+          <div class="white">
+            <div class="container" style="padding: 2em;">
+              <div class="row">
+                <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
+                  <%= f.error_notification %>
+                  <div class="col s12">
+                    <p>Google Drive - Backup / Restore</p>
+                  </div>
+                  <div class="input-field col s10">
+                    <input id="issue_backup_gd_client_id" name="issue_backup_gd_client_id" type="text" class="validate" placeholder="xxx-xxx.apps.googleusercontent.com">
+                    <label for="issue_backup_gd_client_id">Client ID</label>
+                  </div>
+                  <div class="input-field form-actions col s2">
+                    <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Update Google Client-ID" type="submit" name="action"><i class="fa fa-refresh"></i></button>
+                  </div>
+                <% end %>         
+              </div>
+              <div class="row">
+                <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
+                  <%= f.error_notification %>
+                  <div class="input-field col s10">
+                    <input id="issue_backup_gd_secret" name="issue_backup_gd_secret" type="text" class="validate" placeholder="xxxxxxxxxxxxxxxxxxxxxx">
+                    <label for="issue_backup_gd_secret">Secret</label>
+                  </div>
+                  <div class="input-field form-actions col s2">
+                    <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Update Google secret" type="submit" name="action"><i class="fa fa-refresh"></i></button>
+                  </div>
+                <% end %>         
               </div>
             </div>
           </div>

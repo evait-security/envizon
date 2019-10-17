@@ -1,0 +1,28 @@
+<div class="row issue_templates">
+  <div class="col s4">
+    <div class="row search-field">
+      <%= simple_form_for :search, url: issue_templates_search_path, method: "POST", remote: "true" do |f| %>
+        <div class="input-field col s8 ">
+          <input placeholder="Type any issue title..." id="title" name="title" type="text" autofocus>
+          <label for="title">Search</label> 
+        </div>
+        <div class="col s4 input-field">
+          <%= link_to "New Issue", new_issue_template_path, remote: true, class: "btn btn-flat grey lighten-3 blue-text text-darken-2 right" %>        
+        </div>
+      <% end %>
+    </div>
+    <ul class="collection">
+
+      <div id="issue_templates">
+        <% @issue_templates.each do |issue| %>
+          <li class="collection-item issue-template-collection-item">
+              <%= link_to issue.title, edit_issue_template_path(issue), remote: true %>        
+              <%= link_to '<i class="material-icons red-text text-darken-3">delete_forever</i>'.html_safe, issue, method: :delete, :class => "secondary-content", data: { confirm: 'Are you sure?' } %>
+          </li>
+        <% end %>   
+      </div>   
+    </ul> 
+  </div>
+  <div class="col s8" id="issue_container">
+  </div>
+</div>

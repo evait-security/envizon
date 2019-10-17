@@ -31,7 +31,8 @@ gem 'jbuilder', '~> 2.5'
 gem 'ruby-nmap', git: 'https://github.com/sophsec/ruby-nmap.git'
 
 # Icon-Pack
-gem 'material_icons'
+# Use Material Icons directly without gem. Gem maintailer not update the gem frequently
+# gem 'material_icons', git: 'https://github.com/Angelmmiguel/material_icons'
 
 # Login
 gem 'devise'
@@ -62,6 +63,9 @@ gem 'sidekiq'
 
 # db import/export
 gem 'yaml_db'
+
+# gdrive plugin to backup issue database
+gem 'google_drive'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
