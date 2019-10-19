@@ -2,6 +2,7 @@ require 'rake'
 require 'fileutils'
 require 'json'
 
+
 # @restful_api 1.0
 # Handle user settings
 class SettingsController < ApplicationController
@@ -41,7 +42,21 @@ class SettingsController < ApplicationController
     app['db:data:dump'].invoke
     app['db:data:dump'].reenable
     file_name = 'data.yml'
-    send_file Rails.root.join('db', file_name), filename: file_name, type: 'application/yaml'
+
+    # zip storage folder
+    output_filename = 'data.zip'
+    active_storage_filename = 'storage'
+    output_file = Tempfile.new(output_filename)
+    
+    # fix error by open tempfile
+    Zip::OutputStream.open(output_file) { |zos| }
+    # zip the files
+    ::Zip::File.open(output_file, ::Zip::File::CREATE) do |zipfile|
+      write_entries (Dir.entries(Rails.root.join(active_storage_filename)) - %w[. ..]), active_storage_filename, zipfile, Rails.root
+      zipfile.add(file_name, Rails.root.join('db', file_name))
+    end
+
+    send_file output_file, filename: output_filename, type: 'application/zip'
     nil
   end
 
@@ -78,13 +93,30 @@ class SettingsController < ApplicationController
 
 
   def import_db(file)
+
+    extract_dir = Dir.mktmpdir
+    Zip::ZipFile.open(file.first.tempfile) { |zip_file|
+      zip_file.each do |f|
+        f_path=File.join(extract_dir, f.name)
+        FileUtils.mkdir_p(File.dirname(f_path))
+        zip_file.extract(f, f_path) unless File.exist?(f_path)
+      end
+    }
+    unziped_storage = File.join(extract_dir, 'storage')
+    out_storage = Rails.root.join('storage')
+    unziped_data_yml = File.join(extract_dir, 'data.yml')
+    out_data_yml = Rails.root.join('db', 'data.yml')
+
+    FileUtils.rm_rf(Rails.root.join('storage'))
+    FileUtils.mv(unziped_storage, out_storage)
+
     app = Rake.application
     app.init
     app.add_import "#{Gem::Specification.find_by_name('yaml_db').gem_dir}/lib/tasks/yaml_db_tasks.rake"
     app.load_rakefile
 
-    out = Rails.root.join('db', 'data.yml')
-    FileUtils.cp(file.first.tempfile.path, out)
+    FileUtils.cp(Pathname.new(unziped_data_yml), out_data_yml)
+    byebug
     app['db:data:load'].invoke
     app['db:data:load'].reenable
     { message: 'Database successfully imported', type: 'success' }
@@ -134,5 +166,29 @@ class SettingsController < ApplicationController
       format.html { redirect_to root_path }
       format.js { render 'pages/notify', locals: locals }
     end
+  end
+
+  # A helper method to make the recursion work.
+  def write_entries(entries, path, zipfile, root_dir)
+    entries.each do |e|
+      zipfile_path = path == '' ? e : File.join(path, e)
+      disk_file_path = File.join(root_dir, zipfile_path)
+
+      if File.directory? disk_file_path
+        recursively_deflate_directory(disk_file_path, zipfile, zipfile_path, root_dir)
+      else
+        put_into_archive(disk_file_path, zipfile, zipfile_path)
+      end
+    end
+  end
+
+  def recursively_deflate_directory(disk_file_path, zipfile, zipfile_path, root_dir)
+    zipfile.mkdir zipfile_path
+    subdir = Dir.entries(disk_file_path) - %w[. ..]
+    write_entries subdir, zipfile_path, zipfile, root_dir
+  end
+
+  def put_into_archive(disk_file_path, zipfile, zipfile_path)
+    zipfile.add(zipfile_path, disk_file_path)
   end
 end

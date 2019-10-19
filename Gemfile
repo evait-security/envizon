@@ -62,8 +62,12 @@ gem 'sucker_punch'
 gem 'sidekiq'
 
 # db import/export
-gem 'yaml_db'
+gem 'yaml_db', git: 'https://github.com/evs-ch/yaml_db.git'
 gem 'activerecord-import'
+
+# zip
+gem 'rubyzip', '>= 1.0.0' # will load new rubyzip version
+gem 'zip-zip' # will load compatibility for old rubyzip API.
 
 # gdrive plugin to backup issue database
 gem 'google_drive'
