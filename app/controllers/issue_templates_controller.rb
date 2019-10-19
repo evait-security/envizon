@@ -4,7 +4,7 @@ class IssueTemplatesController < ApplicationController
   # GET /issue_templates
   # GET /issue_templates.json
   def index
-    @issue_templates = IssueTemplate.all
+    @issue_templates = IssueTemplate.all.order(:title)
   end
 
   def search 
