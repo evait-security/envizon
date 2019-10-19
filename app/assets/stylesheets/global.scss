@@ -95,3 +95,11 @@ html, body {
 .pl-2 {
   padding-left: 2em;
 }
+.loader {
+  position: absolute;
+  width: 56px;
+  height: 56px;
+  top: 7.8em;
+  right: 3em;
+  display: none;
+}

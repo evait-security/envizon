@@ -123,6 +123,7 @@
 <script>
     // Display group on click (sidebar)
     $(document).on("click", '.group-collection-item', function() {
+        $(".loader").show();
         $("#group-placeholder").addClass("hidden");
         var id = this.getAttribute("gid");
 
