@@ -116,7 +116,6 @@ class SettingsController < ApplicationController
     app.load_rakefile
 
     FileUtils.cp(Pathname.new(unziped_data_yml), out_data_yml)
-    byebug
     app['db:data:load'].invoke
     app['db:data:load'].reenable
     { message: 'Database successfully imported', type: 'success' }
