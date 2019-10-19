@@ -1,41 +1,17 @@
-# envizon - the network visualization tool
+# envizon - by evait security
+## network visualization & vulnerability management/reporting
 
-## TOC
-
-- [envizon - the network visualization tool](#envizon---the-network-visualization-tool)
-  - [TOC](#toc)
-  - [Version 2.1](#version-21)
-  - [Use Case](#use-case)
-  - [Core Features:](#core-features)
-  - [How to start?!](#how-to-start)
-    - [Using Docker](#using-docker)
-      - [Prebuilt Docker Images](#prebuilt-docker-images)
-        - [Running from local git checkout](#running-from-local-git-checkout)
-          - [Development](#development)
-    - [Without Docker](#without-docker)
-      - [Manually](#manually)
-      - [Development](#development-1)
-  - [Usage](#usage)
-    - [Set a password](#set-a-password)
-    - [Scan interface](#scan-interface)
-    - [Groups](#groups)
-    - [Global Search](#global-search)
-    - [Images](#images)
-  - [FAQ](#faq)
-  - [What frameworks and tools were used?](#what-frameworks-and-tools-were-used)
-  - [Help?](#help)
-
-## Version 2.1
+Version 3.0
 
 Fancy shields: Coming Soon™
 
 <img src="https://evait-security.github.io/envizon/envizon-wide-export-blue.svg" width="400px" />
 
-This tool is designed, developed and supported by evait security. In order to give something back to the security community, we publish our internally used and developed, state of the art network visualization and organization tool, 'envizon'. We hope your feedback will help to improve and hone it even further.
+This tool is designed, developed and supported by evait security. In order to give something back to the security community, we publish our internally used and developed, state of the art network visualization and vulnerability reporting tool, 'envizon'. We hope your feedback will help to improve and hone it even further.
 
 ## Use Case
 
-We use envizon for our pentests in order to get an overview of a network and quickly identify the most promising targets.
+We use envizon for our pentests in order to get an overview of a network and quickly identify the most promising targets. The version 3.0 introduce new features such as screenshotting web services, organizing vulnerabilities or generating reports with custom latex templates.
 
 ## Core Features:
 
@@ -47,6 +23,8 @@ We use envizon for our pentests in order to get an overview of a network and qui
 + **Save** and reuse your most used nmap scans
 + **Collaborate** with your team on the project in realtime
 + **Export** selected clients in a text file to connect other tools fast
++ **Manage** issue template and create vulnerabilities linked to hosts in the database
++ **Create** customer reports with latex templates with one click 
 
 ## How to start?!
 
@@ -62,7 +40,7 @@ Use the `docker-compose.yml` from the `docker/` directory and run it with `docke
 
 The Docker image will be pulled from `evait/envizon`.
 
-If you want to update the image or pull it manually, you can do so with `docker pull evait/envizon`.
+If you want to update the app image or pull it manually, you can do so with `docker pull evait/envizon`.
 
 If you want to provide your own SSL-certificates and/or RAILS_SECRET, modify the `docker-compose.yml` according to your needs, otherwise both will be generated.
 
@@ -73,100 +51,27 @@ wget https://raw.githubusercontent.com/evait-security/envizon/master/docker/dock
 sudo docker-compose up
 ```
 
-##### Running from local git checkout
+#### Running from local git checkout
 
 ```zsh
 git clone https://github.com/evait-security/envizon
-cd envizon/docker
+cd envizon/envizon_local
 sudo docker-compose -f docker-compose_local.yml up
 ```
 
-###### Development
+#### Development
 
 _If, for whatever reason, you want to run the development environment in production, you should probably consider changing the secrets in `config/secrets.yml`, and maybe even manually activate SSL._
 
 ```zsh
 git clone https://github.com/evait-security/envizon
-cd envizon/docker
-sudo docker-compose -f docker-compose_development.yml up
+cd envizon/envizon_dev
+sudo docker-compose up
 ```
 
 Running tests:
 ```
 docker exec -it envizon_container_name_1 /bin/ash -c 'rails test'
-```
-
-### Without Docker
-
-#### Manually
-
-Requires a PostgreSQL server.
-
-Create a database `envizon` with a user `envizon`. Password and socket location can be modified in the `docker-compose.yml`. Your user needs SUPERUSER privileges; otherwise database import (and tests) won't work, because of foreign key constraints: use `ALTER USER user WITH SUPERUSER;`.
-
-```zsh
-git clone https://github.com/evait-security/envizon
-cd envizon
-bundle install --path vendor/bundle
-```
-
-You need to create a secret and SSL certificates:
-
-```zsh
-mkdir .ssl
-openssl req -x509 -sha256 -nodes -newkey rsa:2048 -days 365 -keyout .ssl/localhost.key -out .ssl/localhost.crt
-# If you want to use certificates located elsewhere, provide their pathes with SSL_CERT_PATH and SSL_KEY_PATH
-# Create a secret:
-RAILS_ENV=production bundle exec rails secret
-```
-
-The secret needs to be provided as an environment variable (SECRET_KEY_BASE), or be put in `config/secrets.yml`.
-
-Then, run it with:
-
-```zsh
-RAILS_ENV=production
-export RAILS_ENV
-SECRET_KEY_BASE=YOUR_SECRET
-export SECRET_KEY_BASE
-bundle exec rails db:migrate
-bundle exec rails db:seed
-bundle exec rails assets:precompile
-RAILS_FORCE_SSL=true RAILS_SERVE_STATIC_FILES=true bundle exec rails s
-```
-
-Also you need to run selenium in a container on the same system
-
-```
-docker run --rm -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome
-```
-
-#### Development
-
-Databases for development and testing are called `envizon_test` and `envizon_development`, with the same requirements as above. Different database names and credentials can be provided via environment variables or directly modified in `config/database.yml`
-
-```zsh
-git clone https://github.com/evait-security/envizon
-cd envizon
-bundle install --path vendor/bundle
-RAILS_ENV=development
-export RAILS_ENV
-bundle exec rails db:migrate
-bundle exec rails db:seed
-bundle exec rails s
-```
-
-Also you need to run selenium in a container on the same system
-
-```
-docker run --rm -p 4444:4444 -v /dev/shm:/dev/shm selenium/standalone-chrome
-```
-
-To run the tests:
-
-```
-RAILS_ENV=test db:setup
-bundle exec rails test
 ```
 
 ## Usage
