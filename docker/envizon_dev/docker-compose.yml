@@ -1,11 +1,12 @@
 version: '3'
 volumes:
   socket-volume:
+  nmap-uploads:
 services:
   postgres:
     build:
       context: ../postgres
-    volumes:
+    volumes:    
       - socket-volume:/var/run
     environment:
       POSTGRES_PASSWORD: 'envizon'
@@ -28,6 +29,7 @@ services:
     volumes:
       - ../../:/usr/src/app/envizon
       - socket-volume:/var/run
+      - nmap-uploads:/opt/nmap/uploads/
     environment:
       POSTGRES_PASSWORD: 'envizon'
       POSTGRES_USER: 'envizon'
@@ -50,6 +52,7 @@ services:
     volumes:
       - ../../:/usr/src/app/envizon
       - socket-volume:/var/run
+      - nmap-uploads:/opt/nmap/uploads/
     environment:
       REDIS_URL: 'redis://redis:6379/0'
   sidekiq-single:
@@ -63,8 +66,9 @@ services:
     volumes:
       - ../../:/usr/src/app/envizon
       - socket-volume:/var/run
+      - nmap-uploads:/opt/nmap/uploads/
     environment:
-      REDIS_URL: 'redis://redis:6379/0'
+      REDIS_URL: 'redis://redis:6379/0'     
   selenium:
     image: selenium/standalone-chrome
     expose:
