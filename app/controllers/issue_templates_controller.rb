@@ -7,8 +7,8 @@ class IssueTemplatesController < ApplicationController
     @issue_templates = IssueTemplate.all
   end
 
-  def search     
-    @issue_templates = IssueTemplate.where('title LIKE ?', "%#{params["title"]}%")
+  def search 
+    @issue_templates = IssueTemplate.where('lower(title) LIKE :search or lower(description) LIKE :search', search: "%#{params["title"].downcase}%")
     respond_to do |format|
       format.js { render :search_result }
     end
