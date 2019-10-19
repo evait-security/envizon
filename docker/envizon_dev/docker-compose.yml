@@ -13,7 +13,7 @@ services:
       POSTGRES_DB: 'envizon'
       POSTGRES_DEVELOPMENT_DB: 'envizon_development'
       POSTGRES_TEST_DB: 'envizon_test'
-      REDIS_URL: 'redis://localhost:6379/0'
+      REDIS_URL: 'redis://redis:6379/0'
   envizon:
     build:
       context: ../../
@@ -33,6 +33,7 @@ services:
       POSTGRES_USER: 'envizon'
       POSTGRES_HOST: '/var/run/postgresql'
       RAILS_ENV: 'development'
+      REDIS_URL: 'redis://127.0.0.1:6379/0'
     entrypoint: /entrypoint_development.sh
     # uncomment if using byebug:
     # docker-compose up -d, then attach to running container
@@ -73,4 +74,4 @@ services:
   redis:
     image: redis:alpine
     ports:
-      - 6379:6379
+      - '127.0.0.1:6379:6379'
