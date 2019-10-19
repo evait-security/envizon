@@ -50,6 +50,11 @@
               <% end %>        
             </li>
             <li><a href="#" id="user-drop-menu-trigger" class="dropdown-trigger no-autoinit" data-target="user-drop-menu"><i class="material-icons left">account_circle</i><%= current_user.username %></a></li>
+            <div id="sidekiq-modal" class="modal bottom-sheet">
+              <div class="full-iframe-container">
+                <iframe src="/sidekiq/busy?poll=true" frameborder="0" class="full-iframe-row"></iframe>
+              </div>
+            </div>         
           <% else %>
             <li><a href="/"><i class="material-icons left">account_circle</i>Please sign in</a></li>
           <% end %>
@@ -86,11 +91,6 @@
       </div>
     </div>
   </body>
-  <div id="sidekiq-modal" class="modal bottom-sheet">
-    <div class="full-iframe-container">
-      <iframe src="/sidekiq/busy?poll=true" frameborder="0" class="full-iframe-row"></iframe>
-    </div>
-  </div>
 </html>
 
 <%# This file is used by devise for notifications %>
