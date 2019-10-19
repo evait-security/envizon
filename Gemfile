@@ -63,6 +63,7 @@ gem 'sidekiq'
 
 # db import/export
 gem 'yaml_db'
+gem 'activerecord-import'
 
 # gdrive plugin to backup issue database
 gem 'google_drive'

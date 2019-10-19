@@ -55,10 +55,10 @@
               <div class="row" style="padding-top: 2em;">
                 <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
                   <%= f.error_notification %>
-                  <div class="col s4">
+                  <div class="col s6">
                     <p class="grey-text text-darken-2 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Enable / disable global notifications">Global notifications</p>
                   </div>
-                  <div class="col s6">
+                  <div class="col s4">
                   <p>
                     <input type="hidden" name="global_notify" value="true">
                     <label>
@@ -79,29 +79,34 @@
           <div class="white">
             <div class="container" style="padding: 2em;">
               <div class="row">
-                <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
-                  <%= f.error_notification %>
-                  <div class="col s12">
-                    <p>Google Drive - Backup / Restore</p>
-                  </div>
-                  <div class="input-field col s10">
-                    <input id="issue_backup_gd_client_id" name="issue_backup_gd_client_id" type="text" class="validate" placeholder="xxx-xxx.apps.googleusercontent.com">
-                    <label for="issue_backup_gd_client_id">Client ID</label>
-                  </div>
-                  <div class="input-field form-actions col s2">
-                    <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Update Google Client-ID" type="submit" name="action"><i class="fa fa-refresh"></i></button>
-                  </div>
+                <%= simple_form_for :settings, url: update_settings_path do |f| %>
+                <div class="col s10">
+                  <p class="grey-text text-darken-2 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Export all issue templates as json file">Export issue templates (json)</p>
+                </div>
+                <input type="hidden" name="export_issue_templates" value="true">
+                <div class="input-field form-actions col s2" >
+                  <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Export" type="submit" name="action"><i class="fa fa-download"></i></button>
+                </div>
                 <% end %>         
               </div>
               <div class="row">
                 <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
                   <%= f.error_notification %>
-                  <div class="input-field col s10">
-                    <input id="issue_backup_gd_secret" name="issue_backup_gd_secret" type="text" class="validate" placeholder="xxxxxxxxxxxxxxxxxxxxxx">
-                    <label for="issue_backup_gd_secret">Secret</label>
+                  <div class="col s4">
+                    <p class="grey-text text-darken-2">Import issue templates&nbsp;
+                      <i class="material-icons tooltipped red-text text-darken-2" data-position="bottom" data-delay="50" data-tooltip="Warning! All issue templates will be wiped before the import validates your file. Be sure that you have exported all your templates correctly">info_outline</i>
+                    </p>
                   </div>
-                  <div class="input-field form-actions col s2">
-                    <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Update Google secret" type="submit" name="action"><i class="fa fa-refresh"></i></button>
+                  <div class="col s6">
+                    <div class="file-field">
+                      <input id="import_issue_templates" name="import_issue_templates[]" type="file" accept=".json">
+                      <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" placeholder="Select a json file">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="input-field form-actions col s2" >
+                    <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Import issue templates" type="submit" name="action"><i class="fa fa-upload"></i></button>
                   </div>
                 <% end %>         
               </div>

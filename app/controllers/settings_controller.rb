@@ -1,5 +1,6 @@
 require 'rake'
 require 'fileutils'
+require 'json'
 
 # @restful_api 1.0
 # Handle user settings
@@ -12,7 +13,7 @@ class SettingsController < ApplicationController
   # Update user settings
   # @required [Params] params[:setting_to_set] Setting(s) to change
   def update
-    %w[parallel_scans global_notify hosts export_db import_db saved_scan_name].each do |param|
+    %w[parallel_scans global_notify hosts export_db import_db saved_scan_name export_issue_templates import_issue_templates].each do |param|
       param_sym = param.to_sym
       next unless params[param_sym]
       respond_with_notify(send(param_sym, params[param_sym])) && return
@@ -43,6 +44,38 @@ class SettingsController < ApplicationController
     send_file Rails.root.join('db', file_name), filename: file_name, type: 'application/yaml'
     nil
   end
+
+  def export_issue_templates(param)
+    # Testing
+    # values = [{ title: 'nothing', description: 'nothing', rating: 'nothing', recommendation: 'nothing', severity: 1 }]
+    # IssueTemplate.import values, validate: true
+    tempfile = File.new(Rails.root.join('tmp') + 'issue_template.json', 'w')
+    # ugly output with ids
+    # tempfile.write IssueTemplate.all.to_json
+    # nice output without ids
+    tempfile.write JSON.pretty_generate(IssueTemplate.all.map {|md| md.serializable_hash.except('id')})
+    tempfile.rewind
+    send_file tempfile, filename: "issue_templates.json", type: 'application/json'
+    nil
+  end
+
+  def import_issue_templates(file)
+    # Tests for import exported files
+    # alltemplates = JSON.parse(IssueTemplate.all.to_json)
+    # IssueTemplate.all.delelete_all
+    # IssueTemplate.import JSON.parse(IssueTemplate.all.to_json), validate: true
+    begin
+      json_import = File.read(file.first.tempfile.path)
+      IssueTemplate.all.delete_all
+      IssueTemplate.import JSON.parse(json_import), validate: true
+      { message: "Issue templates successfully imported", type: 'success' }
+    rescue
+      { message: "The import was not successfull. The data may not in the right format", type: 'alert' }
+    end
+
+
+  end
+
 
   def import_db(file)
     app = Rake.application
