@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_22_200109) do
+ActiveRecord::Schema.define(version: 2019_10_20_101304) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -107,6 +107,33 @@ ActiveRecord::Schema.define(version: 2019_08_22_200109) do
     t.index ["client_id"], name: "index_ports_on_client_id"
   end
 
+  create_table "report_parts", force: :cascade do |t|
+    t.string "title"
+    t.integer "severity"
+    t.text "description"
+    t.text "customtargets"
+    t.text "rating"
+    t.text "recommendation"
+    t.string "type"
+    t.integer "reportable_id"
+    t.string "reportable_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "reports", force: :cascade do |t|
+    t.text "summary"
+    t.text "conclusion"
+    t.string "logo_url"
+    t.string "contact_person"
+    t.string "company_name"
+    t.string "street"
+    t.string "postalcode"
+    t.string "city"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "saved_scans", force: :cascade do |t|
     t.string "name"
     t.string "parameter"
@@ -125,6 +152,13 @@ ActiveRecord::Schema.define(version: 2019_08_22_200109) do
     t.integer "status"
     t.string "file"
     t.index ["user_id"], name: "index_scans_on_user_id"
+  end
+
+  create_table "screenshots", force: :cascade do |t|
+    t.text "description"
+    t.integer "order"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "settings", force: :cascade do |t|
