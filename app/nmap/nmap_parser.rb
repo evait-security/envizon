@@ -85,24 +85,26 @@ class NmapParser
   def scripts(host, client)
     begin
       host.host_script.script_data.each_pair do |name, data|
-        data.default = '' if data.is_a?(Hash)
-        db_output = Output.where(client_id: client.id, name: name).first_or_create
-        db_output.client = client
-        db_output.name = name
-        # TODO: modify storage/display of data
-        db_output.value = YAML.dump(data)
-        db_output.save
+        if data.present?
+          data.default = '' if data.is_a?(Hash)
+          db_output = Output.where(client_id: client.id, name: name).first_or_create
+          db_output.client = client
+          db_output.name = name
+          # TODO: modify storage/display of data
+          db_output.value = YAML.dump(data).lines[1..-1].join #remove the first line ("---\n")
+          db_output.save
 
-        case name
-        when 'nbstat'
-          nbstat(client, data) if !data.empty?
-        when 'smb-os-discovery'
-          smb_os(client, data) if !data.empty?
-        when 'smb-security-mode'
-          set_label(client, 'SMB Signing') if data['message_signing'].casecmp('disabled').zero? if !data.empty?
+          case name
+          when 'nbstat'
+            nbstat(client, data) if !data.empty?
+          when 'smb-os-discovery'
+            smb_os(client, data) if !data.empty?
+          when 'smb-security-mode'
+            set_label(client, 'SMB Signing') if data['message_signing'].casecmp('disabled').zero? if !data.empty?
+          end
+
+          check_vuln(client, name, data)
         end
-
-        check_vuln(client, name, data)
       end
     rescue => exception
       puts "Faild to get scripts ->"
@@ -142,23 +144,25 @@ class NmapParser
     begin
       client = db_port.client
       port.script_data.each_pair do |name, data|
-        data.default = '' if data.is_a?(Hash)
-        output = Output.where(port_id: db_port.id, name: name).first_or_create
-        output.port_id = db_port.id
-        output.name = name
-        output.value = YAML.dump(data)
-        output.save
+        if data.present?
+          data.default = '' if data.is_a?(Hash)
+          output = Output.where(port_id: db_port.id, name: name).first_or_create
+          output.port_id = db_port.id
+          output.name = name
+          output.value = YAML.dump(data).lines[1..-1].join #remove the first line ("---\n")
+          output.save
 
-        case name
-        when 'http-ntlm-info'
-          hostname = data['DNS_Computer_Name']
-          hostname = data['NetBIOS_Computer_Name'] if hostname.blank?
-          client.hostname = hostname unless hostname.blank?
-        when 'ftp-anon'
-          set_label(client, 'Anonymous FTP') if data.include? 'Anonymous FTP login allowed'
+          case name
+          when 'http-ntlm-info'
+            hostname = data['DNS_Computer_Name']
+            hostname = data['NetBIOS_Computer_Name'] if hostname.blank?
+            client.hostname = hostname unless hostname.blank?
+          when 'ftp-anon'
+            set_label(client, 'Anonymous FTP') if data.include? 'Anonymous FTP login allowed'
+          end
+
+          check_vuln(client, name, data)
         end
-
-        check_vuln(client, name, data)
       end
     rescue => exception
       puts "Faild to get port_scripts ->"

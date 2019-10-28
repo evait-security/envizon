@@ -104,7 +104,7 @@
                       <div class="collapsible-header"><i class="material-icons rotate">keyboard_arrow_right</i><%= "#{output.name}" %></div>
                       <div class="collapsible-body mono">
                         <% output.value.split(/\n/).each do |line| %>
-                            <span><%= "#{line}"%></span>
+                          <pre class="script-output-line"><%= line %></pre>
                         <% end%>
                       </div>
                     </li>
@@ -126,9 +126,11 @@
       <li>
         <div class="collapsible-header"><i class="material-icons rotate">keyboard_arrow_right</i><%= "#{output.name}" %></div>
         <div class="collapsible-body mono">
-          <% output.value.split(/\n/).to_a.each do |cur_line| %>
-              <span><%= "#{cur_line}"%></span>
-          <% end%>
+          <div>
+            <% output.value.split(/\n/).each do |line| %>
+              <pre class="script-output-line"><%= line %></pre>
+            <% end%>
+          </div>
         </div>
       </li>
     <% end%>
