@@ -4,19 +4,19 @@
     <span>
       <a class='dropdown-trigger btn-large btn-flat grey lighten-3 blue-text text-darken-3' href='#' data-target='client'><i class="material-icons left">laptop</i>Client</a>
       <ul id='client' class='dropdown-content'>
-        <li><a href="#" onclick="addSearchOption('Client', 'Hostname', 0);">Hostname</a></li>
-        <li><a href="#" onclick="addSearchOption('Client', 'IP', 0);">IP Adress</a></li>
-        <li><a href="#" onclick="addSearchOption('Client', 'MAC', 0);">MAC Adress</a></li>
-        <li><a href="#" onclick="addSearchOption('Client', 'OS', 0);">Operating System</a></li>
-        <li><a href="#" onclick="addSearchOption('Client', 'CPE', 0);">CPE</a></li>
+        <li><a href="#" onclick="addSearchOption('Client', 'Hostname', 0, '');">Hostname</a></li>
+        <li><a href="#" onclick="addSearchOption('Client', 'IP', 0, '');">IP Adress</a></li>
+        <li><a href="#" onclick="addSearchOption('Client', 'MAC', 0, '');">MAC Adress</a></li>
+        <li><a href="#" onclick="addSearchOption('Client', 'OS', 0, '');">Operating System</a></li>
+        <li><a href="#" onclick="addSearchOption('Client', 'CPE', 0, '');">CPE</a></li>
       </ul>
     </span>
     <span class="pl-2">
       <a class='dropdown-trigger btn-large btn-flat grey lighten-3 blue-text text-darken-3' href='#' data-target='port'><i class="material-icons left">select_all</i>Port</a>
       <ul id='port' class='dropdown-content'>
-        <li><a href="#" onclick="addSearchOption('Port', 'Number', 0);">Number</a></li>
-        <li><a href="#" onclick="addSearchOption('Port', 'Service', 0);">Service</a></li>
-        <li><a href="#" onclick="addSearchOption('Port', 'Description', 0);">Description</a></li>
+        <li><a href="#" onclick="addSearchOption('Port', 'Number', 0, '');">Number</a></li>
+        <li><a href="#" onclick="addSearchOption('Port', 'Service', 0, '');">Service</a></li>
+        <li><a href="#" onclick="addSearchOption('Port', 'Description', 0, '');">Description</a></li>
       </ul>
     </span>
     <span class="pl-2">
@@ -36,16 +36,12 @@
       </ul>
     </span>
     <span class="pl-2">
-      <a class="btn-large btn-flat grey lighten-3 blue-text text-darken-3" onclick="addSearchOption('Script Output', 'Value', 0);"><i class="material-icons left">code</i>Script</a>
+      <a class="btn-large btn-flat grey lighten-3 blue-text text-darken-3" onclick="addSearchOption('Script Output', 'Value', 0, '');"><i class="material-icons left">code</i>Script</a>
+    </span>
+    <span class="pl-2">
+      <a class="btn-large btn-flat grey lighten-3 orange-text text-darken-3" onclick="load_port_entropy()"><i class="material-icons left">bubble_chart</i>Port partition</a>
     </span>
   </div>
-       
-
- 
-
-
-
-
   <div class="section">
     <div class="row">
       <div class="col s4">
@@ -54,7 +50,9 @@
         <% end %>
       </div>
       <div class="col s8">
-        <div id="search_result"></div>
+        <div id="search_result">
+          <%= render partial: "port_entropy" %>
+        </div>
       </div>
     </div>
   </div>
@@ -66,14 +64,18 @@
 </div>
 
 <script>
+  function load_port_entropy(){
+    pre_load();
+    $("#search_result").html("<%= j(render('port_entropy')) %>");
+  }
   // global form counter
   var forms = 1;
 
   // init dropdown button
   $('.dropdown-trigger').dropdown({ constrainWidth: false });
 
-  function addSearchOption(model, name, with_value) {
-    if(with_value == 0) {
+  function addSearchOption(model, name, without_name, value) {
+    if(without_name == 0) {
       var raw = `<div class="form_row">
         <div class="row">
         <input name="search[val${forms}[table]]" value="${model.toLowerCase()}" type="hidden">
@@ -83,7 +85,7 @@
             <input type="hidden" name="search[val${forms}[not]]" class="not" value="false">
           </div>
           <div class="input-field col s6">
-            <input name="search[val${forms}[value]]" type="text" class="validate">
+            <input name="search[val${forms}[value]]" value="${value}" type="text" class="validate">
             <label class="active">${model} -> ${name}</label>
           </div>
           <div class="col s3" style="margin-top: 2em;">
@@ -149,21 +151,10 @@
   }
 
   function pre_load() {
-    // disable search button
-    $('.submit-search').addClass("disabled");
-
     // add spinner until query is ready
-    $("#search_result").html('<div class="text-center" style="padding-top: 50px;"><div class="preloader-wrapper big active">\n' +
-        '    <div class="spinner-layer spinner-blue-only">\n' +
-        '      <div class="circle-clipper left">\n' +
-        '        <div class="circle"></div>\n' +
-        '      </div><div class="gap-patch">\n' +
-        '        <div class="circle"></div>\n' +
-        '      </div><div class="circle-clipper right">\n' +
-        '        <div class="circle"></div>\n' +
-        '      </div>\n' +
-        '    </div>\n' +
-        '  </div></div>');
+    $("#search_result").html('<center><div class="preloader-svg" style="padding-top: 5em;">\n' + 
+          '<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="lds-double-ring"><circle cx="50" cy="50" ng-attr-r="{{config.radius}}" ng-attr-stroke-width="{{config.width}}" ng-attr-stroke="{{config.c1}}" ng-attr-stroke-dasharray="{{config.dasharray}}" fill="none" stroke-linecap="round" r="47" stroke-width="5" stroke="#aaaaaa" stroke-dasharray="73.82742735936014 73.82742735936014" transform="rotate(316.582 50 50)"><animateTransform attributeName="transform" type="rotate" calcMode="linear" values="0 50 50;360 50 50" keyTimes="0;1" dur="1.8s" begin="0s" repeatCount="indefinite"></animateTransform></circle><circle cx="50" cy="50" ng-attr-r="{{config.radius2}}" ng-attr-stroke-width="{{config.width}}" ng-attr-stroke="{{config.c2}}" ng-attr-stroke-dasharray="{{config.dasharray2}}" ng-attr-stroke-dashoffset="{{config.dashoffset2}}" fill="none" stroke-linecap="round" r="41" stroke-width="5" stroke="#1565C0" stroke-dasharray="64.40264939859075 64.40264939859075" stroke-dashoffset="64.40264939859075" transform="rotate(-316.582 50 50)"><animateTransform attributeName="transform" type="rotate" calcMode="linear" values="0 50 50;-360 50 50" keyTimes="0;1" dur="1.8s" begin="0s" repeatCount="indefinite"></animateTransform></circle></svg>\n' +
+          '</div></center>');
   }
 
   $('#add_to_group_view').click(function () {

@@ -1,0 +1,203 @@
+<div class="row group-box scale-transition">
+    <div class="col s12">
+        <div class="card material-table">
+            <div class="table-header table-header-groups">
+                <span class="table-title truncate" style="margin-top: 15px; margin-bottom: 10px;">Global port partition</span>
+            </div>
+            <table id="datatable-port-partition" class="dt_init">
+            <thead>
+                <tr>
+                    <th>Port</th>
+                    <th>Count</th>
+                    <th>Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% all_ports_count = Port.all.count %>
+                <% Port.all.group(:number).count.sort_by{|key, value| value}.each do |port, count| %>
+                <tr class="ui-selectee">
+                    <td><a href="#" class="blue-text text-darken-2" onclick="addSearchOption('Port', 'Number', 0, '<%= port %>');"><%= port %></a></td>
+                    <td><%= count %></td>
+                    <td><%= "#{(count.to_f / all_ports_count.to_f * 100).round(2)} %" %></td>
+                </tr>
+                <% end %>
+            </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function init_datatables() {
+        // Custom JS File for Datatables with Material Design
+        // Credits: https://codepen.io/anon/pen/BddNxJ
+
+        var factory = function($, DataTable) {
+            "use strict";
+
+            /* Set the defaults for DataTables initialisation */
+            $.extend(true, DataTable.defaults, {
+                dom: "<'hiddensearch'f'>" +
+                "tr" +
+                "<'table-footer'lip'>",
+                renderer: 'material'
+            });
+
+            /* Default class modification */
+            $.extend(DataTable.ext.classes, {
+                sWrapper: "dataTables_wrapper",
+                sFilterInput: "form-control input-sm",
+                sLengthSelect: "form-control input-sm"
+            });
+
+            /* Bootstrap paging button renderer */
+            DataTable.ext.renderer.pageButton.material = function(settings, host, idx, buttons, page, pages) {
+                var api = new DataTable.Api(settings);
+                var classes = settings.oClasses;
+                var lang = settings.oLanguage.oPaginate;
+                var btnDisplay, btnClass, counter = 0;
+
+                var attach = function(container, buttons) {
+                    var i, ien, node, button;
+                    var clickHandler = function(e) {
+                        e.preventDefault();
+                        if (!$(e.currentTarget).hasClass('disabled')) {
+                            api.page(e.data.action).draw(false);
+                        }
+                    };
+
+                    for (i = 0, ien = buttons.length; i < ien; i++) {
+                        button = buttons[i];
+
+                        if ($.isArray(button)) {
+                            attach(container, button);
+                        } else {
+                            btnDisplay = '';
+                            btnClass = '';
+
+                            switch (button) {
+
+                                case 'first':
+                                    btnDisplay = lang.sFirst;
+                                    btnClass = button + (page > 0 ?
+                                        '' : ' disabled');
+                                    break;
+
+                                case 'previous':
+                                    btnDisplay = '<i class="material-icons">chevron_left</i>';
+                                    btnClass = button + (page > 0 ?
+                                        '' : ' disabled');
+                                    break;
+
+                                case 'next':
+                                    btnDisplay = '<i class="material-icons">chevron_right</i>';
+                                    btnClass = button + (page < pages - 1 ?
+                                        '' : ' disabled');
+                                    break;
+
+                                case 'last':
+                                    btnDisplay = lang.sLast;
+                                    btnClass = button + (page < pages - 1 ?
+                                        '' : ' disabled');
+                                    break;
+
+                            }
+
+                            if (btnDisplay) {
+                                node = $('<li>', {
+                                    'class': classes.sPageButton + ' ' + btnClass,
+                                    'id': idx === 0 && typeof button === 'string' ?
+                                        settings.sTableId + '_' + button : null
+                                })
+                                    .append($('<a>', {
+                                            'href': '#',
+                                            'aria-controls': settings.sTableId,
+                                            'data-dt-idx': counter,
+                                            'tabindex': settings.iTabIndex
+                                        })
+                                            .html(btnDisplay)
+                                    )
+                                    .appendTo(container);
+
+                                settings.oApi._fnBindAction(
+                                    node, {
+                                        action: button
+                                    }, clickHandler
+                                );
+
+                                counter++;
+                            }
+                        }
+                    }
+                };
+
+                // IE9 throws an 'unknown error' if document.activeElement is used
+                // inside an iframe or frame.
+                var activeEl;
+
+                try {
+                    // Because this approach is destroying and recreating the paging
+                    // elements, focus is lost on the select button which is bad for
+                    // accessibility. So we want to restore focus once the draw has
+                    // completed
+                    activeEl = $(document.activeElement).data('dt-idx');
+                } catch (e) {}
+
+                attach(
+                    $(host).empty().html('<ul class="material-pagination"/>').children('ul'),
+                    buttons
+                );
+
+                if (activeEl) {
+                    $(host).find('[data-dt-idx=' + activeEl + ']').focus();
+                }
+            };
+        }; // /factory
+
+        // Define as an AMD module if possible
+        if (typeof define === 'function' && define.amd) {
+            define(['jquery', 'datatables'], factory);
+        } else if (typeof exports === 'object') {
+            // Node/CommonJS
+            factory(require('jquery'), require('datatables'));
+        } else if (jQuery) {
+            // Otherwise simply initialise as normal, stopping multiple evaluation
+            factory(jQuery, jQuery.fn.dataTable);
+        }
+
+        $('.dt_init').dataTable({
+            "pageLength": 5,
+            "oLanguage": {
+                "sStripClasses": "",
+                "sSearch": "",
+                "sSearchPlaceholder": "Enter Keywords Here",
+                "sInfo": "_START_ -_END_ of _TOTAL_",
+                "sLengthMenu": '<span>Rows per page:</span><select class="browser-default">' +
+                '<option value="5">5</option>' +
+                '<option value="20">20</option>' +
+                '<option value="30">30</option>' +
+                '<option value="40">40</option>' +
+                '<option value="50">50</option>' +
+                '<option value="-1">All</option>' +
+                '</select></div>'
+            },
+            bAutoWidth: false
+        });
+        // remove dt-init marker
+        $('.dt_init').removeClass('dt_init');
+    }
+
+    // Call init datatables
+    $('document').ready(init_datatables());
+
+    // tooltip reinit
+    $('document').ready(function() {
+        $('.tooltipped').tooltip({delay: 50});
+    });
+
+    //Make table rows selectable except the a-Tags
+    $(".dataTable tbody").selectable({
+        filter: 'tr',
+        cancel: 'a'
+    });
+</script>
