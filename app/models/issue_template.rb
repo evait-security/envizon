@@ -1,15 +1,15 @@
 class IssueTemplate < ApplicationRecord
     def color
         case severity
-        when 0..999
+        when 0
           return "green"
-        when 1000..1999
+        when 1
             return "blue"
-        when 2000..2999
+        when 2
             return "orange"
-        when 3000..3999
+        when 3
             return "red"
-        when 4000..4999
+        when 4
             return "purple"
         else
             return "grey"

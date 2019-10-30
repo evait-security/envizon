@@ -4,17 +4,30 @@ class ReportsController < ApplicationController
   # GET /reports
   # GET /reports.json
   def index
+    @new_report = Report.new
     @reports = Report.all
+
+    if @reports.present?
+      if current_user.settings.where(name: 'current_report').present?
+        @current_report = current_user.settings.find_by_name('current_report').value
+        unless Report.exists? @current_report
+          setting = current_user.settings.find_by_name('current_report')
+          setting.value = Report.first.id
+          setting.save!
+          @current_report = setting.value
+        end
+      else
+        setting = current_user.settings.where(name: 'current_report').first_or_create
+        setting.value = Report.first.id
+        setting.save!
+        @current_report = setting.value
+      end
+    end
   end
 
   # GET /reports/1
   # GET /reports/1.json
   def show
-  end
-
-  # GET /reports/new
-  def new
-    @report = Report.new
   end
 
   # GET /reports/1/edit
@@ -28,7 +41,10 @@ class ReportsController < ApplicationController
 
     respond_to do |format|
       if @report.save
-        format.html { redirect_to @report, notice: 'Report was successfully created.' }
+        setting = current_user.settings.where(name: 'current_report').first_or_create
+        setting.value = @report.id
+        setting.save!
+        format.html { redirect_to reports_path, notice: 'Report was successfully created and selected as current.' }
         format.json { render :show, status: :created, location: @report }
       else
         format.html { render :new }
