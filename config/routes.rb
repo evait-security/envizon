@@ -1,6 +1,7 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  resources :reports
   devise_for :users, controllers: { registrations: "registrations", sessions: "sessions"}
   mount ActionCable.server => '/cable'
   root to: redirect(path: '/scans')
