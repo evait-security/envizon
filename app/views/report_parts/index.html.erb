@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Report Parts</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Severity</th>
+      <th>Description</th>
+      <th>Customtargets</th>
+      <th>Rating</th>
+      <th>Recommendation</th>
+      <th>Type</th>
+      <th>Index</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @report_parts.each do |report_part| %>
+      <tr>
+        <td><%= report_part.title %></td>
+        <td><%= report_part.severity %></td>
+        <td><%= report_part.description %></td>
+        <td><%= report_part.customtargets %></td>
+        <td><%= report_part.rating %></td>
+        <td><%= report_part.recommendation %></td>
+        <td><%= report_part.type %></td>
+        <td><%= report_part.index %></td>
+        <td><%= link_to 'Show', report_part %></td>
+        <td><%= link_to 'Edit', edit_report_part_path(report_part) %></td>
+        <td><%= link_to 'Destroy', report_part, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Report Part', new_report_part_path %>
