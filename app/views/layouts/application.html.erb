@@ -44,8 +44,8 @@
                 <i class="material-icons left">bug_report</i>Templates
               <% end %>        
             </li>
-            <li>
-              <%= link_to root_path do %>
+            <li class="<%= 'active' if current_page?(reports_path) %>">
+              <%= link_to reports_path do %>
                 <i class="material-icons left">post_add</i>Reporting
               <% end %>        
             </li>
