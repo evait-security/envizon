@@ -1,7 +1,8 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-  resources :report_parts
+  resources :issue_groups
+  resources :issues
   resources :reports
   devise_for :users, controllers: { registrations: "registrations", sessions: "sessions"}
   mount ActionCable.server => '/cable'

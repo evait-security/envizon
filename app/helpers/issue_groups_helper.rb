@@ -1,0 +1,2 @@
+module IssueGroupsHelper
+end

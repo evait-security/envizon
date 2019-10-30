@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @issue.title %>
+</p>
+
+<p>
+  <strong>Severity:</strong>
+  <%= @issue.severity %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @issue.description %>
+</p>
+
+<p>
+  <strong>Customtargets:</strong>
+  <%= @issue.customtargets %>
+</p>
+
+<p>
+  <strong>Rating:</strong>
+  <%= @issue.rating %>
+</p>
+
+<p>
+  <strong>Recommendation:</strong>
+  <%= @issue.recommendation %>
+</p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @issue.type %>
+</p>
+
+<p>
+  <strong>Index:</strong>
+  <%= @issue.index %>
+</p>
+
+<%= link_to 'Edit', edit_issue_path(@issue) %> |
+<%= link_to 'Back', issues_path %>

@@ -1,0 +1,20 @@
+
+<%= simple_form_for(@issue_group) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-inputs">
+    <%= f.input :title %>
+    <%= f.input :severity %>
+    <%= f.input :description %>
+    <%= f.input :customtargets %>
+    <%= f.input :rating %>
+    <%= f.input :recommendation %>
+    <%= f.input :type %>
+    <%= f.input :index %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>
