@@ -4,7 +4,7 @@
       <div class="row">
         <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
           <input type="hidden" value="<%= form_authenticity_token() %>" name="authenticity_token"/>
-          <div class="input-field col s6">
+          <div class="input-field col s5">
             <select name="current_report" onchange="$(this).submit()">
               <% if @reports.empty? %>
                 <option value="" disabled selected>Please create a report</option>
@@ -17,15 +17,22 @@
             <label>Current report</label>
           </div>
         <% end %>
+        <div class="col s1">
+        <button>edit report</button>
+        </div>
         <%= simple_form_for @new_report, url: reports_path do |f| %>
           <%= f.input :title, label: 'Create new report', placeholder: 'Enter a title ...', :wrapper_html => { :class => "s6" } %>
         <% end %>
       </div>
-    </div>
-    <div class="col s6 offset-s6 editor-container">
       <div class="row">
-      asdasdsadas
+        <div id="report_tree" class="col s12">
+          <%= render partial: "report_parts/report_tree" %>
+        </div>
       </div>
+    </div>
+    <div class="col s6 offset-s6 editor-container"> <!-- scrollbar -->
+      <!-- partial render issue (selected) siehe -> issue template -->
+      <!-- partial render report edit -->
     </div>
   </div>
 </div>

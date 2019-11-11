@@ -1,0 +1,14 @@
+<% report_parts.order(:index).each do |rp| %>
+    <% if rp.title.to_s.empty? %>
+        <p>{{ Element Group }}</p>
+    <% else %>
+        <p><%= rp.title %> - Link</p>
+    <% end %>
+    <% if rp.is_a? IssueGroup %>
+        <% unless rp.report_parts.empty? %>
+            <div class="pl-2">
+                <%= render partial: "report_parts/report_part_tree", locals: { report_parts: rp.report_parts }  %>
+            </div>
+        <% end %>
+    <% end %>
+<% end %>
