@@ -182,6 +182,50 @@
         $(this).blur();
     });
 
+    // archive clients - group header
+    $(document).on("click", '.grp_archive', function() {
+      var id = $('.selected-group').attr('gid');
+      var clients = new Array();
+      $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
+          if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
+              clients.push($(this).attr("id"));
+          }
+      });
+      $.ajax({
+          url: "<%= clients_archive_path %>",
+          dataType : "script",
+          cache: true,
+          method: "post",
+          data: {
+              clients: clients,
+              source_group: id
+          }
+      });
+      $(this).blur();
+    });
+
+    // unarchive clients - group header
+    $(document).on("click", '.grp_unarchive', function() {
+      var id = $('.selected-group').attr('gid');
+      var clients = new Array();
+      $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
+          if($(this).parents(".ui-selectee").hasClass("ui-selected")) {
+              clients.push($(this).attr("id"));
+          }
+      });
+      $.ajax({
+          url: "<%= clients_unarchive_path %>",
+          dataType : "script",
+          cache: true,
+          method: "post",
+          data: {
+              clients: clients,
+              source_group: id
+          }
+      });
+      $(this).blur();
+    });
+
     // new group add - group header
     $(document).on("click", '.grp_new', function() {
         var search = false;

@@ -1,29 +1,16 @@
-<% current_group = Group.find(group_id) %>
-<div class="row group-box scale-transition" id="box_<%= "#{current_group.id}" %>">
-    <div class="col s12" id="group_content_<%= "#{current_group.id}" %>">
+<div class="row group-box scale-transition" id="box_archived">
+    <div class="col s12" id="group_content_archived">
         <div class="card material-table">
             <div class="table-header table-header-groups">
-            <span class="table-title truncate" style="margin-top: 15px; margin-bottom: 10px;"><%= "#{current_group.name}" %></span>
+            <span class="table-title truncate" style="margin-top: 15px; margin-bottom: 10px;">Archived Clients</span>
             <div>
-                <div style="float: left;"><%= "#{current_group.icon}".html_safe %></div>
-                <div style="float: right;" class="actions group-actions" id="<%= "#{current_group.id}" %>">
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Update current group content" class="btn tooltipped hidden grp_update green darken-2"><i class="material-icons white-text">update</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Archive selected clients" class="btn-flat nopadding tooltipped grp_archive"><i class="material-icons">archive</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Export selected clients" class="btn-flat nopadding tooltipped grp_export"><i class="material-icons">file_download</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Select all visible clients in group" class="btn-flat nopadding tooltipped grp_mark_all"><i class="material-icons">check_box</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Unselect all visible clients in group" class="btn-flat nopadding tooltipped grp_unmark_all"><i class="material-icons">check_box_outline_blank</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Delete whole group" class="btn-flat nopadding tooltipped grp_delete"><i class="material-icons red-text text-darken-4">delete_forever</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Delete selected clients" class="btn-flat nopadding tooltipped grp_delete_clients"><i class="material-icons red-text text-darken-4">delete</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Move selected clients to another group" class="btn-flat nopadding tooltipped grp_move"><i class="material-icons blue-text text-darken-2">forward</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Copy selected clients to another group" class="btn-flat nopadding tooltipped grp_copy"><i class="material-icons blue-text text-darken-2">content_copy</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Add new group with selected clients" class="btn-flat nopadding tooltipped grp_new"><i class="material-icons green-text text-darken-2">group_add</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Start scan with selected client" class="btn-flat nopadding tooltipped grp_scan"><i class="material-icons blue-text text-darken-2">gps_fixed</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Search in group" class="btn-flat nopadding tooltipped grp_search-toggle"><i class="material-icons yellow-text text-darken-4">search</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Close group" class="btn-flat nopadding tooltipped grp_close"><i class="material-icons red-text text-darken-2">close</i></a>
+                <div style="float: left;"><i class="material-icons">archive</i></div>
+                <div style="float: right;" class="actions group-actions" id="archived">
+                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Unarchive selected clients" class="btn-flat nopadding tooltipped grp_unarchive"><i class="material-icons">unarchive</i></a>
                 </div>
             </div>
             </div>
-            <table id="datatable-<%= "#{current_group.id}" %>" class="dt_init">
+            <table id="datatable-archived" class="dt_init">
             <thead>
                 <tr>
                 <th>IP</th>
@@ -33,7 +20,7 @@
                 </tr>
             </thead>
             <tbody>
-                <% current_group.clients.where.not(archived: true).order(:ip).to_a.each do |current_client| %>
+                <% Client.where(archived: true).order(:ip).to_a.each do |current_client| %>
                 <tr class="ui-selectee">
                     <td><%= link_to "#{current_client.ip}", client_path(current_client.id), :remote => true, :id => current_client.id, :class => 'blue-text text-darken-2' %></td>
                     <td><%= "#{current_client.hostname}" %></td>

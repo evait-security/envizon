@@ -20,13 +20,46 @@ class ClientsController < ApplicationController
     end
   end
 
+  def archive
+    clients = Client.find(params[:clients]) if params.key?(:clients)
+    if clients.blank?
+      respond_with_notify
+    else
+      archived = 0
+      clients.each do |client|
+        client.archived = true
+        client.save!
+        # client.groups.delete_all
+        archived += 1
+      end
+      message = "Archived #{archived} client(s)"
+      respond_with_refresh(message, params[:source_group],"-2", "-2")
+    end
+  end
+
+  def unarchive
+    clients = Client.find(params[:clients]) if params.key?(:clients)
+    if clients.blank?
+      respond_with_notify
+    else
+      archived = 0
+      clients.each do |client|
+        client.archived = false
+        client.save!
+        archived += 1
+      end
+      message = "Unarchived #{archived} client(s)"
+      respond_with_refresh(message, params[:source_group],"-2", "-2")
+    end
+  end
+
   # @url /clients/global_search
   # @action POST
   #
   # @required [Hash<_unused, Hash>] :search_name Name of the resulting search group
   # @optional [String] :group[:name] Name of the new group
   def global_search
-    @clients = Client.all
+    @clients = Client.where(archived: false)
 
     if params.key?(:search)
       @search_name = 'Custom Search'
@@ -159,6 +192,17 @@ class ClientsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to root_path }
       format.js { render 'pages/notify', locals: { message: message, type: type } }
+    end
+  end
+
+  def respond_with_refresh(message, mod_gids, delete, type = 'notice')
+    if current_user.settings.find_by_name('global_notify').value.include? "true"
+      ActionCable.server.broadcast 'notification_channel', message: message
+    end
+    ActionCable.server.broadcast 'update_channel', ids: mod_gids
+    respond_to do |format|
+      format.html { redirect_to root_path }
+      format.js { render 'groups/group_refresh', locals: {  message: message, delete: delete, close: true, type: type } }
     end
   end
 end

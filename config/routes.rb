@@ -56,6 +56,8 @@ Rails.application.routes.draw do
   # alternatively, constraints need to be used (ie. regex for \d etc)
   get '/clients' => 'clients#index'
   get '/clients/:id' => 'clients#show'
+  post '/clients/archive' => 'clients#archive', as: :clients_archive
+  post '/clients/unarchive' => 'clients#unarchive', as: :clients_unarchive
 
   post 'setting/update_user_settings' => 'setting#update_user_settings', as: :update_user_settings
   post 'settings/update' => 'settings#update', as: :update_settings
