@@ -28,7 +28,7 @@ class IssueGroupsController < ApplicationController
 
     respond_to do |format|
       if @issue_group.save
-        format.html { redirect_to @issue_group, notice: 'Issue group was successfully created.' }
+        format.html { redirect_to reports_path, notice: 'Issue group was successfully created.' }
         format.json { render :show, status: :created, location: @issue_group }
       else
         format.html { render :new }
@@ -42,7 +42,7 @@ class IssueGroupsController < ApplicationController
   def update
     respond_to do |format|
       if @issue_group.update(issue_group_params)
-        format.html { redirect_to @issue_group, notice: 'Issue group was successfully updated.' }
+        format.html { redirect_to reports_path, notice: 'Issue group was successfully updated.' }
         format.json { render :show, status: :ok, location: @issue_group }
       else
         format.html { render :edit }
@@ -56,7 +56,7 @@ class IssueGroupsController < ApplicationController
   def destroy
     @issue_group.destroy
     respond_to do |format|
-      format.html { redirect_to issue_groups_url, notice: 'Issue group was successfully destroyed.' }
+      format.html { redirect_to reports_path, notice: 'Issue group was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

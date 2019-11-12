@@ -1,0 +1,7 @@
+<%= simple_form_for @issue_group do |f| %>
+    <%= f.input :title, wrapper_html: { class: 's5' } %>
+    <%= f.input :index, wrapper_html: { class: 's2' } %>
+    <div class="col s5 input-field">
+        <button type="submit" class="btn right blue darken-2"> <i class="material-icons left">cached</i>Update</button>
+    </div>
+<% end %>
