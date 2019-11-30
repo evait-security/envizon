@@ -4,8 +4,6 @@
 
 .reports-page {
     padding-top: 1em;
-    padding-left: 1em;
-    padding-right: 1em;
     .reports-container {
         position: fixed;
         overflow-y: auto;
@@ -17,5 +15,9 @@
         position: fixed;
         max-height: calc(100vh - 140px);
         min-height: calc(100vh - 64px);
+    }
+    .modal-valign-center {
+        position: absolute;
+        top: 30%;
     }
 }

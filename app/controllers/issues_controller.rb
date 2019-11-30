@@ -41,6 +41,12 @@ class IssuesController < ApplicationController
   # PATCH/PUT /issues/1.json
   def update
     respond_to do |format|
+      # screenshot = Screenshot.new
+      # screenshot.image.attach(params[:issue][:screenshots][:image])
+      # @issue.screenshots << screenshot
+      screenshot = @issue.screenshots.create()
+      screenshot.image.attach(params[:issue][:screenshots][:image])
+
       if @issue.update(issue_params)
         format.html { redirect_to reports_path, notice: 'Issue was successfully updated.' }
         format.json { render :show, status: :ok, location: @issue }
@@ -70,5 +76,9 @@ class IssuesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def issue_params
       params.require(:issue).permit(:title, :severity, :description, :customtargets, :rating, :recommendation, :type, :index)
+    end
+
+    def screenshot_params
+      params.require(:issue).require(:screenshots).permit(:image, :description, :order)
     end
 end

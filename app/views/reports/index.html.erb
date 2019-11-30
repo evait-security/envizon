@@ -1,38 +1,47 @@
 <div class="reports-page">
   <div class="row">
-    <div class="col s6 reports-container">
-      <div class="row">
-        <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
-          <input type="hidden" value="<%= form_authenticity_token() %>" name="authenticity_token"/>
-          <div class="input-field col s5">
-            <select name="current_report" onchange="$(this).submit()">
-              <% if @reports.empty? %>
-                <option value="" disabled selected>Please create a report</option>
-              <% else %>
-                <% @reports.each do |report| %>
-                  <option <%= (report.id.equal? @current_report.to_i) ? 'selected' : '' %> value="<%= report.id %>"><%= report.title %></option> 
-                <% end %>
-              <% end %>
-            </select>
-            <label>Current report</label>
-          </div>
-        <% end %>
-        <div class="col s1">
-        <button>edit report</button>
-        </div>
-        <%= simple_form_for @new_report, url: reports_path do |f| %>
-          <%= f.input :title, label: 'Create new report', placeholder: 'Enter a title ...', :wrapper_html => { :class => "s6" } %>
-        <% end %>
-      </div>
+    <div class="col s3 reports-container pl-1">
       <div class="row">
         <div id="report_tree" class="col s12">
           <%= render partial: "report_parts/report_tree" %>
         </div>
       </div>
     </div>
-    <div class="col s6 offset-s6 editor-container"> <!-- scrollbar -->
+    <div class="col s9 offset-s3 editor-container"> <!-- scrollbar -->
       <!-- partial render issue (selected) siehe -> issue template -->
       <!-- partial render report edit -->
+    </div>
+  </div>
+  <div id="report-new-change-modal" class="modal modal-fixed-footer">
+    <div id="medium-modal-content">
+      <div class="container modal-valign-center">
+        <div class="row">
+          <div class="col offset-s3 s6">
+            <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
+              <input type="hidden" value="<%= form_authenticity_token() %>" name="authenticity_token"/>
+              <div class="input-field col s12">
+                <select name="current_report" onchange="$(this).submit()">
+                  <% if @reports.empty? %>
+                    <option value="" disabled selected>Please create a report</option>
+                  <% else %>
+                    <% @reports.each do |report| %>
+                      <option <%= (report.id.equal? @current_report.to_i) ? 'selected' : '' %> value="<%= report.id %>"><%= report.title %></option> 
+                    <% end %>
+                  <% end %>
+                </select>
+                <label>Current report</label>
+              </div>
+            <% end %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col offset-s3 s6">
+            <%= simple_form_for @new_report, url: reports_path do |f| %>
+              <%= f.input :title, label: 'Create new report', placeholder: 'Enter a title ...', :wrapper_html => { :class => "col s12" } %>
+            <% end %>        
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -43,8 +52,12 @@
   </div>
 </div>
 
-<div class="fixed-action-btn vertical">
-  <a href="#medium-modal" class="btn-floating btn-large blue darken-3 modal-trigger">
-    <i class="material-icons">add</i>
+
+<div class="fixed-action-btn">
+  <a href="#medium-modal" class="btn-floating btn-large blue darken-3 modal-trigger tooltipped" data-position="left" data-tooltip="Add new issue">
+    <i class="large material-icons">add</i>
   </a>
+  <ul>
+    <li><a href="#report-new-change-modal" class="btn-floating orange darken-2 modal-trigger tooltipped" data-position="left" data-tooltip="Create a new report or change the current"><i class="material-icons">assignment</i></a></li>
+  </ul>
 </div>

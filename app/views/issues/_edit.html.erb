@@ -1,11 +1,19 @@
 <%= simple_form_for @issue do |f| %>
-    <%= f.input :title, required: true, wrapper_html: { class: 's5' } %>
-    <%= f.input :severity, collection: [['information', '0'],['low', '1'], ['medium', '2'], ['high', '3'], ['critical', '4']], include_blank: false, wrapper_html: { class: 's2' } %>
+    <%= f.input :title, required: true, wrapper_html: { class: 'col s5' } %>
+    <%= f.input :severity, collection: [['information', '0'],['low', '1'], ['medium', '2'], ['high', '3'], ['critical', '4']], include_blank: false, wrapper_html: { class: 'col s2' } %>
     <%= f.input :index, wrapper_html: { class: 's2' } %>    
     <div class="col s3 input-field">
         <button type="submit" class="btn right blue darken-2"> <i class="material-icons left">cached</i>Update</button>
     </div>
-    <%= f.input :description, wrapper_html: { class: 's12' }, input_html: { class: 'markdown-textarea'} %>
-    <%= f.input :rating, wrapper_html: { class: 's6' }, input_html: { class: 'markdown-textarea'} %>
-    <%= f.input :recommendation, wrapper_html: { class: 's6' }, input_html: { class: 'markdown-textarea'} %>
+    <%= f.input :description, wrapper_html: { class: 'col s6' }, input_html: { class: 'markdown-textarea'} %>
+    <div class="col s6 input-field">
+        <%= f.simple_fields_for :screenshots do |fs| %>
+            <%= fs.file_field :image, direct_upload: false %>
+        <% end %>
+        
+    </div>
+    <%= f.input :customtargets, wrapper_html: { class: 'col s6' } %>
+    <%= f.input :customtargets, wrapper_html: { class: 'col s6' } %>
+    <%= f.input :rating, wrapper_html: { class: 'col s6' }, input_html: { class: 'markdown-textarea'} %>
+    <%= f.input :recommendation, wrapper_html: { class: 'col s6' }, input_html: { class: 'markdown-textarea'} %>
 <% end %>

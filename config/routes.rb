@@ -3,7 +3,9 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
   resources :issue_groups
   resources :issues
+  resources :screenshots, only: [:update, :destroy]
   resources :reports
+  resources :clients
   devise_for :users, controllers: { registrations: "registrations", sessions: "sessions"}
   mount ActionCable.server => '/cable'
   root to: redirect(path: '/scans')
@@ -68,6 +70,4 @@ Rails.application.routes.draw do
   authenticate :user do
     mount Sidekiq::Web => '/sidekiq'
   end
-
-  resources :clients
 end

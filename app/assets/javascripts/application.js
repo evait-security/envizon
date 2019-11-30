@@ -18,4 +18,5 @@
 //= require jquery-ui
 //= require simple-iconpicker.min
 //= require materialize
+//= require activestorage
 //= require_tree .
