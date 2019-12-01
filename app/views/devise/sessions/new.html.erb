@@ -24,7 +24,7 @@
           </div>
           <input type="hidden" name="user[username]" value="root">
           <div class="row">
-            <%= f.input :password, required: false, :wrapper_html => { :class => 's12' } %>
+            <%= f.input :password, required: false, :wrapper_html => { :class => 's12' }, :input_html => { :autofocus => true } %>
           </div>
           <div class="row">
             <div class="form-actions">
