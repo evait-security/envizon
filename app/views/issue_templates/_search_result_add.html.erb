@@ -1,0 +1,9 @@
+<% @issue_templates.each do |issue_template| %>
+    <li class="collection-item issue-template-collection-item">
+        <i class="material-icons left <%= issue_template.color %>-text text-darken-2">bug_report</i><%= issue_template.title %>
+        <%= simple_form_for @issue do |f| %>
+            <input type="hidden" name="issue_template" value="<%= issue_template.id %>">
+            <button type="submit" class="btn-flat grey lighten-2 green-text text-darken-1"> <i class="material-icons left">add</i>create issue</button>
+        <% end %>       
+    </li>
+<% end %>

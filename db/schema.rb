@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_30_202659) do
+ActiveRecord::Schema.define(version: 2019_11_30_001648) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -169,6 +169,8 @@ ActiveRecord::Schema.define(version: 2019_10_30_202659) do
     t.integer "order"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "report_part_id"
+    t.index ["report_part_id"], name: "index_screenshots_on_report_part_id"
   end
 
   create_table "settings", force: :cascade do |t|
@@ -205,5 +207,6 @@ ActiveRecord::Schema.define(version: 2019_10_30_202659) do
   add_foreign_key "outputs", "ports"
   add_foreign_key "ports", "clients"
   add_foreign_key "scans", "users"
+  add_foreign_key "screenshots", "report_parts"
   add_foreign_key "settings", "users"
 end

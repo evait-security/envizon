@@ -3,7 +3,7 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
   resources :issue_groups
   resources :issues
-  resources :screenshots, only: [:update, :destroy]
+  resources :screenshots, only: [:edit, :update, :destroy]
   resources :reports
   resources :clients
   devise_for :users, controllers: { registrations: "registrations", sessions: "sessions"}
@@ -14,6 +14,9 @@ Rails.application.routes.draw do
 
   resources :issue_templates
   post '/issue_templates/search' => 'issue_templates#search', as: :issue_templates_search
+  post '/issue_templates/search_add' => 'issue_templates#search_add', as: :issue_templates_search_add
+
+  post '/reports/change_parent' => 'reports#change_parent', as: :change_parent
 
   # index ever used, ever?
   resources :groups, only: %i[create new]

@@ -19,20 +19,26 @@ class IssueGroupsController < ApplicationController
 
   # GET /issue_groups/1/edit
   def edit
+    @report_parts = ReportPart.where(type: "IssueGroup")
   end
 
   # POST /issue_groups
   # POST /issue_groups.json
   def create
-    @issue_group = IssueGroup.new(issue_group_params)
-
     respond_to do |format|
-      if @issue_group.save
-        format.html { redirect_to reports_path, notice: 'Issue group was successfully created.' }
-        format.json { render :show, status: :created, location: @issue_group }
+      @issue_group = IssueGroup.new(issue_group_params)
+
+      @current_report_setting = current_user.settings.find_by_name('current_report').value
+      if Report.exists? @current_report_setting
+        current_report = Report.find(@current_report_setting)
+        if @issue_group.save
+          current_report.report_parts << @issue_group
+          format.html { redirect_to reports_path, notice: 'Issue group was successfully created.' }
+        else
+          format.html { redirect_to reports_path, alert: 'Error while saving issue group' }
+        end
       else
-        format.html { render :new }
-        format.json { render json: @issue_group.errors, status: :unprocessable_entity }
+        format.html { redirect_to reports_path, alert: 'Current report is not in database.' }
       end
     end
   end
@@ -43,10 +49,8 @@ class IssueGroupsController < ApplicationController
     respond_to do |format|
       if @issue_group.update(issue_group_params)
         format.html { redirect_to reports_path, notice: 'Issue group was successfully updated.' }
-        format.json { render :show, status: :ok, location: @issue_group }
       else
         format.html { render :edit }
-        format.json { render json: @issue_group.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -57,7 +61,6 @@ class IssueGroupsController < ApplicationController
     @issue_group.destroy
     respond_to do |format|
       format.html { redirect_to reports_path, notice: 'Issue group was successfully destroyed.' }
-      format.json { head :no_content }
     end
   end
 
@@ -70,5 +73,12 @@ class IssueGroupsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def issue_group_params
       params.require(:issue_group).permit(:title, :severity, :description, :customtargets, :rating, :recommendation, :type, :index)
+    end
+    
+    def respond_with_notify(message = 'Unknown error', type = 'alert')
+      respond_to do |format|
+        format.html { redirect_to root_path }
+        format.js { render 'pages/notify', locals: { message: message, type: type } }
+      end
     end
 end

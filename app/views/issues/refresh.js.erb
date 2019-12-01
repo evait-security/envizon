@@ -1,3 +1,4 @@
+$('.material-tooltip').remove();
 $(".editor-container").html("<%= j render(partial: 'issues/edit') %>");
 $(".markdown-textarea").each(function(index, value) {
     var simplemde = new SimpleMDE({ element: value, spellChecker: false });
@@ -8,4 +9,5 @@ $(document).ready(function(){
     $('.tooltipped').tooltip({delay: 50});
     $('.materialboxed').materialbox();
 });
-        
+$("#medium-modal").modal('close');
+<%= render(:template => 'pages/notify', :handlers => [:erb], :formats => [:js], locals:{message: message, type: type}) %>

@@ -1,0 +1,9 @@
+<div class="container modal-valign-center">
+    <div class="row">
+        <div class="col offset-s3 s6">         
+            <%= simple_form_for @issue_group do |f| %>
+                 <%= f.input :title, wrapper_html: { class: 's12' }, placeholder: "Type the name and hit enter", label: "Create a new issue group", autofocus: true, required: true %>
+            <% end %>
+        </div>
+    </div>
+</div>

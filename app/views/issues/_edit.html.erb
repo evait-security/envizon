@@ -1,19 +1,61 @@
-<%= simple_form_for @issue do |f| %>
-    <%= f.input :title, required: true, wrapper_html: { class: 'col s5' } %>
-    <%= f.input :severity, collection: [['information', '0'],['low', '1'], ['medium', '2'], ['high', '3'], ['critical', '4']], include_blank: false, wrapper_html: { class: 'col s2' } %>
-    <%= f.input :index, wrapper_html: { class: 's2' } %>    
-    <div class="col s3 input-field">
-        <button type="submit" class="btn right blue darken-2"> <i class="material-icons left">cached</i>Update</button>
+<div class="row">
+    <%= simple_form_for :report, url: change_parent_path, remote: true do |f| %>
+        <input type="hidden" value="<%= form_authenticity_token() %>" name="authenticity_token"/>
+        <input type="hidden" value="<%= @issue.id %>" name="source"/>
+        <div class="input-field col s3">
+            <select name="new_parent" onchange="$(this).submit()">
+                <% @report_parts.each do |report_part| %>
+                    <option <%= (report_part.id.equal? @issue.reportable.id) ? 'selected' : '' %> value="<%= report_part.id %>"><%= report_part.title %></option> 
+                <% end %>
+                <option value="0">Current report</option>
+            </select>
+            <label>New parent</label>
+        </div>
+    <% end %> 
+    <%= simple_form_for @issue, remote: true do |f| %>
+        <%= f.input :title, required: true, wrapper_html: { class: 'col s5' } %>
+        <%= f.input :severity, collection: [['information', '0'],['low', '1'], ['medium', '2'], ['high', '3'], ['critical', '4']], include_blank: false, wrapper_html: { class: 'col s2' } %>
+        <%= f.input :index, wrapper_html: { class: 'col s1' } %>
+        <div class="col s1 input-field">
+            <button type="submit" class="btn right blue darken-2"><i class="material-icons">cached</i></button>
+        </div>   
+</div>
+    <div class="row">
+        <%= f.input :description, wrapper_html: { class: 'col s6' }, input_html: { class: 'markdown-textarea'} %>
+        <div class="col s6">
+            <div class="row"></div> <!-- empty dirty row for padding =/ -->
+            <div class="row">
+                <div class="col s12 file-field input-field">
+                    <div class="btn tooltipped" data-position="top" data-tooltip="To insert images from clipbloard just press STRG + V">
+                        <span>new screenshot</span>
+                        <input type="file" name="issue[screenshot][image]" id="issue_screenshot_image">
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text" id="issue_screenshot_image_path">
+                    </div>            
+                </div>
+            </div>
+            <div class="row">
+                <% @issue.screenshots.each do |screenshot| %>
+                    <div class="col s3">
+                        <%= image_tag url_for(screenshot.image), :class => "materialboxed tooltipped pb-05", width: '100%', data: { position: "top", tooltip: screenshot.description.nil? ? "No description yet" : screenshot.description } %>
+                        <%= link_to edit_screenshot_path(screenshot), class: "btn-flat left grey lighten-3", remote: true do %>
+                            <i class="material-icons orange-text text-darken-3">description</i>
+                        <% end %>
+                        <%= link_to screenshot, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn-flat right grey lighten-3", remote: true do %>
+                            <i class="material-icons red-text text-darken-3">delete</i>
+                        <% end %>
+                    </div>
+                <% end %>
+            </div>
+        </div> 
     </div>
-    <%= f.input :description, wrapper_html: { class: 'col s6' }, input_html: { class: 'markdown-textarea'} %>
-    <div class="col s6 input-field">
-        <%= f.simple_fields_for :screenshots do |fs| %>
-            <%= fs.file_field :image, direct_upload: false %>
-        <% end %>
-        
+    <div class="row">
+        <%= f.input :customtargets, wrapper_html: { class: 'col s6' } %>
+        <%= f.input :customtargets, wrapper_html: { class: 'col s6' } %>
     </div>
-    <%= f.input :customtargets, wrapper_html: { class: 'col s6' } %>
-    <%= f.input :customtargets, wrapper_html: { class: 'col s6' } %>
-    <%= f.input :rating, wrapper_html: { class: 'col s6' }, input_html: { class: 'markdown-textarea'} %>
-    <%= f.input :recommendation, wrapper_html: { class: 'col s6' }, input_html: { class: 'markdown-textarea'} %>
+    <div class="row">
+        <%= f.input :rating, wrapper_html: { class: 'col s6' }, input_html: { class: 'markdown-textarea'} %>
+        <%= f.input :recommendation, wrapper_html: { class: 'col s6' }, input_html: { class: 'markdown-textarea'} %>    
+    </div>
 <% end %>

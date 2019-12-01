@@ -7,10 +7,21 @@ class IssueTemplatesController < ApplicationController
     @issue_templates = IssueTemplate.all.order(:title)
   end
 
+  # POST /issue_templates/search
   def search 
     @issue_templates = IssueTemplate.where('lower(title) LIKE :search or lower(description) LIKE :search', search: "%#{params["title"].downcase}%")
     respond_to do |format|
       format.js { render :search_result }
+    end
+  end
+
+  # POST /issue_templates/search_add
+  # Used if searched from add new issue page (output has to be a little bit different)
+  def search_add
+    @issue = Issue.new
+    @issue_templates = IssueTemplate.where('lower(title) LIKE :search or lower(description) LIKE :search', search: "%#{params["title"].downcase}%")
+    respond_to do |format|
+      format.js { render :search_result_add }
     end
   end
 
