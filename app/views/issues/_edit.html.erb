@@ -11,7 +11,6 @@
         <label>New parent</label>
     </div>
 <% end %>
-
 <%= simple_form_for @issue, remote: true do |f| %>
     <%= f.input :title, required: true, wrapper_html: { class: 'col s5' } %>
     <%= f.input :severity, collection: [['information', '0'],['low', '1'], ['medium', '2'], ['high', '3'], ['critical', '4']], include_blank: false, wrapper_html: { class: 'col s2' } %>
@@ -51,8 +50,13 @@
         </div> 
     </div>
     <div class="row">
-        <%= f.input :customtargets, wrapper_html: { class: 'col s6' } %>
-        <%= f.input :customtargets, wrapper_html: { class: 'col s6' } %>
+        <%= f.input :customtargets, label: "Custom targets", wrapper_html: { class: 'col s6' } %>
+        <div class="col s6">
+            <div class="pb-05"><label class="text optional active">Linked clients</label><i class="material-icons tooltipped" data-position="bottom" data-delay="50" data-tooltip="Use group view in order to link clients with issues">info_outline</i></div>
+            <% @issue.clients.each do |client| %>
+              <div class="chip"><%= client.ip %><%= " (#{client.hostname})" unless client.hostname.empty? %></div>  
+            <% end %>
+        </div>
     </div>
     <div class="row">
         <%= f.input :rating, wrapper_html: { class: 'col s6' }, input_html: { class: 'markdown-textarea'} %>

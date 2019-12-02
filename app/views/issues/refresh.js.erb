@@ -1,5 +1,6 @@
 $('.material-tooltip').remove();
 $(".editor-container").html("<%= j render(partial: 'issues/edit') %>");
+$("#report_tree").html("<%= j render(partial: 'report_parts/report_tree') %>");
 $(".markdown-textarea").each(function(index, value) {
     var simplemde = new SimpleMDE({ element: value, spellChecker: false });
 });

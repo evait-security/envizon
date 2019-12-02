@@ -8,6 +8,7 @@ class ScreenshotsController < ApplicationController
     # PATCH/PUT /screenshots/1
     # PATCH/PUT /screenshots/1.json
     def update
+        @report_parts = ReportPart.where(type: "IssueGroup")
         if @screenshot.update(screenshot_params)
             respond_with_refresh("Screenshot was successfully updated.", "success")
         else
@@ -18,6 +19,7 @@ class ScreenshotsController < ApplicationController
     # DELETE /screenshots/1
     # DELETE /screenshots/1.json
     def destroy
+        @report_parts = ReportPart.where(type: "IssueGroup")
         @screenshot.destroy
         respond_with_refresh("Screenshot was successfully destroyed.", "success")
     end
