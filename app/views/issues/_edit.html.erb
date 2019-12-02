@@ -11,15 +11,18 @@
             </select>
             <label>New parent</label>
         </div>
-    <% end %> 
-    <%= simple_form_for @issue, remote: true do |f| %>
+    <% end %>
+</div>
+
+<%= simple_form_for @issue, remote: true do |f| %>
+    <div class="row">
         <%= f.input :title, required: true, wrapper_html: { class: 'col s5' } %>
         <%= f.input :severity, collection: [['information', '0'],['low', '1'], ['medium', '2'], ['high', '3'], ['critical', '4']], include_blank: false, wrapper_html: { class: 'col s2' } %>
-        <%= f.input :index, wrapper_html: { class: 'col s1' } %>
-        <div class="col s1 input-field">
+        <%= f.input :index, wrapper_html: { class: 'col s2' } %>
+        <div class="col s3 input-field">
             <button type="submit" class="btn right blue darken-2"><i class="material-icons">cached</i></button>
         </div>   
-</div>
+    </div>
     <div class="row">
         <%= f.input :description, wrapper_html: { class: 'col s6' }, input_html: { class: 'markdown-textarea'} %>
         <div class="col s6">
