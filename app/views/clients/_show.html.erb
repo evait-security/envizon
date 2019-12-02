@@ -6,9 +6,8 @@
     line-height: 32px;
     padding-left: 8px;
   }
-  .hostview_copy_ip {
-    font-size: 18px;
-    margin-left: 10px;
+  .host-icon {
+    padding: 0 8px;
   }
   .hostview_link {
     font-size: 22px;
@@ -22,7 +21,11 @@
     border-bottom: none !important;
   }
 </style>
-<span class="card-title"><span id="hostview_ip"><%= "#{client.ip}" %></span><a href="#" id="hostview_copy_ip"><i class="material-icons hostview_copy_ip">content_copy</i></a></span>
+<span class="card-title">
+  <span id="hostview_ip"><%= "#{client.ip}" %></span>
+  <button class="btn-flat host-icon" id="hostview_copy_ip"><i class="material-icons green-text text-darken-2">content_copy</i></button>
+  <%= link_to clients_new_issue_form_path(client), remote: true, class: "btn-flat host-icon tooltipped", data: { position: "right", tooltip: "Link client to new or existing issue"} do %><i class="material-icons grey-text text-darken-2">bug_report</i><% end %>
+</span>
 <table class="responsive-table">
   <thead>
     <tr>
@@ -136,8 +139,4 @@
     <% end%>
   </ul>
   </div>
-<% end %>
-
-<%= javascript_tag do %>
-  $('.collapsible').collapsible();
 <% end %>

@@ -63,6 +63,8 @@ Rails.application.routes.draw do
   get '/clients/:id' => 'clients#show'
   post '/clients/archive' => 'clients#archive', as: :clients_archive
   post '/clients/unarchive' => 'clients#unarchive', as: :clients_unarchive
+  get '/clients/:id/new_issue_form' => 'clients#new_issue_form', as: :clients_new_issue_form
+  get '/clients/:id/link_issue_form' => 'clients#link_issue_form', as: :clients_link_issue_form
 
   post 'setting/update_user_settings' => 'setting#update_user_settings', as: :update_user_settings
   post 'settings/update' => 'settings#update', as: :update_settings

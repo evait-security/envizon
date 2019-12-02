@@ -1,4 +1,5 @@
 $("#hostview").html("<%= j(render('show', :client=> client)) %>");
+$('.collapsible').collapsible();
 $("#hostview_copy_ip").click(function () {
     copyToClipboard('#hostview_ip');
     M.toast({html: "IP address copied to clipboard!", displayLength: "2000", classes: "green"});

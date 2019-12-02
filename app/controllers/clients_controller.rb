@@ -1,6 +1,8 @@
 # @restful_api 1.0
 # Client display and search
-class ClientsController < ApplicationController
+class ClientsController < ApplicationController#
+  before_action :set_client, only: [:new_issue_form]
+
   def index
     require_relative '../nmap/envizon_cpe'
   end
@@ -50,6 +52,35 @@ class ClientsController < ApplicationController
       end
       message = "Unarchived #{archived} client(s)"
       respond_with_refresh(message, params[:source_group],"-2", "-2")
+    end
+  end
+
+  # @url /clients/:id/new_issue_form
+  # @action GET
+  #
+  # @required [Integer] :id
+  def new_issue_form
+    if @client
+      @issue = Issue.new
+      @issue_templates = IssueTemplate.all
+      respond_to do |format|
+          format.html { redirect_back root_path }
+          format.js { render 'clients/new_issue' }
+      end
+    end
+  end
+
+  # @url /clients/:id/link_issue_form
+  # @action GET
+  #
+  # @required [Integer] :id
+  def link_issue_form
+    if @client
+      @issues = Report.find(current_user.settings.find_by_name('current_report').value)
+      respond_to do |format|
+          format.html { redirect_back root_path }
+          format.js { render 'clients/link_issue' }
+      end
     end
   end
 
@@ -137,6 +168,10 @@ class ClientsController < ApplicationController
 
   private
 
+  def set_client
+    @client = Client.find(params[:id])
+  end
+  
   def output(clients, input)
     value = input[:value].downcase if input[:value].present?
     output_param_name = { name: 'name', value: value, not: 'false' }
