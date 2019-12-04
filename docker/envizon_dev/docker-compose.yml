@@ -2,6 +2,7 @@ version: '3'
 volumes:
   socket-volume:
   nmap-uploads:
+  report-templates:
 services:
   postgres:
     build:

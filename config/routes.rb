@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   post '/issue_templates/search_add' => 'issue_templates#search_add', as: :issue_templates_search_add
 
   post '/reports/change_parent' => 'reports#change_parent', as: :change_parent
+  match '/reports/:id/export_docx' => 'reports#export_docx', as: :export_odt, via: [:get, :post]
 
   # index ever used, ever?
   resources :groups, only: %i[create new]

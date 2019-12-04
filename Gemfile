@@ -69,6 +69,9 @@ gem 'activerecord-import'
 gem 'rubyzip', '>= 1.0.0' # will load new rubyzip version
 gem 'zip-zip' # will load compatibility for old rubyzip API.
 
+# export report
+gem 'sablon' # docx tamplate
+
 # gdrive plugin to backup issue database
 gem 'google_drive'
 
