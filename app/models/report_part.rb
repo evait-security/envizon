@@ -14,7 +14,7 @@ class ReportPart < ApplicationRecord
         if pt.type == "Issue"
           parts << pt
         else
-        pt.get_child_issues
+          pt.get_child_issues
         end
       end
     end
