@@ -54,7 +54,7 @@
         <div class="col s6">
             <div class="pb-05"><label class="text optional active">Linked clients</label><i class="material-icons tooltipped" data-position="bottom" data-delay="50" data-tooltip="Use group view in order to link clients with issues">info_outline</i></div>
             <% @issue.clients.each do |client| %>
-              <div class="chip"><%= client.ip %><%= " (#{client.hostname})" unless client.hostname.empty? %></div>  
+              <div class="chip"><%= client.ip %><%= " (#{client.hostname})" unless client.hostname.nil? %></div>  
             <% end %>
         </div>
     </div>

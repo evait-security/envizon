@@ -24,7 +24,8 @@
 <span class="card-title">
   <span id="hostview_ip"><%= "#{client.ip}" %></span>
   <button class="btn-flat host-icon" id="hostview_copy_ip"><i class="material-icons green-text text-darken-2">content_copy</i></button>
-  <%= link_to clients_new_issue_form_path(client), remote: true, class: "btn-flat host-icon tooltipped", data: { position: "right", tooltip: "Link client to new or existing issue"} do %><i class="material-icons grey-text text-darken-2">bug_report</i><% end %>
+  <%= link_to clients_new_issue_form_path(client), remote: true, class: "btn-flat host-icon tooltipped", data: { position: "bottom", tooltip: "Link client to new issue"} do %><i class="material-icons grey-text text-darken-2">bug_report</i><% end %>
+  <%= link_to clients_link_issue_form_path(client), remote: true, class: "btn-flat host-icon tooltipped", data: { position: "bottom", tooltip: "Link client to existing issue"} do %><i class="material-icons blue-text text-darken-2">bug_report</i><% end %>
 </span>
 <table class="responsive-table">
   <thead>

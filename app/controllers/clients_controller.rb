@@ -1,7 +1,8 @@
 # @restful_api 1.0
 # Client display and search
 class ClientsController < ApplicationController#
-  before_action :set_client, only: [:new_issue_form]
+  before_action :set_client, only: [:new_issue_form, :link_issue_form]
+  before_action :set_client_and_issue, only: [:link_issue]
 
   def index
     require_relative '../nmap/envizon_cpe'
@@ -76,10 +77,19 @@ class ClientsController < ApplicationController#
   # @required [Integer] :id
   def link_issue_form
     if @client
-      @issues = Report.find(current_user.settings.find_by_name('current_report').value)
+      @issues = Report.find(current_user.settings.find_by_name('current_report').value).all_issues
       respond_to do |format|
           format.html { redirect_back root_path }
           format.js { render 'clients/link_issue' }
+      end
+    end
+  end
+
+  def link_issue
+    if @issue && @client
+      @issue.clients << @client
+      if @issue.save
+        respond_with_notify("Client linked successfully","success")
       end
     end
   end
@@ -171,6 +181,11 @@ class ClientsController < ApplicationController#
   def set_client
     @client = Client.find(params[:id])
   end
+
+  def set_client_and_issue
+    @client = Client.find(params[:id])
+    @issue = Issue.find(params[:issue])
+  end
   
   def output(clients, input)
     value = input[:value].downcase if input[:value].present?
@@ -226,7 +241,7 @@ class ClientsController < ApplicationController#
   def respond_with_notify(message = 'Please make a selection', type = 'alert')
     respond_to do |format|
       format.html { redirect_to root_path }
-      format.js { render 'pages/notify', locals: { message: message, type: type } }
+      format.js { render 'pages/notify', locals: { message: message, type: type, close: true } }
     end
   end
 

@@ -1,13 +1,17 @@
 <div class="container pt-2">
     <div class="row">
-        <div class="col s8">
+        <div class="col s12">
+            <div class="pb-05"><label class="text optional active">Linked client</label></div>
+            <div class="chip"><%= @client.ip %><%= " (#{@client.hostname})" unless @client.hostname.nil? %></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12">
             <ul class="collection issue-template-collection">
                 <% @issues.each do |issue| %>
                     <li class="collection-item issue-template-collection-item">
-                        <%= link_to edit_issue_template_path(issue_template), remote: true do %>
-                        <i class="material-icons left <%= issue_template.color %>-text text-darken-2">bug_report</i><%= issue_template.title %>
-                        <% end %>      
-                        <%= link_to '<i class="material-icons red-text text-darken-3">delete_forever</i>'.html_safe, issue_template, method: :delete, :class => "secondary-content", data: { confirm: 'Are you sure?' } %>
+                        <i class="material-icons left <%= issue.color %>-text text-darken-2">bug_report</i><%= issue.title %>    
+                        <%= link_to '<i class="material-icons green-text text-darken-3">link</i>'.html_safe, clients_link_issue_path(@client, issue), remote: "true", :class => "secondary-content tooltipped", data: { position: "bottom", tooltip: "Link client to that issue" } %>
                     </li>
                 <% end %>   
             </ul> 

@@ -126,3 +126,6 @@ html, body {
   position: absolute;
   top: 30%;
 }
+.material-tooltip {
+  z-index: 10000000 !important;
+}

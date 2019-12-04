@@ -11,7 +11,7 @@
                 <% if @client %>
                     <div class="col s6">
                         <div class="pb-05"><label class="text optional active">Linked client</label></div>
-                        <div class="chip"><%= @client.ip %><%= " (#{@client.hostname})" unless @client.hostname.empty? %></div>
+                        <div class="chip"><%= @client.ip %><%= " (#{@client.hostname})" unless @client.hostname.nil? %></div>
                     </div>
                 <% end %>
             </div>
