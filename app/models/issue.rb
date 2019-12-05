@@ -1,30 +1,31 @@
 class Issue < ReportPart
   belongs_to :reportable, polymorphic: true
 
-  def self.create_from_template(issueGroup, issueTemplate)
+  def self.create_from_template(issue_group, issue_template)
     Issue.create(
-      reportable: issueGroup, 
-      title: issueTemplate.title, 
-      description: issueTemplate.description, 
-      rating: issueTemplate.rating, 
-      recommendation: issueTemplate.recommendation,
-      severity: issueTemplate.severity ) 
+      reportable: issue_group,
+      title: issue_template.title,
+      description: issue_template.description,
+      rating: issue_template.rating,
+      recommendation: issue_template.recommendation,
+      severity: issue_template.severity
+    )
   end
-  
+
   def color
     case severity
     when 0
-      return "green"
+      'green'
     when 1
-        return "blue"
+      'blue'
     when 2
-        return "orange"
+      'orange'
     when 3
-        return "red"
+      'red'
     when 4
-        return "purple"
+      'purple'
     else
-        return "grey"
-    end  
+      'grey'
+    end
   end
 end
