@@ -5,7 +5,6 @@ Rails.application.routes.draw do
   resources :issues
   resources :screenshots, only: [:edit, :update, :destroy]
   resources :reports
-  resources :clients
   devise_for :users, controllers: { registrations: "registrations", sessions: "sessions"}
   mount ActionCable.server => '/cable'
   root to: redirect(path: '/scans')
