@@ -34,7 +34,7 @@ class IssuesController < ApplicationController
           unless current_report.report_parts.empty?
             lastIssueGroup = current_report.report_parts.last
             if lastIssueGroup.type == "IssueGroup"
-              issueClone = Issue.create_from_template(lastIssueGroup, IssueTemplate.find(params[:issue_template]))
+              issue_clone = Issue.create_from_template(lastIssueGroup, IssueTemplate.find(params[:issue_template]))
               if (client = Client.find(params[:client]))
                 issue_clone.clients << client
               end
@@ -73,8 +73,10 @@ class IssuesController < ApplicationController
   # DELETE /issues/1
   # DELETE /issues/1.json
   def destroy
+    @issue.clients.delete_all
+    @issue.screenshots.delete_all
     @issue.destroy
-    respond_with_notify("Issue was successfully destroyed.", "success")
+    respond_with_refresh("Issue was successfully destroyed.", "success")
   end
 
   private

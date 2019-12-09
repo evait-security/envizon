@@ -8,6 +8,9 @@ class ClientsController < ApplicationController#
     require_relative '../nmap/envizon_cpe'
   end
 
+  def search_form
+  end
+
   # @url /clients/:id
   # @action GET
   #
@@ -138,8 +141,6 @@ class ClientsController < ApplicationController#
       end
     end
   end
-
-  def search; end
 
   def match_search_element(clients, input)
     table = input[:table].downcase

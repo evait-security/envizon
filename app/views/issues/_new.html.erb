@@ -4,6 +4,9 @@
             <div class="row search-field">
                 <%= simple_form_for :search, url: issue_templates_search_add_path, method: "POST", remote: "true" do |f| %>
                     <div class="input-field col s6 ">
+                        <% if @client %>
+                            <input type="hidden" name="client" value="<%= @client.id %>">
+                        <% end %>
                         <input placeholder="Type any issue title..." id="title" name="title" type="text" autofocus>
                         <label for="title">Search</label> 
                     </div>

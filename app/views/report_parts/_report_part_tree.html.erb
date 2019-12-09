@@ -1,17 +1,27 @@
 <% report_parts.order(:index).each do |rp| %>
     <% if rp.is_a? Issue %>
-        <%= link_to edit_issue_path(rp), remote: true do %>
-            <i class="material-icons left <%= rp.color %>-text text-darken-2">bug_report</i><%= rp.title %> - #<%= rp.index %></p>
-        <% end %>
+        <p class="report_part">
+            <%= link_to edit_issue_path(rp), remote: true do %>
+                <i class="material-icons left <%= rp.color %>-text text-darken-2">bug_report</i><%= rp.title %> - #<%= rp.index %>
+            <% end %> 
+            <%= link_to issue_path(rp), method: :delete, data: { confirm: 'The issue and according screenshots will be deleted. Are you sure?' }, remote: :true do %>
+                <i class="material-icons right red-text text-darken-2 report_part_action">delete</i>
+            <% end %> 
+        </p>
     <% end %>
     <% if rp.is_a? IssueGroup %>
-        <%= link_to edit_issue_group_path(rp), remote: true do %>
-            <% if rp.title.to_s.empty? %>
-                <p><i class="material-icons left teal-text text-darken-2">folder_open</i>Issue Group  - #<%= rp.index %></p>
-            <% else %>
-                <p><i class="material-icons left teal-text text-darken-2">folder</i><%= rp.title %> - #<%= rp.index %></p>
+        <p class="report_part">
+            <%= link_to edit_issue_group_path(rp), remote: true do %>
+                <% if rp.title.to_s.empty? %>
+                    <i class="material-icons left teal-text text-darken-2">folder_open</i>Issue Group  - #<%= rp.index %>
+                <% else %>
+                    <i class="material-icons left teal-text text-darken-2">folder</i><%= rp.title %> - #<%= rp.index %><
+                <% end %>
             <% end %>
-        <% end %>
+            <%= link_to issue_group_path(rp), method: :delete, data: { confirm: 'The issue group will be deleted. Are you sure?' }, remote: :true do %>
+                <i class="material-icons right red-text text-darken-2 report_part_action">delete_forever</i>
+            <% end %>      
+        </p>
         <% unless rp.report_parts.empty? %>
             <div class="pl-2">
                 <%= render partial: "report_parts/report_part_tree", locals: { report_parts: rp.report_parts }  %>
