@@ -113,26 +113,50 @@ class ReportsController < ApplicationController
   def export_docx
     # init template files
     FileUtils.mkdir_p('/usr/src/app/envizon/report-templates')
-    report_filne_name = "Report Pentest - #{@report.title} #{Date.today.year}"
-    output_file = File.new(Rails.root.join('tmp') + "#{report_filne_name}.docx", 'w')
+    report_file_name = "Report Pentest - #{@report.title} #{Date.today.year}"
+    output_file = File.new(Rails.root.join('tmp') + "#{report_file_name}.docx", 'w')
     template = Sablon.template(File.expand_path("/usr/src/app/envizon/report-templates/evait.docx"))
 
+    # init strukts
+    s_report = Struct.new(:item, :issue_groups)
+    s_issue_group = Struct.new(:item, :index, :issues)
+    s_issue = Struct.new(:item, :index, :screenshots)
+    s_image = Struct.new(:item, :index, :description, :pix)
+    #Sablon.content(:image, string_io_obj)
     # init template context
     context = {
-      title: report_filne_name,
-      report: OpenStruct.new(
-        :summary => @report.summary,
-        :conclusion => @report.conclusion,
-        :contact_person => @report.contact_person,
-        :company_name => @report.company_name,
-        :street => @report.street,
-        :postalcode => @report.postalcode,
-        :city => @report.city)
+      title: report_file_name,
+      report: s_report.new(
+        @report, #report.item
+        @report.report_parts.select{|rp| rp.is_a? IssueGroup }.each_with_index.map{ |ig, index_ig| #report.issue_groups
+          s_issue_group.new(
+            ig, #report.issue_groups->item
+            index_ig,  #report.issue_groups->index
+            ig.child_issues.each_with_index.map{ |issue, index_issue| #report.issue_groups->issues
+              s_issue.new(
+                issue, #report.issue_groups->issues->item
+                index_issue, #report.issue_groups->issues->index
+                issue.screenshots.each_with_index.map{ |screenshot, index_screenshot|
+                  s_image.new( #report.issue_groups->issues->screenshots
+                    screenshot, #report.issue_groups->issues->screenshots->item
+                    index_screenshot, #report.issue_groups->issues->screenshots->index
+                    screenshot.description,  #report.issue_groups->issues->screenshots->description
+                    #Sablon.content(:image, '/usr/src/app/envizon/report-templates/test.png', properties: {height: '2cm', width: '2cm'})  #report.issue_groups->issues->screenshots->content
+                    Sablon.content(:image, StringIO.new(IO.binread(ActiveStorage::Blob.service.send(:path_for, screenshot.image.key))), filename: 'test.png')  #report.issue_groups->issues->screenshots->content
+                    # use params like:
+                    #Sablon.content(:image, 'path', filename: 'test.png', properties: {height: '2cm', width: '2cm'})
+                  )
+                }
+              )
+            }
+          )
+        }
+      )
     }
 
     # generate docx and let them download
     template.render_to_file output_file, context
-    send_file output_file, filename: "#{report_filne_name}.docx", type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    send_file output_file, filename: "#{report_file_name}.docx", type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     nil
 =begin 
     report_docx = ODFReport::Report.new("/usr/src/app/envizon/report-templates/evait.docx") do |r|
@@ -218,3 +242,4 @@ class ReportsController < ApplicationController
       end
     end
 end
+
