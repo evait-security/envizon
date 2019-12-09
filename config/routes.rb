@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :issues
   resources :screenshots, only: [:edit, :update, :destroy]
   resources :reports
+  resources :clients
   devise_for :users, controllers: { registrations: "registrations", sessions: "sessions"}
   mount ActionCable.server => '/cable'
   root to: redirect(path: '/scans')
@@ -47,19 +48,13 @@ Rails.application.routes.draw do
   get '/groups' => 'groups#index'
   get '/pages/settings' => 'pages#settings', as: :global_settings
   get '/pages/changelog' => 'pages#changelog', as: :changelog
-  post '/clients/global_search' => 'clients#global_search', as: :global_search
 
   get '/images' => 'images#index', as: :images
   get '/images/scan_all' => 'images#scan_all', as: :images_scan_all
   get '/images/scan_all_overwrite' => 'images#scan_all_overwrite', as: :images_scan_all_overwrite
 
-  get '/clients/search' => 'clients#search'
-  post '/clients/search' => 'clients#search', as: :global_search_view
-  #
-  # order matters. keep this below other clients-routes, or it will always match.
-  # alternatively, constraints need to be used (ie. regex for \d etc)
-  get '/clients' => 'clients#index'
-  get '/clients/:id' => 'clients#show'
+  get '/clients/search/form' => 'clients#search_form', as: :global_search_view
+  post '/clients/global_search' => 'clients#global_search', as: :global_search
   post '/clients/archive' => 'clients#archive', as: :clients_archive
   post '/clients/unarchive' => 'clients#unarchive', as: :clients_unarchive
   get '/clients/:id/new_issue_form' => 'clients#new_issue_form', as: :clients_new_issue_form
