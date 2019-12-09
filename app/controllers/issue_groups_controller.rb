@@ -58,9 +58,11 @@ class IssueGroupsController < ApplicationController
   # DELETE /issue_groups/1
   # DELETE /issue_groups/1.json
   def destroy
-    @issue_group.destroy
-    respond_to do |format|
-      format.html { redirect_to reports_path, notice: 'Issue group was successfully destroyed.' }
+    if @issue_group.report_parts.count > 0
+      respond_with_notify("Issue group is not empty.","alert")
+    else
+      @issue_group.destroy
+      respond_with_refresh("Issue group was successfully destroyed.", "success")
     end
   end
 
@@ -79,6 +81,13 @@ class IssueGroupsController < ApplicationController
       respond_to do |format|
         format.html { redirect_to root_path }
         format.js { render 'pages/notify', locals: { message: message, type: type } }
+      end
+    end
+    def respond_with_refresh(message = 'Unknown error', type = 'alert', issue = 0)
+      @report_parts = ReportPart.where(type: "IssueGroup")
+      respond_to do |format|
+        format.html { redirect_to root_path }
+        format.js { render 'issues/refresh', locals: { message: message, type: type } }
       end
     end
 end

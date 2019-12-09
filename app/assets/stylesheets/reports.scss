@@ -16,4 +16,12 @@
         max-height: calc(100vh - 140px);
         min-height: calc(100vh - 64px);
     }
+    .report_part_action {
+        visibility: hidden;
+    }
+    .report_part:hover {
+        .report_part_action {
+            visibility: visible;
+        }
+    }
 }

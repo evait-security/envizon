@@ -73,8 +73,10 @@ class IssuesController < ApplicationController
   # DELETE /issues/1
   # DELETE /issues/1.json
   def destroy
+    @issue.clients.delete_all
+    @issue.screenshots.delete_all
     @issue.destroy
-    respond_with_notify("Issue was successfully destroyed.", "success")
+    respond_with_refresh("Issue was successfully destroyed.", "success")
   end
 
   private
