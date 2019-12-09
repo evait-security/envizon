@@ -34,7 +34,7 @@ class IssuesController < ApplicationController
           unless current_report.report_parts.empty?
             lastIssueGroup = current_report.report_parts.last
             if lastIssueGroup.type == "IssueGroup"
-              issueClone = Issue.create_from_template(lastIssueGroup, IssueTemplate.find(params[:issue_template]))
+              issue_clone = Issue.create_from_template(lastIssueGroup, IssueTemplate.find(params[:issue_template]))
               if (client = Client.find(params[:client]))
                 issue_clone.clients << client
               end

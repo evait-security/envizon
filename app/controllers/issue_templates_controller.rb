@@ -18,6 +18,9 @@ class IssueTemplatesController < ApplicationController
   # POST /issue_templates/search_add
   # Used if searched from add new issue page (output has to be a little bit different)
   def search_add
+    if params.key?(:client)
+      @client = Client.find(params[:client])
+    end
     @issue = Issue.new
     @issue_templates = IssueTemplate.where('lower(title) LIKE :search or lower(description) LIKE :search', search: "%#{params["title"].downcase}%")
     respond_to do |format|
