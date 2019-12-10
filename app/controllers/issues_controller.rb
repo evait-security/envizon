@@ -35,7 +35,7 @@ class IssuesController < ApplicationController
             lastIssueGroup = current_report.report_parts.last
             if lastIssueGroup.type == "IssueGroup"
               issue_clone = Issue.create_from_template(lastIssueGroup, IssueTemplate.find(params[:issue_template]))
-              if (client = Client.find(params[:client]))
+              if (params.key?(:client) && client = Client.find(params[:client]))
                 issue_clone.clients << client
               end
               format.html { redirect_back fallback_location: root_path, notice: 'Issue was successfully created.' }

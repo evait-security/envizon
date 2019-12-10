@@ -15,7 +15,7 @@
                 <% if rp.title.to_s.empty? %>
                     <i class="material-icons left teal-text text-darken-2">folder_open</i>Issue Group  - #<%= rp.index %>
                 <% else %>
-                    <i class="material-icons left teal-text text-darken-2">folder</i><%= rp.title %> - #<%= rp.index %><
+                    <i class="material-icons left teal-text text-darken-2">folder</i><%= rp.title %> - #<%= rp.index %>
                 <% end %>
             <% end %>
             <%= link_to issue_group_path(rp), method: :delete, data: { confirm: 'The issue group will be deleted. Are you sure?' }, remote: :true do %>
