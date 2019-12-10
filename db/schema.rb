@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_30_001648) do
+ActiveRecord::Schema.define(version: 2019_12_10_153723) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -128,6 +128,8 @@ ActiveRecord::Schema.define(version: 2019_11_30_001648) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "index"
+    t.bigint "issue_template_id"
+    t.index ["issue_template_id"], name: "index_report_parts_on_issue_template_id"
   end
 
   create_table "reports", force: :cascade do |t|
@@ -206,6 +208,7 @@ ActiveRecord::Schema.define(version: 2019_11_30_001648) do
   add_foreign_key "outputs", "clients"
   add_foreign_key "outputs", "ports"
   add_foreign_key "ports", "clients"
+  add_foreign_key "report_parts", "issue_templates"
   add_foreign_key "scans", "users"
   add_foreign_key "screenshots", "report_parts"
   add_foreign_key "settings", "users"
