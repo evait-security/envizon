@@ -1,5 +1,5 @@
 class IssuesController < ApplicationController
-  before_action :set_issue, only: [:show, :edit, :update, :destroy]
+  before_action :set_issue, only: [:show, :edit, :update, :destroy, :update_template]
 
   # GET /issues
   # GET /issues.json
@@ -10,6 +10,20 @@ class IssuesController < ApplicationController
   # GET /issues/1
   # GET /issues/1.json
   def show
+  end
+
+  # GET /issues/1/update_template/1
+  def update_template
+    issue_template = @issue.issue_template
+    issue_template.title = @issue.title
+    issue_template.description = @issue.description
+    issue_template.rating = @issue.rating
+    issue_template.recommendation = @issue.recommendation
+    if issue_template.save
+      respond_with_notify("Issue template was successfully updated", "success")
+    else
+      respond_with_notify(issue_template.error, "error")
+    end
   end
 
   # GET /issues/new
@@ -35,7 +49,7 @@ class IssuesController < ApplicationController
             lastIssueGroup = current_report.report_parts.last
             if lastIssueGroup.type == "IssueGroup"
               issue_clone = Issue.create_from_template(lastIssueGroup, IssueTemplate.find(params[:issue_template]))
-              if (params.key?(:client) && client = Client.find(params[:client]))
+              if (params.key?(:client) && client = Client.find_by_id(params[:client]))
                 issue_clone.clients << client
               end
               format.html { redirect_back fallback_location: root_path, notice: 'Issue was successfully created.' }
@@ -82,7 +96,9 @@ class IssuesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_issue
-      @issue = Issue.find(params[:id])
+      unless @issue = Issue.find_by_id(params[:id])
+        respond_with_notify("Value not found in DB", "alert")
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -3,11 +3,17 @@
         <p class="report_part">
             <%= link_to edit_issue_path(rp), remote: true do %>
                 <i class="material-icons left <%= rp.color %>-text text-darken-2">bug_report</i><%= rp.title %> - #<%= rp.index %>
-            <% end %> 
+            <% end %>
             <%= link_to issue_path(rp), method: :delete, data: { confirm: 'The issue and according screenshots will be deleted. Are you sure?' }, remote: :true do %>
-                <i class="material-icons right red-text text-darken-2 report_part_action">delete</i>
-            <% end %> 
-        </p>
+                <i class="material-icons right red-text text-darken-2 report_part_action tooltipped" data-position="top" data-tooltip="Delete issue">delete</i>
+            <% end %>
+            <%= link_to update_template_path(rp), data: { confirm: 'This will overwrite the linked issue template. Are you sure?' }, remote: :true do %>
+                <i class="material-icons right orange-text text-darken-2 report_part_action tooltipped" data-position="top" data-tooltip="Update linked issue template">save</i>
+            <% end %>
+            <%= link_to issue_template_create_from_issue_path(rp), remote: :true do %>
+                <i class="material-icons right green-text text-darken-2 report_part_action tooltipped" data-position="top" data-tooltip="Add as new issue template">add</i>
+            <% end %>
+</p>
     <% end %>
     <% if rp.is_a? IssueGroup %>
         <p class="report_part">

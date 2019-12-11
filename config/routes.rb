@@ -6,13 +6,14 @@ Rails.application.routes.draw do
   resources :screenshots, only: [:edit, :update, :destroy]
   resources :reports
   resources :clients
+  resources :issue_templates
   devise_for :users, controllers: { registrations: "registrations", sessions: "sessions"}
   mount ActionCable.server => '/cable'
   root to: redirect(path: '/scans')
 
   get '/scans' => 'pages#scans'
 
-  resources :issue_templates
+  get '/issue_templates/create_from_issue/:issue_id' => 'issue_templates#create_from_issue', as: :issue_template_create_from_issue
   post '/issue_templates/search' => 'issue_templates#search', as: :issue_templates_search
   post '/issue_templates/search_add' => 'issue_templates#search_add', as: :issue_templates_search_add
 
@@ -45,6 +46,8 @@ Rails.application.routes.draw do
 
   get 'groups/refresh' => 'groups#refresh', as: :group_refresh
   get 'groups/group_list' => 'groups#group_list', as: :group_list
+
+  get '/issues/:id/update_template' => 'issues#update_template', as: :update_template
 
   get '/groups' => 'groups#index'
   get '/pages/settings' => 'pages#settings', as: :global_settings

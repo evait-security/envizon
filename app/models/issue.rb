@@ -9,7 +9,8 @@ class Issue < ReportPart
       description: issue_template.description,
       rating: issue_template.rating,
       recommendation: issue_template.recommendation,
-      severity: issue_template.severity
+      severity: issue_template.severity,
+      issue_template: issue_template
     )
   end
 

@@ -1,5 +1,6 @@
 class IssueTemplatesController < ApplicationController
   before_action :set_issue_template, only: [:show, :edit, :update, :destroy]
+  before_action :set_issue, only: [:create_from_issue]
 
   # GET /issue_templates
   # GET /issue_templates.json
@@ -37,18 +38,31 @@ class IssueTemplatesController < ApplicationController
   def edit
   end
 
+  # GET /issue_templates/create_from_issue/1
+  def create_from_issue
+    issue_template = IssueTemplate.new
+    issue_template.title = @issue.title
+    issue_template.description = @issue.description
+    issue_template.rating = @issue.rating
+    issue_template.recommendation = @issue.recommendation
+    issue_template.severity = @issue.severity
+    if issue_template.save
+      respond_with_notify("Issue template was successfully updated", "success")
+    else
+      respond_with_notify(issue_template.error, "error")
+    end
+  end
+
   # POST /issue_templates
   # POST /issue_templates.json
   def create
-    @issue_template = IssueTemplate.new(issue_template_params)
+    issue_template = IssueTemplate.new(issue_template_params)
 
     respond_to do |format|
-      if @issue_template.save
+      if issue_template.save
         format.html { redirect_to issue_templates_path, notice: 'Issue template was successfully created.' }
-        format.json { render :show, status: :created, location: @issue_template }
       else
-        format.html { render :new }
-        format.json { render json: @issue_template.errors, status: :unprocessable_entity }
+        format.html { redirect_to issue_templates_path, alert: issue_template.errors }
       end
     end
   end
@@ -59,10 +73,8 @@ class IssueTemplatesController < ApplicationController
     respond_to do |format|
       if @issue_template.update(issue_template_params)
         format.html { redirect_to issue_templates_path, notice: 'Issue template was successfully updated.' }
-        format.json { render :show, status: :ok, location: @issue_template }
       else
-        format.html { render :edit }
-        format.json { render json: @issue_template.errors, status: :unprocessable_entity }
+        format.html { redirect_to issue_templates_path, alert: issue_template.errors }
       end
     end
   end
@@ -73,7 +85,6 @@ class IssueTemplatesController < ApplicationController
     @issue_template.destroy
     respond_to do |format|
       format.html { redirect_to issue_templates_url, notice: 'Issue template was successfully destroyed.' }
-      format.json { head :no_content }
     end
   end
 
@@ -83,8 +94,21 @@ class IssueTemplatesController < ApplicationController
       @issue_template = IssueTemplate.find(params[:id])
     end
 
+    def set_issue
+      unless @issue = Issue.find_by_id(params[:issue_id])
+        respond_with_notify("Value not found in DB", "alert")
+      end
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def issue_template_params
       params.require(:issue_template).permit(:title, :description, :rating, :recommendation, :severity)
+    end
+  
+    def respond_with_notify(message = 'Unknown error', type = 'alert')
+      respond_to do |format|
+        format.html { redirect_to root_path }
+        format.js { render 'pages/notify', locals: { message: message, type: type } }
+      end
     end
 end
