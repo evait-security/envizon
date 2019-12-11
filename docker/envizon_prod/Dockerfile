@@ -4,8 +4,8 @@ MAINTAINER evait security GmbH <tech@evait.de>
 
 ENV BUILD_PACKAGES="curl-dev git curl ruby-dev git nmap@edge" \
     NMAP_PACKAGES="nmap@edge nmap-doc@edge nmap-ncat@edge nmap-nping@edge nmap-nselibs@edge nmap-scripts@edge" \
-    DEV_PACKAGES="zlib-dev libxml2-dev libxslt-dev tzdata yaml-dev" \
-    PACKAGES="nodejs graphviz yarn postgresql-dev openssl" \
+    DEV_PACKAGES="zlib-dev libxml2-dev libxslt-dev tzdata yaml-dev less" \
+    PACKAGES="nodejs graphviz yarn postgresql-dev openssl imagemagick" \
     RAILS_ENV="production"
 
 RUN \

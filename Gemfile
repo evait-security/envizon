@@ -54,6 +54,7 @@ gem 'materialize-sass'
 # screenshots
 gem 'selenium-webdriver'
 gem 'image_processing'
+gem 'mini_magick'
 
 # jobs
 # (maybe use sidekiq or whatever in prod?)
@@ -71,9 +72,6 @@ gem 'zip-zip' # will load compatibility for old rubyzip API.
 
 # export report
 gem 'sablon' # docx tamplate
-
-# gdrive plugin to backup issue database
-gem 'google_drive'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
