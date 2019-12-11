@@ -52,7 +52,7 @@ class IssuesController < ApplicationController
               if (params.key?(:client) && client = Client.find_by_id(params[:client]))
                 issue_clone.clients << client
               end
-              format.html { redirect_back fallback_location: root_path, notice: 'Issue was successfully created.' }
+              format.html { redirect_to reports_path, notice: 'Issue was successfully created.' }
             else
               format.html { redirect_to reports_path, alert: 'Last report part is no issue group' }
             end
