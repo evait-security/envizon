@@ -30,4 +30,28 @@ class Issue < ReportPart
       'grey'
     end
   end
+
+
+  def color_hex
+    case severity
+    when 0
+      '#3fb079;'
+    when 1
+      '#0b5394;'
+    when 2
+      '#b45f06;'
+    when 3
+      '#990000;'
+    when 4
+      '#9900ff;'
+    else
+      '#999999;'
+    end
+  end
+
+  def colorize(text)
+    result = text.gsub '<color>', "<span style='color: #{color_hex}'>"
+    result.gsub '</color>', "</span>"
+  end
+  
 end

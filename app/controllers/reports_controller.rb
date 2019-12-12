@@ -137,15 +137,15 @@ class ReportsController < ApplicationController
                 issue, #report.issue_groups->issues->item
                 index_issue, #report.issue_groups->issues->index
                 Sablon.content(:html, <<-HTML.strip
-                #{issue.description}
+                #{issue.colorize(issue.description)}
                 HTML
                 ), #report.issue_groups->issues->description
                 Sablon.content(:html, <<-HTML.strip
-                #{issue.rating}
+                #{issue.colorize(issue.rating)}
                 HTML
                 ), #report.issue_groups->issues->rating
                 Sablon.content(:html, <<-HTML.strip
-                #{issue.recommendation}
+                #{issue.colorize(issue..recommendation)}
                 HTML
                 ),  #report.issue_groups->issues->recommendation
                 issue.screenshots.each_with_index.map{ |screenshot, index_screenshot|
