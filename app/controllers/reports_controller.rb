@@ -128,11 +128,11 @@ class ReportsController < ApplicationController
       title: report_file_name,
       report: s_report.new(
         @report, #report.item
-        @report.report_parts.select{|rp| rp.is_a? IssueGroup }.each_with_index.map{ |ig, index_ig| #report.issue_groups
+        @report.report_parts.order(:index).select{|rp| rp.is_a? IssueGroup }.each_with_index.map{ |ig, index_ig| #report.issue_groups
           s_issue_group.new(
             ig, #report.issue_groups->item
             index_ig,  #report.issue_groups->index
-            ig.child_issues.each_with_index.map{ |issue, index_issue| #report.issue_groups->issues
+            ig.ordered_child_issues.each_with_index.map{ |issue, index_issue| #report.issue_groups->issues
               s_issue.new(
                 issue, #report.issue_groups->issues->item
                 index_issue, #report.issue_groups->issues->index
@@ -145,7 +145,7 @@ class ReportsController < ApplicationController
                 HTML
                 ), #report.issue_groups->issues->rating
                 Sablon.content(:html, <<-HTML.strip
-                #{issue.colorize(issue..recommendation)}
+                #{issue.colorize(issue.recommendation)}
                 HTML
                 ),  #report.issue_groups->issues->recommendation
                 issue.screenshots.each_with_index.map{ |screenshot, index_screenshot|

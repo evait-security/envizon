@@ -15,4 +15,17 @@ class ReportPart < ApplicationRecord
       end
     end.flatten.compact
   end
+
+  def ordered_child_issues
+    return [self] if type == 'Issue'
+    
+    report_parts.order(:index).map do |pt|
+      if pt.type == 'Issue'
+        pt
+      else
+        pt.child_issues
+      end
+    end.flatten.compact
+  end
+
 end
