@@ -120,7 +120,7 @@ class ReportsController < ApplicationController
     # init strukts
     s_report = Struct.new(:item, :issue_groups)
     s_issue_group = Struct.new(:item, :index, :issues)
-    s_issue = Struct.new(:item, :index, :screenshots)
+    s_issue = Struct.new(:item, :index, :description, :rating, :recommendation, :screenshots)
     s_image = Struct.new(:item, :index, :description, :pix)
     #Sablon.content(:image, string_io_obj)
     # init template context
@@ -136,13 +136,25 @@ class ReportsController < ApplicationController
               s_issue.new(
                 issue, #report.issue_groups->issues->item
                 index_issue, #report.issue_groups->issues->index
+                Sablon.content(:html, <<-HTML.strip
+                #{issue.description}
+                HTML
+                ), #report.issue_groups->issues->description
+                Sablon.content(:html, <<-HTML.strip
+                #{issue.rating}
+                HTML
+                ), #report.issue_groups->issues->rating
+                Sablon.content(:html, <<-HTML.strip
+                #{issue.recommendation}
+                HTML
+                ),  #report.issue_groups->issues->recommendation
                 issue.screenshots.each_with_index.map{ |screenshot, index_screenshot|
                   s_image.new( #report.issue_groups->issues->screenshots
                     screenshot, #report.issue_groups->issues->screenshots->item
                     index_screenshot, #report.issue_groups->issues->screenshots->index
                     screenshot.description,  #report.issue_groups->issues->screenshots->description
                     #Sablon.content(:image, '/usr/src/app/envizon/report-templates/test.png', properties: {height: '2cm', width: '2cm'})  #report.issue_groups->issues->screenshots->content
-                    Sablon.content(:image, StringIO.new(IO.binread(ActiveStorage::Blob.service.send(:path_for, screenshot.image.key))), filename: 'test.png')  #report.issue_groups->issues->screenshots->content
+                    Sablon.content(:image, StringIO.new(IO.binread(ActiveStorage::Blob.service.send(:path_for, screenshot.image.key))), filename: 'test.png', properties: {height: "#{screenshot.size_relation * 16.08}cm", width: '16.08cm'})  #report.issue_groups->issues->screenshots->content
                     # use params like:
                     #Sablon.content(:image, 'path', filename: 'test.png', properties: {height: '2cm', width: '2cm'})
                   )
