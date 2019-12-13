@@ -37,3 +37,6 @@ public/assets
 /.ssl/*
 config/secret
 /storage/*
+
+# Ignore private Templates
+/report-templates/*
