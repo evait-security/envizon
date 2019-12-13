@@ -120,7 +120,7 @@ class ReportsController < ApplicationController
     # init strukts
     s_report = Struct.new(:item, :issue_groups)
     s_issue_group = Struct.new(:item, :index, :issues)
-    s_issue = Struct.new(:item, :index, :description, :rating, :recommendation, :screenshots)
+    s_issue = Struct.new(:item, :index, :targets, :description, :rating, :recommendation, :screenshots)
     s_image = Struct.new(:item, :index, :description, :pix)
     #Sablon.content(:image, string_io_obj)
     # init template context
@@ -136,6 +136,7 @@ class ReportsController < ApplicationController
               s_issue.new(
                 issue, #report.issue_groups->issues->item
                 index_issue, #report.issue_groups->issues->index
+                issue.clients.map{|c| c.ip.to_s + (c.hostname.present? ? " (#{c.hostname})" : '')} + (issue.customtargets.present? ? issue.customtargets.lines : []), #report.issue_groups->issues->targets
                 Sablon.content(:html, <<-HTML.strip
                 #{issue.colorize(issue.description)}
                 HTML
