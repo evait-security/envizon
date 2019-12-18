@@ -113,7 +113,11 @@ class ClientsController < ApplicationController#
   # @required [Hash<_unused, Hash>] :search_name Name of the resulting search group
   # @optional [String] :group[:name] Name of the new group
   def global_search
-    @clients = Client.where(archived: false)
+    if params[:search_in_archived].present?
+      @clients = Client.all
+    else
+      @clients = Client.where(archived: false)
+    end
 
     if params.key?(:search)
       @search_name = 'Custom Search'

@@ -58,9 +58,16 @@
   </div>
 </div>
 
-<div class="modal-footer global-search-footer">
-  <a class="btn green darken-2 left submit-search"><i class="material-icons">search</i></a>
-  <a href="#" class="btn modal-action blue darken-2" id="add_to_group_view">Add to Group-View</a>
+<div class="modal-footer global-search-footer row mb-0">
+  <div class="col s6 valign-wrapper">
+    <a class="btn green darken-2 left submit-search"><i class="material-icons">search</i></a>
+    <div class="switch left tooltipped" data-position="top" data-tooltip="Toogle include archived clients in search">
+      <label><input type="checkbox" name="search_in_archived" value="true" id="search_in_archived"><span class="lever"></span></label>
+    </div>
+  </div>
+  <div class="col s6"><a href="#" class="btn modal-action blue darken-2 right" id="add_to_group_view">Add to Group-View</a></div>
+
+ 
 </div>
 
 <script>
@@ -165,6 +172,9 @@
   });
 
   $(document).on("click", '.submit-search', function() {
+    if ($("#search_in_archived").is(":checked")){
+      $('<input>').attr({type: 'hidden',name: 'search_in_archived', value: '1'}).appendTo('#global_search_form');
+    }
     $('#global_search_form').submit();
   });
 </script>
