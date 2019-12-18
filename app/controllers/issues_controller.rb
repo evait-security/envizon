@@ -35,6 +35,14 @@ class IssuesController < ApplicationController
   # GET /issues/1/edit
   def edit
     @report_parts = ReportPart.where(type: "IssueGroup")
+    case current_user.settings.where(name: 'report_mode').first_or_create.value
+    when "presentation"
+      respond_to do |format|
+        format.html { redirect_to root_path }
+        format.js { render 'issues/present' }
+      end
+    else
+    end
   end
 
   # POST /issues

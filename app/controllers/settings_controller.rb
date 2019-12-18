@@ -14,7 +14,7 @@ class SettingsController < ApplicationController
   # Update user settings
   # @required [Params] params[:setting_to_set] Setting(s) to change
   def update
-    %w[parallel_scans global_notify hosts export_db import_db saved_scan_name export_issue_templates import_issue_templates current_report].each do |param|
+    %w[parallel_scans global_notify hosts export_db import_db saved_scan_name export_issue_templates import_issue_templates current_report report_mode].each do |param|
       param_sym = param.to_sym
       next unless params[param_sym]
       respond_with_notify(send(param_sym, params[param_sym])) && return
@@ -39,6 +39,14 @@ class SettingsController < ApplicationController
       setting.save
     end
     { message: "Current report updated to '#{Report.find(current_report).title}'", type: 'success' }
+  end
+
+  def report_mode(report_mode)
+    setting = current_user.settings.where(name: 'report_mode').first_or_create
+    if report_mode.present?
+      setting.value = report_mode
+      setting.save
+    end
   end
 
   def export_db(_param)
@@ -167,7 +175,7 @@ class SettingsController < ApplicationController
   def respond_with_notify(locals)
     return unless locals
     respond_to do |format|
-      format.html { redirect_to root_path }
+      format.html { redirect_back fallback_location: root_path }
       format.js { render 'pages/notify', locals: locals }
     end
   end

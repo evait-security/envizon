@@ -52,18 +52,33 @@
   </div>
 </div>
 
-
-<div class="fixed-action-btn">
-  <%= link_to new_issue_path, remote: true, class: "btn-floating btn-large primary tooltipped", data: { position: "left", tooltip: "Add new issue"} do %><i class="large material-icons">add</i><% end %>
-  <ul>
-    <li>
-      <a href="#report-new-change-modal" class="btn-floating orange darken-2 modal-trigger tooltipped" data-position="left" data-tooltip="Create a new report or change the current"><i class="material-icons">assignment</i></a>
-    </li>
-    <li>
-      <%= link_to new_issue_group_path, remote: true, class: "btn-floating orange darken-2 tooltipped", data: { position: "left", tooltip: "Add new issue group"} do %><i class="large material-icons">add</i><% end %>
-    </li>
-  </ul>
-</div>
+<% case current_user.settings.where(name: 'report_mode').first_or_create.value %>
+<% when "presentation" %>
+  <div class="fixed-action-btn">
+    <%= simple_form_for :settings, url: update_settings_path do |f| %>
+      <input type="hidden" value="edit" name="report_mode"/>
+      <button class="btn-floating btn-large green darken-2 submit tooltipped" data-position="left" data-tooltip="Disable presentation mode"><i class="material-icons">stop_screen_share</i></button>
+    <% end %>
+  </div>
+<% else %>
+  <div class="fixed-action-btn">
+    <%= link_to new_issue_path, remote: true, class: "btn-floating btn-large primary tooltipped", data: { position: "left", tooltip: "Add new issue"} do %><i class="large material-icons">add</i><% end %>
+    <ul>
+      <li>
+        <a href="#report-new-change-modal" class="btn-floating orange darken-2 modal-trigger tooltipped" data-position="left" data-tooltip="Create a new report or change the current"><i class="material-icons">assignment</i></a>
+      </li>
+      <li>
+        <%= link_to new_issue_group_path, remote: true, class: "btn-floating orange darken-2 tooltipped", data: { position: "left", tooltip: "Add new issue group"} do %><i class="material-icons">add</i><% end %>
+      </li>
+      <li>
+        <%= simple_form_for :settings, url: update_settings_path do |f| %>
+          <input type="hidden" value="presentation" name="report_mode"/>
+          <button class="btn-floating green darken-2 submit tooltipped" data-position="left" data-tooltip="Enable presentation mode"><i class="material-icons">screen_share</i></button>
+        <% end %>
+      </li>
+    </ul>
+  </div>
+<% end %>
 
 <script>
     var pasteTarget = document.getElementsByTagName("body");

@@ -2,7 +2,7 @@
 # Client display and search
 class ClientsController < ApplicationController#
   before_action :set_client, only: [:new_issue_form, :link_issue_form]
-  before_action :set_client_and_issue, only: [:link_issue]
+  before_action :set_client_and_issue, only: [:link_issue, :unlink_issue]
 
   def index
     require_relative '../nmap/envizon_cpe'
@@ -96,6 +96,16 @@ class ClientsController < ApplicationController#
       end
     end
   end
+
+  def unlink_issue
+    if @issue && @client
+      @issue.clients.delete(@client)
+      if @issue.save
+        respond_with_notify("Client unlinked successfully","success")
+      end
+    end
+  end
+
 
   # @url /clients/global_search
   # @action POST

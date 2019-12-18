@@ -54,7 +54,12 @@
         <div class="col s6">
             <div class="pb-05"><label class="text optional active">Linked clients</label><i class="material-icons tooltipped" data-position="bottom" data-delay="50" data-tooltip="Use group view in order to link clients with issues">info_outline</i></div>
             <% @issue.clients.each do |client| %>
-              <div class="chip"><%= client.ip %><%= " (#{client.hostname})" unless client.hostname.nil? %></div>  
+              <div class="chip">
+                <%= client.ip %><%= " (#{client.hostname})" unless client.hostname.nil? %>
+                <%= link_to clients_unlink_issue_path(client, @issue),remote: true do %>
+                    <i class="close red-text text-darken-2 material-icons">close</i>
+                <% end %>
+              </div>  
             <% end %>
         </div>
     </div>
