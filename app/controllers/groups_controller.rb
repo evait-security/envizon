@@ -180,14 +180,15 @@ class GroupsController < ApplicationController
 
   # Renders a form for deleting clients
   def delete_form
-    source_group ||= Group.find(params[:source_group]) unless params[:source_group].blank?
-    clients = Client.find(params[:clients]) if params.key?(:clients)
-    if (clients.blank? && source_group.clients.present?) || source_group.nil?
-      respond_with_notify
+    if params.key?(:source_group)
+      if sg = Group.find(params[:source_group])
+        locals = { source_group: sg, clients: sg.clients.where(archived: false) }
+        respond_root_path_js(:delete_group, locals)
+      else
+        respond_with_notify("Group can not be found in database.")
+      end
     else
-      clients ||= []
-      locals = { source_group: source_group, clients: clients }
-      respond_root_path_js(:delete_group, locals)
+      respond_with_notify
     end
   end
 
@@ -200,10 +201,8 @@ class GroupsController < ApplicationController
   def delete
     source_group = Group.find(params[:source_group])
 
-    source_group.clients.each { |client| client.destroy if client.groups.length == 1 }
-
+    source_group.clients.where(archived: false).each { |client| client.destroy if client.groups.length == 1 }
     message = "Deleted group '#{source_group.name}'"
-    deleted = source_group.id
     source_group.destroy
 
     respond_with_refresh(message, "#{source_group.id},-2", source_group.id)

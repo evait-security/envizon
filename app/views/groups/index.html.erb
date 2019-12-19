@@ -377,21 +377,13 @@
 
     // delete group with all clients containing - group header
     $(document).on("click", '.grp_delete', function() {
-        var clients = new Array();
         var id = $('.selected-group').attr('gid');
-        $("#datatable-" +  id).find(".ui-selectable tr a").each(function() {
-            if($(this).parents(".ui-selectee")) {
-                clients.push($(this).attr("id"));
-            }
-        });
-
         $.ajax({
         url: "<%= groups_delete_form_path %>",
             dataType : "script",
             cache: true,
             method: "post",
             data: {
-                clients: clients,
                 source_group: id
             }
         });

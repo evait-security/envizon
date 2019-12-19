@@ -24,6 +24,16 @@
       <h5 class="center-align">Delete whole group with selected clients</h5>
     </div>
     <div class="row">
+      <div class="col s12 m12">
+        <div class="card red darken-4">
+          <div class="card-content white-text">
+            <span class="card-title">Warning</span>
+            <p>This task will remove the group and unlink the clients from it. All clients with no group membership will be removed from the database. (Archived clients will be ignored)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
       <div class="col s12">
         <div class="input-field">
           <input disabled value="<%= source_group.name %>" id="disabled" type="text" class="validate" autofocus>
@@ -34,7 +44,7 @@
     </div>
     <div class="row center-align">
       <div class="col s12" style="margin-bottom: 13px;">
-        <label>Selected Clients</label>
+        <label>Clients in group</label>
       </div>
       <div class="col s12">
         <% clients.each do | temp_client | %>
