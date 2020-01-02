@@ -51,6 +51,10 @@ class ClientsController < ApplicationController#
       archived = 0
       clients.each do |client|
         client.archived = false
+        if client.groups.count = 0
+          unknown = Group.where(name: 'Unknown').first_or_create(mod: false, icon: '<i class="fa fa-desktop"></i>')
+          unknown << client 
+        end
         client.save!
         archived += 1
       end
