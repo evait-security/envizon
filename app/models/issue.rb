@@ -53,5 +53,9 @@ class Issue < ReportPart
     result = text.gsub '<color>', "<span style='color: #{color_hex}'>"
     result.gsub '</color>', "</span>"
   end
+  def clean_text(text)
+    result = text.gsub '<color>', ""
+    result.gsub '</color>', ""
+  end
   
 end

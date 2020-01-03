@@ -1,6 +1,6 @@
 require "sablon"
 class ReportsController < ApplicationController
-  before_action :set_report, only: [:show, :edit, :update, :destroy, :export_docx]
+  before_action :set_report, only: [:show, :edit, :update, :destroy, :export_docx, :export_verinice]
 
   # GET /reports
   # GET /reports.json
@@ -172,6 +172,61 @@ class ReportsController < ApplicationController
     nil
   end
 
+  def export_verinice()
+    report_file_name = "Verinice Report Pentest - #{@report.title} #{Date.today.year}"
+    output_file = File.new(Rails.root.join('tmp') + "#{report_file_name}.xml", 'w')
+
+    @verinice_ids = []
+    @rand = Random.new
+    template_path = '/usr/src/app/envizon/report-templates/evait_verinice.xml.erb'
+
+    issues = @report.all_issues
+
+    targets_ids = {}
+    issue_ids = {}
+    issues_to_targets = {}
+
+    issues.each do |issue|
+      en_issue = verinice_entity
+      issue_ids[issue.id] = en_issue
+      issues_to_targets[en_issue] = []
+      #map linked clients
+      issue.clients.each do |clients|
+        en_clients = verinice_entity
+        targets_ids[clients.id] = en_clients
+        issues_to_targets[en_issue] << en_clients
+      end
+      #map custom targets
+      issue.customtargets.lines.each do |c_targets|
+        en_clients = verinice_entity
+        targets_ids[c_targets] = en_clients
+        issues_to_targets[en_issue] << en_clients
+      end
+    end
+
+    #issue.clients.map{|c| c.ip.to_s + (c.hostname.present? ? " (#{c.hostname})" : '')} + (issue.customtargets.present? ? issue.customtargets.lines : [])
+
+    erb = ERB.new(File.read(template_path), nil, '<>-')
+    res = erb.result(binding)
+    # remove empty lines:
+    res = res.lines.reject { |s| s.strip.empty? }.join
+
+    # replace unicode-chars which verinice doesn't like
+    res = res.gsub(/newline\..*\n/, '').gsub(/[„“”]/, '"').gsub('–', '-')
+
+    # remove/reformat hN. tags and %-span-syntax
+    res = res.gsub(/(h\d\.\s([\w|\s]+)\n)/, "\n\n\\2\n\n")
+             .gsub(/(%\(\w+\)(\w+)%)/, '\2')
+
+    raise 'xml errors!' unless Nokogiri::XML(res).errors.length.zero?
+
+    File.delete(output_file) if File.exist?(output_file)
+    File.open(output_file, 'w') { |f| f.write(res) }
+    send_file output_file, filename: "#{report_file_name}.xml", type: 'application/xml'
+    nil
+  end
+
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_report
@@ -196,6 +251,31 @@ class ReportsController < ApplicationController
         format.html { redirect_to root_path }
         format.js { render 'pages/notify', locals: { message: message, type: type } and return}
       end
+    end
+    def verinice_severity(severity)
+      value = severity.to_i
+      case
+      when value <= 1 # green 0, blue 1
+        0
+      when value == 2 # orange
+        1
+      when value == 3 # red
+        2
+      when value >= 4 # purple 4
+        3
+      end
+    end
+
+    def verinice_entity
+      newid = 0
+      loop do
+        newid = @rand.rand(100_000..999_999)
+        unless @verinice_ids.include?(newid)
+          @verinice_ids << newid
+          break
+        end
+      end
+      newid
     end
 end
 
