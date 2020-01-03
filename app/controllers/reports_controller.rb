@@ -107,6 +107,8 @@ class ReportsController < ApplicationController
     end
   end
 
+
+  # GET|POST /reports/1/export_docx
   def export_docx
     # init template files
     FileUtils.mkdir_p('/usr/src/app/envizon/report-templates')
@@ -168,62 +170,6 @@ class ReportsController < ApplicationController
     template.render_to_file output_file, context
     send_file output_file, filename: "#{report_file_name}.docx", type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     nil
-=begin 
-    report_docx = ODFReport::Report.new("/usr/src/app/envizon/report-templates/evait.docx") do |r|
-      r.add_field :summary, @report.summary
-      r.add_field :conclusion, @report.conclusion
-      r.add_field :contact_person, @report.contact_person
-      r.add_field :company_name, @report.company_name
-      r.add_field :street, @report.street
-      r.add_field :postalcode, @report.postalcode
-      r.add_field :city, @report.city
-      
-      sc_group_index = 0
-      issue_groups = @report.report_parts.select{|rp| rp.is_a? IssueGroup}
-      r.add_section("SC_ISSUEGROUP", issue_groups) do |sc_group|
-        cur_ig = @report.report_parts[sc_group_index]
-        sc_group.add_field(:ig_index) {(sc_group_index + 1).to_s}
-        sc_group.add_field(:ig_title) {|ig| ig.title}
-        #{|ig| issues = ig.report_parts.select{|rp| rp.is_a? IssueGroup}}
-        
-        sc_issue_index = 0
-        issues = cur_ig.report_parts.select{|rp| rp.is_a? Issue}
-        sc_group.add_section("SC_ISSUE", :report_parts ) do |sc_issue|
-          sc_group.add_field(:issue_title) {|issue| issue.title}
-          #sc_group.add_field(:issue_description) {|issue| issue.description}
-          #sc_group.add_field(:issue_rating) {|issue| issue.rating}
-          #sc_group.add_field(:issue_recommendation) {|issue| issue.recommendation}
-
-          sc_issue_index += 1
-        end
-        
-        sc_group_index += 1
-      end
-
-      sc_group_index = 0
-      issue_groups = @report.report_parts.select{|rp| rp.is_a? IssueGroup}
-      r.add_section("SC_ISSUEGROUP", issue_groups) do |sc_group|
-        sc_group.add_field(:ig_index, (sc_group_index + 1).to_s)
-        sc_group.add_field(:ig_title) {|ig| ig.title}
-
-       
-        issues = issue_groups[sc_group_index].report_parts.select{|rp| rp.is_a? IssueGroup}
-        sc_issue_index = 0
-        sc_group.add_section("SC_ISSUE", issues ) do |sc_issue|
-          sc_group.add_field(:issue_title) {|issue| issue.title}
-          sc_group.add_field(:issue_description) {|issue| issue.description}
-          sc_group.add_field(:issue_rating) {|issue| issue.rating}
-          sc_group.add_field(:issue_recommendation) {|issue| issue.recommendation}
-
-          sc_issue_index += 1
-        end
-
-        sc_group_index += 1
-      end   
-    end
-
-    report_odt.generate(output_file)
-=end   
   end
 
   private
