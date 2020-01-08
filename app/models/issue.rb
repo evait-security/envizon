@@ -50,12 +50,17 @@ class Issue < ReportPart
   end
 
   def colorize(text)
-    result = text.gsub '<color>', "<span style='color: #{color_hex}'>"
-    result.gsub '</color>', "</span>"
+    result = text.gsub '<color>', "<strong><span style='color: #{color_hex}'>"
+    result.gsub '</color>', "</span></strong>"
   end
   def clean_text(text)
+=begin
     result = text.gsub '<color>', ""
     result.gsub '</color>', ""
+    result = text.gsub '<i>', ""
+    result.gsub '</i>', ""
+=end
+    ActionView::Base.full_sanitizer.sanitize(text.to_s)
   end
   
 end
