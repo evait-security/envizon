@@ -51,7 +51,8 @@ class Issue < ReportPart
 
   def colorize(text)
     result = text.gsub '<color>', "<strong><span style='color: #{color_hex}'>"
-    result.gsub '</color>', "</span></strong>"
+    result = result.gsub '</color>', "</span></strong>"
+    result.lstrip.rstrip.lines.join('<br>') # trim spaces at begin and end of the block and replace inner spaces to html-style
   end
   def clean_text(text)
 =begin
