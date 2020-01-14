@@ -39,4 +39,4 @@ config/secret
 /storage/*
 
 # Ignore private Templates
-#/report-templates/*
+/report-templates/*
