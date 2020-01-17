@@ -39,7 +39,6 @@ class ReportsController < ApplicationController
   def index
     @new_report = Report.new
     @reports = Report.all
-
     if @reports.present?
       if current_user.settings.where(name: 'current_report').present?
         @current_report = current_user.settings.find_by_name('current_report').value
@@ -55,6 +54,13 @@ class ReportsController < ApplicationController
         setting.save!
         @current_report = setting.value
       end
+    else
+      @current_report = @new_report
+      @current_report.save!
+      setting = current_user.settings.where(name: 'current_report').first_or_create
+      setting.value = @current_report
+      setting.save!
+      
     end
   end
 
