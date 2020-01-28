@@ -14,7 +14,7 @@ class SettingsController < ApplicationController
   # Update user settings
   # @required [Params] params[:setting_to_set] Setting(s) to change
   def update
-    %w[parallel_scans global_notify hosts export_db import_db saved_scan_name export_issue_templates import_issue_templates current_report report_mode].each do |param|
+    %w[parallel_scans global_notify hosts export_db import_db saved_scan_name export_issue_templates import_issue_templates report_mode].each do |param|
       param_sym = param.to_sym
       next unless params[param_sym]
       respond_with_notify(send(param_sym, params[param_sym])) && return
@@ -30,15 +30,6 @@ class SettingsController < ApplicationController
       setting.save
     end
     { message: "Parallel Scans settings updated to '#{parallel}'", type: 'success' }
-  end
-
-  def current_report(current_report)
-    setting = User.first.settings.find_by_name('current_report')
-    if current_report =~ /\A\d+\Z/
-      setting.value = current_report
-      setting.save
-    end
-    { message: "Current report updated to '#{Report.find(current_report).title}'", type: 'success' }
   end
 
   def report_mode(report_mode)

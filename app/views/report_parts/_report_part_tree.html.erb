@@ -1,4 +1,4 @@
-<% report_parts.order(:index).each do |rp| %>
+<% @report_parts.order(:index).each do |rp| %>
     <% if rp.is_a? Issue %>
         <p class="report_part">
             <%= link_to edit_issue_path(rp), remote: true do %>
@@ -13,7 +13,7 @@
             <%= link_to issue_template_create_from_issue_path(rp), remote: :true do %>
                 <i class="material-icons right green-text text-darken-2 report_part_action tooltipped" data-position="top" data-tooltip="Add as new issue template">add</i>
             <% end %>
-</p>
+        </p>
     <% end %>
     <% if rp.is_a? IssueGroup %>
         <p class="report_part">
@@ -29,8 +29,9 @@
             <% end %>      
         </p>
         <% unless rp.report_parts.empty? %>
+            <% @report_parts = rp.report_parts %>
             <div class="pl-2">
-                <%= render partial: "report_parts/report_part_tree", locals: { report_parts: rp.report_parts }  %>
+                <%= render partial: "report_parts/report_part_tree" %>
             </div>
         <% end %>       
     <% end %>

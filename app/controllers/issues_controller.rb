@@ -50,25 +50,20 @@ class IssuesController < ApplicationController
   def create
     respond_to do |format|
       if params.key?(:issue_template) && (IssueTemplate.exists? params[:issue_template])
-        @current_report_setting = current_user.settings.find_by_name('current_report').value
-        if Report.exists? @current_report_setting
-          current_report = Report.find(@current_report_setting)
-          unless current_report.report_parts.empty?
-            lastIssueGroup = current_report.report_parts.last
-            if lastIssueGroup.type == "IssueGroup"
-              issue_clone = Issue.create_from_template(lastIssueGroup, IssueTemplate.find(params[:issue_template]))
-              if (params.key?(:client) && client = Client.find_by_id(params[:client]))
-                issue_clone.clients << client
-              end
-              format.html { redirect_to reports_path, notice: 'Issue was successfully created.' }
-            else
-              format.html { redirect_to reports_path, alert: 'Last report part is no issue group' }
+        current_report = Report.first_or_create
+        unless current_report.report_parts.empty?
+          lastIssueGroup = current_report.report_parts.last
+          if lastIssueGroup.type == "IssueGroup"
+            issue_clone = Issue.create_from_template(lastIssueGroup, IssueTemplate.find(params[:issue_template]))
+            if (params.key?(:client) && client = Client.find_by_id(params[:client]))
+              issue_clone.clients << client
             end
+            format.html { redirect_to reports_path, notice: 'Issue was successfully created.' }
           else
-            format.html { redirect_to reports_path, alert: 'No issue group found in current report. Please create a new one first.' }
+            format.html { redirect_to reports_path, alert: 'Last report part is no issue group' }
           end
         else
-          format.html { redirect_to reports_path, alert: 'Current report is not in database.' }
+          format.html { redirect_to reports_path, alert: 'No issue group found in current report. Please create a new one first.' }
         end
       else
         format.html { redirect_to reports_path, alert: 'Issue template not found.' }

@@ -1,4 +1,15 @@
 <div class="reports-page">
+  <% if @report_parts.empty? %>
+    <div class="row">
+      <div class="col s12">
+        <div class="placeholder tooltipped modal-trigger center-align" data-position="top" data-tooltip="Add new issue group">
+          <%= link_to new_issue_group_path, remote: true do %>
+            <i class="material-icons blue-text text-lighten-4">add</i>
+          <% end %>  
+        </div>
+      </div>
+    </div>
+  <% end %>
   <div class="row">
     <div class="col s3 reports-container pl-1">
       <div class="row">
@@ -7,41 +18,9 @@
         </div>
       </div>
     </div>
-    <div class="col s9 offset-s3 editor-container"> <!-- scrollbar -->
+    <div class="col s9 offset-s3 editor-container"><!-- scrollbar -->
       <!-- partial render issue (selected) siehe -> issue template -->
       <!-- partial render report edit -->
-    </div>
-  </div>
-  <div id="report-new-change-modal" class="modal modal-fixed-footer">
-    <div id="report-new-change-modal-content">
-      <div class="container modal-valign-center">
-        <div class="row">
-          <div class="col offset-s3 s6">
-            <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
-              <input type="hidden" value="<%= form_authenticity_token() %>" name="authenticity_token"/>
-              <div class="input-field col s12">
-                <select name="current_report" onchange="$(this).submit()">
-                  <% if @reports.empty? %>
-                    <option value="" disabled selected>Please create a report</option>
-                  <% else %>
-                    <% @reports.each do |report| %>
-                      <option <%= (report.id.equal? @current_report.to_i) ? 'selected' : '' %> value="<%= report.id %>"><%= report.title %></option> 
-                    <% end %>
-                  <% end %>
-                </select>
-                <label>Current report</label>
-              </div>
-            <% end %>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col offset-s3 s6">
-            <%= simple_form_for @new_report, url: reports_path do |f| %>
-              <%= f.input :title, label: 'Create new report', placeholder: 'Enter a title ...', :wrapper_html => { :class => "col s12" } %>
-            <% end %>        
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </div>
@@ -54,21 +33,18 @@
 
 <% case current_user.settings.where(name: 'report_mode').first_or_create.value %>
 <% when "presentation" %>
-  <div class="fixed-action-btn">
+  <div id="float-action-btn" class="fixed-action-btn">
     <%= simple_form_for :settings, url: update_settings_path do |f| %>
       <input type="hidden" value="edit" name="report_mode"/>
       <button class="btn-floating btn-large green darken-2 submit tooltipped" data-position="left" data-tooltip="Disable presentation mode"><i class="material-icons">stop_screen_share</i></button>
     <% end %>
   </div>
 <% else %>
-  <div class="fixed-action-btn">
+  <div id="float-action-btn" class="fixed-action-btn">
     <%= link_to new_issue_path, remote: true, class: "btn-floating btn-large primary tooltipped", data: { position: "left", tooltip: "Add new issue"} do %><i class="large material-icons">add</i><% end %>
     <ul>
       <li>
         <%= link_to export_odt_path(@current_report), class: "btn-floating green darken-2 tooltipped", data: { position: "left", tooltip: "Export current report as docx"} do %><i class="material-icons">post_add</i><% end %>
-      </li>
-      <li>
-        <a href="#report-new-change-modal" class="btn-floating orange darken-2 modal-trigger tooltipped" data-position="left" data-tooltip="Create a new report or change the current"><i class="material-icons">assignment</i></a>
       </li>
       <li>
         <%= link_to new_issue_group_path, remote: true, class: "btn-floating orange darken-2 tooltipped", data: { position: "left", tooltip: "Add new issue group"} do %><i class="material-icons">add</i><% end %>
@@ -99,4 +75,7 @@
             };
         };
     };
+    $(document).ready(function(){
+      $('.tap-target').tapTarget('open');
+    });    
 </script>

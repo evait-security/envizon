@@ -15,15 +15,9 @@ class ReportsController < ApplicationController
     if (ReportPart.exists? source_param)
       unless (ReportPart.exists? new_parent_param)
         # IF parent not exists, source moved directly to report
-        @current_report_setting = current_user.settings.find_by_name('current_report').value
-        if Report.exists? @current_report_setting
-          new_parent = Report.find(@current_report_setting)
+          new_parent = Report.first_or_create
           new_parent.report_parts << ReportPart.find(source_param)
           respond_with_refresh("Parent was successfully changed.", "success")
-        else
-          respond_with_notify('Current report is not in database.', "alert")
-          return
-        end
       else
         source = ReportPart.find(source_param)
         new_parent = ReportPart.find(new_parent_param)
@@ -37,31 +31,8 @@ class ReportsController < ApplicationController
   end
 
   def index
-    @new_report = Report.new
-    @reports = Report.all
-    if @reports.present?
-      if current_user.settings.where(name: 'current_report').present?
-        @current_report = current_user.settings.find_by_name('current_report').value
-        unless Report.exists? @current_report
-          setting = current_user.settings.find_by_name('current_report')
-          setting.value = Report.first.id
-          setting.save!
-          @current_report = setting.value
-        end
-      else
-        setting = current_user.settings.where(name: 'current_report').first_or_create
-        setting.value = Report.first.id
-        setting.save!
-        @current_report = setting.value
-      end
-    else
-      @current_report = @new_report
-      @current_report.save!
-      setting = current_user.settings.where(name: 'current_report').first_or_create
-      setting.value = @current_report
-      setting.save!
-      
-    end
+    @current_report = Report.first_or_create
+    @report_parts = @current_report.report_parts
   end
 
   # GET /reports/1
@@ -71,25 +42,6 @@ class ReportsController < ApplicationController
 
   # GET /reports/1/edit
   def edit
-  end
-
-  # POST /reports
-  # POST /reports.json
-  def create
-    @report = Report.new(report_params)
-
-    respond_to do |format|
-      if @report.save
-        setting = current_user.settings.where(name: 'current_report').first_or_create
-        setting.value = @report.id
-        setting.save!
-        format.html { redirect_to reports_path, notice: 'Report was successfully created and selected as current.' }
-        format.json { render :show, status: :created, location: @report }
-      else
-        format.html { render :new }
-        format.json { render json: @report.errors, status: :unprocessable_entity }
-      end
-    end
   end
 
   # PATCH/PUT /reports/1
