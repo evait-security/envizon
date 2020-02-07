@@ -98,7 +98,7 @@ class ReportsController < ApplicationController
               s_issue.new(
                 issue, #report.issue_groups->issues->item
                 index_issue, #report.issue_groups->issues->index
-                issue.clients.map{|c| c.ip.to_s + (c.hostname.present? ? " (#{c.hostname})" : '')} + (issue.customtargets.present? ? issue.customtargets.lines : []), #report.issue_groups->issues->targets
+                (issue.clients.map{|c| c.ip.to_s + (c.hostname.present? ? " (#{c.hostname})" : '')} + (issue.customtargets.present? ? issue.customtargets.lines : [])).map{|c| c.strip }.reject{|c| c.empty?}, #report.issue_groups->issues->targets
                 Sablon.content(:html, <<-HTML.strip
                 #{issue.colorize(issue.description)}
                 HTML
