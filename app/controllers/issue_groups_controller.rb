@@ -27,18 +27,12 @@ class IssueGroupsController < ApplicationController
   def create
     respond_to do |format|
       @issue_group = IssueGroup.new(issue_group_params)
-
-      @current_report_setting = current_user.settings.find_by_name('current_report').value
-      if Report.exists? @current_report_setting
-        current_report = Report.find(@current_report_setting)
-        if @issue_group.save
-          current_report.report_parts << @issue_group
-          format.html { redirect_to reports_path, notice: 'Issue group was successfully created.' }
-        else
-          format.html { redirect_to reports_path, alert: 'Error while saving issue group' }
-        end
+      current_report = Report.first_or_create
+      if @issue_group.save
+        current_report.report_parts << @issue_group
+        format.html { redirect_to reports_path, notice: 'Issue group was successfully created.' }
       else
-        format.html { redirect_to reports_path, alert: 'Current report is not in database.' }
+        format.html { redirect_to reports_path, alert: 'Error while saving issue group' }
       end
     end
   end

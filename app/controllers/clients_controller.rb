@@ -84,7 +84,7 @@ class ClientsController < ApplicationController#
   # @required [Integer] :id
   def link_issue_form
     if @client
-      @issues = Report.find(current_user.settings.find_by_name('current_report').value).all_issues
+      @issues = Report.first_or_create.all_issues
       respond_to do |format|
           format.html { redirect_back root_path }
           format.js { render 'clients/link_issue' }

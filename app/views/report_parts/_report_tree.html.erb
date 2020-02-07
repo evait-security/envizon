@@ -1,4 +1,1 @@
-<% if (current_user.settings.where(name: 'current_report').present?) && (Report.exists? current_user.settings.find_by_name('current_report').value) %>
-    <% selected_report = Report.find(current_user.settings.find_by_name('current_report').value) %>
-    <%= render partial: "report_parts/report_part_tree", locals: { report_parts: selected_report.report_parts }  %>
-<% end %>
+<%= render partial: "report_parts/report_part_tree" %>
