@@ -120,6 +120,11 @@ class ReportsController < ApplicationController
     FileUtils.mkdir_p('/usr/src/app/envizon/report-templates')
     report_file_name = "Report Pentest - #{@report.title} #{Date.today.year}"
     output_file = File.new(Rails.root.join('tmp') + "#{report_file_name}.docx", 'w')
+
+    Sablon.configure do |config|
+      config.register_html_tag(:pre, :inline, 
+        properties: { rFonts: {ascii: "Roboto Mono", cs: "Roboto Mono"} })
+    end
     template = Sablon.template(File.expand_path("/usr/src/app/envizon/report-templates/evait.docx"))
 
     # init strukts
