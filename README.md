@@ -9,9 +9,12 @@ Fancy shields: Coming Soon™
 
 This tool is designed, developed and supported by evait security. In order to give something back to the security community, we publish our internally used and developed, state of the art network visualization and vulnerability reporting tool, 'envizon'. We hope your feedback will help to improve and hone it even further.
 
+## Website
+https://evait-security.github.io/envizon/
+
 ## Use Case
 
-We use envizon for our pentests in order to get an overview of a network and quickly identify the most promising targets. The version 3.0 introduce new features such as screenshotting web services, organizing vulnerabilities or generating reports with custom latex templates.
+We use envizon for our pentests in order to get an overview of a network and quickly identify the most promising targets. The version 3.0 introduce new features such as screenshotting web services, organizing vulnerabilities or generating reports with custom docx templates.
 
 ## Core Features:
 
@@ -24,7 +27,7 @@ We use envizon for our pentests in order to get an overview of a network and qui
 + **Collaborate** with your team on the project in realtime
 + **Export** selected clients in a text file to connect other tools fast
 + **Manage** issue template and create vulnerabilities linked to hosts in the database
-+ **Create** customer reports with latex templates with one click 
++ **Create** customer reports with docx templates with one click
 
 ## How to start?!
 
@@ -36,7 +39,7 @@ Docker and Docker Compose are required.
 
 #### Prebuilt Docker Images
 
-Use the `docker-compose.yml` from the `docker/` directory and run it with `docker-compose up`.
+Use the `docker-compose.yml` from the `docker/envizon_prod` directory and run it with `docker-compose up`.
 
 The Docker image will be pulled from `evait/envizon`.
 
@@ -47,7 +50,7 @@ If you want to provide your own SSL-certificates and/or RAILS_SECRET, modify the
 For the lazy ones
 
 ```zsh
-wget https://raw.githubusercontent.com/evait-security/envizon/master/docker/docker-compose.yml
+wget https://raw.githubusercontent.com/evait-security/envizon/master/docker/envizon_prod/docker-compose.yml
 sudo docker-compose up
 ```
 
@@ -55,7 +58,7 @@ sudo docker-compose up
 
 ```zsh
 git clone https://github.com/evait-security/envizon
-cd envizon/envizon_local
+cd envizon/docker/envizon_local
 sudo docker-compose -f docker-compose_local.yml up
 ```
 
@@ -65,7 +68,7 @@ _If, for whatever reason, you want to run the development environment in product
 
 ```zsh
 git clone https://github.com/evait-security/envizon
-cd envizon/envizon_dev
+cd envizon/docker/envizon_dev
 sudo docker-compose up
 ```
 
@@ -82,18 +85,9 @@ After starting the docker images go to: https://localhost:3000/ (or http://local
 
 You have to specify a password for your envizon instance. You can change it in the settings interface after logging in.
 
-<img src="https://evait-security.github.io/envizon/screenshots/set-password.png">
-
 ### Scan interface
 
-The scan interface is divided in two sections. On the left side you can run a new scan with preconfigured parameters or your own nmap fu. You also have the possibility to upload
-previously created nmap scans (with the `-oX` parameter).
-
-<img src="https://evait-security.github.io/envizon/screenshots/scan-1.png">
-
-On the right side you will see your running and finished scans.
-
-<img src="https://evait-security.github.io/envizon/screenshots/scan-2.png">
+On the scan interface you can run a new network scan with preconfigured parameters or your own nmap fu (experimental). You also have the possibility to upload previously created nmap scans (with the `-oX` parameter).
 
 ### Groups
 
@@ -101,15 +95,11 @@ The group interface is the heart of envizon. You can select, group, order, quick
 
 *Most of the buttons and links have tooltips.*
 
-<img src="https://evait-security.github.io/envizon/screenshots/groups.png">
-
 ### Global Search
 
 In this section you can search for nearly anything in the database and combine each search parameter with 'AND', 'OR' & 'NOT'.
 
-Perform simple queries for hostname, IP, open ports, etc. or create combined queries like: `hostname contains 'win' AND mac address starts with '0E:5C' OR has port 21 and 22 open`.
-
-<img src="https://evait-security.github.io/envizon/screenshots/search.png">
+Perform simple queries for hostname, IP, open ports, etc. or create combined queries like: `hostname contains 'win' AND mac address starts with '0E:5C' OR has port 21 and 22 open`. The portlist provides the port count for all clients and lets you quickly identify rarely used ports.
 
 ### Images
 
@@ -119,7 +109,12 @@ This page renders the images of all ports with visible/interactive content captu
 
 Using the left groups sidebar you can filter all images by group. Please note, that any on-change updates (e.g. someone deletes a group) are disabled on this page to avoid any disturbance on the manual image reviewing process.
 
-<img src="https://evait-security.github.io/envizon/screenshots/images.png">
+
+### Vulnerabilty management and reporting
+
+In the `templates` section you can create issue templates you want to reuse for your reports. You can set a title, severity, description, rating and recommendation. In the reports section you are able to create reports for your customers. First, you have to create an issue group for example "Internal network". In this group you can create new issues with the content of your issue templates and link them to existing clients in the database. You can easily add screenshots as proofs for your findings by using `CTRL + v` and pressing "update". The templates are linked to the new issues and can be updated with one click. Under `edit current report` you can edit basic information about the report itself for example the name of the customer or a management summary. The presentation mode allows you to hide all items exept the issues and their screenshots.
+
+In order to create a great looking report you have to edit the docx template file under `./report_templates/envizon_template.docx`. All variables used are included in the default template.
 
 ## FAQ
 
