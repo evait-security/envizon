@@ -77,7 +77,7 @@ class ReportsController < ApplicationController
       config.register_html_tag(:pre, :inline, 
         properties: { rFonts: {ascii: "Roboto Mono", cs: "Roboto Mono"} })
     end
-    template = Sablon.template(File.expand_path("/usr/src/app/envizon/report-templates/evait.docx"))
+    template = Sablon.template(File.expand_path("/usr/src/app/envizon/report-templates/envizon_template.docx"))
 
     # init strukts
     s_report = Struct.new(:item, :issue_groups)
