@@ -217,7 +217,8 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     psych (3.1.0)
-    puma (3.12.4)
+    puma (4.3.3)
+      nio4r (~> 2.0)
     rack (2.2.2)
     rack-protection (2.0.8.1)
       rack
@@ -387,7 +388,7 @@ DEPENDENCIES
   pg (~> 0.18)
   pry
   pry-rails
-  puma (~> 3.7)
+  puma (~> 4.3)
   railroady
   rails (~> 5.2.3)
   rails-erd
