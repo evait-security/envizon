@@ -24,7 +24,6 @@ services:
       - postgres
       - selenium
       - redis
-    network_mode: 'host'
     ports:
       - 3000:3000
     volumes:
@@ -37,7 +36,7 @@ services:
       POSTGRES_HOST: '/var/run/postgresql'
       SECRET_KEY_BASE:
       RAILS_ENV: 'production'
-      REDIS_URL: 'redis://127.0.0.1:6379/0'
+      REDIS_URL: 'redis://redis:6379/0'
       RAILS_FORCE_SSL: 'true'
       RAILS_SERVE_STATIC_FILES: 'true'
       SSL_KEY_PATH:
@@ -50,11 +49,12 @@ services:
     depends_on:
       - postgres
       - redis
+    network_mode: 'host'
     volumes:
       - socket-volume:/var/run
       - nmap-uploads:/usr/src/app/envizon/nmap/uploads/
     environment:
-      REDIS_URL: 'redis://redis:6379/0'
+      REDIS_URL: 'redis://127.0.0.1:6379/0'
       SECRET_KEY_BASE:
       RAILS_ENV: 'production'
   sidekiq-single:
@@ -64,11 +64,12 @@ services:
     depends_on:
       - postgres
       - redis
+    network_mode: 'host'
     volumes:
       - socket-volume:/var/run
       - nmap-uploads:/usr/src/app/envizon/nmap/uploads/
     environment:
-      REDIS_URL: 'redis://redis:6379/0'
+      REDIS_URL: 'redis://127.0.0.1:6379/0'
       SECRET_KEY_BASE:
       RAILS_ENV: 'production'
   selenium:
@@ -76,8 +77,11 @@ services:
     image: selenium/standalone-chrome
     expose:
       - "4444"
+      - "9515"
     volumes:
       - /dev/shm:/dev/shm
+    environment:
+      CHROMEDRIVER_WHITELISTED_IPS:
   redis:
     image: redis:alpine
     container_name: envizon_redis

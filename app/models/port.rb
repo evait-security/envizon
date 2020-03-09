@@ -40,8 +40,18 @@ class Port < ApplicationRecord
 
     case service_short
     when 'http', 'https'
-      wd = Selenium::WebDriver.for :remote, url: 'http://selenium:4444/wd/hub',
-                                            desired_capabilities: SELENIUM_CAPS
+      # wd = Selenium::WebDriver.for :remote, url: 'http://selenium:4444/wd/hub',
+      options = Selenium::WebDriver::Chrome::Options.new
+      options.add_argument('--ignore-certificate-errors')
+      options.add_argument('--disable-popup-blocking')
+      options.add_argument('--disable-translate')
+      options.add_argument('--whitelisted-ips')
+      options.add_argument('--disable-extensions')
+      # options.AddArgument('--headless')
+      # options.AddArgument('--no-sandbox');
+      wd = Selenium::WebDriver.for :remote, url: 'http://127.0.0.1:4444/wd/hub',
+                                            desired_capabilities: SELENIUM_CAPS,
+                                            options: options
       wd.manage.timeouts.page_load = 10
       wd.navigate.to url_ip
       sleep 5
