@@ -19,10 +19,6 @@
   #single_host_view_card {
     min-height: calc(100vh - 8em);
   }
-  .fixed-action-btn {
-    right: 35px !important;
-    bottom: 15px !important;
-  }
   .btn-small {
     height: 28px;
     line-height: 28px;
@@ -110,13 +106,11 @@
   </div>
 </div>
 
-<div class="fixed-action-btn vertical">
-  <a class="btn-floating btn-large blue darken-3">
-    <i class="material-icons">menu</i>
-  </a>
+<div class="fixed-action-btn toolbar direction-top no-autoinit">
+  <a class="btn-floating btn-large blue darken-3"><i class="material-icons">menu</i></a>
   <ul>
-    <li><a class="btn-floating red tooltipped group_add_float" data-position="left" data-delay="50" data-tooltip="Add a group"><i class="material-icons">group_add</i></a></li>
-    <li><a class="btn-floating green darken-2 tooltipped search_float" data-position="left" data-delay="50" data-tooltip="Global search"><i class="material-icons">search</i></a></li>
+    <li><a href="#" class="tooltipped group_add_float" data-position="top" data-delay="50" data-tooltip="Add a group"><i class="material-icons">group_add</i></a></li>
+    <li><a href="#" class="tooltipped search_float" data-position="top" data-delay="50" data-tooltip="Global search"><i class="material-icons">search</i></a></li>
   </ul>
 </div>
 
