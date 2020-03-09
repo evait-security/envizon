@@ -82,7 +82,6 @@ group :development, :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'brakeman'
   gem 'capybara', '~> 2.13'
-  gem 'coverband', git: 'https://github.com/represent/coverband.git'
   gem 'minitest-rails'
   gem 'minitest-reporters'
   gem 'pry'
