@@ -69,7 +69,8 @@ class ReportsController < ApplicationController
   # GET|POST /reports/1/export_docx
   def export_docx
     # init template files
-    FileUtils.mkdir_p('/usr/src/app/envizon/report-templates')
+    template_path = Rails.root.join('report-templates')
+    FileUtils.mkdir_p(template_path)
     report_file_name = "Report Pentest - #{@report.title} #{Date.today.year}"
     output_file = File.new(Rails.root.join('tmp') + "#{report_file_name}.docx", 'w')
 
@@ -77,7 +78,7 @@ class ReportsController < ApplicationController
       config.register_html_tag(:pre, :inline, 
         properties: { rFonts: {ascii: "Roboto Mono", cs: "Roboto Mono"} })
     end
-    template = Sablon.template(File.expand_path("/usr/src/app/envizon/report-templates/envizon_template.docx"))
+    template = Sablon.template(File.expand_path(Rails.root.join(template_path, 'envizon_template.docx')))
 
     # init strukts
     s_report = Struct.new(:item, :issue_groups)
@@ -141,7 +142,7 @@ class ReportsController < ApplicationController
 
     @verinice_ids = []
     @rand = Random.new
-    template_path = '/usr/src/app/envizon/report-templates/evait_verinice.xml.erb'
+    template_path = Rails.root.join('report-templates', 'evait_verinice.xml.erb')
 
     issues = @report.all_issues
 

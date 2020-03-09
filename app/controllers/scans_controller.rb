@@ -47,8 +47,8 @@ class ScansController < ApplicationController
       xmls = params[:xml_file]
       name = params[:name]
       xmls.each_with_index do |xml, index|
-        FileUtils.mkdir_p('/opt/nmap/uploads')
-        destination = '/opt/nmap/uploads/' + name + '_' + index.to_s + '.xml'
+        FileUtils.mkdir_p(Rails.root.join('nmap', 'uploads'))
+        destination = Rails.root.join('nmap', 'uploads', name, '_', index.to_s, '.xml')
         FileUtils.move xml.path, destination
 
         scan = Scan.new(name: name, user_id: current_user.id)

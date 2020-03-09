@@ -52,19 +52,21 @@ gem 'jquery-ui-rails'
 gem 'materialize-sass'
 
 # screenshots
-gem 'selenium-webdriver'
 gem 'image_processing'
 gem 'mini_magick'
+gem 'selenium-webdriver'
 
 # jobs
-# (maybe use sidekiq or whatever in prod?)
-# (redis would be used for ActionCable anyway, so..)
-gem 'sucker_punch'
 gem 'sidekiq'
+gem 'sucker_punch'
+
+# gems needed for sidekiq, not bundled in Ruby 2.7 anymore
+gem 'e2mmap'
+gem 'thwait'
 
 # db import/export
-gem 'yaml_db', git: 'https://github.com/evs-ch/yaml_db.git'
 gem 'activerecord-import'
+gem 'yaml_db', git: 'https://github.com/evs-ch/yaml_db.git'
 
 # zip
 gem 'rubyzip', '>= 1.0.0' # will load new rubyzip version
@@ -112,3 +114,4 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+
