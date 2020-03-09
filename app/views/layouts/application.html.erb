@@ -26,7 +26,7 @@
             <% end %>
             <li class="<%= 'active' if current_page?(images_path) %>">
               <%= link_to images_path do %>
-                <i class="material-icons left">camera</i>Images
+                <i class="material-icons left">camera</i>Images<span class="new badge white grey-text text-darken-3" data-badge-caption="beta"></span>
               <% end %>
             </li>
             <li class="<%= 'active' if current_page?(scans_path) %>">
@@ -46,7 +46,7 @@
             </li>
             <li class="<%= 'active' if current_page?(reports_path) %>">
               <%= link_to reports_path do %>
-                <i class="material-icons left">post_add</i>Reporting
+                <i class="material-icons left">post_add</i>Reporting<span class="new badge white grey-text text-darken-3" data-badge-caption="beta"></span>
               <% end %>        
             </li>
             <li><a href="#" id="user-drop-menu-trigger" class="dropdown-trigger no-autoinit" data-target="user-drop-menu"><i class="material-icons left">account_circle</i><%= current_user.username %></a></li>
@@ -92,10 +92,16 @@
 <%= render 'layouts/messages' %>
 
 <%= javascript_tag do %>
-  M.AutoInit();
-  $("#user-drop-menu-trigger").dropdown({ constrainWidth: false });
+M.AutoInit();
+$('#user-drop-menu-trigger').dropdown({
+  constrainWidth: false
+});
 
-  document.addEventListener("DOMContentLoaded", function(){
-    $('.preloader-background').delay(500).fadeOut();
-  });
+document.addEventListener('DOMContentLoaded', function() {
+  return $('.preloader-background').delay(500).fadeOut();
+});
+
+$('.fixed-action-btn').floatingActionButton({
+  toolbarEnabled: true
+});
 <% end %>

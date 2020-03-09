@@ -33,29 +33,32 @@
 
 <% case current_user.settings.where(name: 'report_mode').first_or_create.value %>
 <% when "presentation" %>
-  <div id="float-action-btn" class="fixed-action-btn">
+  <div class="fixed-action-btn">
     <%= simple_form_for :settings, url: update_settings_path do |f| %>
       <input type="hidden" value="edit" name="report_mode"/>
       <button class="btn-floating btn-large green darken-2 submit tooltipped" data-position="left" data-tooltip="Disable presentation mode"><i class="material-icons">stop_screen_share</i></button>
     <% end %>
   </div>
 <% else %>
-  <div id="float-action-btn" class="fixed-action-btn">
-    <%= link_to new_issue_path, remote: true, class: "btn-floating btn-large primary tooltipped", data: { position: "left", tooltip: "Add new issue"} do %><i class="large material-icons">add</i><% end %>
+  <div class="fixed-action-btn toolbar direction-top no-autoinit">
+    <a class="btn-floating btn-large primary"><i class="large material-icons">mode_edit</i></a>
     <ul>
       <li>
-        <%= link_to export_odt_path(@current_report), class: "btn-floating green darken-2 tooltipped", data: { position: "left", tooltip: "Export current report as docx"} do %><i class="material-icons">post_add</i><% end %>
+        <%= link_to new_issue_path, remote: true, class: "tooltipped", data: { position: "top", tooltip: "Add new issue"} do %><i class="material-icons">add</i><% end %>
       </li>
       <li>
-        <%= link_to new_issue_group_path, remote: true, class: "btn-floating orange darken-2 tooltipped", data: { position: "left", tooltip: "Add new issue group"} do %><i class="material-icons">add</i><% end %>
+        <%= link_to export_odt_path(@current_report), class: "tooltipped", data: { position: "top", tooltip: "Export current report as docx"} do %><i class="material-icons">post_add</i><% end %>
       </li>
       <li>
-        <%= link_to edit_report_path(@current_report), remote: true, class: "btn-floating blue darken-2 tooltipped", data: { position: "left", tooltip: "Edit current report"} do %><i class="material-icons">edit</i><% end %>
+        <%= link_to new_issue_group_path, remote: true, class: "tooltipped", data: { position: "top", tooltip: "Add new issue group"} do %><i class="material-icons">playlist_add</i><% end %>
+      </li>
+      <li class="waves-effect waves-light">
+        <%= link_to edit_report_path(@current_report), remote: true, class: "tooltipped", data: { position: "top", tooltip: "Edit current report"} do %><i class="material-icons">edit</i><% end %>
       </li>
       <li>
         <%= simple_form_for :settings, url: update_settings_path do |f| %>
           <input type="hidden" value="presentation" name="report_mode"/>
-          <button class="btn-floating green darken-2 submit tooltipped" data-position="left" data-tooltip="Enable presentation mode"><i class="material-icons">screen_share</i></button>
+          <a href="#" onclick='$(this).parent().submit();' class="submit tooltipped" data-position="top" data-tooltip="Enable presentation mode"><i class="material-icons">screen_share</i></a>
         <% end %>
       </li>
     </ul>
