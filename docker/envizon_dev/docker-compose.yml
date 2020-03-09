@@ -1,4 +1,4 @@
-version: '3'
+version: '2.1'
 volumes:
   socket-volume:
   nmap-uploads:
@@ -7,7 +7,7 @@ services:
   postgres:
     build:
       context: ../postgres
-    volumes:    
+    volumes:
       - socket-volume:/var/run
     environment:
       POSTGRES_PASSWORD: 'envizon'
@@ -69,13 +69,16 @@ services:
       - socket-volume:/var/run
       - nmap-uploads:/opt/nmap/uploads/
     environment:
-      REDIS_URL: 'redis://redis:6379/0'     
+      REDIS_URL: 'redis://redis:6379/0'
   selenium:
     image: selenium/standalone-chrome
     expose:
       - "4444"
     volumes:
       - /dev/shm:/dev/shm
+    shm_size: 2gb
+    mem_limit: 2gb
+    mem_reservation: 2gb
   redis:
     image: redis:alpine
     ports:
