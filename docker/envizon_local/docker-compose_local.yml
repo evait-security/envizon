@@ -4,9 +4,10 @@ volumes:
   nmap-uploads:
   report-templates:
 services:
-  postgres_local:
+  postgres:
     build:
       context: ../postgres
+    container_name: envizon_postgres_local
     volumes:
       - socket-volume:/var/run
     environment:
@@ -16,12 +17,13 @@ services:
       POSTGRES_DEVELOPMENT_DB: 'envizon_development'
       POSTGRES_TEST_DB: 'envizon_test'
       REDIS_URL: 'redis://redis:6379/0'
-  envizon_local:
+  envizon:
     build:
       context: ../../
       dockerfile: docker/envizon_local/Dockerfile_local
+    container_name: envizon_local
     depends_on:
-      - postgres_local
+      - postgres
       - selenium
       - redis
     network_mode: 'host'
@@ -48,6 +50,7 @@ services:
     build:
       context: ../../
       dockerfile: docker/envizon_dev/Dockerfile_development
+    container_name: envizon_sidekiq_default
     command: bundle exec sidekiq -q default -c 5 & bundle exec sidekiq -q scan -c 5 & bundle exec sidekiq -q background -c 5
     depends_on:
       - postgres
@@ -62,6 +65,7 @@ services:
     build:
       context: ../../
       dockerfile: docker/envizon_dev/Dockerfile_development
+    container_name: envizon_sidekiq_single
     command: bundle exec sidekiq -q single -c 1
     depends_on:
       - postgres
@@ -74,11 +78,13 @@ services:
       REDIS_URL: 'redis://redis:6379/0'
   selenium:
     image: selenium/standalone-chrome
+    container_name: envizon_selenium
     expose:
       - "4444"
     volumes:
       - /dev/shm:/dev/shm
   redis:
     image: redis:alpine
+    container_name: envizon_redis
     ports:
       - '127.0.0.1:6379:6379'

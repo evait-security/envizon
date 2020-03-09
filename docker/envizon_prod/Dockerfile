@@ -26,8 +26,9 @@ RUN \
   cd /usr/src/app && \
   git clone https://github.com/evait-security/envizon.git && \
   cd envizon && \
+  # git checkout 3.0 && \
   mkdir .ssl && \
-  bundle install
+  bundle install --without test:development
 
 RUN \
   cp /usr/src/app/envizon/docker/envizon_prod/entrypoint.sh /entrypoint.sh && \

@@ -114,7 +114,7 @@ Using the left groups sidebar you can filter all images by group. Please note, t
 
 In the `templates` section you can create issue templates you want to reuse for your reports. You can set a title, severity, description, rating and recommendation. In the reports section you are able to create reports for your customers. First, you have to create an issue group for example "Internal network". In this group you can create new issues with the content of your issue templates and link them to existing clients in the database. You can easily add screenshots as proofs for your findings by using `CTRL + v` and pressing "update". The templates are linked to the new issues and can be updated with one click. Under `edit current report` you can edit basic information about the report itself for example the name of the customer or a management summary. The presentation mode allows you to hide all items exept the issues and their screenshots.
 
-In order to create a great looking report you have to edit the docx template file under `./report_templates/envizon_template.docx`. All variables used are included in the default template.
+In order to create a great looking report you have to edit the docx template file under `./report-templates/envizon_template.docx`. All variables used are included in the default template.
 
 ## FAQ
 

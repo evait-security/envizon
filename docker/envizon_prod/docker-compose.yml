@@ -6,6 +6,7 @@ volumes:
 services:
   postgres:
     image: postgres:alpine
+    container_name: envizon_postgres
     volumes:
       - socket-volume:/var/run
     environment:
@@ -15,9 +16,10 @@ services:
       REDIS_URL: 'redis://redis:6379/0'
   envizon:
     image: evait/envizon
-#    build:
-#      context: .
-#      dockerfile: ./Dockerfile
+    container_name: envizon
+    build:
+      context: ../../
+      dockerfile: docker/envizon_prod/Dockerfile
     depends_on:
       - postgres
       - selenium
@@ -40,36 +42,33 @@ services:
       RAILS_SERVE_STATIC_FILES: 'true'
       SSL_KEY_PATH:
       SSL_CERT_PATH:
-    entrypoint: /entrypoint_local.sh
+    entrypoint: /entrypoint.sh
   sidekiq-default:
-    build:
-      context: ../../
-      dockerfile: docker/envizon_dev/Dockerfile_development
+    image: evait/envizon
+    container_name: envizon_sidekiq_default
     command: bundle exec sidekiq -q default -c 5 & bundle exec sidekiq -q scan -c 5 & bundle exec sidekiq -q background -c 5
     depends_on:
       - postgres
       - redis
     volumes:
-      - ../../:/usr/src/app/envizon
       - socket-volume:/var/run
       - nmap-uploads:/opt/nmap/uploads/
     environment:
       REDIS_URL: 'redis://redis:6379/0'
   sidekiq-single:
-    build:
-      context: ../../
-      dockerfile: docker/envizon_dev/Dockerfile_development
+    image: evait/envizon
+    container_name: envizon_sidekiq_single
     command: bundle exec sidekiq -q single -c 1
     depends_on:
       - postgres
       - redis
     volumes:
-      - ../../:/usr/src/app/envizon
       - socket-volume:/var/run
       - nmap-uploads:/opt/nmap/uploads/
     environment:
       REDIS_URL: 'redis://redis:6379/0'
   selenium:
+    container_name: envizon_selenium
     image: selenium/standalone-chrome
     expose:
       - "4444"
@@ -77,5 +76,6 @@ services:
       - /dev/shm:/dev/shm
   redis:
     image: redis:alpine
+    container_name: envizon_redis
     ports:
       - '127.0.0.1:6379:6379'

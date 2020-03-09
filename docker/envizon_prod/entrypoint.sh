@@ -21,18 +21,16 @@ then
   then
     echo "Found a previous secret in 'config/secret:'"
     export SECRET_KEY_BASE=$(cat config/secret)
-    echo "$SECRET_KEY_BASE"
   else
     echo "Generating one for you and placing it in 'config/secret':"
     export SECRET_KEY_BASE=$(rails secret)
     echo "$SECRET_KEY_BASE" > config/secret
-    echo "$SECRET_KEY_BASE"
   fi
 fi
 
-if [[ ! -f report_templates/envizon_template.docx ]]; then
-  mkdir -p report_templates
-  cp report_templates/envizon_template.docx.example report_templates/envizon_template.docx
+if [[ ! -f report-templates/envizon_template.docx ]]; then
+  mkdir -p report-templates
+  cp report-templates/envizon_template.docx.example report-templates/envizon_template.docx
 fi
 
 rm -f /usr/src/app/envizon/tmp/pids/server.pid

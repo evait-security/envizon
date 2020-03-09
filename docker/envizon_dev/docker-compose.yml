@@ -7,6 +7,7 @@ services:
   postgres:
     build:
       context: ../postgres
+    container_name: envizon_postgres_dev
     volumes:
       - socket-volume:/var/run
     environment:
@@ -20,6 +21,7 @@ services:
     build:
       context: ../../
       dockerfile: docker/envizon_dev/Dockerfile_development
+    container_name: envizon_dev
     depends_on:
       - postgres
       - selenium
@@ -46,6 +48,7 @@ services:
     build:
       context: ../../
       dockerfile: docker/envizon_dev/Dockerfile_development
+    container_name: envizon_sidekiq_default
     command: bundle exec sidekiq -q default -c 5 & bundle exec sidekiq -q scan -c 5 & bundle exec sidekiq -q background -c 5
     depends_on:
       - postgres
@@ -60,6 +63,7 @@ services:
     build:
       context: ../../
       dockerfile: docker/envizon_dev/Dockerfile_development
+    container_name: envizon_sidekiq_single
     command: bundle exec sidekiq -q single -c 1
     depends_on:
       - postgres
@@ -72,11 +76,13 @@ services:
       REDIS_URL: 'redis://redis:6379/0'
   selenium:
     image: selenium/standalone-chrome
+    container_name: envizon_selenium
     expose:
       - "4444"
     volumes:
       - /dev/shm:/dev/shm
   redis:
     image: redis:alpine
+    container_name: envizon_redis
     ports:
       - '127.0.0.1:6379:6379'
