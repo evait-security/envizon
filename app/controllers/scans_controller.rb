@@ -14,9 +14,9 @@ class ScansController < ApplicationController
       params[:command] ||= ''
       args = {
         'scan_name' => params[:name],
-        'user_id'   => current_user.id,
-        'command'   => params[:command],
-        'target'    => params[:target]
+        'user_id' => current_user.id,
+        'command' => params[:command],
+        'target' => params[:target]
       }
       ScanWorker.perform_async(args)
 
@@ -27,7 +27,7 @@ class ScansController < ApplicationController
           locals = { message: "Scan '#{args['scan_name']}' created", type: 'success', close: true }
           format.js { render 'pages/notify', locals: locals }
         else
-          format.js { render(js: %(window.location.href='#{scans_path}')) and return }
+          format.js { render(js: %(window.location.href='#{scans_path}')) && return }
         end
       end
     else
@@ -56,15 +56,15 @@ class ScansController < ApplicationController
         scan.save
 
         args_parse = {
-          'xmlpath' => destination, 
-          'scan_id' => scan.id, 
+          'xmlpath' => destination,
+          'scan_id' => scan.id,
           'user_id' => current_user.id
         }
         ScanParseWorker.perform_async(args_parse)
       end
       respond_to do |format|
         format.html { redirect_to scans_path }
-        format.js { render(js: %(window.location.href='#{scans_path}')) and return }
+        format.js { render(js: %(window.location.href='#{scans_path}')) && return }
       end
     else
       locals = { message: 'You need to provide a name and a file for your upload!',
@@ -75,6 +75,7 @@ class ScansController < ApplicationController
 
   def download
     return unless params[:id].present?
+
     file = Scan.find(params[:id]).file
     filename = File.basename(file)
     send_file file, type: 'text/xml', filename: filename, disposition: 'attachment'
