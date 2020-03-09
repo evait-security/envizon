@@ -17,15 +17,8 @@ fi
 if [ -z "$SECRET_KEY_BASE" ]
 then
   echo "No rails secret provided via '\$SECRET_KEY_BASE'."
-  if [[ -f config/secret ]]
-  then
-    echo "Found a previous secret in 'config/secret:'"
-    export SECRET_KEY_BASE=$(cat config/secret)
-  else
-    echo "Generating one for you and placing it in 'config/secret':"
-    export SECRET_KEY_BASE=$(rails secret)
-    echo "$SECRET_KEY_BASE" > config/secret
-  fi
+  echo "You need to set it in the docker-compose.yml or as an environment variable!"
+  exit
 fi
 
 if [[ ! -f report-templates/envizon_template.docx ]]; then

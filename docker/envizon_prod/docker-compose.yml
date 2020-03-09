@@ -55,6 +55,8 @@ services:
       - nmap-uploads:/opt/nmap/uploads/
     environment:
       REDIS_URL: 'redis://redis:6379/0'
+      SECRET_KEY_BASE:
+      RAILS_ENV: 'production'
   sidekiq-single:
     image: evait/envizon
     container_name: envizon_sidekiq_single
@@ -67,6 +69,8 @@ services:
       - nmap-uploads:/opt/nmap/uploads/
     environment:
       REDIS_URL: 'redis://redis:6379/0'
+      SECRET_KEY_BASE:
+      RAILS_ENV: 'production'
   selenium:
     container_name: envizon_selenium
     image: selenium/standalone-chrome

@@ -45,13 +45,29 @@ The Docker image will be pulled from `evait/envizon`.
 
 If you want to update the app image or pull it manually, you can do so with `docker pull evait/envizon`.
 
-If you want to provide your own SSL-certificates and/or RAILS_SECRET, modify the `docker-compose.yml` according to your needs, otherwise both will be generated.
+If you want to provide your own SSL-certificates, modify the `docker-compose.yml` according to your needs, otherwise they will be generated.
 
-For the lazy ones
+You need to provide a `SECRET_KEY_BASE` either as an environment variable, or by adding it in the `docker-compose.yml` (for the envizon container as well as for the sidekiq containers).
+
+To provide it at runtime, use
+
+```zsh
+SECRET_KEY_BASE=YOURSECRETKEYBASEHERE sudo --preserve-env=SECRET_KEY_BASE docker-compose up
+```
+
+or without sudo:
+
+```zsh
+SECRET_KEY_BASE=YOURSECRETKEYBASEHERE docker-compose up
+```
+
+**For the lazy ones:**
 
 ```zsh
 wget https://raw.githubusercontent.com/evait-security/envizon/master/docker/envizon_prod/docker-compose.yml
-sudo docker-compose up
+export SECRET_KEY_BASE=$(openssl rand -hex 64)
+echo $SECRET_KEY_BASE # so you can note it down somewhere..
+sudo --preserve-env=SECRET_KEY_BASE docker-compose up
 ```
 
 #### Running from local git checkout
@@ -59,7 +75,9 @@ sudo docker-compose up
 ```zsh
 git clone https://github.com/evait-security/envizon
 cd envizon/docker/envizon_local
-sudo docker-compose -f docker-compose_local.yml up
+export SECRET_KEY_BASE=$(openssl rand -hex 64)
+echo $SECRET_KEY_BASE # so you can note it down somewhere..
+sudo --preserve-env=SECRET_KEY_BASE docker-compose -f docker-compose.yml up
 ```
 
 #### Development
@@ -105,7 +123,7 @@ Perform simple queries for hostname, IP, open ports, etc. or create combined que
 
 This page renders the images of all ports with visible/interactive content captured by starting a new scan on the images/scan-interface. Actually only web-services are converted into a PNG files using selenium and chrome-headless. The scan interface has two functions:
 - Re-Scan (check which port can be captured and add only new images)
-- Re-Scan with overwrite (delete all images from the database and take a screenshot from all possible ports) 
+- Re-Scan with overwrite (delete all images from the database and take a screenshot from all possible ports)
 
 Using the left groups sidebar you can filter all images by group. Please note, that any on-change updates (e.g. someone deletes a group) are disabled on this page to avoid any disturbance on the manual image reviewing process.
 
