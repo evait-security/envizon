@@ -76,9 +76,6 @@ services:
       - "4444"
     volumes:
       - /dev/shm:/dev/shm
-    shm_size: 2gb
-    mem_limit: 2gb
-    mem_reservation: 2gb
   redis:
     image: redis:alpine
     ports:

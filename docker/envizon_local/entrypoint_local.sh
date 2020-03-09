@@ -31,7 +31,7 @@ then
 fi
 
 rm -f /usr/src/app/envizon/tmp/pids/server.pid
-rails db:migrate
-rails db:seed
-rails assets:precompile
-exec rails server
+bundle exec rails db:migrate
+bundle exec rails db:seed
+bundle exec rails assets:precompile
+exec bundle exec rails server

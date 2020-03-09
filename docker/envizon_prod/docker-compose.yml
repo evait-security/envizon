@@ -1,6 +1,8 @@
-version: '3'
+version: '2.1'
 volumes:
   socket-volume:
+  nmap-uploads:
+  report-templates:
 services:
   postgres:
     image: postgres:alpine
@@ -10,6 +12,7 @@ services:
       POSTGRES_PASSWORD: 'envizon'
       POSTGRES_USER: 'envizon'
       POSTGRES_DB: 'envizon'
+      REDIS_URL: 'redis://redis:6379/0'
   envizon:
     image: evait/envizon
 #    build:
@@ -17,20 +20,62 @@ services:
 #      dockerfile: ./Dockerfile
     depends_on:
       - postgres
+      - selenium
+      - redis
     network_mode: 'host'
     ports:
       - 3000:3000
     volumes:
       - socket-volume:/var/run
+      - nmap-uploads:/opt/nmap/uploads/
     environment:
       POSTGRES_PASSWORD: 'envizon'
       POSTGRES_USER: 'envizon'
       POSTGRES_DB: 'envizon'
       POSTGRES_HOST: '/var/run/postgresql'
+      SECRET_KEY_BASE:
       RAILS_ENV: 'production'
+      REDIS_URL: 'redis://127.0.0.1:6379/0'
       RAILS_FORCE_SSL: 'true'
       RAILS_SERVE_STATIC_FILES: 'true'
-      SECRET_KEY_BASE:
       SSL_KEY_PATH:
       SSL_CERT_PATH:
-    entrypoint: /entrypoint.sh
+    entrypoint: /entrypoint_local.sh
+  sidekiq-default:
+    build:
+      context: ../../
+      dockerfile: docker/envizon_dev/Dockerfile_development
+    command: bundle exec sidekiq -q default -c 5 & bundle exec sidekiq -q scan -c 5 & bundle exec sidekiq -q background -c 5
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ../../:/usr/src/app/envizon
+      - socket-volume:/var/run
+      - nmap-uploads:/opt/nmap/uploads/
+    environment:
+      REDIS_URL: 'redis://redis:6379/0'
+  sidekiq-single:
+    build:
+      context: ../../
+      dockerfile: docker/envizon_dev/Dockerfile_development
+    command: bundle exec sidekiq -q single -c 1
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ../../:/usr/src/app/envizon
+      - socket-volume:/var/run
+      - nmap-uploads:/opt/nmap/uploads/
+    environment:
+      REDIS_URL: 'redis://redis:6379/0'
+  selenium:
+    image: selenium/standalone-chrome
+    expose:
+      - "4444"
+    volumes:
+      - /dev/shm:/dev/shm
+  redis:
+    image: redis:alpine
+    ports:
+      - '127.0.0.1:6379:6379'
