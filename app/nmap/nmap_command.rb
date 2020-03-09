@@ -6,8 +6,8 @@ class NmapCommand
     @timestamp = Time.now.strftime('%Y%m%d_%H%M%S_%L')
     @targets = targets.respond_to?(:split) ? targets.split(' ') : targets
     @target_file = file
-    FileUtils.mkdir_p(Rails.root.join('app', 'nmap', 'output'))
-    @file_name = Rails.root.join('app', 'nmap', 'output', @timestamp + '_output.xml')
+    FileUtils.mkdir_p(Rails.root.join('nmap', 'uploads'))
+    @file_name = Rails.root.join('nmap', 'uploads', @timestamp + '_output.xml')
     gen_exclude_file(user_id)
     @options = args(options)
   end
@@ -22,7 +22,7 @@ class NmapCommand
 
     exclude_hosts = exclude_hosts.uniq.sort
 
-    path = Rails.root.join('app', 'nmap', 'output', @timestamp + '_exclude.txt')
+    path = Rails.root.join('nmap', 'uploads', @timestamp + '_exclude.txt')
     exclude_file = File.open(path, 'w')
     exclude_hosts.each { |h| exclude_file.puts h }
     exclude_file.close
