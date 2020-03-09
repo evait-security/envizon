@@ -47,6 +47,14 @@ class Port < ApplicationRecord
       sleep 5
       wd.manage.window.resize_to(1920, 1080)
       img = wd.screenshot_as(:png)
+      # NOTE: if we find out performance suffers by always using a new instance,
+      # we could alternatively use a global-ish wd object (as in wd ||= Selenium::WebDriver),
+      # initialized ...somewhere else, or just in the initializer:
+      # SELENIUM = Selenium::WebDriver.for :remote, url: 'http://localhost:4444/wd/hub', desired_capabilities: caps
+      # wd = SELENIUM
+      # => in which case we'd probably have to use wd.close, to only close the tab/window, assuming that doesn't destroy
+      # Selenium::WebDriver instance as well(?)
+      wd.quit
     end
 
     return unless img
