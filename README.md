@@ -65,7 +65,7 @@ SECRET_KEY_BASE=YOURSECRETKEYBASEHERE docker-compose up
 
 ```zsh
 wget https://raw.githubusercontent.com/evait-security/envizon/master/docker/envizon_prod/docker-compose.yml
-export SECRET_KEY_BASE=$(openssl rand -hex 64)
+export SECRET_KEY_BASE="$(echo $(openssl rand -hex 64) | tr -d '\n')"
 echo $SECRET_KEY_BASE # so you can note it down somewhere..
 sudo --preserve-env=SECRET_KEY_BASE docker-compose up
 ```
@@ -75,7 +75,7 @@ sudo --preserve-env=SECRET_KEY_BASE docker-compose up
 ```zsh
 git clone https://github.com/evait-security/envizon
 cd envizon/docker/envizon_local
-export SECRET_KEY_BASE=$(openssl rand -hex 64)
+export SECRET_KEY_BASE="$(echo $(openssl rand -hex 64) | tr -d '\n')"
 echo $SECRET_KEY_BASE # so you can note it down somewhere..
 sudo --preserve-env=SECRET_KEY_BASE docker-compose -f docker-compose.yml up
 ```
