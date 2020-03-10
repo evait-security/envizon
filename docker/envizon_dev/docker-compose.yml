@@ -25,7 +25,6 @@ services:
       - postgres
       - selenium
       - redis
-    network_mode: 'host'
     ports:
       - 3000:3000
     volumes:
@@ -36,7 +35,7 @@ services:
       POSTGRES_USER: 'envizon'
       POSTGRES_HOST: '/var/run/postgresql'
       RAILS_ENV: 'development'
-      REDIS_URL: 'redis://127.0.0.1:6379/0'
+      REDIS_URL: 'redis://redis:6379/0'
     entrypoint: /entrypoint_development.sh
     # uncomment if using byebug:
     # docker-compose up -d, then attach to running container
@@ -51,11 +50,12 @@ services:
     depends_on:
       - postgres
       - redis
+    network_mode: 'host'
     volumes:
       - ../../:/usr/src/app/envizon
       - socket-volume:/var/run
     environment:
-      REDIS_URL: 'redis://redis:6379/0'
+      REDIS_URL: 'redis://127.0.0.1:6379/0'
   sidekiq-single:
     build:
       context: ../../
@@ -65,18 +65,22 @@ services:
     depends_on:
       - postgres
       - redis
+    network_mode: 'host'
     volumes:
       - ../../:/usr/src/app/envizon
       - socket-volume:/var/run
     environment:
-      REDIS_URL: 'redis://redis:6379/0'
+      REDIS_URL: 'redis://127.0.0.1:6379/0'
   selenium:
-    image: selenium/standalone-chrome
     container_name: envizon_selenium
-    expose:
-      - "4444"
+    image: selenium/standalone-chrome
+    ports:
+      - "4444:4444"
+      - "9515:9515"
     volumes:
       - /dev/shm:/dev/shm
+    environment:
+      CHROMEDRIVER_WHITELISTED_IPS:
   redis:
     image: redis:alpine
     container_name: envizon_redis

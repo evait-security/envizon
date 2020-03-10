@@ -27,8 +27,8 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - socket-volume:/var/run
       - nmap-uploads:/usr/src/app/envizon/nmap/uploads/
+      - socket-volume:/var/run
     environment:
       POSTGRES_PASSWORD: 'envizon'
       POSTGRES_USER: 'envizon'
@@ -51,8 +51,8 @@ services:
       - redis
     network_mode: 'host'
     volumes:
-      - socket-volume:/var/run
       - nmap-uploads:/usr/src/app/envizon/nmap/uploads/
+      - socket-volume:/var/run
     environment:
       REDIS_URL: 'redis://127.0.0.1:6379/0'
       SECRET_KEY_BASE:
@@ -66,8 +66,8 @@ services:
       - redis
     network_mode: 'host'
     volumes:
-      - socket-volume:/var/run
       - nmap-uploads:/usr/src/app/envizon/nmap/uploads/
+      - socket-volume:/var/run
     environment:
       REDIS_URL: 'redis://127.0.0.1:6379/0'
       SECRET_KEY_BASE:
@@ -75,9 +75,9 @@ services:
   selenium:
     container_name: envizon_selenium
     image: selenium/standalone-chrome
-    expose:
-      - "4444"
-      - "9515"
+    ports:
+      - "4444:4444"
+      - "9515:9515"
     volumes:
       - /dev/shm:/dev/shm
     environment:

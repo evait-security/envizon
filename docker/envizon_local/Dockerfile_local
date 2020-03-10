@@ -30,7 +30,7 @@ RUN \
   mkdir .ssl && \
   bundle install
 
-COPY docker/envizon_dev/entrypoint_local.sh /
+COPY docker/envizon_local/entrypoint_local.sh /
 COPY docker/envizon_dev/entrypoint_development.sh /
 
 RUN chmod +x /entrypoint_local.sh
