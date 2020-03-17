@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'rake'
 require 'fileutils'
 require 'json'
-
 
 # @restful_api 1.0
 # Handle user settings
@@ -14,10 +15,14 @@ class SettingsController < ApplicationController
   # Update user settings
   # @required [Params] params[:setting_to_set] Setting(s) to change
   def update
-    %w[parallel_scans global_notify hosts export_db import_db saved_scan_name export_issue_templates import_issue_templates report_mode].each do |param|
+    %w[parallel_scans global_notify hosts
+       export_db import_db saved_scan_name
+       export_issue_templates
+       import_issue_templates report_mode].each do |param|
       param_sym = param.to_sym
       next unless params[param_sym]
-      respond_with_notify(send(param_sym, params[param_sym])) && return
+
+      respond_with_notify(send(param_sym, params[param_sym])) and return
     end
   end
 
@@ -50,25 +55,34 @@ class SettingsController < ApplicationController
     app['db:data:dump'].invoke
     app['db:data:dump'].reenable
     file_name = 'data.yml'
+    pg_dump_name = 'envizon.db.tar.gz'
+    pg_dump_file = Rails.root.join('db', pg_dump_name)
+
+    pg_cmd = %w[pg_dump -c -b
+                -d envizon -U envizon
+                -F tar -f ] + [pg_dump_file] +
+             %w[-h /var/run/postgresql]
+    `#{pg_cmd.join(' ')}`
 
     # zip storage folder
     output_filename = 'data.zip'
     active_storage_filename = 'storage'
     output_file = Tempfile.new(output_filename)
-    
+
     # fix error by open tempfile
     Zip::OutputStream.open(output_file) { |zos| }
     # zip the files
     ::Zip::File.open(output_file, ::Zip::File::CREATE) do |zipfile|
-      write_entries (Dir.entries(Rails.root.join(active_storage_filename)) - %w[. ..]), active_storage_filename, zipfile, Rails.root
+      write_entries (Dir.entries(Rails.root.join(active_storage_filename)) - %w[. ..]),
+                    active_storage_filename, zipfile, Rails.root
       zipfile.add(file_name, Rails.root.join('db', file_name))
+      zipfile.add(pg_dump_name, pg_dump_file)
     end
 
     send_file output_file, filename: output_filename, type: 'application/zip'
-    nil
   end
 
-  def export_issue_templates(param)
+  def export_issue_templates(_param)
     # Testing
     # values = [{ title: 'nothing', description: 'nothing', rating: 'nothing', recommendation: 'nothing', severity: 1 }]
     # IssueTemplate.import values, validate: true
@@ -76,9 +90,9 @@ class SettingsController < ApplicationController
     # ugly output with ids
     # tempfile.write IssueTemplate.all.to_json
     # nice output without ids
-    tempfile.write JSON.pretty_generate(IssueTemplate.all.map {|md| md.serializable_hash.except('id')})
+    tempfile.write JSON.pretty_generate(IssueTemplate.all.map { |md| md.serializable_hash.except('id') })
     tempfile.rewind
-    send_file tempfile, filename: "issue_templates.json", type: 'application/json'
+    send_file tempfile, filename: 'issue_templates.json', type: 'application/json'
     nil
   end
 
@@ -87,25 +101,24 @@ class SettingsController < ApplicationController
     # alltemplates = JSON.parse(IssueTemplate.all.to_json)
     # IssueTemplate.all.delelete_all
     # IssueTemplate.import JSON.parse(IssueTemplate.all.to_json), validate: true
-    begin
-      json_import = File.read(file.first.tempfile.path)
-      IssueTemplate.all.delete_all
-      IssueTemplate.import JSON.parse(json_import), validate: true
-      { message: "Issue templates successfully imported", type: 'success' }
-    rescue
-      { message: "The import was not successfull. The data may not in the right format", type: 'alert' }
-    end
+
+    json_import = File.read(file.first.tempfile.path)
+    IssueTemplate.all.delete_all
+    IssueTemplate.import JSON.parse(json_import), validate: true
+    { message: 'Issue templates successfully imported', type: 'success' }
+  rescue StandardError
+    { message: 'The import was not successfull. The data may not in the right format', type: 'alert' }
   end
 
   def import_db(file)
     extract_dir = Dir.mktmpdir
-    Zip::ZipFile.open(file.first.tempfile) { |zip_file|
+    Zip::ZipFile.open(file.first.tempfile) do |zip_file|
       zip_file.each do |f|
-        f_path=File.join(extract_dir, f.name)
+        f_path = File.join(extract_dir, f.name)
         FileUtils.mkdir_p(File.dirname(f_path))
         zip_file.extract(f, f_path) unless File.exist?(f_path)
       end
-    }
+    end
     unziped_storage = File.join(extract_dir, 'storage')
     out_storage = Rails.root.join('storage')
     unziped_data_yml = File.join(extract_dir, 'data.yml')
@@ -154,17 +167,18 @@ class SettingsController < ApplicationController
 
   def global_notify(_global_notify)
     setting = current_user.settings.where(name: 'global_notify').first_or_create
-    if params[:global_notify_setting].present?
-      setting.value = "true"
-    else
-      setting.value = "false"
-    end
+    setting.value = if params[:global_notify_setting].present?
+                      'true'
+                    else
+                      'false'
+                    end
     setting.save
     { message: 'Notication settings updated', type: 'success' }
   end
 
   def respond_with_notify(locals)
     return unless locals
+
     respond_to do |format|
       format.html { redirect_back fallback_location: root_path }
       format.js { render 'pages/notify', locals: locals }
