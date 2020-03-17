@@ -14,7 +14,7 @@ class SettingsController < ApplicationController
   # Update user settings
   # @required [Params] params[:setting_to_set] Setting(s) to change
   def update
-    %w[parallel_scans global_notify hosts export_db import_db saved_scan_name export_issue_templates import_issue_templates report_mode].each do |param|
+    %w[parallel_scans global_notify max_host_per_scan hosts export_db import_db saved_scan_name export_issue_templates import_issue_templates report_mode].each do |param|
       param_sym = param.to_sym
       next unless params[param_sym]
       respond_with_notify(send(param_sym, params[param_sym])) && return
@@ -158,6 +158,18 @@ class SettingsController < ApplicationController
       setting.value = "true"
     else
       setting.value = "false"
+    end
+    setting.save
+    { message: 'Notication settings updated', type: 'success' }
+  end
+
+  def max_host_per_scan(_max_host_per_scan)
+    setting = current_user.settings.where(name: 'max_host_per_scan').first_or_create
+    if params[:max_host_per_scan_setting].present?
+      value = params[:max_host_per_scan_setting].to_i
+      setting.value = value > 0 ? value.to_s : "0"
+    else
+      setting.value = "0"
     end
     setting.save
     { message: 'Notication settings updated', type: 'success' }

@@ -4,8 +4,14 @@ class NmapCommand
     @run_counter = 0
 
     @user_id = user_id
+    begin
+      @simultane_targets = @user.find(@user_id).settings.where(name: 'max_host_per_scan').first_or_create.value.to_i
+      @simultane_targets = @simultane_targets > 0 ? @simultane_targets : 0
+    rescue
+      @simultane_targets = 0
+    end
+
     #split targets
-    @simultane_targets = 1 #todo get from settings
     targets_list = targets.respond_to?(:split) ? targets.split(' ') : targets #what if it is not respond to split?
     ip_targets = []
     host_targets = []
