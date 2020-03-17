@@ -23,8 +23,6 @@ class ScanWorker
         cmd = 'sudo'
       end
 
-      puts cmd
-      puts options
       Open3.popen3(env, cmd, *options) do |_stdin, stdout, _stderr, thread|
         stdout.each do |l|
           l.match(/About (.*) done/) do |m|
@@ -32,13 +30,15 @@ class ScanWorker
             c = m.captures.first
             scan.status = c.match(/\A(\d+)\.\d+\%\Z/).captures.first.to_i
             scan.save
-            next unless User.first.settings.where(name: 'global_notify').first.value.include? "true"
+            next unless User.first.settings.where(name: 'global_notify').first.value.include? 'true'
+
             message = "Scan #{scan.name} - #{args['run_counter']}/#{args['max_run_counter']} is #{c} done."
             ActionCable.server.broadcast 'notification_channel', message: message
           end
           # TODO: message on fail?
           # exception?
           # parse nmap errors if it doesn't like the options
+          # puts _stderr.lines.map(&:to_s)
         end
         # let's do some generic error handling in the meantime:
         return_value = thread.value
@@ -49,8 +49,8 @@ class ScanWorker
         scan.enddate = Time.now
         scan.save
         args_parse = {
-          'xmlpath' => args['filename'], 
-          'scan_id' => args['scan_id'], 
+          'xmlpath' => args['filename'],
+          'scan_id' => args['scan_id'],
           'user_id' => args['user_id'],
           'run_coutner' => args['run_counter'],
           'max_run_counter' => args['max_run_counter']
@@ -100,8 +100,8 @@ class ScanWorker
         scan.enddate = Time.now
         scan.save
         args_parse = {
-          'xmlpath' => filename, 
-          'scan_id' => scan.id, 
+          'xmlpath' => filename,
+          'scan_id' => scan.id,
           'user_id' => args['user_id'],
           'run_coutner' => command.run_counter,
           'max_run_counter' => command.max_run_counter
