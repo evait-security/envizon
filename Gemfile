@@ -29,6 +29,7 @@ gem 'jbuilder', '~> 2.5'
 
 # nmap
 gem 'ruby-nmap', git: 'https://github.com/sophsec/ruby-nmap.git'
+gem 'ipaddress', git: 'https://github.com/ipaddress-gem/ipaddress.git'
 
 # Icon-Pack
 # Use Material Icons directly without gem. Gem maintailer not update the gem frequently

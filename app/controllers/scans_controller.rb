@@ -18,7 +18,12 @@ class ScansController < ApplicationController
         'command' => params[:command],
         'target' => params[:target]
       }
-      ScanWorker.perform_async(args)
+      #ScanWorker.perform_async(args)
+      command = NmapCommand.new(params[:command], current_user.id, params[:target])
+      scan = Scan.new(name: args['scan_name'], user_id: args['user_id'])
+      scan.command = 'Scan in progress…'
+      scan.save
+      command.run_worker(scan)
 
       respond_to do |format|
         format.html { redirect_to scans_path }
