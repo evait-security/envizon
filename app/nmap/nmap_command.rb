@@ -25,7 +25,7 @@ class NmapCommand
     unless ip_targets.blank?
       ip_targets = ip_targets.map{|i| i.hosts.blank? ? i : i.hosts}.flatten
       # .hosts do not split to single ips, because its don't set the subnet to /32
-      ip_targets = ip_targets.map do |single| 
+      ip_targets = ip_targets.map do |single|
         single.prefix = 32
         single
       end
@@ -40,7 +40,7 @@ class NmapCommand
       # map ips to compact string arrays and apand to @all_targets
       @all_targets += ip_targets.each_slice(@simultane_targets).to_a.map{|i| address_array_to_string_array(i)}
     end
-    
+
     @max_run_counter = @all_targets.length
 
     # file names
@@ -50,17 +50,18 @@ class NmapCommand
   end
 
   def address_array_to_string_array(ip_address_list)
-    result = IPAddress::IPv4::summarize(*ip_address_list).map{|i| i.to_string}
-
+    IPAddress::IPv4::summarize(*ip_address_list).map(&:to_string)
   end
+
   def next_targets
     @targets
   end
 
   def gen_exclude_file(user_id)
-    exclude_hosts = []
-
-    Socket.ip_address_list.each { |ip| exclude_hosts.push(ip.ip_address) }
+    exclude_hosts = Socket.ip_address_list.map do |ip|
+      ipaddr = IPAddress(ip)
+      ipaddr.respond_to?(:compressed) ? ip.compressed : ip.address
+    end
 
     host = User.find(user_id).settings.where(name: 'exclude_hosts').first_or_create.value
     exclude_hosts += YAML.safe_load(host).lines if host.present?
@@ -83,13 +84,13 @@ class NmapCommand
   def args(options)
     options = options.split
     %w[nmap sudo -iL -oX -oN -oS -oG].each { |o| options.delete o }
-    
+
     ['--stats-every', '10s',
      '--excludefile',
      @exclude_file.to_s].each { |o| options.push o }
   end
 
-  
+
 
   def run_worker(scan)
     scan.startdate = Time.now
@@ -107,8 +108,8 @@ class NmapCommand
 
 
       args_parse = {
-        'scan_id'     => scan.id, 
-        'user_id'     => @user_id, 
+        'scan_id'     => scan.id,
+        'user_id'     => @user_id,
         'cmd'         => cmd,
         'options'     => options.join(' '),
         'run_counter' => index,
@@ -116,7 +117,7 @@ class NmapCommand
         'max_run_counter' => @max_run_counter
       }
       ScanWorker.perform_async(args_parse)
-      
+
     end
   end
 =begin
@@ -127,7 +128,7 @@ class NmapCommand
     #targets = @target_file.present? ? ['-iL ', @target_file.to_s] : @targets
     if !@all_targets.blank? && @run_counter < @max_run_counter
       cur_run_counter = @run_counter
-      @run_counter += 1 
+      @run_counter += 1
       options = @options
       file_name = Rails.root.join('app', 'nmap', 'output', "#{@timestamp}_output#{(cur_run_counter +1)}-#{@max_run_counter}.xml")
       options.push '-oX'
