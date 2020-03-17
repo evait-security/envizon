@@ -105,7 +105,30 @@ You have to specify a password for your envizon instance. You can change it in t
 
 ### Scan interface
 
-On the scan interface you can run a new network scan with preconfigured parameters or your own nmap fu (experimental). You also have the possibility to upload previously created nmap scans (with the `-oX` parameter).
+On the scan interface you can run a new network scan with preconfigured parameters or your own nmap fu. You also have the possibility to upload previously created nmap scans (with the `-oX` parameter).
+
+The scans are divided into smaller ones automatically to reduce the waiting time for results. Possible values as targets are:
+
+```
+idontexists.com
+
+192.168.1.1
+192.168.1.1/24
+192.168.1.1/255.255.255.0
+
+192.168.1.1-192.168.1.10
+192.168.1.1-10
+192.168.1-10.1-10
+
+192.168.1.1-192.168.1.10/24
+192.168.1.1-10/24
+192.168.1-10.1-10/24
+
+192.168.1.1-192.168.1.10/255.255.255.0
+192.168.1.1-10/255.255.255.0
+192.168.1-10.1-10/255.255.255.0
+```
+
 
 ### Groups
 
