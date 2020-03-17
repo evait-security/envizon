@@ -71,8 +71,8 @@ class NmapCommand
 
   def gen_exclude_file(user_id)
     exclude_hosts = Socket.ip_address_list.map do |ip|
-      ipaddr = IPAddress(ip)
-      ipaddr.respond_to?(:compressed) ? ip.compressed : ip.address
+      ipaddr = IPAddress(ip.ip_address)
+      ipaddr.respond_to?(:compressed) ? ipaddr.compressed : ipaddr.address
     end
 
     host = User.find(user_id).settings.where(name: 'exclude_hosts').first_or_create.value
