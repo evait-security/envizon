@@ -109,7 +109,7 @@ On the scan interface you can run a new network scan with preconfigured paramete
 
 The scans are divided into smaller ones automatically to reduce the waiting time for results.
 
-To specify scan destinations, you can use host names or IP addresses. IP addresses can be specified with or without subnet mask or CIDR prefix. To specify ranges, the individual parts of the IP can be separated with '-' or ','. These can be combined as desired. If the range is written out in full, only a '-' is permitted. Possible values as targets are:
+To specify scan destinations, you can use host names or IP addresses. IP addresses can be specified with or without subnet mask or CIDR prefix. To specify ranges, the individual parts of the IP can be separated with `-` or `,`. These can be combined as desired. If the range is written out in full, only a `-` is permitted. Possible values as targets are:
 
 ```
 scanme.nmap.org
