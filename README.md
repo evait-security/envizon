@@ -107,26 +107,31 @@ You have to specify a password for your envizon instance. You can change it in t
 
 On the scan interface you can run a new network scan with preconfigured parameters or your own nmap fu. You also have the possibility to upload previously created nmap scans (with the `-oX` parameter).
 
-The scans are divided into smaller ones automatically to reduce the waiting time for results. Possible values as targets are:
+The scans are divided into smaller ones automatically to reduce the waiting time for results.
+
+To specify scan destinations, you can use host names or IP addresses. IP addresses can be specified with or without subnet mask or CIDR prefix. To specify ranges, the individual parts of the IP can be separated with '-' or ','. These can be combined as desired. If the range is written out in full, only a '-' is permitted. Possible values as targets are:
 
 ```
 scanme.nmap.org
 
 192.168.1.1
-192.168.1.1/24
-192.168.1.1/255.255.255.0
+192.168.1.0/24
+192.168.1.0/255.255.255.0
 
 192.168.1.1-192.168.1.10
+192.168.1.1-192.168.10.254
+192.168.1.0-192.168.10.0/24
+192.168.1.0-192.168.10.0/255.255.255.0
+
 192.168.1.1-10
 192.168.1-10.1-10
+192.168.1-10.0/24
+192.168.1-10.0/255.255.255.0
 
-192.168.1.1-192.168.1.10/24
-192.168.1.1-10/24
-192.168.1-10.1-10/24
-
-192.168.1.1-192.168.1.10/255.255.255.0
-192.168.1.1-10/255.255.255.0
-192.168.1-10.1-10/255.255.255.0
+192.168.1,2.1
+192.168.1,2.1-10
+192.168.1,2.0/24
+192.168.1,2.0/255.255.255.0
 ```
 
 
