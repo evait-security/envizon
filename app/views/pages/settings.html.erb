@@ -72,6 +72,28 @@
                   </div>
                 <% end %>
               </div>
+              <div class="row" style="padding-top: 2em;">
+                <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
+                  <%= f.error_notification %>
+                  <div class="col s4">
+                    <p class="grey-text text-darken-2 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Set the number of hosts per scan">Hosts per scan</p>
+                  </div>
+                  <div class="col s6">
+                    <input type="hidden" name="max_host_per_scan" value="true">
+                    <label>
+                      <%
+                        max_host_per_scan = YAML.safe_load(current_user.settings.where(name: 'max_host_per_scan').first_or_create.value)
+                        max_host_per_scan ||= '0'
+                      %>
+                      <input id="max_host_per_scan_setting" name="max_host_per_scan_setting" placeholder='Use "0" unlimitet' type="text" class="validate" value="<%= max_host_per_scan %>">
+                      <span></span>
+                    </label>
+                  </div>
+                  <div class="input-field form-actions col s2" >
+                    <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Update global notification settings" type="submit" name="action"><i class="fa fa-refresh"></i></button>
+                  </div>
+                <% end %>
+              </div>
             </div>
           </div>
         </div>

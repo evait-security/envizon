@@ -14,6 +14,12 @@ GIT
       yard (~> 0.9.12)
 
 GIT
+  remote: https://github.com/ipaddress-gem/ipaddress.git
+  revision: 1d48e380a275b441bf1ffc56e72f4443969f404f
+  specs:
+    ipaddress (0.8.3)
+
+GIT
   remote: https://github.com/sophsec/ruby-nmap.git
   revision: 36080d1fb440de8a80a560c09676fa06e87a8ab2
   specs:
@@ -373,6 +379,7 @@ DEPENDENCIES
   e2mmap
   font-awesome-rails
   image_processing
+  ipaddress!
   irb
   jbuilder (~> 2.5)
   jeweler

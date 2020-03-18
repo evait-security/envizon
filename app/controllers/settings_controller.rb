@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'rake'
 require 'fileutils'
 require 'json'
@@ -15,7 +13,8 @@ class SettingsController < ApplicationController
   # Update user settings
   # @required [Params] params[:setting_to_set] Setting(s) to change
   def update
-    %w[parallel_scans global_notify hosts
+    %w[parallel_scans global_notify
+       max_host_per_scan hosts
        export_db import_db saved_scan_name
        export_issue_templates
        import_issue_templates report_mode].each do |param|
@@ -79,7 +78,6 @@ class SettingsController < ApplicationController
       write_entries (Dir.entries(Rails.root.join(active_storage_filename)) - %w[. ..]),
                     active_storage_filename, zipfile, Rails.root
       zipfile.add(file_name, Rails.root.join('db', file_name))
-      zipfile.add(pg_dump_name, pg_dump_file)
     end
 
     FileUtils.remove_file(pg_dump_file, force: true)
@@ -105,13 +103,14 @@ class SettingsController < ApplicationController
     # alltemplates = JSON.parse(IssueTemplate.all.to_json)
     # IssueTemplate.all.delelete_all
     # IssueTemplate.import JSON.parse(IssueTemplate.all.to_json), validate: true
-
-    json_import = File.read(file.first.tempfile.path)
-    IssueTemplate.all.delete_all
-    IssueTemplate.import JSON.parse(json_import), validate: true
-    { message: 'Issue templates successfully imported', type: 'success' }
-  rescue StandardError
-    { message: 'The import was not successfull. The data may not in the right format', type: 'alert' }
+    begin
+      json_import = File.read(file.first.tempfile.path)
+      IssueTemplate.all.delete_all
+      IssueTemplate.import JSON.parse(json_import), validate: true
+      { message: "Issue templates successfully imported", type: 'success' }
+    rescue StandardError
+      { message: "The import was not successful. The data may not be in the right format", type: 'alert' }
+    end
   end
 
   def import_db(file)
@@ -133,10 +132,10 @@ class SettingsController < ApplicationController
     FileUtils.rm_rf(Rails.root.join('storage'))
     FileUtils.mv(unziped_storage, out_storage)
 
-    # app = Rake.application
-    # app.init
-    # app.add_import "#{Gem::Specification.find_by_name('yaml_db').gem_dir}/lib/tasks/yaml_db_tasks.rake"
-    # app.load_rakefile
+    app = Rake.application
+    app.init
+    app.add_import "#{Gem::Specification.find_by_name('yaml_db').gem_dir}/lib/tasks/yaml_db_tasks.rake"
+    app.load_rakefile
 
     FileUtils.cp(Pathname.new(unziped_data_sql), out_data_sql)
     # app['db:data:load'].invoke
@@ -173,11 +172,19 @@ class SettingsController < ApplicationController
 
   def global_notify(_global_notify)
     setting = current_user.settings.where(name: 'global_notify').first_or_create
-    setting.value = if params[:global_notify_setting].present?
-                      'true'
-                    else
-                      'false'
-                    end
+    setting.value = params[:global_notify_setting].present? ? 'true' : 'false'
+    setting.save
+    { message: 'Notication settings updated', type: 'success' }
+  end
+
+  def max_host_per_scan(_max_host_per_scan)
+    setting = current_user.settings.where(name: 'max_host_per_scan').first_or_create
+    if params[:max_host_per_scan_setting].present?
+      value = params[:max_host_per_scan_setting].to_i
+      setting.value = value > 0 ? value.to_s : "0"
+    else
+      setting.value = "0"
+    end
     setting.save
     { message: 'Notication settings updated', type: 'success' }
   end
