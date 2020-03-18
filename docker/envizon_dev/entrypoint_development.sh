@@ -10,7 +10,7 @@ then
   file_date=$(date +"%Y-%m-%d-%H:%M")
   echo "Importing existing database dump."
   echo "A backup of the current database will be placed in db/envizon.db.${file_date}.tar"
-  db_connection_string="--dbname=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@:5432/${POSTGRES_DB}?host=${POSTGRES_HOST}"
+  db_connection_string="--dbname=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@:5432/${POSTGRES_DEVELOPMENT_DB}?host=${POSTGRES_HOST}"
   pg_dump -c -b  -F tar -f db/envizon.db.${file_date}.tar ${db_connection_string} || exit
   pg_restore -c ${db_connection_string} db/envizon.db.tar || exit
   rm -f db/envizon.db.tar
