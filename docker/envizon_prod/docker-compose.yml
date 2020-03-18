@@ -2,7 +2,7 @@ version: '2.1'
 volumes:
   socket-volume:
   nmap-uploads:
-  report-templates:
+  storage:
 services:
   postgres:
     image: postgres:alpine
@@ -28,6 +28,7 @@ services:
       - 3000:3000
     volumes:
       - nmap-uploads:/usr/src/app/envizon/nmap/uploads/
+      - storage:/usr/src/app/envizon/storage
       - socket-volume:/var/run
     environment:
       POSTGRES_PASSWORD: 'envizon'
@@ -35,6 +36,7 @@ services:
       POSTGRES_DB: 'envizon'
       POSTGRES_HOST: '/var/run/postgresql'
       SECRET_KEY_BASE:
+      RAILS_LOG_TO_STDOUT:
       RAILS_ENV: 'production'
       REDIS_URL: 'redis://redis:6379/0'
       RAILS_FORCE_SSL: 'true'
@@ -52,10 +54,12 @@ services:
     network_mode: 'host'
     volumes:
       - nmap-uploads:/usr/src/app/envizon/nmap/uploads/
+      - storage:/usr/src/app/envizon/storage
       - socket-volume:/var/run
     environment:
       REDIS_URL: 'redis://127.0.0.1:6379/0'
       SECRET_KEY_BASE:
+      RAILS_LOG_TO_STDOUT:
       RAILS_ENV: 'production'
   sidekiq-single:
     image: evait/envizon
@@ -67,10 +71,12 @@ services:
     network_mode: 'host'
     volumes:
       - nmap-uploads:/usr/src/app/envizon/nmap/uploads/
+      - storage:/usr/src/app/envizon/storage
       - socket-volume:/var/run
     environment:
       REDIS_URL: 'redis://127.0.0.1:6379/0'
       SECRET_KEY_BASE:
+      RAILS_LOG_TO_STDOUT:
       RAILS_ENV: 'production'
   selenium:
     container_name: envizon_selenium

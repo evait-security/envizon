@@ -1,7 +1,6 @@
 version: '2.1'
 volumes:
   socket-volume:
-  report-templates:
 services:
   postgres:
     build:
