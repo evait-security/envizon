@@ -78,6 +78,7 @@ class SettingsController < ApplicationController
       write_entries (Dir.entries(Rails.root.join(active_storage_filename)) - %w[. ..]),
                     active_storage_filename, zipfile, Rails.root
       zipfile.add(file_name, Rails.root.join('db', file_name))
+      zipfile.add(pg_dump_name, pg_dump_file)
     end
 
     FileUtils.remove_file(pg_dump_file, force: true)
