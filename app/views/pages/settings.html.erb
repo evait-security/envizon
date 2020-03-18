@@ -82,10 +82,10 @@
                     <input type="hidden" name="max_host_per_scan" value="true">
                     <label>
                       <%
-                        max_host_per_scan = YAML.safe_load(current_user.settings.where(name: 'max_host_per_scan').first_or_create.value)
+                          max_host_per_scan = YAML.safe_load(current_user.settings.where(name: 'max_host_per_scan').first_or_create.value)
                         max_host_per_scan ||= '0'
                       %>
-                      <input id="max_host_per_scan_setting" name="max_host_per_scan_setting" placeholder='Use "0" unlimitet' type="text" class="validate" value="<%= max_host_per_scan %>">
+                      <input id="max_host_per_scan_setting" name="max_host_per_scan_setting" placeholder='Use "0" unlimited' type="text" class="validate" value="<%= max_host_per_scan %>">
                       <span></span>
                     </label>
                   </div>

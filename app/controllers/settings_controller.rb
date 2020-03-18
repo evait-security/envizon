@@ -170,20 +170,20 @@ class SettingsController < ApplicationController
     { message: "#{hosts_given.lines.count} hosts excluded", type: 'success' }
   end
 
-  def global_notify(_global_notify)
+  def global_notify(global_notify)
     setting = current_user.settings.where(name: 'global_notify').first_or_create
     setting.value = params[:global_notify_setting].present? ? 'true' : 'false'
     setting.save
     { message: 'Notication settings updated', type: 'success' }
   end
 
-  def max_host_per_scan(_max_host_per_scan)
+  def max_host_per_scan(max_host_per_scan)
     setting = current_user.settings.where(name: 'max_host_per_scan').first_or_create
     if params[:max_host_per_scan_setting].present?
       value = params[:max_host_per_scan_setting].to_i
-      setting.value = value > 0 ? value.to_s : "0"
+      setting.value = value.positive? ? value.to_s : '0'
     else
-      setting.value = "0"
+      setting.value = '0'
     end
     setting.save
     { message: 'Notication settings updated', type: 'success' }
