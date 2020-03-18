@@ -33,6 +33,8 @@ services:
     environment:
       POSTGRES_PASSWORD: 'envizon'
       POSTGRES_USER: 'envizon'
+      POSTGRES_DB: 'envizon'
+      POSTGRES_DEVELOPMENT_DB: 'envizon'
       POSTGRES_HOST: '/var/run/postgresql'
       RAILS_ENV: 'development'
       REDIS_URL: 'redis://redis:6379/0'

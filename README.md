@@ -110,7 +110,7 @@ On the scan interface you can run a new network scan with preconfigured paramete
 The scans are divided into smaller ones automatically to reduce the waiting time for results. Possible values as targets are:
 
 ```
-idontexists.com
+scanme.nmap.org
 
 192.168.1.1
 192.168.1.1/24
@@ -156,6 +156,19 @@ Using the left groups sidebar you can filter all images by group. Please note, t
 In the `templates` section you can create issue templates you want to reuse for your reports. You can set a title, severity, description, rating and recommendation. In the reports section you are able to create reports for your customers. First, you have to create an issue group for example "Internal network". In this group you can create new issues with the content of your issue templates and link them to existing clients in the database. You can easily add screenshots as proofs for your findings by using `CTRL + v` and pressing "update". The templates are linked to the new issues and can be updated with one click. Under `edit current report` you can edit basic information about the report itself for example the name of the customer or a management summary. The presentation mode allows you to hide all items exept the issues and their screenshots.
 
 In order to create a great looking report you have to edit the docx template file under `./report-templates/envizon_template.docx`. All variables used are included in the default template.
+
+## Import / Export
+
+The complete project / database can be exported in the settings.
+
+To import an exported zip file, you can select and upload it in the settings as well.
+
+**NOTE:** This will overwrite any data in your current project, including all stored images!
+
+Importing an exported project creates a temporary file in your envizon container,
+which will be only fully imported once your container has been restarted!
+This can be achieved by running `docker-compose restart envizon`.
+An additional backup of the previous PostgreSQL will be created and placed in the db subfolder in your envizon container at this point.
 
 ## FAQ
 

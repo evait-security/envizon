@@ -52,7 +52,8 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  config.web_console.whitelisted_ips = %w[172.17.0.0/24 172.18.0.0/24]
+  # allow connections from all around docker in dev env
+  config.web_console.whitelisted_ips = %w[172.0.0.0/8]
 
   # Store files for active storage.
   config.active_storage.service = :local

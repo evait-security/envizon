@@ -39,10 +39,10 @@ class SettingsController < ApplicationController
 
   def report_mode(report_mode)
     setting = current_user.settings.where(name: 'report_mode').first_or_create
-    if report_mode.present?
-      setting.value = report_mode
-      setting.save
-    end
+    return unless report_mode.present?
+
+    setting.value = report_mode
+    setting.save
   end
 
   def export_db(_param)
@@ -55,13 +55,16 @@ class SettingsController < ApplicationController
     app['db:data:dump'].invoke
     app['db:data:dump'].reenable
     file_name = 'data.yml'
-    pg_dump_name = 'envizon.db.tar.gz'
+    pg_dump_name = 'envizon.db.tar'
     pg_dump_file = Rails.root.join('db', pg_dump_name)
 
-    pg_cmd = %w[pg_dump -c -b
-                -d envizon -U envizon
-                -F tar -f ] + [pg_dump_file] +
-             %w[-h /var/run/postgresql]
+    db_conf = Rails.configuration.database_configuration[Rails.env]
+    db_connection_string = "--dbname=postgresql://#{db_conf['username']}:#{db_conf['password']}@:5432/#{db_conf['database']}?host=#{db_conf['host']}"
+    pg_cmd = ['pg_dump',
+              '-c', '-b',
+              '-F', 'tar',
+              '-f', pg_dump_file,
+              db_connection_string]
     `#{pg_cmd.join(' ')}`
 
     # zip storage folder
@@ -79,7 +82,8 @@ class SettingsController < ApplicationController
       zipfile.add(pg_dump_name, pg_dump_file)
     end
 
-    send_file output_file, filename: output_filename, type: 'application/zip'
+    FileUtils.remove_file(pg_dump_file, force: true)
+    send_file output_file, filename: output_filename, type: 'application/zip' and return
   end
 
   def export_issue_templates(_param)
@@ -121,21 +125,23 @@ class SettingsController < ApplicationController
     end
     unziped_storage = File.join(extract_dir, 'storage')
     out_storage = Rails.root.join('storage')
-    unziped_data_yml = File.join(extract_dir, 'data.yml')
-    out_data_yml = Rails.root.join('db', 'data.yml')
+    unziped_data_sql = File.join(extract_dir, 'envizon.db.tar')
+    out_data_sql = Rails.root.join('db', 'envizon.db.tar')
+    # unziped_data_yml = File.join(extract_dir, 'data.yml')
+    # out_data_yml = Rails.root.join('db', 'data.yml')
 
     FileUtils.rm_rf(Rails.root.join('storage'))
     FileUtils.mv(unziped_storage, out_storage)
 
-    app = Rake.application
-    app.init
-    app.add_import "#{Gem::Specification.find_by_name('yaml_db').gem_dir}/lib/tasks/yaml_db_tasks.rake"
-    app.load_rakefile
+    # app = Rake.application
+    # app.init
+    # app.add_import "#{Gem::Specification.find_by_name('yaml_db').gem_dir}/lib/tasks/yaml_db_tasks.rake"
+    # app.load_rakefile
 
-    FileUtils.cp(Pathname.new(unziped_data_yml), out_data_yml)
-    app['db:data:load'].invoke
-    app['db:data:load'].reenable
-    { message: 'Database successfully imported', type: 'success' }
+    FileUtils.cp(Pathname.new(unziped_data_sql), out_data_sql)
+    # app['db:data:load'].invoke
+    # app['db:data:load'].reenable
+    { message: 'Import complete, now restart your Docker containers', type: 'success' }
   end
 
   def saved_scan_name(scan_name)
