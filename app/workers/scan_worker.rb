@@ -24,8 +24,11 @@ class ScanWorker
         cmd = 'sudo'
       end
 
+      nmap_output = []
       Open3.popen3(env, cmd, *options) do |_stdin, stdout, _stderr, thread|
+
         stdout.each do |l|
+          nmap_output.push l
           l.match(/About (.*) done/) do |m|
             puts m
             c = m.captures.first

@@ -28,6 +28,8 @@ public/api
 *.dot
 *.pdf
 app/nmap/output
+nmap/output
+nmap/uploads
 
 /.idea/*
 *.iml
