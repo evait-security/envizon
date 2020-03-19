@@ -172,10 +172,6 @@ class NmapCommand
     result_map.flatten.uniq
   end
 
-  def next_targets
-    @targets
-  end
-
   def gen_exclude_file(user_id)
     exclude_hosts = Socket.ip_address_list.map do |ip|
       ipaddr = IPAddress(ip.ip_address)
