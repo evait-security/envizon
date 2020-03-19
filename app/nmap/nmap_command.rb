@@ -200,7 +200,7 @@ class NmapCommand
     options = options.split
     %w[nmap sudo -iL -oX -oN -oS -oG].each { |o| options.delete o }
 
-    ['--stats-every', '10s',
+    ['--stats-every', '60s',
      '--excludefile',
      @exclude_file.to_s].each { |o| options.push o }
      options
