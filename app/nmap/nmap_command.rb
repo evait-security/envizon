@@ -31,7 +31,7 @@ class NmapCommand
   def parse_splited_ip_range(ip_parts)
     result = []
     ip = ip_parts.join('.')
-    unless test.include?('-') || test.include?(',')
+    unless ip.include?('-') || ip.include?(',')
       result.push ip
     else
       ip_parts.each_with_index do |ip_part, i| 
