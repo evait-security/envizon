@@ -69,6 +69,9 @@ class SettingsController < ApplicationController
     # zip storage folder
     output_filename = 'data.zip'
     active_storage_filename = 'storage'
+    FileUtils.mkdir_p(Rails.root.join(active_storage_filename))
+    # just to ensure it's there, even if it was never used
+    # is a docker volume in prod, so _should_ always be there..
     output_file = Tempfile.new(output_filename)
 
     # fix error by open tempfile
@@ -124,14 +127,14 @@ class SettingsController < ApplicationController
       end
     end
     unziped_storage = File.join(extract_dir, 'storage')
-    out_storage = Rails.root.join('storage')
+    # out_storage = Rails.root.join('storage')
     unziped_data_sql = File.join(extract_dir, 'envizon.db.tar')
     out_data_sql = Rails.root.join('db', 'envizon.db.tar')
     # unziped_data_yml = File.join(extract_dir, 'data.yml')
     # out_data_yml = Rails.root.join('db', 'data.yml')
 
     FileUtils.rm_rf(Rails.root.join('storage'))
-    FileUtils.mv(unziped_storage, out_storage)
+    FileUtils.mv(unziped_storage, Rails.root)
 
     app = Rake.application
     app.init
