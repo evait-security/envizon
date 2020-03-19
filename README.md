@@ -47,27 +47,12 @@ If you want to update the app image or pull it manually, you can do so with `doc
 
 If you want to provide your own SSL-certificates, modify the `docker-compose.yml` according to your needs, otherwise they will be generated.
 
-You need to provide a `SECRET_KEY_BASE` either as an environment variable, or by adding it in the `docker-compose.yml` (for the envizon container as well as for the sidekiq containers).
-
-To provide it at runtime, use
-
-```zsh
-SECRET_KEY_BASE=YOURSECRETKEYBASEHERE sudo --preserve-env=SECRET_KEY_BASE docker-compose up
-```
-
-or without sudo:
-
-```zsh
-SECRET_KEY_BASE=YOURSECRETKEYBASEHERE docker-compose up
-```
-
 **For the lazy ones:**
 
 ```zsh
 wget https://raw.githubusercontent.com/evait-security/envizon/master/docker/envizon_prod/docker-compose.yml
-export SECRET_KEY_BASE="$(echo $(openssl rand -hex 64) | tr -d '\n')"
-echo $SECRET_KEY_BASE # so you can note it down somewhere..
-sudo --preserve-env=SECRET_KEY_BASE docker-compose up
+echo SECRET_KEY_BASE="$(echo $(openssl rand -hex 64) | tr -d '\n')" > .envizon_secret.env
+sudo docker-compose up
 ```
 
 #### Running from local git checkout
@@ -75,9 +60,8 @@ sudo --preserve-env=SECRET_KEY_BASE docker-compose up
 ```zsh
 git clone https://github.com/evait-security/envizon
 cd envizon/docker/envizon_local
-export SECRET_KEY_BASE="$(echo $(openssl rand -hex 64) | tr -d '\n')"
-echo $SECRET_KEY_BASE # so you can note it down somewhere..
-sudo --preserve-env=SECRET_KEY_BASE docker-compose -f docker-compose.yml up
+echo SECRET_KEY_BASE="$(echo $(openssl rand -hex 64) | tr -d '\n')" > .envizon_secret.env
+sudo docker-compose up
 ```
 
 #### Development
@@ -88,11 +72,6 @@ _If, for whatever reason, you want to run the development environment in product
 git clone https://github.com/evait-security/envizon
 cd envizon/docker/envizon_dev
 sudo docker-compose up
-```
-
-Running tests:
-```
-docker exec -it envizon_container_name_1 /bin/ash -c 'rails test'
 ```
 
 ## Usage

@@ -35,7 +35,6 @@ services:
       POSTGRES_USER: 'envizon'
       POSTGRES_DB: 'envizon'
       POSTGRES_HOST: '/var/run/postgresql'
-      SECRET_KEY_BASE:
       RAILS_LOG_TO_STDOUT:
       RAILS_ENV: 'production'
       REDIS_URL: 'redis://redis:6379/0'
@@ -43,6 +42,8 @@ services:
       RAILS_SERVE_STATIC_FILES: 'true'
       SSL_KEY_PATH:
       SSL_CERT_PATH:
+    env_file:
+      - .envizon_secret.env
     entrypoint: /entrypoint.sh
   sidekiq-default:
     image: evait/envizon
@@ -58,9 +59,10 @@ services:
       - socket-volume:/var/run
     environment:
       REDIS_URL: 'redis://127.0.0.1:6379/0'
-      SECRET_KEY_BASE:
       RAILS_LOG_TO_STDOUT:
       RAILS_ENV: 'production'
+    env_file:
+      - .envizon_secret.env
   sidekiq-single:
     image: evait/envizon
     container_name: envizon_sidekiq_single
@@ -75,9 +77,10 @@ services:
       - socket-volume:/var/run
     environment:
       REDIS_URL: 'redis://127.0.0.1:6379/0'
-      SECRET_KEY_BASE:
       RAILS_LOG_TO_STDOUT:
       RAILS_ENV: 'production'
+    env_file:
+      - .envizon_secret.env
   selenium:
     container_name: envizon_selenium
     image: selenium/standalone-chrome
