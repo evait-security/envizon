@@ -69,9 +69,7 @@ class SettingsController < ApplicationController
     # zip storage folder
     output_filename = 'data.zip'
     active_storage_filename = 'storage'
-    FileUtils.mkdir_p(Rails.root.join(active_storage_filename))
-    # just to ensure it's there, even if it was never used
-    # is a docker volume in prod, so _should_ always be there..
+    FileUtils.mkdir_p(Rails.root.join(active_storage_filename)) unless Dir.exist?('storage')
     output_file = Tempfile.new(output_filename)
 
     # fix error by open tempfile
