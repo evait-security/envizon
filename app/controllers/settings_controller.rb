@@ -176,7 +176,7 @@ class SettingsController < ApplicationController
     setting = current_user.settings.where(name: 'global_notify').first_or_create
     setting.value = params[:global_notify_setting].present? ? 'true' : 'false'
     setting.save
-    { message: 'Notication settings updated', type: 'success' }
+    { message: 'Notification settings updated', type: 'success' }
   end
 
   def max_host_per_scan(max_host_per_scan)
@@ -188,7 +188,7 @@ class SettingsController < ApplicationController
       setting.value = '0'
     end
     setting.save
-    { message: 'Notication settings updated', type: 'success' }
+    { message: 'Host-Splitting settings updated', type: 'success' }
   end
 
   def respond_with_notify(locals)

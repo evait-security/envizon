@@ -2,11 +2,11 @@
   <% if @report_parts.empty? %>
     <div class="row">
       <div class="col s12">
-        <div class="placeholder tooltipped modal-trigger center-align" data-position="top" data-tooltip="Add new issue group">
-          <%= link_to new_issue_group_path, remote: true do %>
-            <i class="material-icons blue-text text-lighten-4">add</i>
-          <% end %>  
-        </div>
+        <%= link_to new_issue_group_path, remote: true do %>
+          <div class="placeholder tooltipped modal-trigger center-align" data-position="top" data-tooltip="Add new issue group">
+              <i class="material-icons blue-text text-lighten-4">add</i>
+          </div>
+        <% end %>  
       </div>
     </div>
   <% end %>
