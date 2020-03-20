@@ -46,7 +46,7 @@ services:
     build:
       context: ../../
       dockerfile: docker/envizon_dev/Dockerfile_development
-    container_name: envizon_sidekiq_default
+    container_name: envizon_sidekiq_default_dev
     command: bundle exec sidekiq -q default -c 5 & bundle exec sidekiq -q scan -c 5 & bundle exec sidekiq -q background -c 5
     depends_on:
       - postgres
@@ -61,7 +61,7 @@ services:
     build:
       context: ../../
       dockerfile: docker/envizon_dev/Dockerfile_development
-    container_name: envizon_sidekiq_single
+    container_name: envizon_sidekiq_single_dev
     command: bundle exec sidekiq -q single -c 1
     depends_on:
       - postgres

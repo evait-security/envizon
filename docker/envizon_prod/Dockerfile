@@ -21,12 +21,10 @@ RUN \
   rm -rf /var/cache/apk/* && \
   rm -rf /usr/lib/lib/ruby/gems/*/cache/* && \
   rm -rf ~/.gem && \
-
   mkdir -p /usr/src/app && \
   cd /usr/src/app && \
   git clone https://github.com/evait-security/envizon.git && \
   cd envizon && \
-  # git checkout 3.0 && \
   mkdir .ssl && \
   bundle install --without test:development
 
