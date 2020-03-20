@@ -84,6 +84,13 @@ class NmapCommand
         end
       end
     end
+    
+    # if the user set '31' or '30' prefix, handle them like single host. this is a workarout because IPAddress maps these range in different ways
+    special_targets = ip_targets.select{|value| [30,31].any? value.prefix.to_i}
+    special_targets.each do | value| 
+      host_targets.push value.to_string
+      ip_targets.delete(value)
+    end
 
     ip_targets = IPAddress::IPv4.summarize(*ip_targets)
 
@@ -95,19 +102,11 @@ class NmapCommand
 
         # workaround for subnet with two clients, because the subnet '31' not ever suported
         ip_targets = ip_targets.map do | ip |
-          if ip.prefix.to_i == 31
-            ip.prefix = 32
-            result = [ip]
-            ip_parts = ip.address.split('.')
-            begin
-              if ip_parts.last.to_i.even?
-                result.push IPAddress.parse((ip_parts[0,3] + [((ip_parts.last.to_i) +1).to_s]).join('.'))
-              else
-                result.push IPAddress.parse((ip_parts[0,3] + [((ip_parts.last.to_i) -1).to_s]).join('.'))
-                result.reverse
-              end
-            rescue
-              # skip second IP. Address out of scope.
+          case ip.prefix.to_i
+          when 31,30 # workaround for subnet with two/four clients, because the subnet '31','30' not ever suported
+            result = ip.entries.map do |inner|
+              inner.prefix = 32
+              inner
             end
           else
             result = ip
@@ -150,19 +149,8 @@ class NmapCommand
       case ip.prefix.to_i
       when 32 # single target without subnet
         result = ip.address
-      when 31 # workaround for subnet with two clients, because the subnet '31' not ever suported
-        ip_parts = ip.address.split('.')
-        result = [ip.address]
-        begin
-          if ip_parts.last.to_i.even?
-            result.push IPAddress.parse((ip_parts[0,3] + [((ip_parts.last.to_i) +1).to_s]).join('.')).address
-          else
-            result.push IPAddress.parse((ip_parts[0,3] + [((ip_parts.last.to_i) -1).to_s]).join('.')).address
-            result.reverse
-          end
-        rescue
-          # skip second IP. Address out of scope.
-        end
+      when 31,30 # workaround for subnet with two/four clients, because the subnet '31'/'32' not ever suported
+        result = ip.entries.map{|k|k.address}
       else
         result = ip.to_string
       end
