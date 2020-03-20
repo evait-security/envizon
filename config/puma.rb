@@ -57,7 +57,7 @@ if ENV.fetch('RAILS_ENV') == 'production'
            cert: ENV.fetch('SSL_CERT_PATH') { '.ssl/localhost.crt' },
            verify_mode: 'none'
 else
-  port ENV.fetch('PORT') { 3000 }
+  bind 'tcp://0.0.0.0:3000'
 end
 
 # Allow puma to be restarted by `rails restart` command.

@@ -10,13 +10,15 @@ App.notification = App.cable.subscriptions.create("UpdateChannel", {
   received: function(data) {
     // Called when there's incoming data on the websocket for this channel
 
-    // refresh sidebar
-    $.ajax({
-      url: "/pages/group_list",
-      dataType : "script",
-      cache: true,
-      method: "get"
-    });
+    // refresh sidebar if user is on group page
+    if ($(".groups-page").size()){
+      $.ajax({
+        url: "/groups/group_list",
+        dataType : "script",
+        cache: true,
+        method: "get"
+      });
+    }
 
     // check if selected group should be rerendered
     if( $('.selected-group').attr('gid') !== undefined ){

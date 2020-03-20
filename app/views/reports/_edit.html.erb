@@ -1,0 +1,27 @@
+
+<div class="container pt-2">
+    <%= simple_form_for @report, remote: true do |f| %>
+        <div class="row">
+            <%= f.input :title, wrapper_html: { class: 'col s4' } %>
+            <%= f.input :logo_url, wrapper_html: { class: 'col s4' } %>
+            <%= f.input :contact_person, wrapper_html: { class: 'col s4' } %>
+        </div>
+        <div class="row">
+            <%= f.input :company_name, wrapper_html: { class: 'col s3' } %>
+            <%= f.input :street, wrapper_html: { class: 'col s3' } %>
+            <%= f.input :postalcode, wrapper_html: { class: 'col s3' } %>
+            <%= f.input :city, wrapper_html: { class: 'col s3' } %>
+        </div>
+        <div class="row">
+            <%= f.input :summary, wrapper_html: { class: 'col s12' }, input_html: { class: 'markdown-textarea'} %>
+        </div>
+        <div class="row">
+            <%= f.input :conclusion, wrapper_html: { class: 'col s12' }, input_html: { class: 'markdown-textarea'} %>
+        </div>
+        <div class="row">
+            <div class="col s12 input-field">
+                <button type="submit" class="btn right blue darken-2">Update <i class="left material-icons">cached</i></button>
+            </div>  
+        </div>
+    <% end %>
+</div>

@@ -1,0 +1,20 @@
+<%= simple_form_for :report, url: change_parent_path, remote: true do |f| %>
+    <input type="hidden" value="<%= form_authenticity_token() %>" name="authenticity_token"/>
+    <input type="hidden" value="<%= @issue_group.id %>" name="source"/>
+    <div class="input-field col s3">
+        <select name="new_parent" onchange="$(this).submit()">
+            <% @report_parts.each do |report_part| %>
+                <option <%= (report_part.id.equal? @issue_group.reportable.id) ? 'selected' : '' %> value="<%= report_part.id %>"><%= report_part.title %></option> 
+            <% end %>
+            <option value="0">Current report</option>
+        </select>
+        <label>New parent</label>
+    </div>
+<% end %>
+<%= simple_form_for @issue_group do |f| %>
+    <%= f.input :title, wrapper_html: { class: 's5' } %>
+    <%= f.input :index, wrapper_html: { class: 's1' } %>
+    <div class="col s3 input-field">
+        <button type="submit" class="btn right blue darken-2 btn-save"> <i class="material-icons">save</i></button>
+    </div>
+<% end %>

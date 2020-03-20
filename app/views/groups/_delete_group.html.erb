@@ -19,8 +19,19 @@
 </style>
 <%= simple_form_for :group, url: groups_delete_path, remote: true do |f| %>
   <div class="modal-content">
+    <a href="#" class="modal-action modal-close red-text text-darken-2 right btn-flat"><i class="material-icons">close</i></a>
     <div class="modal-header" style="border-bottom: 1px solid rgba(0, 0, 0, 0.1); padding-bottom: 20px; margin-bottom: 50px;">
       <h5 class="center-align">Delete whole group with selected clients</h5>
+    </div>
+    <div class="row">
+      <div class="col s12 m12">
+        <div class="card red darken-4">
+          <div class="card-content white-text">
+            <span class="card-title">Warning</span>
+            <p>This task will remove the group and unlink the clients from it. All clients with no group membership will be removed from the database. (Archived clients will be ignored)</p>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="row">
       <div class="col s12">
@@ -33,7 +44,7 @@
     </div>
     <div class="row center-align">
       <div class="col s12" style="margin-bottom: 13px;">
-        <label>Selected Clients</label>
+        <label>Clients in group</label>
       </div>
       <div class="col s12">
         <% clients.each do | temp_client | %>
@@ -45,6 +56,5 @@
   </div>
   <div class="modal-footer">
     <%= f.button :submit, 'Delete', :class => 'modal-action red darken-4' %>
-    <a href="#" class="modal-action modal-close waves-effect waves-red btn-flat">Close</a>
   </div>
 <% end %>

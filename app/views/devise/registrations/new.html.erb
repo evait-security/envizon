@@ -13,31 +13,29 @@
 
 <div class="container">
   <div class="row">
-    <div class="col s4"></div>
-    <div class="col s4" >
-      <div class="row z-depth-3" id="form-margin">
+    <div class="col offset-s4 s4">
+      <div class="row z-depth-1" id="form-margin">
         <div class="row center-align" id="logo">
           <%= image_tag("logo/envizon-wide-export-blue.svg", class:"form_logo") %>
         </div>
         <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-            <div class="row right-align" >
-              <div class="chip ">Please sign up</div>
+          <div class="row center-align" >
+            <div class="chip blue pulse lighten-5 blue-text text-darken-3">Please define your application password</div>
+          </div>
+          <input type="hidden" name="user[username]" value="root">
+          <div class="row">
+            <%= f.input :password, required: true, :wrapper_html => { :class => 's12' }, :input_html => { :autofocus => true } %>
+          </div>
+          <div class="row">
+            <%= f.input :password_confirmation, required: true, :wrapper_html => { :class => 's12' } %>
+          </div>
+          <div class="row">
+            <div class="form-actions">
+              <%= f.button :submit, "Set password", class: "hidden" %>
             </div>
-            <input type="hidden" name="user[username]" value="root">
-            <div class="row">
-              <%= f.input :password, required: true, hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length), :wrapper_html => { :class => 's12' } %>
-            </div>
-            <div class="row">
-              <%= f.input :password_confirmation, required: true, :wrapper_html => { :class => 's12' } %>
-            </div>
-            <div class="row">
-              <div class="form-actions">
-                <%= f.button :submit, "Set password" %><div class="right"><%= render "devise/shared/links" %></div>
-              </div>
-            </div>
+          </div>
         <% end %>
       </div>
     </div>
   </div>
-  <div class="col s4"></div>
 </div>

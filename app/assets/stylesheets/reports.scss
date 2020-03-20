@@ -1,0 +1,27 @@
+// Place all the styles related to the reports controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.reports-page {
+    padding-top: 1em;
+    .reports-container {
+        position: fixed;
+        overflow-y: auto;
+        max-height: calc(100vh - 140px);
+        min-height: calc(100vh - 64px);
+    }
+    .editor-container {
+        overflow-y: auto;
+        position: fixed;
+        max-height: calc(100vh - 140px);
+        min-height: calc(100vh - 64px);
+    }
+    .report_part_action {
+        visibility: hidden;
+    }
+    .report_part:hover {
+        .report_part_action {
+            visibility: visible;
+        }
+    }
+}

@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @issue_group.title %>
+</p>
+
+<p>
+  <strong>Severity:</strong>
+  <%= @issue_group.severity %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @issue_group.description %>
+</p>
+
+<p>
+  <strong>Customtargets:</strong>
+  <%= @issue_group.customtargets %>
+</p>
+
+<p>
+  <strong>Rating:</strong>
+  <%= @issue_group.rating %>
+</p>
+
+<p>
+  <strong>Recommendation:</strong>
+  <%= @issue_group.recommendation %>
+</p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @issue_group.type %>
+</p>
+
+<p>
+  <strong>Index:</strong>
+  <%= @issue_group.index %>
+</p>
+
+<%= link_to 'Edit', edit_issue_group_path(@issue_group) %> |
+<%= link_to 'Back', issue_groups_path %>

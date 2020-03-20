@@ -1,0 +1,89 @@
+version: '2.1'
+volumes:
+  socket-volume:
+services:
+  postgres:
+    build:
+      context: ../postgres
+    container_name: envizon_postgres_dev
+    volumes:
+      - socket-volume:/var/run
+    environment:
+      POSTGRES_PASSWORD: 'envizon'
+      POSTGRES_USER: 'envizon'
+      POSTGRES_DB: 'envizon'
+      POSTGRES_DEVELOPMENT_DB: 'envizon_development'
+      POSTGRES_TEST_DB: 'envizon_test'
+      REDIS_URL: 'redis://redis:6379/0'
+  envizon:
+    build:
+      context: ../../
+      dockerfile: docker/envizon_dev/Dockerfile_development
+    container_name: envizon_dev
+    depends_on:
+      - postgres
+      - selenium
+      - redis
+    ports:
+      - 3000:3000
+    volumes:
+      - ../../:/usr/src/app/envizon
+      - socket-volume:/var/run
+    environment:
+      POSTGRES_PASSWORD: 'envizon'
+      POSTGRES_USER: 'envizon'
+      POSTGRES_DB: 'envizon'
+      POSTGRES_DEVELOPMENT_DB: 'envizon_development'
+      POSTGRES_HOST: '/var/run/postgresql'
+      RAILS_ENV: 'development'
+      REDIS_URL: 'redis://redis:6379/0'
+    entrypoint: /entrypoint_development.sh
+    # uncomment if using byebug:
+    # docker-compose up -d, then attach to running container
+    # stdin_open: true
+    # tty: true
+  sidekiq-default:
+    build:
+      context: ../../
+      dockerfile: docker/envizon_dev/Dockerfile_development
+    container_name: envizon_sidekiq_default_dev
+    command: bundle exec sidekiq -q default -c 5 & bundle exec sidekiq -q scan -c 5 & bundle exec sidekiq -q background -c 5
+    depends_on:
+      - postgres
+      - redis
+    network_mode: 'host'
+    volumes:
+      - ../../:/usr/src/app/envizon
+      - socket-volume:/var/run
+    environment:
+      REDIS_URL: 'redis://127.0.0.1:6379/0'
+  sidekiq-single:
+    build:
+      context: ../../
+      dockerfile: docker/envizon_dev/Dockerfile_development
+    container_name: envizon_sidekiq_single_dev
+    command: bundle exec sidekiq -q single -c 1
+    depends_on:
+      - postgres
+      - redis
+    network_mode: 'host'
+    volumes:
+      - ../../:/usr/src/app/envizon
+      - socket-volume:/var/run
+    environment:
+      REDIS_URL: 'redis://127.0.0.1:6379/0'
+  selenium:
+    container_name: envizon_selenium
+    image: selenium/standalone-chrome
+    ports:
+      - "4444:4444"
+      - "9515:9515"
+    volumes:
+      - /dev/shm:/dev/shm
+    environment:
+      CHROMEDRIVER_WHITELISTED_IPS:
+  redis:
+    image: redis:alpine
+    container_name: envizon_redis
+    ports:
+      - '127.0.0.1:6379:6379'

@@ -1,0 +1,52 @@
+<ul class="collection">
+<% if Group.all.count == 0 %>
+    <li class="collection-item">No Groups available</li>
+<% else %>
+    <!-- get all groups and cast to array -->
+    <% 
+        allGroups = Group.all.order(mod: :asc, name: :asc).to_a
+        clientlessGroups = []
+    %>
+    <!-- All groups with clients (Sidebar) -->
+    <% allGroups.each do | current_group | %>
+        <% if current_group.clients.where.not(archived: true).count > 0 %>
+            <a class="collection-item group-collection-item link" id="info_<%= "#{current_group.id}" %>" gid="<%= "#{current_group.id}" %>">
+                <span class="collection-item-title truncate"><%= "#{current_group.name}" %><% unless current_group.mod %>&nbsp;*<% end %></span>
+                <div class="secondary-content">
+                    <span style="float: left;" class="chip"><%= "#{current_group.clients.where(archived: false).count}" %></span>
+                    <div style="float: right;">
+                        <%= "#{current_group.icon}".html_safe %>
+                    </div>
+                </div>
+            </a>
+        <% else %>
+            <% clientlessGroups << current_group %>
+        <% end %>
+    <% end %>
+    <!-- All groups without clients (Sidebar) -->
+    <% clientlessGroups.each do | current_group | %>
+        <% unless current_group.clients.where(archived: false).count > 0 %>
+            <a class="collection-item group-collection-item link" id="info_<%= "#{current_group.id}" %>" gid="<%= "#{current_group.id}" %>"> 
+                <span style="font-weight: 300 !important;" class="collection-item-title truncate"><%= "#{current_group.name}" %><% unless current_group.mod %>&nbsp;*<% end %></span>
+                <div class="secondary-content">
+                    <span style="float: left;" class="chip"><%= "#{current_group.clients.where(archived: false).count}" %></span>
+                    <div style="float: right;">
+                        <%= "#{current_group.icon}".html_safe %>
+                    </div>
+                </div>
+            </a>
+        <% end %>
+    <% end %>
+    <!-- Archived -->
+    <% unless Client.where(archived: true).count == 0 %>
+        <a class="collection-item group-collection-item link" id="info_archived" gid="archived"> 
+            <span style="font-weight: 300 !important;" class="collection-item-title truncate">Archived Clients *</span>
+            <div class="secondary-content">
+                <span style="float: left;" class="chip"><%= Client.where(archived: true).count %></span>
+                <div style="float: right;">
+                    <i class="material-icons">archive</i>
+                </div>
+            </div>
+        </a>
+    <% end %>
+<% end %>

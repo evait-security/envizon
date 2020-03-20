@@ -1,5 +1,8 @@
 development:
   adapter: async
+  adapter: redis
+  url: <%= ENV['REDIS_URL'] ? ENV['REDIS_URL'] : 'redis://localhost:6379/0' %>
+  channel_prefix: envizon_production
 
 test:
   adapter: async

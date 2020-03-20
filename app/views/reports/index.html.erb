@@ -1,0 +1,94 @@
+<div class="reports-page">
+  <% if @report_parts.empty? %>
+    <div class="row">
+      <div class="col s12">
+        <%= link_to new_issue_group_path, remote: true do %>
+          <div class="placeholder tooltipped modal-trigger center-align" data-position="top" data-tooltip="Add new issue group">
+              <i class="material-icons blue-text text-lighten-4">add</i>
+          </div>
+        <% end %>  
+      </div>
+    </div>
+  <% end %>
+  <div class="row">
+    <div class="col s3 reports-container pl-1">
+      <div class="row">
+        <div id="report_tree" class="col s12">
+          <%= render partial: "report_parts/report_tree" %>
+        </div>
+      </div>
+    </div>
+    <div class="col s9 offset-s3 editor-container"><!-- scrollbar -->
+      <!-- partial render issue (selected) siehe -> issue template -->
+      <!-- partial render report edit -->
+    </div>
+  </div>
+</div>
+
+<!-- Modal (medium) -->
+<div id="medium-modal" class="modal modal-fixed-footer">
+  <div id="medium-modal-content">
+  </div>
+</div>
+
+<% case current_user.settings.where(name: 'report_mode').first_or_create.value %>
+<% when "presentation" %>
+  <div class="fixed-action-btn">
+    <%= simple_form_for :settings, url: update_settings_path do |f| %>
+      <input type="hidden" value="edit" name="report_mode"/>
+      <button class="btn-floating btn-large green darken-2 submit tooltipped" data-position="left" data-tooltip="Disable presentation mode"><i class="material-icons">stop_screen_share</i></button>
+    <% end %>
+  </div>
+<% else %>
+  <div class="fixed-action-btn toolbar direction-top no-autoinit">
+    <a class="btn-floating btn-large blue darken-3"><i class="large material-icons">mode_edit</i></a>
+    <ul>
+      <li>
+        <%= link_to new_issue_path, remote: true, class: "tooltipped", data: { position: "top", tooltip: "Add new issue"} do %><i class="material-icons">add</i><% end %>
+      </li>
+      <li>
+        <%= link_to export_odt_path(@current_report), class: "tooltipped", data: { position: "top", tooltip: "Export current report as docx"} do %><i class="material-icons">post_add</i><% end %>
+      </li>
+      <li>
+        <%= link_to new_issue_group_path, remote: true, class: "tooltipped", data: { position: "top", tooltip: "Add new issue group"} do %><i class="material-icons">playlist_add</i><% end %>
+      </li>
+      <li class="waves-effect waves-light">
+        <%= link_to edit_report_path(@current_report), remote: true, class: "tooltipped", data: { position: "top", tooltip: "Edit current report"} do %><i class="material-icons">edit</i><% end %>
+      </li>
+      <li>
+        <%= simple_form_for :settings, url: update_settings_path do |f| %>
+          <input type="hidden" value="presentation" name="report_mode"/>
+          <a href="#" onclick='$(this).parent().submit();' class="submit tooltipped" data-position="top" data-tooltip="Enable presentation mode"><i class="material-icons">screen_share</i></a>
+        <% end %>
+      </li>
+    </ul>
+  </div>
+<% end %>
+
+<script>
+  var pasteTarget = document.getElementsByTagName("body");
+  pasteTarget[0].addEventListener("paste", uploadClipboardData);
+  function uploadClipboardData(e){
+      for (var i = 0 ; i < e.clipboardData.items.length ; i++) {
+          var item = e.clipboardData.items[i];
+          if (item.type.indexOf("image") != -1) {
+              var fileInput = document.getElementById("issue_screenshot_image");
+              fileInput.files = e.clipboardData.files;
+              $("#issue_screenshot_image_path").val("Image from clipboard ...");
+          };
+      };
+  };
+  $(document).ready(function(){
+    $('.tap-target').tapTarget('open');
+  });
+  $(window).bind('keydown', function(event) {
+    if (event.ctrlKey || event.metaKey) {
+      switch (String.fromCharCode(event.which).toLowerCase()) {
+      case 's':
+          event.preventDefault();
+          $(".btn-save").trigger("click");
+          break;
+      }
+    }
+  });
+</script>

@@ -19,6 +19,7 @@
 </style>
 <%= simple_form_for :group, url: groups_path, remote: true do |f| %>
 <div class="modal-content">
+  <a href="#" class="modal-action modal-close red-text text-darken-2 right btn-flat"><i class="material-icons">close</i></a>
   <div class="modal-header" style="border-bottom: 1px solid rgba(0, 0, 0, 0.1); padding-bottom: 20px; margin-bottom: 50px;">
     <h5 class="center-align">Create an empty group</h5>
   </div>
@@ -34,7 +35,6 @@
 
 <div class="modal-footer">
   <%= f.button :submit, 'Create', :class => 'modal-action green darken-2' %>
-  <a href="#" class="modal-action modal-close waves-effect waves-red btn-flat">Close</a>
 </div>
 <% end %>
 

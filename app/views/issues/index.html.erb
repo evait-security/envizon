@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Issues</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Severity</th>
+      <th>Description</th>
+      <th>Customtargets</th>
+      <th>Rating</th>
+      <th>Recommendation</th>
+      <th>Type</th>
+      <th>Index</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @issues.each do |issue| %>
+      <tr>
+        <td><%= issue.title %></td>
+        <td><%= issue.severity %></td>
+        <td><%= issue.description %></td>
+        <td><%= issue.customtargets %></td>
+        <td><%= issue.rating %></td>
+        <td><%= issue.recommendation %></td>
+        <td><%= issue.type %></td>
+        <td><%= issue.index %></td>
+        <td><%= link_to 'Show', issue %></td>
+        <td><%= link_to 'Edit', edit_issue_path(issue) %></td>
+        <td><%= link_to 'Destroy', issue, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Issue', new_issue_path %>

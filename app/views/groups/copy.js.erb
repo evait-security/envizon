@@ -1,3 +1,4 @@
 $("#medium-modal").modal('open');
 $("#medium-modal-content").html("<%= j(render('copy', :clients=> clients, :source_group=> source_group)) %>");
-Materialize.updateTextFields();
+$('select').formSelect();
+M.updateTextFields();

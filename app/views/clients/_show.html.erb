@@ -6,17 +6,27 @@
     line-height: 32px;
     padding-left: 8px;
   }
-  .hostview_copy_ip {
-    font-size: 18px;
-    margin-left: 10px;
+  .host-icon {
+    padding: 0 8px;
   }
   .hostview_link {
     font-size: 22px;
     margin-left: 10px;
     vertical-align: middle;
   }
+  .collapsible-header {
+    border-bottom: none !important;
+  }
+  .collapsible-body {
+    border-bottom: none !important;
+  }
 </style>
-<span class="card-title"><span id="hostview_ip"><%= "#{client.ip}" %></span><a href="#" id="hostview_copy_ip" onclick=""><i class="material-icons hostview_copy_ip">content_copy</i></a></span>
+<span class="card-title">
+  <span id="hostview_ip"><%= "#{client.ip}" %></span>
+  <button class="btn-flat host-icon" id="hostview_copy_ip"><i class="material-icons green-text text-darken-2">content_copy</i></button>
+  <%= link_to clients_new_issue_form_path(client), remote: true, class: "btn-flat host-icon tooltipped", data: { position: "bottom", tooltip: "Link client to new issue"} do %><i class="material-icons grey-text text-darken-2">bug_report</i><% end %>
+  <%= link_to clients_link_issue_form_path(client), remote: true, class: "btn-flat host-icon tooltipped", data: { position: "bottom", tooltip: "Link client to existing issue"} do %><i class="material-icons blue-text text-darken-2">bug_report</i><% end %>
+</span>
 <table class="responsive-table">
   <thead>
     <tr>
@@ -35,8 +45,8 @@
         <% end %>
       </td>
       <td>
-        <% client.labels.to_a.each do |label|%>
-            <div class="chip <%= label.priority%>"><%= label.name%></div>
+        <% client.labels.uniq.to_a.each do |label|%>
+            <div class="chip tooltipped <%= label.priority%>" data-tooltip="<%= label.description%>"><%= label.name%></div>
         <% end %>
       </td>
       <td>
@@ -57,6 +67,7 @@
       <th>Port</th>
       <th>Desc</th>
       <th>Content</th>
+      <th></th>
     </tr>
   <thead>
   <tbody>
@@ -64,23 +75,40 @@
         <tr>
           <td>
             <span><%= "#{port.number}" %></span>
-            <% if port.service.include? "http" %>
-                  <a href="<% if port.service.include? "https" or port.number.to_s.include? "443" %>https<% else %>http<% end %>://<%= "#{port.client.ip}" %>:<%= "#{port.number}" %>" target="_blank"><i class="material-icons hostview_link ">link</i></a>
+            <% if port.service_short %>
+              <!-- HTTP Service -->
+              <% if port.service_short.include? "http" %>
+                <%= link_to port.url_ip, target: "_blank" do %>
+                  <i class="material-icons hostview_link grey-text text-darken-2">link</i>
+                <% end %>
+                <!-- show custom button for link with hostname if exists -->
+                <% url_host = port.url_host %>
+                <% if url_host %>
+                  <%= link_to url_host, target: "_blank" do %>
+                    <i class="material-icons hostview_link tooltipped" data-position="top" data-tooltip="Open link with hostname instead of IP">link</i>
+                  <% end %>
+                <% end %>
+              <% end %>
             <% end %>
           </td>
           <td><%= "#{port.service}" %></td>
-          <td><%= "#{port.description}" %></td>
+          <% if port.image.attached? %>
+            <td><%= "#{port.description}" %></td>
+            <td><%= image_tag url_for(port.image), :class => "materialboxed", width: '120' %></td>
+          <% else %>
+            <td colspan="2"><%= "#{port.description}" %></td>
+          <% end %>
         </tr>
         <% if port.outputs.count > 0 %>
             <tr>
-              <td colspan="3">
+              <td colspan="4">
                 <ul class="collapsible" data-collapsible="expandable">
                   <% port.outputs.to_a.each do |output| %>
                     <li>
-                      <div class="collapsible-header"><i class="material-icons">short_text</i><%= "#{output.name}" %></div>
+                      <div class="collapsible-header"><i class="material-icons rotate">keyboard_arrow_right</i><%= "#{output.name}" %></div>
                       <div class="collapsible-body mono">
                         <% output.value.split(/\n/).each do |line| %>
-                            <span><%= "#{line}"%></span>
+                          <pre class="script-output-line"><%= line %></pre>
                         <% end%>
                       </div>
                     </li>
@@ -100,11 +128,13 @@
   <ul class="collapsible" data-collapsible="expandable">
     <% client.outputs.to_a.each do |output| %>
       <li>
-        <div class="collapsible-header"><i class="material-icons">short_text</i><%= "#{output.name}" %></div>
+        <div class="collapsible-header"><i class="material-icons rotate">keyboard_arrow_right</i><%= "#{output.name}" %></div>
         <div class="collapsible-body mono">
-          <% output.value.split(/\n/).to_a.each do |cur_line| %>
-              <span><%= "#{cur_line}"%></span>
-          <% end%>
+          <div>
+            <% output.value.split(/\n/).each do |line| %>
+              <pre class="script-output-line"><%= line %></pre>
+            <% end%>
+          </div>
         </div>
       </li>
     <% end%>

@@ -1,0 +1,98 @@
+version: '2.1'
+volumes:
+  socket-volume:
+  nmap-uploads:
+  storage:
+services:
+  postgres:
+    image: postgres:alpine
+    container_name: envizon_postgres
+    volumes:
+      - socket-volume:/var/run
+    environment:
+      POSTGRES_PASSWORD: 'envizon'
+      POSTGRES_USER: 'envizon'
+      POSTGRES_DB: 'envizon'
+      REDIS_URL: 'redis://redis:6379/0'
+  envizon:
+    image: evait/envizon
+    container_name: envizon
+    build:
+      context: ../../
+      dockerfile: docker/envizon_prod/Dockerfile
+    depends_on:
+      - postgres
+      - selenium
+      - redis
+    ports:
+      - 3000:3000
+    volumes:
+      - nmap-uploads:/usr/src/app/envizon/nmap/uploads/
+      - storage:/usr/src/app/envizon/storage
+      - socket-volume:/var/run
+    environment:
+      POSTGRES_PASSWORD: 'envizon'
+      POSTGRES_USER: 'envizon'
+      POSTGRES_DB: 'envizon'
+      POSTGRES_HOST: '/var/run/postgresql'
+      RAILS_LOG_TO_STDOUT:
+      RAILS_ENV: 'production'
+      REDIS_URL: 'redis://redis:6379/0'
+      RAILS_FORCE_SSL: 'true'
+      RAILS_SERVE_STATIC_FILES: 'true'
+      SSL_KEY_PATH:
+      SSL_CERT_PATH:
+    env_file:
+      - .envizon_secret.env
+    entrypoint: /entrypoint.sh
+  sidekiq-default:
+    image: evait/envizon
+    container_name: envizon_sidekiq_default
+    command: bundle exec sidekiq -q default -c 5 & bundle exec sidekiq -q scan -c 5 & bundle exec sidekiq -q background -c 5
+    depends_on:
+      - postgres
+      - redis
+    network_mode: 'host'
+    volumes:
+      - nmap-uploads:/usr/src/app/envizon/nmap/uploads/
+      - storage:/usr/src/app/envizon/storage
+      - socket-volume:/var/run
+    environment:
+      REDIS_URL: 'redis://127.0.0.1:6379/0'
+      RAILS_LOG_TO_STDOUT:
+      RAILS_ENV: 'production'
+    env_file:
+      - .envizon_secret.env
+  sidekiq-single:
+    image: evait/envizon
+    container_name: envizon_sidekiq_single
+    command: bundle exec sidekiq -q single -c 1
+    depends_on:
+      - postgres
+      - redis
+    network_mode: 'host'
+    volumes:
+      - nmap-uploads:/usr/src/app/envizon/nmap/uploads/
+      - storage:/usr/src/app/envizon/storage
+      - socket-volume:/var/run
+    environment:
+      REDIS_URL: 'redis://127.0.0.1:6379/0'
+      RAILS_LOG_TO_STDOUT:
+      RAILS_ENV: 'production'
+    env_file:
+      - .envizon_secret.env
+  selenium:
+    container_name: envizon_selenium
+    image: selenium/standalone-chrome
+    ports:
+      - "4444:4444"
+      - "9515:9515"
+    volumes:
+      - /dev/shm:/dev/shm
+    environment:
+      CHROMEDRIVER_WHITELISTED_IPS:
+  redis:
+    image: redis:alpine
+    container_name: envizon_redis
+    ports:
+      - '127.0.0.1:6379:6379'

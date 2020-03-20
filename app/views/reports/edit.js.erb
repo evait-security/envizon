@@ -1,0 +1,6 @@
+$("#medium-modal-content").html("<%= j render(partial: 'reports/edit') %>");
+$(".markdown-textarea").each(function(index, value) {
+    var simplemde = new SimpleMDE({ element: value, spellChecker: false });
+});
+M.updateTextFields();
+$("#medium-modal").modal('open');

@@ -1,11 +1,11 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.1'
+gem 'rails', '~> 5.2.3'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.18'
 # Use Puma as the app server
-gem 'puma', '~> 3.7'
+gem 'puma', '~> 4.3'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -17,8 +17,6 @@ gem 'coffee-rails', '~> 4.2'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
-# Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
-gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
@@ -31,9 +29,11 @@ gem 'jbuilder', '~> 2.5'
 
 # nmap
 gem 'ruby-nmap', git: 'https://github.com/sophsec/ruby-nmap.git'
+gem 'ipaddress', git: 'https://github.com/ipaddress-gem/ipaddress.git'
 
 # Icon-Pack
-gem 'material_icons'
+# Use Material Icons directly without gem. Gem maintailer not update the gem frequently
+# gem 'material_icons', git: 'https://github.com/Angelmmiguel/material_icons'
 
 # Login
 gem 'devise'
@@ -52,21 +52,37 @@ gem 'jquery-datatables-rails'
 gem 'jquery-ui-rails'
 gem 'materialize-sass'
 
+# screenshots
+gem 'image_processing'
+gem 'mini_magick'
+gem 'selenium-webdriver'
+
 # jobs
-# (maybe use sidekiq or whatever in prod?)
-# (redis would be used for ActionCable anyway, so..)
+gem 'sidekiq'
 gem 'sucker_punch'
 
+# gems needed for sidekiq, not bundled in Ruby 2.7 anymore
+gem 'e2mmap'
+gem 'thwait'
+
 # db import/export
+gem 'activerecord-import'
 gem 'yaml_db', git: 'https://github.com/evs-ch/yaml_db.git'
+
+# zip
+gem 'rubyzip', '>= 1.0.0' # will load new rubyzip version
+gem 'zip-zip' # will load compatibility for old rubyzip API.
+
+# export report
+gem 'sablon' # docx tamplate
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'irb'
   # Adds support for Capybara system testing and selenium driver
   gem 'brakeman'
   gem 'capybara', '~> 2.13'
-  gem 'coverband', git: 'https://github.com/represent/coverband.git'
   gem 'minitest-rails'
   gem 'minitest-reporters'
   gem 'pry'
@@ -76,7 +92,6 @@ group :development, :test do
   gem 'rails_best_practices'
   gem 'rake'
   gem 'rubocop'
-  gem 'selenium-webdriver'
 end
 
 group :development do
@@ -99,3 +114,4 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+

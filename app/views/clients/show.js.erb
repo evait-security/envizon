@@ -1,7 +1,8 @@
 $("#hostview").html("<%= j(render('show', :client=> client)) %>");
+$('.collapsible').collapsible();
 $("#hostview_copy_ip").click(function () {
     copyToClipboard('#hostview_ip');
-    Materialize.toast('IP address copied to clipboard!', 2000, 'green');
+    M.toast({html: "IP address copied to clipboard!", displayLength: "2000", classes: "green"});
 });
 
 function copyToClipboard(element) {
@@ -14,5 +15,7 @@ function copyToClipboard(element) {
 
 $(document).ready(function(){
     $('.collapsible').collapsible();
+    $('.materialboxed').materialbox();
+    $('.tooltipped').tooltip();
 });
 

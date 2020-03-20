@@ -1,15 +1,17 @@
-<% flash.each do |key, value| %>
-  <script>
-      <%
-        case key
-          when  'alert'
-            toast_color = 'red'
-          when 'notice'
-            toast_color = 'blue'
-          else
-            toast_color = 'blue'
-        end
-      %>
-    Materialize.toast('<%= value %>', 3000, '<%= toast_color %>');
-  </script>
+<%# This file is used by devise for notifications %>
+<% flash.each do |key, value|
+    classes = 'blue'
+    case key
+        when  'alert'
+        classes = 'red'
+        when 'notice'
+        classes = 'blue'
+        else
+        classes = 'blue'
+    end
+    %>
+    <%= javascript_tag do %>
+        M.toast({html: "<%= value %>", displayLength: "3000", classes: "<%= classes %>"});
+    <% end %>
 <% end %>
+<% flash.clear %>

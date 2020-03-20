@@ -1,4 +1,10 @@
+<% if group_id == "archived" %>
+    $(".selected-group").html("<%= j(render('groups/group_archived')) %>");
+    $(".selected-group").attr('gid', '<%= group_id %>');
+    $(".loader").hide();
+<% end %>
 <% if Group.exists?(id: group_id) %>
     $(".selected-group").html("<%= j(render('groups/group', group_id: group_id)) %>");
     $(".selected-group").attr('gid', '<%= group_id %>');
+    $(".loader").hide();
 <% end %>

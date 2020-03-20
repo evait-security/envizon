@@ -15,7 +15,7 @@
         <!--Import Google Icon Font-->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <!--Import materialize.css-->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
         <!--Let browser know website is optimized for mobile-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -77,46 +77,88 @@
                 <h3 class="center-align grey-text">features</h3>
             </div>
             <div class="row" style="padding-top: 6em;">
-                <div class="col s3 center-align box">
+                <div class="col s4 center-align box">
                     <div class="grey lighten-5 box-inner">
                         <i class="large material-icons blue-text text-darken-3">group</i>
                         <h5 class="grey-text">group hosts</h5>
                         <p class="grey-text">Create any number of groups to organize your targets / clients across subnets</p>
                     </div>
                 </div>
-                <div class="col s3 center-align box">
+                <div class="col s4 center-align box">
                     <div class="grey lighten-5 box-inner">
                         <i class="large material-icons blue-text text-darken-3">search</i>
                         <h5 class="grey-text">global search</h5>
                         <p class="grey-text">Search in every host property and combine searches for complex queries</p>
                     </div>
                 </div>
-                <div class="col s3 center-align box">
+                <div class="col s4 center-align box">
                     <div class="grey lighten-5 box-inner">
                         <i class="large material-icons blue-text text-darken-3">gps_fixed</i>
                         <h5 class="grey-text">scan interface</h5>
                         <p class="grey-text">Use predefined scans or freely choose your own nmap options to enumerate the network</p>
                     </div>
                 </div>
-                <div class="col s3 center-align box">
+            </div>
+            <div class="row">
+                <div class="col s6 m3 center-align box">
+                    <div class="grey lighten-5 box-inner">
+                        <i class="large material-icons blue-text text-darken-3">camera</i>
+                        <h5 class="grey-text">screenshot ports</h5>
+                        <p class="grey-text">Visualize all http-like applications of your targets using chrome-headless (selenium) - VNC soon&trade;</p>
+                    </div>
+                </div>
+                <div class="col s6 m3 center-align box">
                     <div class="grey lighten-5 box-inner">
                         <i class="large material-icons blue-text text-darken-3">import_export</i>
                         <h5 class="grey-text">data exchange</h5>
                         <p class="grey-text">Import nmap scans or an envizon database. Export individial results as YAML-data or simple lists for other tools, or just export the complete database</p>
                     </div>
                 </div>
+                <div class="col s6 m3 center-align box">
+                    <div class="grey lighten-5 box-inner">
+                        <i class="large material-icons blue-text text-darken-3">call_merge</i>
+                        <h5 class="grey-text">on-change update</h5>
+                        <p class="grey-text">Work with your teammates simultaneously in the groups section without having to reload</p>
+                    </div>
+                </div>
+                <div class="col s6 m3 center-align box">
+                    <div class="grey lighten-5 box-inner">
+                        <i class="large material-icons blue-text text-darken-3">bug_report</i>
+                        <h5 class="grey-text">issue templating and pentest reporting</h5>
+                        <p class="grey-text">create templates for your vulnerabilities, group, link to assets and export them to a complete pentest report</p>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="container">
             <div class="row" style="padding-top: 6em;">
-                <h3 class="center-align grey-text">screenshots</h3>
+                <h3 class="center-align grey-text">impressions</h3>
+            </div>
+            <div class="row" style="padding-top: 3em;">
+                <div class="col s8">
+                    <img class="materialboxed" src="https://evait-security.github.io/envizon/screenshots/groups.png" width="100%">
+                </div>
+                <div class="col s4">
+                    <h5 class="grey-text text-darken-2">Groups-Interaface</h5>
+                    <p class="grey-text text-darken-2" style="text-align: justify;">
+                    The group interface is the heart of envizon. You can select, group, order, quick search, global search, move, copy, delete and view your clients. The left side represents the group list. If you click on a group you will get a detailed view in the center of the page with the group content. Each client in a group has a link. By clicking on the IP address you will get a more detailed view on the right side with all attributes, labels, ports and nmap output.</p>
+                </div>
+            </div>
+            <div class="row" style="padding-top: 3em;">
+                <div class="col s8">
+                    <img class="materialboxed" src="https://evait-security.github.io/envizon/screenshots/images.png" width="100%">
+                </div>
+                <div class="col s4">
+                    <h5 class="grey-text text-darken-2">Image-Interface</h5>
+                    <p class="grey-text text-darken-2" style="text-align: justify;">All http-like services enumerated by nmap will be screenshotted using selenium with a chrome-headless backend and stored in the database as PNG.</p>
+                </div>
             </div>
             <div class="row" style="padding-top: 3em;">
                 <div class="col s8">
                     <img class="materialboxed" src="https://evait-security.github.io/envizon/screenshots/scan-1.png" width="100%">
                 </div>
                 <div class="col s4">
-                    <h5 class="grey-text text-darken-2">Scan Interface</h5>
+                    <h5 class="grey-text text-darken-2">Scan-Interface</h5>
                     <p class="grey-text text-darken-2" style="text-align: justify;">The scan interface is divided in two sections. On the left side you can run a new scan with preconfigured parameters or your own nmap fu. You also have the possibility to upload previously created nmap scans (with the `-oX` parameter).</p>
                 </div>
             </div>
@@ -125,18 +167,8 @@
                     <img class="materialboxed" src="https://evait-security.github.io/envizon/screenshots/scan-2.png" width="100%">
                 </div>
                 <div class="col s4">
-                    <h5 class="grey-text text-darken-2">Scan Interface</h5>
+                    <h5 class="grey-text text-darken-2">Scan-Interface</h5>
                     <p class="grey-text text-darken-2" style="text-align: justify;">On the right side you will see your running and finished scans.</p>
-                </div>
-            </div>
-            <div class="row" style="padding-top: 3em;">
-                <div class="col s8">
-                    <img class="materialboxed" src="https://evait-security.github.io/envizon/screenshots/groups.png" width="100%">
-                </div>
-                <div class="col s4">
-                    <h5 class="grey-text text-darken-2">Groups</h5>
-                    <p class="grey-text text-darken-2" style="text-align: justify;">
-                    The group interface is the heart of envizon. You can select, group, order, quick search, global search, move, copy, delete and view your clients. The left side represents the group list. If you click on a group you will get a detailed view in the center of the page with the group content. Each client in a group has a link. By clicking on the IP address you will get a more detailed view on the right side with all attributes, labels, ports and nmap output.</p>
                 </div>
             </div>
             <div class="row" style="padding-top: 3em;">
@@ -144,16 +176,21 @@
                     <img class="materialboxed" src="https://evait-security.github.io/envizon/screenshots/search.png" width="100%">
                 </div>
                 <div class="col s4">
-                    <h5 class="grey-text text-darken-2">Global search</h5>
+                    <h5 class="grey-text text-darken-2">Global-Search-Interface</h5>
                     <p class="grey-text text-darken-2" style="text-align: justify;">In this section you can search for nearly anything in the database and combine each search parameter with 'AND', 'OR' &amp; 'NOT'. <br />Perform simple queries for hostname, IP, open ports, etc. or create combined queries like: hostname contains 'win' AND mac address starts with '0E:5C' OR has port 21 and 22 open.</p>
                 </div>
             </div>
+            <div class="row" style="padding-top: 3em;">
+                <div class="col s8">
+                    <img class="materialboxed" src="https://evait-security.github.io/envizon/screenshots/reporting.png" width="100%">
+                </div>
+                <div class="col s4">
+                    <h5 class="grey-text text-darken-2">Issue templating and reporting</h5>
+                    <p class="grey-text text-darken-2" style="text-align: justify;">Keep your issue templates organized and create complete pentest reports with vulns that are linked to issue templates and clients as well. The output is a ".docx" file which can be easily edited after export. The template is located under "./report-templates/envizon_template.docx" and can be edited to your needs.</p>
+                </div>
+            </div>
         </div>
-        <!--Import jQuery before materialize.js-->
-        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script>M.AutoInit();</script>
     </body>
 </html>
-
-<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/brands.js" integrity="sha384-sCI3dTBIJuqT6AwL++zH7qL8ZdKaHpxU43dDt9SyOzimtQ9eyRhkG3B7KMl6AO19" crossorigin="anonymous"></script>
-<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>

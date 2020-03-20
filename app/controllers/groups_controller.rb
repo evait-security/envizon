@@ -12,6 +12,28 @@ class GroupsController < ApplicationController
     end
   end
 
+  # @url /pages/refresh
+  # @action GET
+  #
+  # Refreshes group view
+  def refresh
+    respond_to do |format|
+      format.html {}
+      format.js { render 'groups/group_refresh', locals: { message: 'Group content has been refreshed', type: 'success', delete: '-2' } }
+    end
+  end
+
+  # @url /pages/group_list
+  # @action POST
+  #
+  # Render the sidebar in the group view
+  def group_list
+    respond_to do |format|
+      format.html {}
+      format.js { render 'groups/group_list' }
+    end
+  end
+
   # @url /groups
   # @action POST
   #
@@ -39,8 +61,14 @@ class GroupsController < ApplicationController
     respond_with_refresh(message, "-2,-2", "-2") && return unless selected_clients.present?
 
     if params[:move].present? && params[:move].casecmp('true').zero?
+      if search
+        tmp_array = []
+        selected_clients.each { |client| Client.find(client).groups.each { |group| tmp_array << group.id}}
+        affected_group = tmp_array.uniq.join(",")
+      else
+        affected_group = source_group.id
+      end
       move_do(selected_clients, destination_group, source_group, search)
-      affected_group = source_group.id
     else
       selected_clients.each { |selected| destination_group.clients << Client.find(selected) }
     end
@@ -152,14 +180,15 @@ class GroupsController < ApplicationController
 
   # Renders a form for deleting clients
   def delete_form
-    source_group ||= Group.find(params[:source_group]) unless params[:source_group].blank?
-    clients = Client.find(params[:clients]) if params.key?(:clients)
-    if (clients.blank? && source_group.clients.present?) || source_group.nil?
-      respond_with_notify
+    if params.key?(:source_group)
+      if sg = Group.find(params[:source_group])
+        locals = { source_group: sg, clients: sg.clients.where(archived: false) }
+        respond_root_path_js(:delete_group, locals)
+      else
+        respond_with_notify("Group can not be found in database.")
+      end
     else
-      clients ||= []
-      locals = { source_group: source_group, clients: clients }
-      respond_root_path_js(:delete_group, locals)
+      respond_with_notify
     end
   end
 
@@ -172,10 +201,8 @@ class GroupsController < ApplicationController
   def delete
     source_group = Group.find(params[:source_group])
 
-    source_group.clients.each { |client| client.destroy if client.groups.length == 1 }
-
+    source_group.clients.where(archived: false).each { |client| client.destroy if client.groups.length == 1 }
     message = "Deleted group '#{source_group.name}'"
-    deleted = source_group.id
     source_group.destroy
 
     respond_with_refresh(message, "#{source_group.id},-2", source_group.id)
@@ -276,13 +303,13 @@ class GroupsController < ApplicationController
   private
 
   def respond_with_refresh(message, mod_gids, delete, type = 'notice')
-    if current_user.settings.find_by_name('global_notify').value
+    if current_user.settings.find_by_name('global_notify').value.include? "true"
       ActionCable.server.broadcast 'notification_channel', message: message
     end
     ActionCable.server.broadcast 'update_channel', ids: mod_gids
     respond_to do |format|
       format.html { redirect_to root_path }
-      format.js { render 'pages/group_refresh', locals: {  message: message, delete: delete, close: true, type: type } }
+      format.js { render 'groups/group_refresh', locals: {  message: message, delete: delete, close: true, type: type } }
     end
   end
 

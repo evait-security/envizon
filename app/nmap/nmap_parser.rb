@@ -37,93 +37,138 @@ class NmapParser
   end
 
   def os_info(host, client)
-    accuracy = 0
-    os = ''
-    host.os && host.os.each do |os_match|
-      next unless os_match.accuracy > accuracy
-      os = os_match.name
-      accuracy = os_match.accuracy
+    begin
+      accuracy = 0
+      os = ''
+      host.os && host.os.each do |os_match|
+        next unless os_match.accuracy > accuracy
+        os = os_match.name
+        accuracy = os_match.accuracy
+      end
+      client.os = os unless os.blank? || client.os.present?
+      client.save
+    rescue => exception
+      puts "Faild to get os_info ->"
+      puts "host => #{host}"
+      puts "client => #{client}"
+      puts "exception => #{exception}"
     end
-    client.os = os unless os.blank? || client.os.present?
-    client.save
+      
   end
 
   def os_type(host, client)
-    cpe = ''
-    type = ''
-    accuracy = 0
-    host.os && host.os.classes.each do |os_class|
-      next unless os_class.accuracy > accuracy
-      cpe = os_class.cpe.first
-      type = os_class.type
-      accuracy = os_class.accuracy
+    begin
+      cpe = ''
+      type = ''
+      accuracy = 0
+      host.os && host.os.classes.each do |os_class|
+        next unless os_class.accuracy > accuracy
+        begin
+          cpe = os_class.cpe.first  
+        rescue => exception
+          puts "Faild to get cpe for os_type"
+        end
+        type = os_class.type
+        accuracy = os_class.accuracy
+      end
+      client.cpe = cpe unless cpe.blank?
+      client.ostype = type unless type.blank?
+      client.save
+    rescue => exception
+      puts "Faild to get os_type ->"
+      puts "host => #{host}"
+      puts "client => #{client}"
+      puts "exception => #{exception}"
     end
-    client.cpe = cpe unless cpe.blank?
-    client.ostype = type unless type.blank?
-    client.save
   end
 
   def scripts(host, client)
-    host.host_script.script_data.each_pair do |name, data|
-      data.default = '' if data.is_a?(Hash)
-      db_output = Output.where(client_id: client.id, name: name).first_or_create
-      db_output.client = client
-      db_output.name = name
-      # TODO: modify storage/display of data
-      db_output.value = YAML.dump(data)
-      db_output.save
+    begin
+      host.host_script.script_data.each_pair do |name, data|
+        if data.present?
+          data.default = '' if data.is_a?(Hash)
+          db_output = Output.where(client_id: client.id, name: name).first_or_create
+          db_output.client = client
+          db_output.name = name
+          # TODO: modify storage/display of data
+          db_output.value = YAML.dump(data).lines[1..-1].join #remove the first line ("---\n")
+          db_output.save
 
-      case name
-      when 'nbstat'
-        nbstat(client, data)
-      when 'smb-os-discovery'
-        smb_os(client, data)
-      when 'smb-security-mode'
-        set_label(client, 'SMB Signing') if data['message_signing'].casecmp('disabled').zero?
-      when 'smb-vuln-ms17-010'
-        set_label(client, 'MS17-010') if data['CVE-2017-0143']['state'].casecmp('vulnerable').zero?
-      when 'smb-vuln-ms08-067'
-        set_label(client, 'MS08-067') if data['CVE-2008-4250']['state'].casecmp('vulnerable').zero?
+          case name
+          when 'nbstat'
+            nbstat(client, data) if !data.empty?
+          when 'smb-os-discovery'
+            smb_os(client, data) if !data.empty?
+          when 'smb-security-mode'
+            set_label(client, 'SMB Signing') if data['message_signing'].casecmp('disabled').zero? if !data.empty?
+          end
+
+          check_vuln(client, name, data)
+        end
       end
+    rescue => exception
+      puts "Faild to get scripts ->"
+      puts "host => #{host}"
+      puts "client => #{client}"
+      puts "exception => #{exception}"
     end
   end
 
   def ports(host, client)
-    host.ports.each do |port|
-      next unless port.state == :open
-      db_port = Port.where(client_id: client.id, number: port.number).first_or_create
-      db_port.client_id = client.id
-      db_port.number = port.number
-      if port.service
-        db_port.service = port.service.name unless db_port.sv
-        if port.service.product.present?
-          db_port.description = port.service.product
-          db_port.description += ' ' + port.service.version if port.service.version.present?
-          db_port.sv = true
+    begin
+      host.ports.each do |port|
+        next unless port.state == :open
+        db_port = Port.where(client_id: client.id, number: port.number).first_or_create
+        db_port.client_id = client.id
+        db_port.number = port.number
+        if port.service
+          db_port.service = "#{port.service.ssl? ? 'ssl/' : ''}#{port.service.name}" unless db_port.sv
+          if port.service.product.present?
+            db_port.description = port.service.product
+            db_port.description += ' ' + port.service.version if port.service.version.present?
+            db_port.sv = true
+          end
         end
+        port_scripts(db_port, port) if port.scripts
+        db_port.save
       end
-      port_scripts(db_port, port) if port.scripts
-      db_port.save
+    rescue => exception
+      puts "Faild to get ports ->"
+      puts "host => #{host}"
+      puts "client => #{client}"
+      puts "exception => #{exception}"
     end
   end
 
   def port_scripts(db_port, port)
-    port.script_data.each_pair do |name, data|
-      data.default = '' if data.is_a?(Hash)
-      output = Output.where(port_id: db_port.id, name: name).first_or_create
-      output.port_id = db_port.id
-      output.name = name
-      output.value = YAML.dump(data)
-      output.save
+    begin
+      client = db_port.client
+      port.script_data.each_pair do |name, data|
+        if data.present?
+          data.default = '' if data.is_a?(Hash)
+          output = Output.where(port_id: db_port.id, name: name).first_or_create
+          output.port_id = db_port.id
+          output.name = name
+          output.value = YAML.dump(data).lines[1..-1].join #remove the first line ("---\n")
+          output.save
 
-      case name
-      when 'http-ntlm-info'
-        hostname = data['DNS_Computer_Name']
-        hostname = data['NetBIOS_Computer_Name'] if hostname.blank?
-        client.hostname = hostname unless hostname.blank?
-      when 'ftp-anon'
-        set_label(client, 'Anonymous FTP') if data.include? 'Anonymous FTP login allowed'
+          case name
+          when 'http-ntlm-info'
+            hostname = data['DNS_Computer_Name']
+            hostname = data['NetBIOS_Computer_Name'] if hostname.blank?
+            client.hostname = hostname unless hostname.blank?
+          when 'ftp-anon'
+            set_label(client, 'Anonymous FTP') if data.include? 'Anonymous FTP login allowed'
+          end
+
+          check_vuln(client, name, data)
+        end
       end
+    rescue => exception
+      puts "Faild to get port_scripts ->"
+      puts "db_port => #{db_port}"
+      puts "port => #{port}"
+      puts "exception => #{exception}"
     end
   end
 
@@ -140,6 +185,43 @@ class NmapParser
 
   def set_label(client, labeltext)
     client.labels << Label.find_by_name(labeltext) unless client.labels.find_by_name(labeltext).present?
+    client.save
+  end
+
+  def check_vuln(client, script_name, script_values)
+    if script_values.is_a?(Hash) 
+      begin
+        vuln = []
+        likely = []
+        script_values.each do |script_vuln|
+          begin
+            case script_vuln[1]['state'].downcase
+            when 'vulnerable'
+              vuln << script_vuln[0].to_s
+            when 'likely vulnerable'
+              likely << script_vuln[0].to_s
+            end
+          rescue => exception
+            puts "Faild to state from check_vuln single vuln ->"
+            puts "script_vuln => #{script_vuln}"
+          end
+        end
+      rescue => exception
+        puts "Faild to state from check_vuln script ->"
+        puts "script_name => #{script_name}"
+        puts "script_values => #{script_values}"
+      end
+      set_vuln_label(client, script_name, vuln, false)
+      set_vuln_label(client, script_name, likely, true)
+    end
+  end
+
+  def set_vuln_label(client, script_name, vulns, likely)
+    return if vulns.empty?
+    client.labels << Label.where(
+      :name => "#{script_name}",
+      :description => "Generated label: #{likely ? 'Likely vulnerable' : 'Vulnerable'} to '#{vulns.join("', '")}'",
+      :priority => likely ? 'orange darken-1 white-text' : 'red darken-1 white-text' ).first_or_create
     client.save
   end
 
