@@ -18,7 +18,7 @@ class User < ApplicationRecord
     exclude_hosts.save
 
     max_host = Setting.where(user_id: id, name: 'max_host_per_scan').first_or_create
-    max_host.assign_attributes(user_id: id, name: 'max_host_per_scan', value: '0')
+    max_host.assign_attributes(user_id: id, name: 'max_host_per_scan', value: '25')
     max_host.save
 
     notify_scan_status = Setting.where(user_id: id, name: 'global_notify').first_or_create

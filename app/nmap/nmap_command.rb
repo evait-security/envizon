@@ -6,22 +6,22 @@ class NmapCommand
 
     begin
       case ip_parts.size
-      when 4 #eg ["192", "168", "1-4", "15"]
-        result = parse_splited_ip_range(ip_parts).flatten.map do | range |
+      when 4 # eg ["192", "168", "1-4", "15"]
+        result = parse_splited_ip_range(ip_parts).flatten.map do |range|
           IPAddress.parse [range, subnet].compact.join('/')
         end
-        
-      when 7 #eg ["192", "168", "1", "1-192", "168", "1", "10"]
+
+      when 7 # eg ["192", "168", "1", "1-192", "168", "1", "10"]
         s_start, s_end = ip_parts[3].split('-').map(&:strip)
         ip_start_s = (ip_parts[0, 3] + [s_start]).join('.')
         ip_end_s = ([s_end] + ip_parts[4, 7]).join('.')
         ip_start = IPAddr.new([ip_start_s, subnet].compact.join('/'))
         ip_end = IPAddr.new([ip_end_s, subnet].compact.join('/'))
-        result = (ip_start..ip_end).map {|ipad| IPAddress.parse "#{ipad}/#{ipad.prefix}"}
+        result = (ip_start..ip_end).map { |ipad| IPAddress.parse "#{ipad}/#{ipad.prefix}" }
       end
 
-      #[ip_range, subnet].compact.join('/')
-    rescue # not compatible ip range
+      # [ip_range, subnet].compact.join('/')
+    rescue StandardError # not compatible ip range
       return nil
     end
     result
@@ -31,26 +31,26 @@ class NmapCommand
   def parse_splited_ip_range(ip_parts)
     result = []
     ip = ip_parts.join('.')
-    unless ip.include?('-') || ip.include?(',')
-      result.push ip
-    else
-      ip_parts.each_with_index do |ip_part, i| 
+    if ip.include?('-') || ip.include?(',')
+      ip_parts.each_with_index do |ip_part, i|
         if ip_part.include? '-'
           s_start, s_end = ip_part.split('-').map(&:strip).reject(&:empty?)
-          result += (s_start..s_end).map do | curr| 
-            iner_range = (ip_parts[0, i] + [curr] + ip_parts[(i+1), ip_parts.size])
+          result += (s_start..s_end).map do |curr|
+            iner_range = (ip_parts[0, i] + [curr] + ip_parts[(i + 1), ip_parts.size])
             parse_splited_ip_range(iner_range)
           end
           return result # do not go on. the rest of the parts will get by the recursive function
         elsif ip_part.include? ','
-          result += ip_part.split(',').map(&:strip).reject(&:empty?).map do | curr| 
-            iner_range = (ip_parts[0, i] + [curr] + ip_parts[(i+1), ip_parts.size])
+          result += ip_part.split(',').map(&:strip).reject(&:empty?).map do |curr|
+            iner_range = (ip_parts[0, i] + [curr] + ip_parts[(i + 1), ip_parts.size])
             parse_splited_ip_range(iner_range)
           end
           return result # do not go on. the rest of the parts will get by the recursive function
         end
         # go to next part and search for "-" or ","
       end
+    else
+      result.push ip
     end
     result
   end
@@ -77,17 +77,17 @@ class NmapCommand
       rescue ArgumentError
         # not a CIDR range
         ip_range = parse_ip_range(address)
-        unless ip_range.blank?
-          ip_targets += ip_range
-        else
+        if ip_range.blank?
           host_targets.push address
+        else
+          ip_targets += ip_range
         end
       end
     end
-    
+
     # if the user set '31' or '30' prefix, handle them like single host. this is a workarout because IPAddress maps these range in different ways
-    special_targets = ip_targets.select{|value| [30,31].any? value.prefix.to_i}
-    special_targets.each do | value| 
+    special_targets = ip_targets.select { |value| [30, 31].any? value.prefix.to_i }
+    special_targets.each do |value|
       host_targets.push value.to_string
       ip_targets.delete(value)
     end
@@ -101,9 +101,9 @@ class NmapCommand
       unless ip_targets.blank?
 
         # workaround for subnet with two clients, because the subnet '31' not ever suported
-        ip_targets = ip_targets.map do | ip |
+        ip_targets = ip_targets.map do |ip|
           case ip.prefix.to_i
-          when 31,30 # workaround for subnet with two/four clients, because the subnet '31','30' not ever suported
+          when 31, 30 # workaround for subnet with two/four clients, because the subnet '31','30' not ever suported
             result = ip.entries.map do |inner|
               inner.prefix = 32
               inner
@@ -114,7 +114,7 @@ class NmapCommand
           result
         end
 
-        ip_targets = ip_targets.flatten.map{|i| i.hosts.blank? ? i : i.hosts}.flatten
+        ip_targets = ip_targets.flatten.map { |i| i.hosts.blank? ? i : i.hosts }.flatten
         # .hosts do not split to single ips, because its don't set the subnet to /32
         ip_targets = ip_targets.map do |single|
           single.prefix = 32
@@ -122,14 +122,14 @@ class NmapCommand
         end
       end
       # fill last array to max
-      if(!@all_targets.blank? && !ip_targets.blank? && @all_targets.last.length < @simultane_targets)
+      if !@all_targets.blank? && !ip_targets.blank? && @all_targets.last.length < @simultane_targets
         ips = address_array_to_string_array(ip_targets.shift(@simultane_targets - @all_targets.last.length))
-        @all_targets.last.push *ips
+        @all_targets.last.push(*ips)
       end
 
       unless ip_targets.blank?
         # map ips to compact string arrays and apand to @all_targets
-        @all_targets += ip_targets.each_slice(@simultane_targets).to_a.map{|i| address_array_to_string_array(i)}
+        @all_targets += ip_targets.each_slice(@simultane_targets).to_a.map { |i| address_array_to_string_array(i) }
       end
     else
       # all hosts at same scan
@@ -145,12 +145,12 @@ class NmapCommand
   end
 
   def address_array_to_string_array(ip_address_list)
-    result_map = IPAddress::IPv4.summarize(*ip_address_list).map do | ip |
+    result_map = IPAddress::IPv4.summarize(*ip_address_list).map do |ip|
       case ip.prefix.to_i
       when 32 # single target without subnet
         result = ip.address
-      when 31,30 # workaround for subnet with two/four clients, because the subnet '31'/'32' not ever suported
-        result = ip.entries.map{|k|k.address}
+      when 31, 30 # workaround for subnet with two/four clients, because the subnet '31'/'32' not ever suported
+        result = ip.entries.map(&:address)
       else
         result = ip.to_string
       end
@@ -190,7 +190,7 @@ class NmapCommand
     ['--stats-every', '60s',
      '--excludefile',
      @exclude_file.to_s].each { |o| options.push o }
-     options
+    options
   end
 
   def run_worker(scan)
