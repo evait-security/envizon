@@ -156,7 +156,6 @@ class NmapCommand
         begin
           if ip_parts.last.to_i.even?
             result.push IPAddress.parse((ip_parts[0,3] + [((ip_parts.last.to_i) +1).to_s]).join('.')).address
-            result.reverse
           else
             result.push IPAddress.parse((ip_parts[0,3] + [((ip_parts.last.to_i) -1).to_s]).join('.')).address
             result.reverse
