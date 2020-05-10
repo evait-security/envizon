@@ -132,7 +132,10 @@ class SettingsController < ApplicationController
     # out_data_yml = Rails.root.join('db', 'data.yml')
 
     FileUtils.rm_rf(Rails.root.join('storage'))
-    FileUtils.mv(unziped_storage, Rails.root)
+    # FileUtils.mv(unziped_storage, Rails.root) # not work because storage folder can not be deleted
+    Dir.children(unziped_storage).each do |f|
+      FileUtils.mv(File.join(unziped_storage , f), Rails.root.join('storage'))
+    end
 
     app = Rake.application
     app.init
