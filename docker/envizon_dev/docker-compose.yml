@@ -73,7 +73,7 @@ services:
     environment:
       REDIS_URL: 'redis://127.0.0.1:6379/0'
   selenium:
-    container_name: envizon_selenium
+    container_name: envizon_selenium_dev
     image: selenium/standalone-chrome
     ports:
       - "4444:4444"
@@ -84,6 +84,6 @@ services:
       CHROMEDRIVER_WHITELISTED_IPS:
   redis:
     image: redis:alpine
-    container_name: envizon_redis
+    container_name: envizon_redis_dev
     ports:
       - '127.0.0.1:6379:6379'
