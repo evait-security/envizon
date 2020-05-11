@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_10_153723) do
+ActiveRecord::Schema.define(version: 2020_05_11_204729) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -153,6 +153,22 @@ ActiveRecord::Schema.define(version: 2019_12_10_153723) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "saved_scans_collection_items", force: :cascade do |t|
+    t.bigint "saved_scans_collection_id"
+    t.bigint "saved_scan_id"
+    t.integer "order"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["saved_scan_id"], name: "index_saved_scans_collection_items_on_saved_scan_id"
+    t.index ["saved_scans_collection_id"], name: "index_saved_scans_collection_items_on_saved_scans_collection_id"
+  end
+
+  create_table "saved_scans_collections", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "scans", force: :cascade do |t|
     t.string "command"
     t.string "name"
@@ -209,6 +225,8 @@ ActiveRecord::Schema.define(version: 2019_12_10_153723) do
   add_foreign_key "outputs", "ports"
   add_foreign_key "ports", "clients"
   add_foreign_key "report_parts", "issue_templates"
+  add_foreign_key "saved_scans_collection_items", "saved_scans"
+  add_foreign_key "saved_scans_collection_items", "saved_scans_collections"
   add_foreign_key "scans", "users"
   add_foreign_key "screenshots", "report_parts"
   add_foreign_key "settings", "users"

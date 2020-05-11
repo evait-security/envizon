@@ -59,7 +59,6 @@ gem 'selenium-webdriver'
 
 # jobs
 gem 'sidekiq'
-gem 'sucker_punch'
 
 # gems needed for sidekiq, not bundled in Ruby 2.7 anymore
 gem 'e2mmap'
@@ -75,6 +74,13 @@ gem 'zip-zip' # will load compatibility for old rubyzip API.
 
 # export report
 gem 'sablon' # docx tamplate
+
+# admin db
+gem 'trestle'
+gem 'trestle-auth'
+gem 'trestle-search'
+# gem 'trestle-active_storage'
+gem 'trestle-tinymce'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

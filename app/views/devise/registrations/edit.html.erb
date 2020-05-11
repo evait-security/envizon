@@ -26,20 +26,20 @@
                 <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
             <% end %>
             <div class="row">
-              <%= f.input :password, autocomplete: "off", hint: "leave it blank if you don't want to change it", required: false, :wrapper_html => { :class => 's12' } %>
+              <%= f.input :password, autocomplete: "off", required: true, :wrapper_html => { :class => 's12' } %>
             </div>
             <div class="row">
-              <%= f.input :password_confirmation, required: false, :wrapper_html => { :class => 's12' }  %>
+              <%= f.input :password_confirmation, required: true, :wrapper_html => { :class => 's12' }  %>
             </div>
             <div class="row">
               <%= f.input :current_password, hint: "we need your current password to confirm your changes", required: true, :wrapper_html => { :class => 's12' }  %>
             </div>
             <div class="row">
               <div class="form-actions">
-                <%= f.button :submit, "Update" %><div class="right"><%= link_to "Delete this user", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %> | <%= link_to "Back", :back %></div>
+                <%= f.button :submit, "Update" %>
               </div>
-              </div>
-        <% end %>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>

@@ -171,6 +171,18 @@ GEM
       railties (>= 3.2.16)
     json (2.3.0)
     jwt (2.2.1)
+    kaminari (1.2.0)
+      activesupport (>= 4.1.0)
+      kaminari-actionview (= 1.2.0)
+      kaminari-activerecord (= 1.2.0)
+      kaminari-core (= 1.2.0)
+    kaminari-actionview (1.2.0)
+      actionview
+      kaminari-core (= 1.2.0)
+    kaminari-activerecord (1.2.0)
+      activerecord
+      kaminari-core (= 1.2.0)
+    kaminari-core (1.2.0)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -339,12 +351,23 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sucker_punch (2.1.2)
-      concurrent-ruby (~> 1.0)
     thor (1.0.1)
     thread_safe (0.3.6)
     thwait (0.1.0)
     tilt (2.0.10)
+    tinymce-rails (5.2.2)
+      railties (>= 3.1.1)
+    trestle (0.9.3)
+      activemodel (>= 4.2.0)
+      kaminari (>= 1.1.0)
+      railties (>= 4.2.0)
+      sprockets-rails (>= 2.0.0)
+    trestle-auth (0.4.0)
+      bcrypt (~> 3.1.7)
+      trestle (~> 0.9.0)
+    trestle-tinymce (0.3.0)
+      tinymce-rails (~> 5.1)
+      trestle (~> 0.9.0)
     tzinfo (1.2.6)
       thread_safe (~> 0.1)
     uglifier (4.2.0)
@@ -413,8 +436,10 @@ DEPENDENCIES
   simple_form
   spring
   spring-watcher-listen (~> 2.0.0)
-  sucker_punch
   thwait
+  trestle
+  trestle-auth
+  trestle-tinymce
   tzinfo-data
   uglifier (>= 1.3.0)
   web-console

@@ -39,11 +39,6 @@
                 <i class="material-icons left">playlist_play</i>Tasks
               </a>
             </li>
-            <li class="<%= 'active' if current_page?(issue_templates_path) %>">
-              <%= link_to issue_templates_path do %>
-                <i class="material-icons left">bug_report</i>Templates
-              <% end %>        
-            </li>
             <li class="<%= 'active' if current_page?(reports_path) %>">
               <%= link_to reports_path do %>
                 <i class="material-icons left">post_add</i>Reporting<span class="new badge white grey-text text-darken-3" data-badge-caption="beta"></span>
@@ -64,6 +59,7 @@
     <!-- Dropdown Structure -->
     <ul id="user-drop-menu" class="dropdown-content">
       <li><%= link_to '<i class="material-icons">settings</i>Settings'.html_safe, global_settings_path %></li>
+      <li><%= link_to '<i class="material-icons">create</i>Edit data'.html_safe, trestle_path %></li>
       <li><%= link_to '<i class="material-icons">verified_user</i>Set password'.html_safe, edit_user_registration_path %></li>
       <li><%= link_to '<i class="material-icons">new_releases</i>Changelog'.html_safe, changelog_path %></li>
       <li><%= link_to '<i class="material-icons">build</i>Version: 3.0'.html_safe, "javascript:void(0)" %></li>

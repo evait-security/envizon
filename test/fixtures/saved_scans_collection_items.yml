@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  SavedScansCollection: one
+  SavedScan: one
+  order: 1
+
+two:
+  SavedScansCollection: two
+  SavedScan: two
+  order: 1

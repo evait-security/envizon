@@ -15,7 +15,7 @@ class SettingsController < ApplicationController
   def update
     %w[parallel_scans global_notify
        max_host_per_scan hosts
-       export_db import_db saved_scan_name
+       export_db import_db
        export_issue_templates
        import_issue_templates report_mode].each do |param|
       param_sym = param.to_sym
@@ -146,26 +146,6 @@ class SettingsController < ApplicationController
     # app['db:data:load'].invoke
     # app['db:data:load'].reenable
     { message: 'Import complete, now restart your Docker containers', type: 'success' }
-  end
-
-  def saved_scan_name(scan_name)
-    if params[:saved_scan_id].present?
-      scan = SavedScan.find(params[:saved_scan_id])
-      if scan_name.empty? || params[:saved_scan_param].empty?
-        message = "Removed saved scan '#{scan_name}'"
-        scan.delete
-      else
-        scan.assign_attributes(name: scan_name, parameter: params[:saved_scan_param])
-        scan.save
-        message = "Modified saved scan '#{scan_name}'"
-      end
-    else
-      SavedScan.create(name: scan_name, parameter: params[:saved_scan_param])
-      message = "Created saved scan '#{scan_name}'"
-    end
-    { message: message, type: 'success',
-      partial_render: 'pages/settings_scans',
-      partial_render_id: 'settings_scans_list' }
   end
 
   def hosts(hosts_given)

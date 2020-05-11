@@ -1,8 +1,6 @@
 # @restful_api 1.0
 # Start a scan or upload an XML
 class ScansController < ApplicationController
-  require 'scan_job'
-  require 'scan_parse_job'
   # @url /scans/create
   # @action POST
   #
