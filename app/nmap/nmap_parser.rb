@@ -151,7 +151,19 @@ class NmapParser
           output.name = name
           output.value = YAML.dump(data).lines[1..-1].join #remove the first line ("---\n")
           output.save
-
+          check_vuln(client, name, data)
+        else #falback.. sometiemes the data from script_data ist empty
+          data = port.scripts[name]
+          if data.present?
+            data.default = '' if data.is_a?(Hash)
+            output = Output.where(port_id: db_port.id, name: name).first_or_create
+            output.port_id = db_port.id
+            output.name = name
+            output.value = YAML.dump(data).lines
+            output.save
+          end
+        end
+        if data.present?
           case name
           when 'http-ntlm-info'
             hostname = data['DNS_Computer_Name']
@@ -159,9 +171,9 @@ class NmapParser
             client.hostname = hostname unless hostname.blank?
           when 'ftp-anon'
             set_label(client, 'Anonymous FTP') if data.include? 'Anonymous FTP login allowed'
+          when 'winrm'
+            set_label(client, 'WinRM') if data.include? 'WinRM service detected'
           end
-
-          check_vuln(client, name, data)
         end
       end
     rescue => exception
