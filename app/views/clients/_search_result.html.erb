@@ -26,12 +26,12 @@
          </tr>
          </thead>
          <tbody>
-            <% @clients.order(:ip).to_a.each do |current_client| %>
+            <% @clients.includes(:ports).order(:ip).each do |current_client| %>
               <tr class="ui-selectee">
                 <td><%= link_to "#{current_client.ip}", client_path(current_client.id), :remote => true, :id => current_client.id, :class => 'blue-text text-darken-2' %></td>
                 <td><%= "#{current_client.hostname}" %></td>
                 <td><%= "#{current_client.os}" %></td>
-                <td><%= "#{current_client.ports.count}" %></td>
+                <td><%= "#{current_client.ports.size}" %></td>
               </tr>
             <%  end %>
          </tbody>
