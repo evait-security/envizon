@@ -3,13 +3,13 @@ Trestle.configure do |config|
   #
   # Set the page title shown in the main header within the admin.
   #
-  config.site_title = "Envizon"
+  config.site_title = "envizon"
 
   # Specify a custom image to be used in place of the site title for mobile and
   # expanded/desktop navigation. These images should be placed within your
   # asset paths, e.g. app/assets/images.
   #
-  # config.site_logo = "logo.png"
+  config.site_logo = "logo/envizon-wide-export-white.svg"
 
   # Specify a custom image to be used for the collapsed/tablet navigation.
   #
@@ -22,7 +22,7 @@ Trestle.configure do |config|
   # Set the text shown in the page footer within the admin.
   # Defaults to 'Powered by Trestle'.
   #
-  # config.footer = "Powered by Trestle"
+  config.footer = "envizon - by evait security GmbH"
 
   # Sets the default precision for timestamps (either :minutes or :seconds).
   # Defaults to :minutes.
@@ -45,7 +45,7 @@ Trestle.configure do |config|
   # Set the path to consider the application root (for title links and breadcrumbs).
   # Defaults to the same value as `config.path`.
   #
-  # config.root = "/"
+  config.root = "/"
 
   # Set the initial breadcrumbs to display in the breadcrumb trail.
   # Defaults to a breadcrumb labeled 'Home' linking to to the application root.

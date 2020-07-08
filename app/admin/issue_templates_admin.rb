@@ -1,8 +1,15 @@
 Trestle.resource(:issue_templates) do
   menu do
-    item :issue_templates, icon: "fa fa-star"
+    item :issue_templates, icon: "fa fa-file-text-o"
   end
 
+  search do |query|
+    if query
+      IssueTemplate.where("title ILIKE ?", "%#{query}%")
+    else
+      IssueTemplate.all
+    end
+  end
   # Customize the table columns shown on the index view.
   #
   # table do

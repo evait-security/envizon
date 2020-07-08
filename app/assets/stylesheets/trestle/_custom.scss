@@ -6,3 +6,15 @@
 //
 //    @import "trestle/custom/my_custom_css";
 //
+.app-sidebar-title {
+    padding: 2px 15px !important;
+}
+.app-sidebar-header, .modal-header {
+    background-color: #1565C0 !important;
+}
+.app-sidebar-header {
+    background-image: none !important;
+}
+.app-header {
+    display: none !important;
+}

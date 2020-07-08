@@ -1,8 +1,14 @@
 Trestle.resource(:saved_scans) do
   menu do
-    item :saved_scans, icon: "fa fa-star"
+    item :saved_scans, icon: "fa fa-database"
   end
-
+  search do |query|
+    if query
+      SavedScan.where("name ILIKE ?", "%#{query}%")
+    else
+      SavedScan.all
+    end
+  end
   # Customize the table columns shown on the index view.
   #
   # table do
