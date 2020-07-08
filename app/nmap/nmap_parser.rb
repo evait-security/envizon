@@ -186,13 +186,14 @@ class NmapParser
 
   def groups(client)
     unknown = Group.where(name: 'Unknown').first_or_create(mod: false, icon: '<i class="fa fa-desktop"></i>')
-    group_name = @cpe_helper.group(client)
-    group = Group.where(name: group_name).first_or_create(mod: false, icon: @cpe_helper.icon(client))
-    group.clients << client unless group.clients.find_by(id: client.id).present?
-    if client.groups.count > 1
-      unknown.clients.delete client if unknown.clients.find_by(id: client.id).present?
+    @cpe_helper.group(client).each do |group_name|
+      group = Group.where(name: group_name).first_or_create(mod: false, icon: @cpe_helper.icon(client))
+      group.clients << client unless group.clients.find_by(id: client.id).present?
+      if client.groups.count > 1
+        unknown.clients.delete client if unknown.clients.find_by(id: client.id).present?
+      end
+      group.save
     end
-    group.save
   end
 
   def set_label(client, labeltext)
@@ -248,7 +249,7 @@ class NmapParser
   end
 
   def smb_os(client, data)
-    set_label(client, 'Null Session') if data['os'].present?
+    # set_label(client, 'Null Session') if data['os'].present?
     hostname = data['fqdn']
     hostname = data['server'].gsub('\\x00', '') if hostname.blank?
     client.hostname = hostname unless hostname.blank?

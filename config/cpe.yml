@@ -61,7 +61,77 @@
     :/o:
       :microsoft:
         :_default: Windows
+      :linux:
+        :_default: Linux
+      :apple:
+        :_default: Apple
+        :iphone: Apple Mobile
+        :iphone_os: Apple Mobile
+        :ipad: Apple Mobile
+        :ipad_mini: Apple Mobile
+        :ipad_2: Apple Mobile
+      :google:
+        :android: Android
+      :cyanogenmod:
+        :cyanogenmod: Android
+    :/h:
+      :apple: Apple Mobile
+      :softbank:
+        :softbank:
+          :windows_mobile_smartphone: Windows Mobile
+:group_detailed:
+  :_default: Unknown
+  :cpe:
+    :/d: Network Devices
+    :/o:
+      :microsoft:
+        :_default: Windows
+        :windows_95: Windows 95
+        :windows_98: Windows 98
+        :windows_2000: Windows 2000
+        :windows_xp: Windows XP
+        :windows_vista: Windows Vista
+        :windows_7: Windows 7
+        :windows_8: Windows 8
+        :windows_8.1: Windows 8.1
+        :windows_10:
+          :_default: Windows 10
+          :1511: Windows 10 1511
+          :1607: Windows 10 1607
+          :1703: Windows 10 1703
+          :1709: Windows 10 1709
+          :1803: Windows 10 1803
+          :1809: Windows 10 1809
+          :1903: Windows 10 1903
+          :1909: Windows 10 1909
+          :2004: Windows 10 2004
         :windows_mobile: Windows Mobile
+        :azure_devops_server: Windows Azure
+        :windows_2003_server: Windows Server 2003
+        :windows_server_2003:
+          :_default: Windows Server 2003
+          :windows_server_2003:r2: Windows Server 2003 R2
+        :windows:server_2008:
+          :_default: Windows Server 2008
+          :windows_server_2008:r2: Windows Server 2008 R2
+          :windows_server_2008:sp2: Windows Server 2008 SP2
+        :windows_server_2012:
+          :_default: Windows Server 2012
+          :windows_server_2012:r2: Windows Server 2012 R2
+        :windows_server_2016:
+          :_default: Windows Server 2016
+          :windows_server_2016:1709: Windows Server 2016 1709
+          :windows_server_2016:1803: Windows Server 2016 1803
+          :windows_server_2016:1909: Windows Server 2016 1909
+        :windows_server_2019: Windows Server 2019
+        :windows_small_business_server_2011: Windows Small Business Server 2011
+        :windows:
+          :2000: Windows 2000
+          :3.0: Windows 3.0
+          :3.1: Windows 3.1
+          :3.11: Windows 3.11
+          :vista: Windows Vista
+          :server_2008: Windows Server 2008
       :linux:
         :_default: Linux
       :apple:
