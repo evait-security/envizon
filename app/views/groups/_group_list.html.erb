@@ -13,7 +13,7 @@
             <a class="collection-item group-collection-item link" id="info_<%= "#{current_group.id}" %>" gid="<%= "#{current_group.id}" %>">
                 <span class="collection-item-title truncate"><%= "#{current_group.name}" %><% unless current_group.mod %>&nbsp;*<% end %></span>
                 <div class="secondary-content">
-                    <span style="float: left;" class="chip"><%= "#{current_group.clients.where(archived: false).size}" %></span>
+                    <span style="float: left;" class="chip"><span class="blue-text text-darken-3"><%= "#{current_group.clients.select{|c|c.archived == false}.size}" %></span><%= " | #{current_group.clients.size}"%></span>
                     <div style="float: right;">
                         <%= "#{current_group.icon}".html_safe %>
                     </div>
@@ -29,7 +29,7 @@
             <a class="collection-item group-collection-item link" id="info_<%= "#{current_group.id}" %>" gid="<%= "#{current_group.id}" %>"> 
                 <span style="font-weight: 300 !important;" class="collection-item-title truncate"><%= "#{current_group.name}" %><% unless current_group.mod %>&nbsp;*<% end %></span>
                 <div class="secondary-content">
-                    <span style="float: left;" class="chip"><%= "#{current_group.clients.select{|c|c.archived == false}.size}" %></span>
+                    <span style="float: left;" class="chip"><%= "#{current_group.clients.select{|c|c.archived == false}.size} | #{current_group.clients.size}" %></span>
                     <div style="float: right;">
                         <%= "#{current_group.icon}".html_safe %>
                     </div>
@@ -39,6 +39,7 @@
     <% end %>
     <!-- Archived -->
     <% unless Client.select{|c|c.archived == true}.size == 0 %>
+        <hr>
         <a class="collection-item group-collection-item link" id="info_archived" gid="archived"> 
             <span style="font-weight: 300 !important;" class="collection-item-title truncate">Archived Clients *</span>
             <div class="secondary-content">
