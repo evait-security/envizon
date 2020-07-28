@@ -1,0 +1,33 @@
+<style><%= Diffy::CSS %></style>
+<span>
+  <strong>Title:</strong>
+  <div class='well diff'>
+      <%= diff(@issue_template.title, @issue.title) %>
+  </div>
+</span>
+<br>
+<span>
+  <strong>Description:</strong>
+  <div class='well diff'>
+      <%= diff(@issue_template.description, @issue.description) %>
+  </div>
+</span>
+<br>
+<span>
+  <strong>Rating:</strong>
+  <div class='well diff'>
+      <%= diff(@issue_template.rating, @issue.rating) %>
+  </div>
+</span>
+<br>
+<span>
+  <strong>Recommendation:</strong>
+  <div class='well diff'>
+      <%= diff(@issue_template.recommendation, @issue.recommendation) %>
+  </div>
+</span>
+<br>
+<%= link_to update_template_path(@issue), data: { confirm: 'This will overwrite the linked issue template. Are you sure?' }, remote: :true do %>
+  <i class="material-icons left orange-text text-darken-2 report_part_action tooltipped" data-position="top" data-tooltip="Update linked issue template">save</i>
+<% end %> |
+<%= link_to 'Back', issues_path %>

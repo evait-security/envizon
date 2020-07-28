@@ -52,6 +52,9 @@ gem 'jquery-datatables-rails'
 gem 'jquery-ui-rails'
 gem 'materialize-sass'
 
+# diff
+gem 'diffy'
+
 # screenshots
 gem 'image_processing'
 gem 'mini_magick'

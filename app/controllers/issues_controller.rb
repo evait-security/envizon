@@ -1,5 +1,5 @@
 class IssuesController < ApplicationController
-  before_action :set_issue, only: [:show, :edit, :update, :destroy, :update_template]
+  before_action :set_issue, only: [:show, :edit, :update, :destroy, :update_template, :confirm_update_template]
 
   # GET /issues
   # GET /issues.json
@@ -10,6 +10,11 @@ class IssuesController < ApplicationController
   # GET /issues/1
   # GET /issues/1.json
   def show
+  end
+
+  # GET /issues/1/update_template/1
+  def confirm_update_template
+    @issue_template = @issue.issue_template
   end
 
   # GET /issues/1/update_template/1
