@@ -2,28 +2,28 @@
 <span>
   <strong>Title:</strong>
   <div class='well diff'>
-      <%= diff(@issue_template.title, @issue.title) %>
+      <%= diff(@issue_template_remote['title'], @issue.title) %>
   </div>
 </span>
 <br>
 <span>
   <strong>Description:</strong>
   <div class='well diff'>
-      <%= diff(@issue_template.description, @issue.description) %>
+      <%= diff(@issue_template_remote['description'], @issue.description) %>
   </div>
 </span>
 <br>
 <span>
   <strong>Rating:</strong>
   <div class='well diff'>
-      <%= diff(@issue_template.rating, @issue.rating) %>
+      <%= diff(@issue_template_remote['rating'], @issue.rating) %>
   </div>
 </span>
 <br>
 <span>
   <strong>Recommendation:</strong>
   <div class='well diff'>
-      <%= diff(@issue_template.recommendation, @issue.recommendation) %>
+      <%= diff(@issue_template_remote['recommendation'], @issue.recommendation) %>
   </div>
 </span>
 <br>

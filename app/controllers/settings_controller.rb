@@ -174,6 +174,18 @@ class SettingsController < ApplicationController
     { message: 'Host-Splitting settings updated', type: 'success' }
   end
 
+  def mysql_connection(mysql_connection)
+    setting = current_user.settings.where(name: 'mysql_connection').first_or_create
+    if params[:mysql_connection_setting].present?
+      value = params[:mysql_connection_setting].to_i
+      setting.value = value.positive? ? value.to_s : '0'
+    else
+      setting.value = '0'
+    end
+    setting.save
+    { message: 'mysql connection settings updated', type: 'success' }
+  end
+
   def respond_with_notify(locals)
     return unless locals
 

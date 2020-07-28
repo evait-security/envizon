@@ -94,6 +94,28 @@
                   </div>
                 <% end %>
               </div>
+              <div class="row" style="padding-top: 2em;">
+                <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
+                  <%= f.error_notification %>
+                  <div class="col s4">
+                    <p class="grey-text text-darken-2 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Set the mysql connection String as json">mysql connection</p>
+                  </div>
+                  <div class="col s6">
+                    <input type="hidden" name="mysql_connection" value="true">
+                    <label>
+                      <%
+                          mysql_connection = YAML.safe_load(current_user.settings.where(name: 'mysql_connection').first_or_create.value)
+                        mysql_connection ||= '0'
+                      %>
+                      <input id="mysql_connection_setting" name="mysql_connection_setting" placeholder='Use "0" unlimited' type="text" class="validate" value="<%= mysql_connection %>">
+                      <span></span>
+                    </label>
+                  </div>
+                  <div class="input-field form-actions col s2" >
+                    <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Update global notification settings" type="submit" name="action"><i class="fa fa-refresh"></i></button>
+                  </div>
+                <% end %>
+              </div>
             </div>
           </div>
         </div>

@@ -70,6 +70,7 @@ gem 'thwait'
 # db import/export
 gem 'activerecord-import'
 gem 'yaml_db', git: 'https://github.com/evs-ch/yaml_db.git'
+gem 'mysql2'
 
 # zip
 gem 'rubyzip', '>= 1.0.0' # will load new rubyzip version

@@ -1,5 +1,6 @@
 class IssuesController < ApplicationController
   before_action :set_issue, only: [:show, :edit, :update, :destroy, :update_template, :confirm_update_template]
+  before_action :set_mysql_client, only: [:confirm_update_template, :update_template]
 
   # GET /issues
   # GET /issues.json
@@ -15,10 +16,43 @@ class IssuesController < ApplicationController
   # GET /issues/1/update_template/1
   def confirm_update_template
     @issue_template = @issue.issue_template
+    uid = @mysql_client.escape('1') #todo get uid from issue
+    
+    begin
+      @issue_template_remote = @mysql_client.query("SELECT * FROM issue_templates WHERE uid=#{uid}")
+      if @issue_template_remote.size < 1
+        respond_with_notify("Unknown UID", "alert")
+        # redirect_back(fallback_location: root_path, alert: "Unknown UID")
+      end
+      if @issue_template_remote.size > 1
+        respond_with_notify("Multiple UIDs", "alert")
+        # redirect_back(fallback_location: root_path, alert: "Multiple UIDs")
+      end
+      @issue_template_remote = @issue_template_remote.first
+    rescue => exception
+      respond_with_notify("something went wrong with the mysql connection2", "alert")
+      # redirect_back(fallback_location: root_path, alert: "something went wrong with the mysql connection2")
+    end
   end
 
   # GET /issues/1/update_template/1
   def update_template
+
+    uid = @mysql_client.escape('1') #todo get uid from issue
+    title = @mysql_client.escape(@issue.title)
+    description = @mysql_client.escape(@issue.description)
+    rating = @mysql_client.escape(@issue.rating)
+    recommendation = @mysql_client.escape(@issue.recommendation)
+
+    begin
+      @mysql_client.query("UPDATE issue_templates SET title = '#{title}', description = '#{description}', rating = '#{rating}', recommendation = '#{recommendation}' WHERE uid=#{uid}").first
+    rescue => exception
+      redirect_back(fallback_location: root_path, alert: "something went wrong with the mysql connection")
+    else
+      respond_with_notify("Issue template was successfully updated", "success")
+    end
+    
+=begin
     issue_template = @issue.issue_template
     issue_template.title = @issue.title
     issue_template.description = @issue.description
@@ -29,6 +63,7 @@ class IssuesController < ApplicationController
     else
       respond_with_notify(issue_template.error, "error")
     end
+=end
   end
 
   # GET /issues/new
@@ -109,6 +144,15 @@ class IssuesController < ApplicationController
       end
     end
 
+    def set_mysql_client
+      begin
+        mysql_connection = JSON.parse(current_user.settings.where(name: 'mysql_connection').first_or_create.value).first
+        @mysql_client = Mysql2::Client.new(mysql_connection)
+      rescue => exception
+        respond_with_notify("something went wrong with the mysql connection", "alert")
+      end
+      
+    end
     # Never trust parameters from the scary internet, only allow the white list through.
     def issue_params
       params.require(:issue).permit(:title, :severity, :description, :customtargets, :rating, :recommendation, :type, :index)

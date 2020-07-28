@@ -21,6 +21,10 @@ class User < ApplicationRecord
     max_host.assign_attributes(user_id: id, name: 'max_host_per_scan', value: '25')
     max_host.save
 
+    mysql_connection = Setting.where(user_id: id, name: 'mysql_connection').first_or_create
+    mysql_connection.assign_attributes(user_id: id, name: 'mysql_connection', value: '[{"host":"mysql","username":"root","password":"mypass123","database":"testdb"}]')
+    mysql_connection.save
+
     notify_scan_status = Setting.where(user_id: id, name: 'global_notify').first_or_create
     notify_scan_status.assign_attributes(user_id: id, name: 'global_notify', value: 'true')
     notify_scan_status.save
