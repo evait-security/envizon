@@ -15,6 +15,7 @@ class SettingsController < ApplicationController
   def update
     %w[parallel_scans global_notify
        max_host_per_scan hosts
+       mysql_connection
        export_db import_db
        export_issue_templates
        import_issue_templates report_mode].each do |param|
@@ -173,17 +174,21 @@ class SettingsController < ApplicationController
     setting.save
     { message: 'Host-Splitting settings updated', type: 'success' }
   end
-
+  
   def mysql_connection(mysql_connection)
     setting = current_user.settings.where(name: 'mysql_connection').first_or_create
     if params[:mysql_connection_setting].present?
-      value = params[:mysql_connection_setting].to_i
-      setting.value = value.positive? ? value.to_s : '0'
+      begin
+        setting.value = JSON.parse(params[:mysql_connection_setting]).to_s
+        setting.save
+        result = { message: 'mysql connection settings updated', type: 'success' }
+      rescue => exception
+        result = { message: 'mysql connection not in JSON format', type: 'alert' }
+      end
     else
-      setting.value = '0'
+      result = { message: 'mysql connection not set', type: 'alert' }
     end
-    setting.save
-    { message: 'mysql connection settings updated', type: 'success' }
+    result
   end
 
   def respond_with_notify(locals)
