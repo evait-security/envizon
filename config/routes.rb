@@ -50,7 +50,9 @@ Rails.application.routes.draw do
   get 'groups/group_list' => 'groups#group_list', as: :group_list
 
   get '/issues/:id/update_template' => 'issues#update_template', as: :update_template
+  get '/issues/:id/new_template' => 'issues#new_template', as: :new_template
   get '/issues/:id/confirm_update_template' => 'issues#confirm_update_template', as: :confirm_update_template
+  get '/issues/:id/confirm_create_template' => 'issues#confirm_create_template', as: :confirm_create_template
 
   get '/groups' => 'groups#index'
   get '/pages/settings' => 'pages#settings', as: :global_settings

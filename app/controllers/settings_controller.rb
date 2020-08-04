@@ -5,8 +5,6 @@ require 'json'
 # @restful_api 1.0
 # Handle user settings
 class SettingsController < ApplicationController
-  before_action :set_mysql_client, only: [:import_issue_templates_new]
-
   def edit; end
 
   # @url /settings/update
@@ -201,14 +199,15 @@ class SettingsController < ApplicationController
     setting = current_user.settings.where(name: 'mysql_connection').first_or_create
     if params[:mysql_connection_setting].present?
       begin
-        setting.value = JSON.parse(params[:mysql_connection_setting]).to_s
+        Mysql2::Client.new(JSON.parse(params[:mysql_connection_setting]))
+        setting.value = params[:mysql_connection_setting]
         setting.save
-        result = { message: 'mysql connection settings updated', type: 'success' }
+        result = { message: 'The mysql connection was successfully established and saved', type: 'success' }
       rescue => exception
-        result = { message: 'mysql connection not in JSON format', type: 'alert' }
+        result = { message: exception, type: 'alert' }
       end
     else
-      result = { message: 'mysql connection not set', type: 'alert' }
+      result = { message: 'Mysql connection string not set', type: 'alert' }
     end
     result
   end
@@ -245,14 +244,4 @@ class SettingsController < ApplicationController
   def put_into_archive(disk_file_path, zipfile, zipfile_path)
     zipfile.add(zipfile_path, disk_file_path)
   end
-
-  private
-    def set_mysql_client
-      begin
-        mysql_connection = JSON.parse(current_user.settings.where(name: 'mysql_connection').first_or_create.value).first
-        @mysql_client = Mysql2::Client.new(mysql_connection)
-      rescue => exception
-        respond_with_notify("something went wrong with the mysql connection", "alert")
-      end
-    end
 end

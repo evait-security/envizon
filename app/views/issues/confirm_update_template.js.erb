@@ -1,0 +1,7 @@
+<% if @issue_template_remote %>
+    $("#medium-modal").modal('open');
+    $("#medium-modal").html("<%= j(render('confirm_update_template_diff')) %>");
+<% else %>
+    $("#medium-modal").modal('open');
+    $("#medium-modal").html("<%= j(render('confirm_update_template_new')) %>");
+<% end %>

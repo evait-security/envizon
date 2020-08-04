@@ -7,10 +7,10 @@
             <%= link_to issue_path(rp), method: :delete, data: { confirm: 'The issue and according screenshots will be deleted. Are you sure?' }, remote: :true do %>
                 <i class="material-icons right red-text text-darken-2 report_part_action tooltipped" data-position="top" data-tooltip="Delete issue">delete</i>
             <% end %>
-            <%= link_to confirm_update_template_path(rp), data: { confirm: 'This will navigate to a diff page?' } do %>
+            <%= link_to confirm_update_template_path(rp), remote: true do %>
                 <i class="material-icons right orange-text text-darken-2 report_part_action tooltipped" data-position="top" data-tooltip="Update linked issue template">save</i>
             <% end %>
-            <%= link_to issue_template_create_from_issue_path(rp), remote: :true do %>
+            <%= link_to confirm_create_template_path(rp), remote: :true do %>
                 <i class="material-icons right green-text text-darken-2 report_part_action tooltipped" data-position="top" data-tooltip="Add as new issue template">add</i>
             <% end %>
         </p>

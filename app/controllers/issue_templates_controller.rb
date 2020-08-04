@@ -30,15 +30,18 @@ class IssueTemplatesController < ApplicationController
   end
 
   # GET /issue_templates/new
+  # todo: delete
   def new
     @issue_template = IssueTemplate.new
   end
 
   # GET /issue_templates/1/edit
+  # todo: delete
   def edit
   end
 
   # GET /issue_templates/create_from_issue/1
+  # todo: delete
   def create_from_issue
     issue_template = IssueTemplate.new
     issue_template.title = @issue.title
@@ -55,6 +58,7 @@ class IssueTemplatesController < ApplicationController
 
   # POST /issue_templates
   # POST /issue_templates.json
+  # todo: delete
   def create
     issue_template = IssueTemplate.new(issue_template_params)
 
@@ -69,6 +73,7 @@ class IssueTemplatesController < ApplicationController
 
   # PATCH/PUT /issue_templates/1
   # PATCH/PUT /issue_templates/1.json
+  # todo: delete
   def update
     respond_to do |format|
       if @issue_template.update(issue_template_params)
@@ -81,6 +86,7 @@ class IssueTemplatesController < ApplicationController
 
   # DELETE /issue_templates/1
   # DELETE /issue_templates/1.json
+  # todo: delete
   def destroy
     @issue_template.destroy
     respond_to do |format|

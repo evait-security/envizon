@@ -1,0 +1,47 @@
+<style><%= Diffy::CSS %></style>
+<div class="modal-content p-0">
+    <div class="row orange lighten-4 pt-3 pb-2">
+        <div class="col s12 center">
+            <h3 class="grey-text text-darken-3">Apply changes to issue template</h3>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col s12">
+              <h5>Title</h5>
+              <div class='well diff'>
+                  <%= diff(@issue_template_remote['title'], @issue.title) %>
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+              <h5>Description</h5>
+              <div class='well diff'>
+                  <%= diff(@issue_template_remote['description'], @issue.description) %>
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+              <h5>Rating</h5>
+              <div class='well diff'>
+                  <%= diff(@issue_template_remote['rating'], @issue.rating) %>
+              </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+              <h5>Recommendation</h5>
+              <div class='well diff'>
+                  <%= diff(@issue_template_remote['recommendation'], @issue.recommendation) %>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <%= link_to update_template_path(@issue), remote: :true, class: "btn-flat green-text text-darken-2" do %>
+        <i class="material-icons left">backup</i>Save to cloud
+    <% end %>
+</div>

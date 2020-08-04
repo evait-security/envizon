@@ -1,6 +1,5 @@
 class Issue < ReportPart
   belongs_to :reportable, polymorphic: true
-  belongs_to :issue_template, required: false
 
   def self.create_from_template(issue_group, issue_template)
     Issue.create(
@@ -10,7 +9,7 @@ class Issue < ReportPart
       rating: issue_template.rating,
       recommendation: issue_template.recommendation,
       severity: issue_template.severity,
-      issue_template: issue_template
+      uuid: issue_template.uuid
     )
   end
 
