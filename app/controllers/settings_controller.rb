@@ -5,6 +5,8 @@ require 'json'
 # @restful_api 1.0
 # Handle user settings
 class SettingsController < ApplicationController
+  before_action :set_mysql_client, only: [:import_issue_templates_new]
+
   def edit; end
 
   # @url /settings/update
@@ -116,6 +118,26 @@ class SettingsController < ApplicationController
     end
   end
 
+  def import_issue_templates_new()
+
+    begin
+      issue_template_remote = @mysql_client.query("SELECT * FROM issue_templates")
+      issue_template_remote = issue_template_remote.each do |it_remote|
+        IssueTemplate.create(
+          :uuid => it_remote['uuid'],
+          :title => it_remote['title'],
+          :description => it_remote['description'],
+          :rating => it_remote['rating'],
+          :recommendation => it_remote['recommendation'],
+          :severity => it_remote['severity']
+        )
+      end
+      { message: "Issue templates successfully imported", type: 'success' }
+    rescue StandardError
+      { message: "The import was not successful. The data may not be in the right format", type: 'alert' }
+    end
+  end
+
   def import_db(file)
     extract_dir = Dir.mktmpdir
     Zip::ZipFile.open(file.first.tempfile) do |zip_file|
@@ -174,7 +196,7 @@ class SettingsController < ApplicationController
     setting.save
     { message: 'Host-Splitting settings updated', type: 'success' }
   end
-  
+
   def mysql_connection(mysql_connection)
     setting = current_user.settings.where(name: 'mysql_connection').first_or_create
     if params[:mysql_connection_setting].present?
@@ -223,4 +245,14 @@ class SettingsController < ApplicationController
   def put_into_archive(disk_file_path, zipfile, zipfile_path)
     zipfile.add(zipfile_path, disk_file_path)
   end
+
+  private
+    def set_mysql_client
+      begin
+        mysql_connection = JSON.parse(current_user.settings.where(name: 'mysql_connection').first_or_create.value).first
+        @mysql_client = Mysql2::Client.new(mysql_connection)
+      rescue => exception
+        respond_with_notify("something went wrong with the mysql connection", "alert")
+      end
+    end
 end
