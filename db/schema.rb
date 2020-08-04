@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_11_204729) do
+ActiveRecord::Schema.define(version: 2020_08_02_212104) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(version: 2020_05_11_204729) do
     t.integer "severity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "uuid", default: 0
   end
 
   create_table "labels", force: :cascade do |t|
@@ -129,6 +130,7 @@ ActiveRecord::Schema.define(version: 2020_05_11_204729) do
     t.datetime "updated_at", null: false
     t.integer "index"
     t.bigint "issue_template_id"
+    t.integer "uuid", default: 0
     t.index ["issue_template_id"], name: "index_report_parts_on_issue_template_id"
   end
 
