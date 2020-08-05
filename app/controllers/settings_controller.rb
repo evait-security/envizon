@@ -115,25 +115,13 @@ class SettingsController < ApplicationController
 
   def import_db(file)
     extract_dir = Dir.mktmpdir
-    Zip::ZipFile.open(file.first.tempfile) do |zip_file|
-      zip_file.each do |f|
-        f_path = File.join(extract_dir, f.name)
-        FileUtils.mkdir_p(File.dirname(f_path))
-        zip_file.extract(f, f_path) unless File.exist?(f_path)
-      end
-    end
+    system("unzip #{file.first.tempfile.path} -d #{extract_dir}")
     unziped_storage = File.join(extract_dir, 'storage')
-    # out_storage = Rails.root.join('storage')
     unziped_data_sql = File.join(extract_dir, 'envizon.db.tar')
     out_data_sql = Rails.root.join('db', 'envizon.db.tar')
-    # unziped_data_yml = File.join(extract_dir, 'data.yml')
-    # out_data_yml = Rails.root.join('db', 'data.yml')
 
     FileUtils.rm_rf(Rails.root.join('storage'))
-    # FileUtils.mv(unziped_storage, Rails.root) # not work because storage folder can not be deleted
-    Dir.children(unziped_storage).each do |f|
-      FileUtils.mv(File.join(unziped_storage , f), Rails.root.join('storage'))
-    end
+    system("mv #{unziped_storage} #{Rails.root.join('storage')}")
 
     app = Rake.application
     app.init
@@ -141,8 +129,6 @@ class SettingsController < ApplicationController
     app.load_rakefile
 
     FileUtils.cp(Pathname.new(unziped_data_sql), out_data_sql)
-    # app['db:data:load'].invoke
-    # app['db:data:load'].reenable
     { message: 'Import complete, now restart your Docker containers', type: 'success' }
   end
 
