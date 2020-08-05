@@ -13,7 +13,7 @@
         <div class="col s12">
           <ul class="tabs tabs-fixed-width">
             <li class="tab col s6"><a href="#quick_settings">Quick settings</a></li>
-            <li class="tab col s6"><a href="#issue_settings">Issue settings</a></li>
+            <li class="tab col s6"><a href="#issue_settings">Issue template settings</a></li>
           </ul>
         </div>
         <div id="quick_settings" class="col s12">
@@ -82,7 +82,7 @@
                     <input type="hidden" name="max_host_per_scan" value="true">
                     <label>
                       <%
-                          max_host_per_scan = YAML.safe_load(current_user.settings.where(name: 'max_host_per_scan').first_or_create.value)
+                        max_host_per_scan = YAML.safe_load(current_user.settings.where(name: 'max_host_per_scan').first_or_create.value)
                         max_host_per_scan ||= '0'
                       %>
                       <input id="max_host_per_scan_setting" name="max_host_per_scan_setting" placeholder='Use "0" unlimited' type="text" class="validate" value="<%= max_host_per_scan %>">
@@ -101,6 +101,17 @@
           <div class="white">
             <div class="container" style="padding: 2em;">
               <div class="row" style="padding-top: 2em;">
+                <div class="col s4">
+                  <p class="grey-text text-darken-2">database structure</p>
+                </div>
+                <div class="col s6">
+                  <p class="grey-text text-darken-2">click on the right button to view the mysql structure</p>
+                </div>
+                <div class="col s2">
+                  <a class="btn grey darken-1 modal-trigger" href="#db-model"><i class="material-icons">code</i></a>
+                </div>
+              </div>
+              <div class="row" style="padding-top: 2em;">
                 <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
                   <%= f.error_notification %>
                   <div class="col s4">
@@ -118,18 +129,23 @@
                   </div>
                 <% end %>
               </div>
-              <div class="row">
+            </div>
+          </div>
+          <div class="orange lighten-5">
+            <div class="container" style="padding: 2em;">
+              <div class="row mb-0">
                 <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
                   <%= f.error_notification %>
                   <div class="col s4">
-                    <p class="grey-text text-darken-2">Import issue templates&nbsp;
-                      <i class="material-icons tooltipped red-text text-darken-2" data-position="bottom" data-delay="50" data-tooltip="Warning! All issue templates will be wiped in your local database.">info_outline</i>
+                    <p class="orange-text text-darken-3">Import issue templates&nbsp;
+                      <i class="material-icons tooltipped orange-text text-darken-2" data-position="bottom" data-delay="50" data-tooltip="Warning! All issue templates will be wiped in your local database.">info_outline</i>
                     </p>
                   </div>
                   <div class="col s6">
+                    <input type="hidden" name="import_issue_templates" value="true">
                   </div>
                   <div class="input-field form-actions col s2" >
-                    <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Import issue templates from remote mysql server" type="submit" name="action"><i class="fa fa-download"></i></button>
+                    <button class="btn orange darken-2 tooltipped" data-position="bottom" data-disable="true" data-delay="50" data-tooltip="Import issue templates from remote mysql server" type="submit" name="action"><i class="fa fa-download"></i></button>
                   </div>
                 <% end %>         
               </div>
@@ -170,5 +186,38 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+<div id="db-model" class="modal">
+  <div class="modal-content p-0">
+    <div class="row blue lighten-5 pt-3 pb-2">
+        <div class="col s12 center">
+            <h3 class="blue-text text-darken-3">Issue template database structure</h3>
+        </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col s12">     
+<pre>CREATE TABLE `issue_templates` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `rating` text DEFAULT NULL,
+  `recommendation` text DEFAULT NULL,
+  `severity` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE `issue_templates`
+  ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `issue_templates`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+SET FOREIGN_KEY_CHECKS=1;</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
   </div>
 </div>

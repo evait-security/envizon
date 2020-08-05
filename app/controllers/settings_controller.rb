@@ -17,7 +17,6 @@ class SettingsController < ApplicationController
        max_host_per_scan hosts
        mysql_connection
        export_db import_db
-       export_issue_templates
        import_issue_templates report_mode].each do |param|
       param_sym = param.to_sym
       next unless params[param_sym]
@@ -87,42 +86,19 @@ class SettingsController < ApplicationController
     send_file output_file, filename: output_filename, type: 'application/zip' and return
   end
 
-  def export_issue_templates(_param)
-    # Testing
-    # values = [{ title: 'nothing', description: 'nothing', rating: 'nothing', recommendation: 'nothing', severity: 1 }]
-    # IssueTemplate.import values, validate: true
-    tempfile = File.new(Rails.root.join('tmp') + 'issue_template.json', 'w')
-    # ugly output with ids
-    # tempfile.write IssueTemplate.all.to_json
-    # nice output without ids
-    tempfile.write JSON.pretty_generate(IssueTemplate.all.map { |md| md.serializable_hash.except('id') })
-    tempfile.rewind
-    send_file tempfile, filename: 'issue_templates.json', type: 'application/json'
-    nil
-  end
-
-  def import_issue_templates(file)
-    # Tests for import exported files
-    # alltemplates = JSON.parse(IssueTemplate.all.to_json)
-    # IssueTemplate.all.delelete_all
-    # IssueTemplate.import JSON.parse(IssueTemplate.all.to_json), validate: true
-    begin
-      json_import = File.read(file.first.tempfile.path)
-      IssueTemplate.all.delete_all
-      IssueTemplate.import JSON.parse(json_import), validate: true
-      { message: "Issue templates successfully imported", type: 'success' }
-    rescue StandardError
-      { message: "The import was not successful. The data may not be in the right format", type: 'alert' }
-    end
-  end
-
-  def import_issue_templates_new()
+  def import_issue_templates(_param)
+    set_mysql_client
 
     begin
       issue_template_remote = @mysql_client.query("SELECT * FROM issue_templates")
-      issue_template_remote = issue_template_remote.each do |it_remote|
+      
+      # danger things incomming
+      IssueTemplate.delete_all
+      # danger things completed
+
+      issue_template_remote.each do |it_remote|
         IssueTemplate.create(
-          :uuid => it_remote['uuid'],
+          :uuid => it_remote['id'],
           :title => it_remote['title'],
           :description => it_remote['description'],
           :rating => it_remote['rating'],
@@ -130,9 +106,10 @@ class SettingsController < ApplicationController
           :severity => it_remote['severity']
         )
       end
-      { message: "Issue templates successfully imported", type: 'success' }
-    rescue StandardError
-      { message: "The import was not successful. The data may not be in the right format", type: 'alert' }
+
+      { message: "Issue templates successfully imported / synced", type: 'success' }
+    rescue => exception
+      { message: exception, type: 'alert' }
     end
   end
 
@@ -210,6 +187,14 @@ class SettingsController < ApplicationController
       result = { message: 'Mysql connection string not set', type: 'alert' }
     end
     result
+  end
+
+  def set_mysql_client
+    begin
+      @mysql_client = Mysql2::Client.new(JSON.parse(current_user.settings.where(name: 'mysql_connection').first_or_create.value))
+    rescue => exception
+      respond_with_notify(exception, "alert")
+    end
   end
 
   def respond_with_notify(locals)

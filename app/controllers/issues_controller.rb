@@ -90,24 +90,33 @@ class IssuesController < ApplicationController
   # POST /issues.json
   def create
     respond_to do |format|
-      if params.key?(:issue_template) && (IssueTemplate.exists? params[:issue_template])
-        current_report = Report.first_or_create
-        unless current_report.report_parts.empty?
-          lastIssueGroup = current_report.report_parts.last
-          if lastIssueGroup.type == "IssueGroup"
+      current_report = Report.first_or_create
+      unless current_report.report_parts.empty?
+        lastIssueGroup = current_report.report_parts.last
+        if lastIssueGroup.type == "IssueGroup"
+          if params.key?(:issue_template) && (IssueTemplate.exists? params[:issue_template])
             issue_clone = Issue.create_from_template(lastIssueGroup, IssueTemplate.find(params[:issue_template]))
             if (params.key?(:client) && client = Client.find_by_id(params[:client]))
               issue_clone.clients << client
             end
-            format.html { redirect_to reports_path, notice: 'Issue was successfully created.' }
+            format.html { redirect_to reports_path, notice: 'Issue was successfully created from template.' }
           else
-            format.html { redirect_to reports_path, alert: 'Last report part is no issue group' }
+            empty_issue_template = IssueTemplate.new
+            empty_issue_template.title = "New blank issue"
+            empty_issue_template.description = ""
+            empty_issue_template.rating = ""
+            empty_issue_template.recommendation = ""
+            empty_issue_template.severity = -1
+            empty_issue_template.uuid = 0
+
+            Issue.create_from_template(lastIssueGroup, empty_issue_template)
+            format.html { redirect_to reports_path, notice: 'New issue was created. Consider syncing it later.' }
           end
         else
-          format.html { redirect_to reports_path, alert: 'No issue group found in current report. Please create a new one first.' }
+          format.html { redirect_to reports_path, alert: 'Last report part is no issue group' }
         end
       else
-        format.html { redirect_to reports_path, alert: 'Issue template not found.' }
+        format.html { redirect_to reports_path, alert: 'No issue group found in current report. Please create a new one first.' }
       end
     end
   end

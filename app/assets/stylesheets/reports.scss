@@ -19,7 +19,12 @@
     .report_part_action {
         visibility: hidden;
     }
+    // this should be done in a better way, wait for bootstrap and flexbox rework =)
     .report_part:hover {
+        display: flex;
+        a {
+            display: flex;
+        }
         .report_part_action {
             visibility: visible;
         }

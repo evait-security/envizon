@@ -4,14 +4,14 @@
             <%= link_to edit_issue_path(rp), remote: true do %>
                 <i class="material-icons left <%= rp.color %>-text text-darken-2">bug_report</i><%= rp.title %> - #<%= rp.index %>
             <% end %>
-            <%= link_to issue_path(rp), method: :delete, data: { confirm: 'The issue and according screenshots will be deleted. Are you sure?' }, remote: :true do %>
-                <i class="material-icons right red-text text-darken-2 report_part_action tooltipped" data-position="top" data-tooltip="Delete issue">delete</i>
+            <%= link_to confirm_create_template_path(rp), remote: :true do %>
+                <i class="material-icons right green-text text-darken-2 report_part_action tooltipped" data-position="top" data-tooltip="Add as new issue template to remote database">add</i>
             <% end %>
             <%= link_to confirm_update_template_path(rp), remote: true do %>
-                <i class="material-icons right orange-text text-darken-2 report_part_action tooltipped" data-position="top" data-tooltip="Update linked issue template">save</i>
+                <i class="material-icons right orange-text text-darken-2 report_part_action tooltipped" data-position="top" data-tooltip="Update linked issue template on remote database">save</i>
             <% end %>
-            <%= link_to confirm_create_template_path(rp), remote: :true do %>
-                <i class="material-icons right green-text text-darken-2 report_part_action tooltipped" data-position="top" data-tooltip="Add as new issue template">add</i>
+            <%= link_to issue_path(rp), method: :delete, data: { confirm: 'The issue and according screenshots will be deleted. Are you sure?' }, remote: :true do %>
+                <i class="material-icons right red-text text-darken-2 report_part_action tooltipped" data-position="top" data-tooltip="Delete issue">delete</i>
             <% end %>
         </p>
     <% end %>

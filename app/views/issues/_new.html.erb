@@ -1,37 +1,49 @@
-<div class="container pt-2">
-    <div class="row issue_templates">
-        <div class="col s12">
-            <div class="row search-field">
-                <%= simple_form_for :search, url: issue_templates_search_add_path, method: "POST", remote: "true" do |f| %>
-                    <div class="input-field col s6 ">
-                        <% if @client %>
-                            <input type="hidden" name="client" value="<%= @client.id %>">
-                        <% end %>
-                        <input placeholder="Type any issue title..." id="title" name="title" type="text" autofocus>
-                        <label for="title">Search</label> 
-                    </div>
-                <% end %>
-                <% if @client %>
-                    <div class="col s6">
-                        <div class="pb-05"><label class="text optional active">Linked client</label></div>
-                        <div class="chip"><%= @client.ip %><%= " (#{@client.hostname})" unless @client.hostname.nil? %></div>
-                    </div>
-                <% end %>
-            </div>
-            <ul class="collection issue-template-collection">
-                <% @issue_templates.each do |issue_template| %>
-                    <li class="collection-item issue-template-collection-item">                        
-                        <i class="material-icons left <%= issue_template.color %>-text text-darken-2">bug_report</i><%= issue_template.title %>
-                        <%= simple_form_for @issue do |f| %>
+<div class="modal-content p-0">
+    <div class="row blue lighten-5 pt-3 pb-2">
+        <div class="col s12 center">
+            <h3 class="blue-text text-darken-3">Create a new issue</h3>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row issue_templates">
+            <div class="col s12">
+                <div class="row search-field">
+                    <%= simple_form_for :search, url: issue_templates_search_add_path, method: "POST", remote: "true" do |f| %>
+                        <div class="input-field col s6 ">
                             <% if @client %>
                                 <input type="hidden" name="client" value="<%= @client.id %>">
                             <% end %>
-                            <input type="hidden" name="issue_template" value="<%= issue_template.id %>">
-                            <button type="submit" class="btn-flat grey lighten-2 green-text text-darken-1"> <i class="material-icons left">add</i>create issue</button>
-                        <% end %>                        
-                    </li>
-                <% end %>   
-            </ul> 
-        </div>
-    </div>    
+                            <input placeholder="Type any issue title..." id="title" name="title" type="text" autofocus>
+                            <label for="title">Search</label> 
+                        </div>
+                    <% end %>
+                    <% if @client %>
+                        <div class="col s6">
+                            <div class="pb-05"><label class="text optional active">Linked client</label></div>
+                            <div class="chip"><%= @client.ip %><%= " (#{@client.hostname})" unless @client.hostname.nil? %></div>
+                        </div>
+                    <% end %>
+                </div>
+                <ul class="collection issue-template-collection">
+                    <% @issue_templates.each do |issue_template| %>
+                        <li class="collection-item issue-template-collection-item">                        
+                            <i class="material-icons left <%= issue_template.color %>-text text-darken-2">bug_report</i><%= issue_template.title %>
+                            <%= simple_form_for @issue do |f| %>
+                                <% if @client %>
+                                    <input type="hidden" name="client" value="<%= @client.id %>">
+                                <% end %>
+                                <input type="hidden" name="issue_template" value="<%= issue_template.id %>">
+                                <button type="submit" class="btn-flat grey lighten-2 green-text text-darken-1"> <i class="material-icons left">add</i>create issue</button>
+                            <% end %>                        
+                        </li>
+                    <% end %>   
+                </ul> 
+            </div>
+        </div>    
+    </div>
+</div>
+<div class="modal-footer">
+    <%= simple_form_for @issue do |f| %>
+        <button type="submit" class="btn blue darken-3"> <i class="material-icons left">add</i>create blank issue</button>
+    <% end %>
 </div>
