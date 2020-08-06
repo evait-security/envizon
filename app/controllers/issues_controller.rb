@@ -46,6 +46,12 @@ class IssuesController < ApplicationController
     severity = @mysql_client.escape(@issue.severity.to_s)
     begin
       @mysql_client.query("INSERT INTO issue_templates (title, description, rating, recommendation, severity) VALUES ('#{title}','#{description}','#{rating}','#{recommendation}','#{severity}')")
+      
+      # get the ID from the current insert.
+      # the function `last_id` use the last inserted id from the current session, so it's thread save. 
+      # https://stackoverflow.com/questions/8161211/get-affected-row-in-ruby-after-doing-an-insert-in-mysql
+      @issue.uuid = @mysql_client.last_id
+      @issue.save
     rescue => exception
       respond_with_notify("something went wrong with the mysql connection: 9080231", "alert")
     end
