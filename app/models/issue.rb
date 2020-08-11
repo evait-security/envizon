@@ -49,8 +49,7 @@ class Issue < ReportPart
   end
 
   def colorize(text)
-    result = text.gsub '<color>', "<strong><span style='color: #{color_hex}'>"
-    result = result.gsub '</color>', "</span></strong>"
+    result = text.gsub /hsl\(.*?\)/, "#{color_hex}"
     result.lstrip.rstrip.lines.join('<br>') # trim spaces at begin and end of the block and replace inner spaces to html-style
   end
   def clean_text(text)

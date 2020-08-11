@@ -20,7 +20,7 @@
     </div>   
 
     <div class="row">
-        <%= f.input :description, wrapper_html: { class: 'col s6' }, input_html: { class: 'markdown-textarea'} %>
+        <%= f.input :description, wrapper_html: { class: 'col s6' }, input_html: { class: 'editor'} %>
         <div class="col s6">
             <div class="row"></div> <!-- empty dirty row for padding =/ -->
             <div class="row">
@@ -64,7 +64,7 @@
         </div>
     </div>
     <div class="row">
-        <%= f.input :rating, wrapper_html: { class: 'col s6' }, input_html: { class: 'markdown-textarea'} %>
-        <%= f.input :recommendation, wrapper_html: { class: 'col s6' }, input_html: { class: 'markdown-textarea'} %>    
+        <%= f.input :rating, wrapper_html: { class: 'col s6' }, input_html: { class: 'editor'} %>
+        <%= f.input :recommendation, wrapper_html: { class: 'col s6' }, input_html: { class: 'editor'} %>    
     </div>
 <% end %>

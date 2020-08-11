@@ -1,6 +1,27 @@
 $(".editor-container").html("<%= j render(partial: 'issues/edit') %>");
-$(".markdown-textarea").each(function(index, value) {
-    ClassicEditor.create(value);
+$(".editor").each(function(index, value) {
+    ClassicEditor
+    .create( value, {
+        toolbar: {
+            items: [
+                'bold',
+                'italic',
+                'fontColor',
+                'fontBackgroundColor',
+                'codeBlock',
+                'highlight',
+                'fontFamily',
+                'horizontalLine',
+                'specialCharacters',
+                'link',
+                'bulletedList',
+                'numberedList',
+                'undo',
+                'redo'
+            ]
+        },
+        language: 'de'				
+    });
 });
 M.updateTextFields();
 $(document).ready(function(){
