@@ -7,7 +7,7 @@ $('.material-tooltip').remove();
 
 $("#report_tree").html("<%= j render(partial: 'report_parts/report_tree') %>");
 $(".markdown-textarea").each(function(index, value) {
-    var simplemde = new SimpleMDE({ element: value, spellChecker: false });
+    ClassicEditor.create(value);
 });
 M.updateTextFields();
 $(document).ready(function(){

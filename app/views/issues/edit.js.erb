@@ -1,6 +1,6 @@
 $(".editor-container").html("<%= j render(partial: 'issues/edit') %>");
 $(".markdown-textarea").each(function(index, value) {
-    var simplemde = new SimpleMDE({ element: value, spellChecker: false });
+    ClassicEditor.create(value);
 });
 M.updateTextFields();
 $(document).ready(function(){
@@ -8,4 +8,3 @@ $(document).ready(function(){
     $('.tooltipped').tooltip({delay: 50});
     $('.materialboxed').materialbox();
 });
-        
