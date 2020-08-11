@@ -9,17 +9,27 @@
 if SavedScan.all.empty?
   SavedScan.create([{ name: 'ARP scan', parameter: '-sP -PR' },
                     { name: 'Enumerate devices only', parameter: '-sn -T4' },
-                    { name: 'Quick OS SMB detection', parameter: '-sU -sS --script=smb-os-discovery.nse -p U:137,T:139 -T4' },
+                    { name: 'Quick OS SMB detection - SMB', parameter: '--script smb-os-discovery.nse -p445 -T4' },
+                    { name: 'Quick OS SMB detection - NetBIOS', parameter: '-sU -sS --script=smb-os-discovery.nse -p U:137,T:139 -T4' },
                     { name: 'Default scripts, top ports, OS detection', parameter: '-O -sC -T4' },
+                    { name: 'Default scripts, top ports, OS detection - light', parameter: '-O -sC -T4 --version-light --max-retries 2 --script-timeout 15s' },
                     { name: 'Default scripts, top 300 ports, OS detection, service detection', parameter: '--top-ports 300 -O -sC -sV -T4' },
+                    { name: 'Default scripts, top 300 ports, OS detection, service detection - light', parameter: '--top-ports 300 -O -sC -sV -T4 --max-retries 2 --script-timeout 15s' },
                     { name: 'Scan all ports', parameter: '-p- -T4' },
                     { name: 'Full scan', parameter: '-O -p- -sC -sV -T4' },
-                    { name: 'Vuln all', parameter: '--script=vuln --max-retries 2' },
-                    { name: 'Vuln: Exploit', parameter: '--script=exploit --max-retries 2' },
-                    { name: 'Fast scan', parameter: '-F -T4 --max-retries 1' },
-                    { name: 'Fast scan with OS-Discovery', parameter: '-F -T4 --max-retries 1 -O --version-light --script=smb-os-discovery' },
+                    { name: 'Full scan - light', parameter: '-O -p- -sC -sV -T4 --max-retries 2 --script-timeout 15s' },
+                    { name: 'Fast scan', parameter: '-F -T4 --max-retries 1 --script-timeout 10s' },
+                    { name: 'Fast scan with OS-Discovery', parameter: '-F -T4 --max-retries 1 -O --version-light --script=smb-os-discovery --script-timeout 10s' },
                     { name: 'Scripts: Web', parameter: '-p 80,443,3000 -sV --script "http-* and not(dos or brute)"'},
-                    { name: 'Scripts: SMB', parameter: '--script "smb* and not(dos or brute)" -p 139,445 -sU -sT' }])
+                    { name: 'Scripts: SMB', parameter: '--script "smb* and not(dos or brute)" -p 139,445 -sU -sT' },
+
+                    { name: 'Vuln: all', parameter: '--script=vuln --max-retries 2 --script-timeout 30s' },
+                    { name: 'Vuln: Exploit', parameter: '--script=exploit --max-retries 2 --script-timeout 30s' },
+                    { name: 'Vuln: MS08-067 - TCP', parameter: '--script smb-vuln-ms08-067.nse -p445' },
+                    { name: 'Vuln: MS08-067 - UDP', parameter: '-sU --script smb-vuln-ms08-067.nse -p U:137' },
+                    { name: 'Vuln: MS17-010', parameter: '-p445 --script smb-vuln-ms17-010' },
+                    { name: 'Vuln: smb-double-pulsar-backdoor', parameter: '-p 445 --script=smb-double-pulsar-backdoor' }])
+
 end
 
 if Label.all.empty?
