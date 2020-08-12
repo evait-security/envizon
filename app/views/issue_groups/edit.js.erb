@@ -1,7 +1,4 @@
 $(".editor-container").html("<%= j render(partial: 'edit') %>");
-$(".markdown-textarea").each(function(index, value) {
-    var simplemde = new SimpleMDE({ element: value, spellChecker: false });
-});
 M.updateTextFields();
 $(document).ready(function(){
     $('select').formSelect();

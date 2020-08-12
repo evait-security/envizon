@@ -1,6 +1,27 @@
 $("#medium-modal-content").html("<%= j render(partial: 'reports/edit') %>");
-$(".markdown-textarea").each(function(index, value) {
-    var simplemde = new SimpleMDE({ element: value, spellChecker: false });
+$(".editor").each(function(index, value) {
+    ClassicEditor
+    .create( value, {
+        toolbar: {
+            items: [
+                'bold',
+                'italic',
+                'fontColor',
+                'fontBackgroundColor',
+                'codeBlock',
+                'highlight',
+                'fontFamily',
+                'horizontalLine',
+                'specialCharacters',
+                'link',
+                'bulletedList',
+                'numberedList',
+                'undo',
+                'redo'
+            ]
+        },
+        language: 'de'				
+    });
 });
 M.updateTextFields();
 $("#medium-modal").modal('open');
