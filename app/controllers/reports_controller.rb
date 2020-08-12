@@ -75,7 +75,7 @@ class ReportsController < ApplicationController
     template = Sablon.template(File.expand_path(Rails.root.join(template_path, 'envizon_template.docx')))
 
     # init strukts
-    s_report = Struct.new(:item, :issue_groups)
+    s_report = Struct.new(:item, :summary, :conclusion, :issue_groups)
     s_issue_group = Struct.new(:item, :index, :issues)
     s_issue = Struct.new(:item, :index, :targets, :description, :rating, :recommendation, :screenshots)
     s_image = Struct.new(:item, :index, :description, :pix)
@@ -84,7 +84,15 @@ class ReportsController < ApplicationController
     context = {
       title: report_file_name,
       report: s_report.new(
-        @report, # report.item
+        @report, # report.summary
+        Sablon.content(:html, <<-HTML.strip
+        #{@report.summary}
+        HTML
+        ), # report.conclusion
+        Sablon.content(:html, <<-HTML.strip
+        #{@report.conclusion}
+        HTML
+        ), # report.issue_groups->issues->description
         @report.report_parts.order(:index).select { |rp| rp.is_a? IssueGroup }.each_with_index.map do |ig, index_ig| # report.issue_groups
           s_issue_group.new(
             ig, # report.issue_groups->item

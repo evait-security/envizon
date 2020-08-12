@@ -149,3 +149,13 @@ html, body {
 .ck.ck-editor {
   padding-top: 1em !important;
 }
+.ck.ck-content.ck-editor__editable p:first-child {
+  margin-block-start: 0.5em !important;
+}
+.ck.ck-content.ck-editor__editable p:last-child {
+  margin-block-end: 0.5em !important;
+}
+.ck.ck-content.ck-editor__editable p {
+  margin-block-start: 0px !important;
+  margin-block-end: 0px !important;
+}
