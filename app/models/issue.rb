@@ -47,9 +47,6 @@ class Issue < ReportPart
     end
   end
 
-  def colorize(text)
-    result.lstrip.rstrip.lines.join('<br>') # trim spaces at begin and end of the block and replace inner spaces to html-style
-  end
   def clean_text(text)
 =begin
     result = text.gsub '<color>', ""

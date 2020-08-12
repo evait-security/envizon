@@ -95,15 +95,15 @@ class ReportsController < ApplicationController
                 index_issue, # report.issue_groups->issues->index
                 (issue.clients.map { |c| c.ip.to_s + (c.hostname.present? ? " (#{c.hostname})" : '') } + (issue.customtargets.present? ? issue.customtargets.lines : [])).map(&:strip).reject(&:empty?), # report.issue_groups->issues->targets
                 Sablon.content(:html, <<-HTML.strip
-                #{issue.colorize(issue.description)}
+                #{issue.description}
                 HTML
                 ), # report.issue_groups->issues->description
                 Sablon.content(:html, <<-HTML.strip
-                #{issue.colorize(issue.rating)}
+                #{issue.rating}
                 HTML
                 ), # report.issue_groups->issues->rating
                 Sablon.content(:html, <<-HTML.strip
-                #{issue.colorize(issue.recommendation)}
+                #{issue.recommendation}
                 HTML
                 ), # report.issue_groups->issues->recommendation
                 issue.screenshots.each_with_index.map do |screenshot, index_screenshot|
