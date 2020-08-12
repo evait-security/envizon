@@ -30,7 +30,6 @@ class Issue < ReportPart
     end
   end
 
-
   def color_hex
     case severity
     when 0
@@ -49,7 +48,6 @@ class Issue < ReportPart
   end
 
   def colorize(text)
-    result = text.gsub /hsl\(.*?\)/, "#{color_hex}"
     result.lstrip.rstrip.lines.join('<br>') # trim spaces at begin and end of the block and replace inner spaces to html-style
   end
   def clean_text(text)
