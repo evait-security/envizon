@@ -3,7 +3,7 @@ FROM ruby:2.7-alpine
 ENV BUILD_PACKAGES="curl-dev git curl ruby-dev git nmap@edge" \
     NMAP_PACKAGES="nmap@edge nmap-doc@edge nmap-ncat@edge nmap-nping@edge nmap-nselibs@edge nmap-scripts@edge" \
     DEV_PACKAGES="zlib-dev libxml2-dev libxslt-dev tzdata yaml-dev less" \
-    PACKAGES="nodejs graphviz yarn postgresql-dev postgresql-client openssl imagemagick" \
+    PACKAGES="nodejs graphviz yarn postgresql-dev postgresql-client openssl imagemagick mariadb-dev mariadb-connector-c-dev" \
     RAILS_ENV="production"
 
 RUN \
@@ -23,7 +23,7 @@ RUN \
   rm -rf ~/.gem && \
   mkdir -p /usr/src/app && \
   cd /usr/src/app && \
-  git clone https://github.com/evait-security/envizon.git && \
+  git clone -b 4.0.1 https://github.com/evait-security/envizon.git && \
   cd envizon && \
   mkdir .ssl && \
   bundle install --without test:development

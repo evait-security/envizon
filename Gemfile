@@ -83,8 +83,6 @@ gem 'sablon' # docx tamplate
 gem 'trestle'
 gem 'trestle-auth'
 gem 'trestle-search'
-# gem 'trestle-active_storage'
-gem 'trestle-tinymce'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
