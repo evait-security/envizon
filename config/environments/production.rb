@@ -1,4 +1,13 @@
-require '../ext/conditional_uglifier'
+class ConditionalUglifier < Uglifier
+  def really_compile(source, generate_map)
+    # Skip any optimization (e.g. for shims)
+      if source =~ /^\/\/= skip/
+          source.gsub!(/\/\/= ?skip(\n)*;(\n)*\z/, "")
+      else
+          super
+      end
+  end
+end
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
