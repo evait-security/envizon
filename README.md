@@ -1,7 +1,7 @@
 # envizon - by evait security
 ## network visualization & vulnerability management/reporting
 
-Version 3.0
+Version 4.0
 
 Fancy shields: Coming Soon™
 
@@ -135,9 +135,11 @@ This page renders the images of all ports with visible/interactive content captu
 Using the left groups sidebar you can filter all images by group. Please note, that any on-change updates (e.g. someone deletes a group) are disabled on this page to avoid any disturbance on the manual image reviewing process.
 
 
-### Vulnerabilty management and reporting
+### Vulnerabilty management and reporting (BETA)
 
-In the `templates` section you can create issue templates you want to reuse for your reports. You can set a title, severity, description, rating and recommendation. In the reports section you are able to create reports for your customers. First, you have to create an issue group for example "Internal network". In this group you can create new issues with the content of your issue templates and link them to existing clients in the database. You can easily add screenshots as proofs for your findings by using `CTRL + v` and pressing "update". The templates are linked to the new issues and can be updated with one click. Under `edit current report` you can edit basic information about the report itself for example the name of the customer or a management summary. The presentation mode allows you to hide all items exept the issues and their screenshots.
+Introducing remote issue templates: All issue templates are now located on a dedicated mysql database and are cached locally. You can easily clear this cache and sync all templates from the remote database with one click in the "settings" section under "issue templates". New issues created in your report are linked to their remote template and can be updated / added with one click. Before updating a remote template you will receive a diff-view with the corresponding changes.
+
+In the `templates` section you can create issue templates you want to reuse for your reports. You can set a title, severity, description, rating and recommendation. In the reports section you are able to create reports for your customers. First, you have to create an issue group for example "Internal network". In this group you can create new issues with the content of your issue templates and link them to existing clients in the database. You can easily add screenshots as proofs for your findings by using `CTRL + v` and pressing "update" or `CTRL + s`. The remote templates are linked to the new issues and can be updated with one click. Under `edit current report` you can edit basic information about the report itself for example the name of the customer or a management summary. The presentation mode allows you to hide all items exept the issues and their screenshots.
 
 In order to create a great looking report you have to edit the docx template file under `./report-templates/envizon_template.docx`. All variables used are included in the default template.
 
