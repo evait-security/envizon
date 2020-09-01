@@ -46,15 +46,4 @@ class Issue < ReportPart
       '#999999;'
     end
   end
-
-  def clean_text(text)
-=begin
-    result = text.gsub '<color>', ""
-    result.gsub '</color>', ""
-    result = text.gsub '<i>', ""
-    result.gsub '</i>', ""
-=end
-    ActionView::Base.full_sanitizer.sanitize(text.to_s)
-  end
-  
 end

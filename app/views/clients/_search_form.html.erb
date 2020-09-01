@@ -30,8 +30,9 @@
     <span class="pl-2">
       <a class='dropdown-trigger btn-large btn-flat grey lighten-3 blue-text text-darken-3' href='#' data-target='label'><i class="material-icons left">label</i>Label</a>
       <ul id='label' class='dropdown-content'>
-        <% Label.all.pluck(:name).uniq.each do |lbl| %>
-            <li><a href="#" onclick="this.blur(); addSearchOption('Label', '<%= lbl %>', 1);"><%= lbl %></a></li>
+        <% Label.all.uniq.each do |lbl| %>
+          <% lbl_count = lbl.clients.size %>
+          <li><a href="#" onclick="this.blur(); addSearchOption('Label', '<%= lbl %>', 1);"><%= lbl.name %><span class="new badge <%= lbl_count > 0 ? 'blue': 'grey' %> darken-2" data-badge-caption=""><%= lbl_count %></span></a></li>
         <% end %>
       </ul>
     </span>

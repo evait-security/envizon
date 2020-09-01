@@ -12,13 +12,9 @@
                 <h5>Title</h5>
                 <p><%= @issue.title %></p>
             </div>
-            <div class="col s3">
+            <div class="col s6">
                 <h5>Severity</h5>
                 <i class="material-icons left <%= @issue.color %>-text text-darken-2">bug_report</i>
-            </div>
-            <div class="col s3">
-                <h5>UUID</h5>
-                <p><%= @issue.uuid.to_s %></p>
             </div>
         </div>
         <div class="row">
