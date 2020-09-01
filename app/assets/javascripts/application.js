@@ -17,7 +17,8 @@
 //= require dataTables/extras/dataTables.responsive
 //= require jquery-ui
 //= require simple-iconpicker.min
-//= require ckeditor
 //= require materialize
 //= require activestorage
 //= require_tree .
+//= skip
+//= require ckeditor

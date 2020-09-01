@@ -1,3 +1,5 @@
+require '../ext/conditional_uglifier'
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
   # Rails.application.config.action_cable.disable_request_forgery_protection = true
@@ -24,7 +26,7 @@ Rails.application.configure do
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
   # Compress JavaScripts and CSS.
-  config.assets.js_compressor = :closure
+  config.assets.js_compressor = ConditionalUglifier.new
   # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
