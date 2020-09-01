@@ -10,4 +10,8 @@ class Report < ApplicationRecord
     end
     issue_array
   end
+
+  def self.prepare_text_docx(text) 
+    text.gsub('<pre>', '<p>').gsub('</pre>', '</p>') if text
+  end
 end

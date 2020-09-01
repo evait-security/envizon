@@ -69,7 +69,7 @@ class ReportsController < ApplicationController
     output_file = File.new(Rails.root.join('tmp') + "#{report_file_name}.docx", 'w')
 
     Sablon.configure do |config|
-      config.register_html_tag(:pre, :inline,
+      config.register_html_tag(:code, :inline,
                                properties: { rFonts: { ascii: 'Roboto Mono', cs: 'Roboto Mono' } })
     end
     template = Sablon.template(File.expand_path(Rails.root.join(template_path, 'envizon_template.docx')))
@@ -86,11 +86,11 @@ class ReportsController < ApplicationController
       report: s_report.new(
         @report, # report.summary
         Sablon.content(:html, <<-HTML.strip
-        #{@report.summary}
+        #{Report.prepare_text_docx(@report.summary)}
         HTML
         ), # report.conclusion
         Sablon.content(:html, <<-HTML.strip
-        #{@report.conclusion}
+        #{Report.prepare_text_docx(@report.conclusion)}
         HTML
         ), # report.issue_groups->issues->description
         @report.report_parts.order(:index).select { |rp| rp.is_a? IssueGroup }.each_with_index.map do |ig, index_ig| # report.issue_groups
@@ -103,15 +103,15 @@ class ReportsController < ApplicationController
                 index_issue, # report.issue_groups->issues->index
                 (issue.clients.map { |c| c.ip.to_s + (c.hostname.present? ? " (#{c.hostname})" : '') } + (issue.customtargets.present? ? issue.customtargets.lines : [])).map(&:strip).reject(&:empty?), # report.issue_groups->issues->targets
                 Sablon.content(:html, <<-HTML.strip
-                #{issue.description}
+                #{Report.prepare_text_docx(issue.description)}
                 HTML
                 ), # report.issue_groups->issues->description
                 Sablon.content(:html, <<-HTML.strip
-                #{issue.rating}
+                #{Report.prepare_text_docx(issue.rating)}
                 HTML
                 ), # report.issue_groups->issues->rating
                 Sablon.content(:html, <<-HTML.strip
-                #{issue.recommendation}
+                #{Report.prepare_text_docx(issue.recommendation)}
                 HTML
                 ), # report.issue_groups->issues->recommendation
                 issue.screenshots.each_with_index.map do |screenshot, index_screenshot|
