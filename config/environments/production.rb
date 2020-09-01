@@ -1,5 +1,5 @@
 class ConditionalUglifier < Uglifier
-  def compress(source, generate_map)
+  def compress(source)
     # Skip any optimization (e.g. for shims)
       if source =~ /^\/\/= skip/
           source.gsub!(/\/\/= ?skip(\n)*;(\n)*\z/, "")
