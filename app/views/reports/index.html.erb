@@ -50,6 +50,9 @@
         <%= link_to export_odt_path(@current_report), class: "tooltipped", data: { position: "top", tooltip: "Export current report as docx"} do %><i class="material-icons">post_add</i><% end %>
       </li>
       <li>
+        <%= link_to export_xlsx_path(@current_report), class: "tooltipped", data: { position: "top", tooltip: "Export current report as xlsx"} do %><i class="material-icons">table_chart</i><% end %>
+      </li>
+      <li>
         <%= link_to new_issue_group_path, remote: true, class: "tooltipped", data: { position: "top", tooltip: "Add new issue group"} do %><i class="material-icons">playlist_add</i><% end %>
       </li>
       <li class="waves-effect waves-light">

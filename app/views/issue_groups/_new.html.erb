@@ -1,9 +1,16 @@
-<div class="container modal-valign-center">
-    <div class="row">
-        <div class="col offset-s3 s6">         
-            <%= simple_form_for @issue_group do |f| %>
-                 <%= f.input :title, wrapper_html: { class: 's12' }, placeholder: "Type the name and hit enter", label: "Create a new issue group", autofocus: true, required: true %>
-            <% end %>
+<div class="modal-content p-0">
+    <div class="row primary lighten-4 pt-3 pb-2">
+        <div class="col s12 center">
+            <h3 class="primary-text text-darken-3">Create new issue group</h3>
+        </div>
+    </div>
+    <div class="container modal-valign-center">
+        <div class="row">
+            <div class="col offset-s3 s6">         
+                <%= simple_form_for @issue_group do |f| %>
+                    <%= f.input :title, wrapper_html: { class: 's12' }, placeholder: "Type the name and hit enter", label: "Create a new issue group", autofocus: true, required: true %>
+                <% end %>
+            </div>
         </div>
     </div>
 </div>

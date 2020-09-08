@@ -23,7 +23,7 @@ RUN \
   rm -rf ~/.gem && \
   mkdir -p /usr/src/app && \
   cd /usr/src/app && \
-  git clone -b 4.0.1 https://github.com/evait-security/envizon.git && \
+  git clone https://github.com/evait-security/envizon.git && \
   cd envizon && \
   mkdir .ssl && \
   bundle install --without test:development

@@ -57,7 +57,6 @@ Rails.application.routes.draw do
 
   get '/groups' => 'groups#index'
   get '/pages/settings' => 'pages#settings', as: :global_settings
-  get '/pages/changelog' => 'pages#changelog', as: :changelog
 
   get '/images' => 'images#index', as: :images
   get '/images/scan_all' => 'images#scan_all', as: :images_scan_all

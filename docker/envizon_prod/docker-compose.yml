@@ -36,7 +36,7 @@ services:
       POSTGRES_DB: 'envizon'
       POSTGRES_HOST: '/var/run/postgresql'
       # RAILS_LOG_TO_STDOUT: 'true' --> for debugging
-      RAILS_LOG_TO_STDOUT: 'false'
+      RAILS_LOG_TO_STDOUT:
       RAILS_ENV: 'production'
       REDIS_URL: 'redis://redis:6379/0'
       RAILS_FORCE_SSL: 'true'
