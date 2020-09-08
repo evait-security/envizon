@@ -20,6 +20,7 @@ Rails.application.routes.draw do
 
   post '/reports/change_parent' => 'reports#change_parent', as: :change_parent
   match '/reports/:id/export_docx' => 'reports#export_docx', as: :export_odt, via: [:get, :post]
+  match '/reports/:id/export_xlsx' => 'reports#export_xlsx', as: :export_xlsx, via: [:get, :post]
   match '/reports/:id/export_verinice' => 'reports#export_verinice', as: :export_verinice, via: [:get, :post]
 
   # index ever used, ever?

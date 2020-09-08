@@ -1,6 +1,7 @@
 require 'sablon'
+require 'axlsx'
 class ReportsController < ApplicationController
-  before_action :set_report, only: %i[show edit update destroy export_docx export_verinice]
+  before_action :set_report, only: %i[show edit update destroy export_docx export_xlsx export_verinice]
 
   # GET /reports
   # GET /reports.json
@@ -135,6 +136,74 @@ class ReportsController < ApplicationController
     # generate docx and let them download
     template.render_to_file output_file, context
     send_file output_file, filename: "#{report_file_name}.docx", type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    nil
+  end
+
+  def export_xlsx
+    #https://github.com/randym/axlsx
+    #https://github.com/randym/axlsx/blob/master/examples/example.rb
+
+    report_file_name = "Report Pentest Table - #{@report.title} #{Date.today.year}"
+    output_file = File.new(Rails.root.join('tmp') + "#{report_file_name}.xls", 'w')
+
+    package = Axlsx::Package.new
+    workbook = package.workbook
+
+    workbook.styles do |s|
+      #head = s.add_style :bg_color => "00", :fg_color => "FF", :b => true  
+      head = s.add_style :b => true  
+      severity =[
+        (s.add_style :fg_color => "3fb079"),
+        (s.add_style :fg_color => "0b5394"),
+        (s.add_style :fg_color => "b45f06"),
+        (s.add_style :fg_color => "990000"),
+        (s.add_style :fg_color => "9900ff"),
+        (s.add_style :fg_color => "999999")
+      ]
+
+      workbook.add_worksheet(:name => "Pentest Report") do |sheet|
+        sheet.add_row ["Title", "Severity", "Description", "Targets", "Rating", "Recommendation"], :style => head
+
+        @report.report_parts.order(:index).select { |rp| rp.is_a? IssueGroup }.each_with_index.map do |ig, index_ig| # report.issue_groups
+          ig.ordered_child_issues.each_with_index.map do |issue, index_issue| # report.issue_groups->issues
+            begin
+              sev_cell = severity[issue.severity]
+            rescue => exception
+              sev_cell = severity.last
+            end
+
+            case issue.severity
+            when 0
+              severity_text = 'information'
+            when 1
+              severity_text = 'low'
+            when 2
+              severity_text = 'medium'
+            when 3
+              severity_text = 'high'
+            when 4
+              severity_text = 'critical'
+            else
+              severity_text = 'unknown'
+            end
+            
+            sheet.add_row [
+                Nokogiri::HTML(issue.title).text,
+                severity_text,
+                Nokogiri::HTML(issue.description).text,
+                (issue.clients.map { |c| c.ip.to_s + (c.hostname.present? ? " (#{c.hostname})" : '') } + (issue.customtargets.present? ? issue.customtargets.lines : [])).map(&:strip).reject(&:empty?).join(" \n"), # report.issue_groups->issues->targets
+                Nokogiri::HTML(issue.rating).text,
+                Nokogiri::HTML(issue.recommendation).text
+              ], :style => [nil, sev_cell, nil, nil, nil, nil]
+          end
+        end
+      end
+    end
+
+    File.delete(output_file) if File.exist?(output_file)
+    package.serialize(output_file)
+
+    send_file output_file, filename: "#{report_file_name}.xlsx", type: 'application/xml'
     nil
   end
 

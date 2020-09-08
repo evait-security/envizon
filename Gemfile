@@ -78,6 +78,7 @@ gem 'zip-zip' # will load compatibility for old rubyzip API.
 
 # export report
 gem 'sablon' # docx tamplate
+gem 'axlsx' # xlsx export
 
 # admin db
 gem 'trestle'
