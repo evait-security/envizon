@@ -47,14 +47,6 @@ If you want to update the app image or pull it manually, you can do so with `doc
 
 If you want to provide your own SSL-certificates, modify the `docker-compose.yml` according to your needs, otherwise they will be generated.
 
-**For the lazy ones:**
-
-```zsh
-wget https://raw.githubusercontent.com/evait-security/envizon/master/docker/envizon_prod/docker-compose.yml
-echo SECRET_KEY_BASE="$(echo $(openssl rand -hex 64) | tr -d '\n')" > .envizon_secret.env
-sudo docker-compose up
-```
-
 #### Running from local git checkout
 
 ```zsh
