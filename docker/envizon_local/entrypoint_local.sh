@@ -6,6 +6,7 @@ then
     echo "Certificates found in .ssl/."
   else
     echo "No certificates provided and none in .ssl/, generating some for you"
+    mkdir -p .ssl
     openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 \
       -subj "/C=DE/ST=None/L=None/O=evait/CN=None" \
       -keyout .ssl/localhost.key  -out .ssl/localhost.crt
