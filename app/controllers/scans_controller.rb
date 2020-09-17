@@ -1,3 +1,5 @@
+require "shodanz"
+
 # @restful_api 1.0
 # Start a scan or upload an XML
 class ScansController < ApplicationController
@@ -10,18 +12,27 @@ class ScansController < ApplicationController
   def create
     if %i[target name].all? { |key| params[key].present? }
       params[:command] ||= ''
-      args = {
-        'scan_name' => params[:name],
-        'user_id' => current_user.id,
-        'command' => params[:command],
-        'target' => params[:target]
-      }
-      #ScanWorker.perform_async(args)
-      command = NmapCommand.new(params[:command], current_user.id, params[:target])
-      scan = Scan.new(name: args['scan_name'], user_id: args['user_id'])
-      scan.command = 'Scan in progress…'
-      scan.save
-      command.run_worker(scan)
+
+      case params[:command]
+      when 'shodan'
+        client = Shodanz.client.new(key: 'gul3hYnLPX1rQqRlpZ0ZKL8Kp9W6C05Z')
+        #host = client.host("213.160.71.2")
+        #host['data'][3]['http'].keys
+
+      else # nmap as default
+        args = {
+          'scan_name' => params[:name],
+          'user_id' => current_user.id,
+          'command' => params[:command],
+          'target' => params[:target]
+        }
+        #ScanWorker.perform_async(args)
+        command = NmapCommand.new(params[:command], current_user.id, params[:target])
+        scan = Scan.new(name: args['scan_name'], user_id: args['user_id'])
+        scan.command = 'Scan in progress…'
+        scan.save
+        command.run_worker(scan)
+      end
 
       respond_to do |format|
         format.html { redirect_to scans_path }
