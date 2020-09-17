@@ -52,6 +52,15 @@ class IssuesController < ApplicationController
       # https://stackoverflow.com/questions/8161211/get-affected-row-in-ruby-after-doing-an-insert-in-mysql
       @issue.uuid = @mysql_client.last_id
       @issue.save
+
+      # create new local cached issue template (overwrite if uuid already exist)
+      it = IssueTemplate.find_or_create_by(uuid: @issue.uuid)
+      it.title = @issue.title
+      it.description = @issue.description
+      it.rating = @issue.rating
+      it.recommendation = @issue.recommendation
+      it.severity = @issue.severity
+      it.save
     rescue => exception
       respond_with_notify("something went wrong with the mysql connection: 9080231", "alert")
     end
@@ -65,8 +74,18 @@ class IssuesController < ApplicationController
     description = @mysql_client.escape(@issue.description)
     rating = @mysql_client.escape(@issue.rating)
     recommendation = @mysql_client.escape(@issue.recommendation)
+    severity = @mysql_client.escape(@issue.severity.to_s)
     begin
-      @mysql_client.query("UPDATE issue_templates SET title = '#{title}', description = '#{description}', rating = '#{rating}', recommendation = '#{recommendation}' WHERE id=#{uid}")
+      @mysql_client.query("UPDATE issue_templates SET title = '#{title}', description = '#{description}', rating = '#{rating}', recommendation = '#{recommendation}', severity = '#{severity}' WHERE id=#{uid}")
+      
+      # update local cached issue template (create if uuid didn't exist)
+      it = IssueTemplate.find_or_create_by(uuid: @issue.uuid)
+      it.title = @issue.title
+      it.description = @issue.description
+      it.rating = @issue.rating
+      it.recommendation = @issue.recommendation
+      it.severity = @issue.severity
+      it.save
     rescue => exception
       respond_with_notify("something went wrong with the mysql connection: 2090203", "alert")
     end
