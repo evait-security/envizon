@@ -94,6 +94,28 @@
                   </div>
                 <% end %>
               </div>
+              <div class="row" style="padding-top: 2em;">
+                <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
+                  <%= f.error_notification %>
+                  <div class="col s4">
+                    <p class="grey-text text-darken-2 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Set API-Key for Shodan">Shodan API-Key</p>
+                  </div>
+                  <div class="col s6">
+                    <input type="hidden" name="shodan_apikey" value="true">
+                    <label>
+                      <%
+                        shodan_apikey = current_user.settings.where(name: 'shodan_apikey').first_or_create.value
+                        shodan_apikey ||= ''
+                      %>
+                      <input id="shodan_apikey_setting" name="shodan_apikey_setting" placeholder='Set API-Key for Shodan' type="text" class="validate" value="<%= shodan_apikey %>">
+                      <span></span>
+                    </label>
+                  </div>
+                  <div class="input-field form-actions col s2" >
+                    <button class="btn tooltipped" data-position="bottom" data-delay="50" data-tooltip="Update global notification settings" type="submit" name="action"><i class="fa fa-refresh"></i></button>
+                  </div>
+                <% end %>
+              </div>
             </div>
           </div>
         </div>

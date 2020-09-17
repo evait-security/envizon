@@ -17,7 +17,8 @@ class SettingsController < ApplicationController
        max_host_per_scan hosts
        mysql_connection
        export_db import_db
-       import_issue_templates report_mode].each do |param|
+       import_issue_templates report_mode
+       shodan_apikey].each do |param|
       param_sym = param.to_sym
       next unless params[param_sym]
 
@@ -137,6 +138,24 @@ class SettingsController < ApplicationController
     setting.value = YAML.dump(hosts_given)
     setting.save
     { message: "#{hosts_given.lines.count} hosts excluded", type: 'success' }
+  end
+
+  def shodan_apikey(shodan_apikey)
+    setting = current_user.settings.where(name: 'shodan_apikey').first_or_create
+    if params[:shodan_apikey_setting].present?
+      value = params[:shodan_apikey_setting].to_s.strip
+      if value.match?(/[a-zA-Z0-9]{32}/)
+        setting.value = value
+        result = { message: "Shodan API-Key updated", type: 'success' }
+      else
+        result = { message: 'API-Key format ist wrong', type: 'alert' }
+      end
+    else
+      setting.value = ''
+      result = { message: "Shodan API-Key removed", type: 'success' }   
+    end
+    setting.save
+    result
   end
 
   def global_notify(global_notify)

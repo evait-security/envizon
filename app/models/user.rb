@@ -28,6 +28,10 @@ class User < ApplicationRecord
     notify_scan_status = Setting.where(user_id: id, name: 'global_notify').first_or_create
     notify_scan_status.assign_attributes(user_id: id, name: 'global_notify', value: 'true')
     notify_scan_status.save
+
+    shodan_apikey = Setting.where(user_id: id, name: 'shodan_apikey').first_or_create
+    shodan_apikey.assign_attributes(user_id: id, name: 'shodan_apikey', value: '')
+    shodan_apikey.save
   end
 
   def email_required?
