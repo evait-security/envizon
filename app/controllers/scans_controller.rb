@@ -15,7 +15,7 @@ class ScansController < ApplicationController
 
       case params[:command]
       when 'shodan'
-        client = Shodanz.client.new(key: 'gul3hYnLPX1rQqRlpZ0ZKL8Kp9W6C05Z')
+        client = Shodanz.client.new(key: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
         #host = client.host("213.160.71.2")
         #host['data'][3]['http'].keys
 
