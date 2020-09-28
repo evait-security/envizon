@@ -32,7 +32,7 @@
       <ul id='label' class='dropdown-content'>
         <% Label.all.uniq.each do |lbl| %>
           <% lbl_count = lbl.clients.size %>
-          <li><a href="#" onclick="this.blur(); addSearchOption('Label', '<%= lbl %>', 1);"><%= lbl.name %><span class="new badge <%= lbl_count > 0 ? 'blue': 'grey' %> darken-2" data-badge-caption=""><%= lbl_count %></span></a></li>
+          <li><a href="#" onclick="this.blur(); addSearchOption('Label', '<%= lbl.name %>', 1);"><%= lbl.name %><span class="new badge <%= lbl_count > 0 ? 'blue': 'grey' %> darken-2" data-badge-caption=""><%= lbl_count %></span></a></li>
         <% end %>
       </ul>
     </span>
