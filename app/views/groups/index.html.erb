@@ -438,7 +438,6 @@
 
     // new group add -> button float
     $(".group_add_float").click(function () {
-        $("#generic-modal").modal('open');
         $.ajax({
             url: "<%= new_group_path %>",
             dataType : "script",

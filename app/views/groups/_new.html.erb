@@ -1,22 +1,3 @@
-<style>
-  .iconsholder {
-    box-sizing: unset;
-  }
-  .howl-iconpicker-close {
-    width: 260px;
-  }
-  .srchicons {
-    text-align: center !important;
-  }
-  .howl-iconpicker {
-    background: #fff;
-  }
-  .selectedicon {
-    background: #1976D2!important;
-    border-color: #1976D2!important;
-    color: #fff;
-  }
-</style>
 <%= simple_form_for :group, url: groups_path, remote: true do |f| %>
 <div class="modal-content">
   <a href="#" class="modal-action modal-close red-text text-darken-2 right btn-flat"><i class="material-icons">close</i></a>
@@ -28,7 +9,7 @@
       <%= f.input :name, :wrapper_html => { :class => "s12" } %>
     </div>
     <div class="col s6">
-      <%= f.input :icon, :input_html => {:class => "iconpicker"}, :wrapper_html => { :class => "s12" } %>
+      <%= f.input :icon, placeholder: "fab fa-windows", :input_html => {:class => "iconpicker"}, :wrapper_html => { :class => "s12" } %>
     </div>
   </div>
 </div>
@@ -39,5 +20,5 @@
 <% end %>
 
 <script>
-    $('.iconpicker').iconpicker(".iconpicker");
+  $('.iconpicker').iconpicker();
 </script>

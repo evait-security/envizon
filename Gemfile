@@ -47,7 +47,7 @@ gem 'remotipart'
 
 # Frontend
 # gem 'devise-bootstrap-views'
-gem 'font-awesome-rails'
+gem 'font_awesome5_rails'
 gem 'jquery-datatables-rails'
 gem 'jquery-ui-rails'
 gem 'materialize-sass'

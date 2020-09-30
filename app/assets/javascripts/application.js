@@ -16,7 +16,7 @@
 //= require dataTables/jquery.dataTables
 //= require dataTables/extras/dataTables.responsive
 //= require jquery-ui
-//= require simple-iconpicker.min
+//= require fontawesome-iconpicker.min
 //= require materialize
 //= require activestorage
 //= require_tree .
