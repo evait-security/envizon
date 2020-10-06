@@ -121,7 +121,7 @@ class SettingsController < ApplicationController
     out_data_sql = Rails.root.join('db', 'envizon.db.tar')
 
     FileUtils.rm_rf(Rails.root.join('storage'))
-    system("mv #{unziped_storage} #{Rails.root.join('storage')}")
+    system("mv #{unziped_storage}/* #{Rails.root.join('storage')}")
 
     app = Rake.application
     app.init
