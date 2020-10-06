@@ -120,9 +120,13 @@ class SettingsController < ApplicationController
     unziped_data_sql = File.join(extract_dir, 'envizon.db.tar')
     out_data_sql = Rails.root.join('db', 'envizon.db.tar')
 
-    FileUtils.rm_rf(Rails.root.join('storage'))
-    system("mv #{unziped_storage}/* #{Rails.root.join('storage')}")
-
+    Dir.children(Rails.root.join('storage')).each do |ch|
+      FileUtils.rm_rf(Rails.root.join('storage', ch))
+    end
+    Dir.children(unziped_storage).each do |ch|
+      FileUtils.mv(File.join(unziped_storage, ch), Rails.root.join('storage'))
+    end
+    
     app = Rake.application
     app.init
     app.add_import "#{Gem::Specification.find_by_name('yaml_db').gem_dir}/lib/tasks/yaml_db_tasks.rake"
