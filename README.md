@@ -55,6 +55,14 @@ echo SECRET_KEY_BASE="$(echo $(openssl rand -hex 64) | tr -d '\n')" > .envizon_s
 sudo docker-compose up
 ```
 
+#### Updating to new version without loosing your data
+
+```
+cd [FOLDER CONTAINS COMPOSE FILE]
+docker-compose pull envizon
+docker-compose up --force-recreate -d envizon
+```
+
 #### Running from local git checkout
 
 ```zsh
