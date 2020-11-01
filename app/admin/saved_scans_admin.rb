@@ -1,6 +1,6 @@
 Trestle.resource(:saved_scans) do
   menu do
-    item :saved_scans, icon: "fa fa-database"
+    item :saved_scans, icon: "fas fa-database"
   end
   search do |query|
     if query

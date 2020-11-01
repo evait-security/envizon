@@ -91,10 +91,10 @@ class SettingsController < ApplicationController
 
     begin
       issue_template_remote = @mysql_client.query("SELECT * FROM issue_templates")
-      
-      # danger things incomming
+
+      # dangerous things incomming
       IssueTemplate.delete_all
-      # danger things completed
+      # dangerous things completed
 
       issue_template_remote.each do |it_remote|
         IssueTemplate.create(
@@ -126,7 +126,7 @@ class SettingsController < ApplicationController
     Dir.children(unziped_storage).each do |ch|
       FileUtils.mv(File.join(unziped_storage, ch), Rails.root.join('storage'))
     end
-    
+
     app = Rake.application
     app.init
     app.add_import "#{Gem::Specification.find_by_name('yaml_db').gem_dir}/lib/tasks/yaml_db_tasks.rake"

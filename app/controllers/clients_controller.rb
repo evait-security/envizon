@@ -52,7 +52,7 @@ class ClientsController < ApplicationController#
       clients.each do |client|
         client.archived = false
         if client.groups.count = 0
-          unknown = Group.where(name: 'Unknown').first_or_create(mod: false, icon: '<i class="fa fa-desktop"></i>')
+          unknown = Group.where(name: 'Unknown').first_or_create(mod: false, icon: '<i class="fas fa-desktop"></i>')
           unknown << client 
         end
         client.save!

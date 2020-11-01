@@ -185,7 +185,26 @@ class NmapCommand
 
   def args(options)
     options = options.split
-    %w[nmap sudo -iL -oX -oN -oS -oG].each { |o| options.delete o }
+    %w[nmap sudo -iL -oX -oN -oS -oG --datadir].each { |o| options.delete o }
+
+    options.dup.each do |option|
+      # we'll assume nothing else in here uses path separators
+      # => CIDR style targets are passed separately to NmapCommand
+      (options.delete(option) && next) if option.include?('datadir=')
+      next unless option.match(%r{\\|\/})
+
+      next if File.directory?(File.expand_path(option))
+
+      # we also skip relative pathes even in nmap-nse-directories, to avoid path traversel
+      # users should just enter the script name directly - if it's in there, it will be found
+      prefixes = %w[~/.nmap /usr/local/share/nmap /usr/share/nmap]
+      is_bad_path = prefixes.any do |prefix|
+        File.file?(Pathname(prefix).join(option).expand_path) ||
+          File.file?(Pathname(prefix).join(option, 'scripts').expand_path)
+      end
+
+      options.delete(option) if is_bad_path
+    end
 
     ['--stats-every', '60s',
      '--excludefile',

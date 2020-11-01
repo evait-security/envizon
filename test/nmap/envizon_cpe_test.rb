@@ -13,7 +13,7 @@ class EnvizonCpeTest < ActionDispatch::IntegrationTest
   test 'should get icon for linux' do
     e_cpe = EnvizonCpe.new
     icon = e_cpe.icon(clients(:linux))
-    expected_icon = '<i class="fa fa-linux"></i>'
+    expected_icon = '<i class="fab fa-linux"></i>'
     assert_equal(expected_icon, icon,
                  "CPE-name of Client isn't #{expected_icon} is #{icon}")
   end
@@ -29,7 +29,7 @@ class EnvizonCpeTest < ActionDispatch::IntegrationTest
   test 'should get icon for windows' do
     e_cpe = EnvizonCpe.new
     icon = e_cpe.icon(clients(:msw))
-    expected_icon = '<i class="fa fa-windows"></i>'
+    expected_icon = '<i class="fab fa-windows"></i>'
     assert_equal(expected_icon, icon,
                  "CPE-name of Client isn't #{expected_icon} is #{icon}")
   end

@@ -53,15 +53,15 @@ Trestle.configure do |config|
   # config.root_breadcrumbs = -> { [Trestle::Breadcrumb.new("Home", Trestle.config.root)] }
 
   # Set the default icon class to use when it is not explicitly provided.
-  # Defaults to "fa fa-arrow-circle-o-right".
+  # Defaults to "fas fa-arrow-circle-o-right".
   #
-  # config.default_navigation_icon = "fa fa-arrow-circle-o-right"
+  # config.default_navigation_icon = "fas fa-arrow-circle-o-right"
 
   # Add an explicit menu block to be added to the admin navigation.
   #
   # config.menu do
   #   group "Custom Group" do
-  #     item "Custom Link", "/admin/custom", icon: "fa fa-car", badge: { text: "NEW!", class: "label-success" }, priority: :first
+  #     item "Custom Link", "/admin/custom", icon: "fas fa-car", badge: { text: "NEW!", class: "label-success" }, priority: :first
   #   end
   # end
 

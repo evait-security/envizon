@@ -18,7 +18,7 @@ class NmapParser
         client = prepare_client(host)
         os_info(host, client)
         os_type(host, client)
-        scripts(host, client) if host.host_script && host.host_script.scripts
+        scripts(host, client) if host.host_script&.scripts
         ports(host, client)
         groups(client) if client.groups.blank? || client.groups.where(name: 'Unknown').present?
 
@@ -48,12 +48,11 @@ class NmapParser
       client.os = os unless os.blank? || client.os.present?
       client.save
     rescue => exception
-      puts "Faild to get os_info ->"
+      puts "Failed to get os_info ->"
       puts "host => #{host}"
       puts "client => #{client}"
       puts "exception => #{exception}"
     end
-      
   end
 
   def os_type(host, client)
@@ -64,9 +63,9 @@ class NmapParser
       host.os && host.os.classes.each do |os_class|
         next unless os_class.accuracy > accuracy
         begin
-          cpe = os_class.cpe.first  
+          cpe = os_class.cpe.first
         rescue => exception
-          puts "Faild to get cpe for os_type"
+          puts "Failed to get cpe for os_type"
         end
         type = os_class.type
         accuracy = os_class.accuracy
@@ -75,7 +74,7 @@ class NmapParser
       client.ostype = type unless type.blank?
       client.save
     rescue => exception
-      puts "Faild to get os_type ->"
+      puts "Failed to get os_type ->"
       puts "host => #{host}"
       puts "client => #{client}"
       puts "exception => #{exception}"
@@ -107,7 +106,7 @@ class NmapParser
         end
       end
     rescue => exception
-      puts "Faild to get scripts ->"
+      puts "Failed to get scripts ->"
       puts "host => #{host}"
       puts "client => #{client}"
       puts "exception => #{exception}"
@@ -133,7 +132,7 @@ class NmapParser
         db_port.save
       end
     rescue => exception
-      puts "Faild to get ports ->"
+      puts "Failed to get ports ->"
       puts "host => #{host}"
       puts "client => #{client}"
       puts "exception => #{exception}"
@@ -177,7 +176,7 @@ class NmapParser
         end
       end
     rescue => exception
-      puts "Faild to get port_scripts ->"
+      puts "Failed to get port_scripts ->"
       puts "db_port => #{db_port}"
       puts "port => #{port}"
       puts "exception => #{exception}"
@@ -185,7 +184,7 @@ class NmapParser
   end
 
   def groups(client)
-    unknown = Group.where(name: 'Unknown').first_or_create(mod: false, icon: '<i class="fa fa-desktop"></i>')
+    unknown = Group.where(name: 'Unknown').first_or_create(mod: false, icon: '<i class="fas fa-desktop"></i>')
     @cpe_helper.group(client).each do |group_name|
       group = Group.where(name: group_name).first_or_create(mod: false, icon: @cpe_helper.icon(client))
       group.clients << client unless group.clients.find_by(id: client.id).present?
@@ -202,7 +201,7 @@ class NmapParser
   end
 
   def check_vuln(client, script_name, script_values)
-    if script_values.is_a?(Hash) 
+    if script_values.is_a?(Hash)
       begin
         vuln = []
         likely = []
@@ -215,12 +214,12 @@ class NmapParser
               likely << script_vuln[0].to_s
             end
           rescue => exception
-            puts "Faild to state from check_vuln single vuln ->"
+            puts "Failed to state from check_vuln single vuln ->"
             puts "script_vuln => #{script_vuln}"
           end
         end
       rescue => exception
-        puts "Faild to state from check_vuln script ->"
+        puts "Failed to state from check_vuln script ->"
         puts "script_name => #{script_name}"
         puts "script_values => #{script_values}"
       end
