@@ -207,11 +207,14 @@ class NmapParser
         likely = []
         script_values.each do |script_vuln|
           begin
-            case script_vuln[1]['state'].downcase
-            when 'vulnerable'
-              vuln << script_vuln[0].to_s
-            when 'likely vulnerable'
-              likely << script_vuln[0].to_s
+            state = script_vuln[1]['state']
+            if state
+              case state.downcase
+              when 'vulnerable'
+                vuln << script_vuln[0].to_s
+              when 'likely vulnerable'
+                likely << script_vuln[0].to_s
+              end
             end
           rescue => exception
             puts "Failed to state from check_vuln single vuln ->"
@@ -252,10 +255,9 @@ class NmapParser
     hostname = data['fqdn']
     hostname = data['server'].gsub('\\x00', '') if hostname.blank?
     client.hostname = hostname unless hostname.blank?
-
     cpe = data['cpe']
     client.cpe = cpe unless cpe.blank?
-    os = data['lanmanager'] if cpe.downcase.include?('microsoft')
+    os = data['lanmanager']
     client.os = os unless os.blank?
   end
 end
