@@ -28,6 +28,7 @@ We use envizon for our pentests in order to get an overview of a network and qui
 + **Export** selected clients in a text file to connect other tools fast
 + **Manage** issue template and create vulnerabilities linked to hosts in the database
 + **Create** customer reports with docx templates with one click
++ **Take** notes no nearly any object (WIP)
 
 ## How to start?!
 
