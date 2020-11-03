@@ -1,6 +1,7 @@
 class Issue < ReportPart
   belongs_to :reportable, polymorphic: true
-
+  has_many :notes, as: :noteable
+  
   def self.create_from_template(issue_group, issue_template)
     Issue.create(
       reportable: issue_group,

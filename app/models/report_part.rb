@@ -3,6 +3,7 @@ class ReportPart < ApplicationRecord
   has_many :screenshots, dependent: :destroy
   has_many :client_report_parts, foreign_key: :report_part_id
   has_many :clients, through: :client_report_parts
+  has_many :notes, as: :noteable
 
   def child_issues
     return [self] if type == 'Issue'

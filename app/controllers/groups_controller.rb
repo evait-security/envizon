@@ -51,7 +51,7 @@ class GroupsController < ApplicationController
     source_group = search || params[:source_group].blank? ? nil : Group.find(params[:source_group])
     destination_group = Group.new
     destination_group.name = name.blank? ? 'Unknown' : name
-    destination_group.icon = '<i class="fa ' + params[:group][:icon] + '"></i>'
+    destination_group.icon = '<i class="' + params[:group][:icon] + '"></i>'
     destination_group.mod = true
 
     affected_group = "-2"

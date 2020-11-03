@@ -2,6 +2,7 @@ require 'sidekiq/web'
 Sidekiq::Web.set :session_secret, Rails.application.credentials[:secret_key_base]
 
 Rails.application.routes.draw do
+  resources :notes, only: [:create, :destroy]
   resources :issue_groups
   resources :issues
   resources :screenshots, only: [:edit, :update, :destroy]
@@ -13,7 +14,7 @@ Rails.application.routes.draw do
   root to: redirect(path: '/scans')
 
   get '/scans' => 'pages#scans'
-
+  get "/notes/new/:noteable_type/:noteable_id" => 'notes#new', as: :new_note
   get '/issue_templates/create_from_issue/:issue_id' => 'issue_templates#create_from_issue', as: :issue_template_create_from_issue
   post '/issue_templates/search' => 'issue_templates#search', as: :issue_templates_search
   post '/issue_templates/search_add' => 'issue_templates#search_add', as: :issue_templates_search_add

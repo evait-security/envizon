@@ -1,0 +1,30 @@
+<div class="modal-content p-0">
+  <div class="row green lighten-5 pt-3 pb-2">
+    <div class="col s12 center">
+        <h3 class="green-text text-darken-3">Create a new note</h3>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col s12">
+        <div class="chip blue darken-3 white-text"><%= @noteable.model_name %></div>
+        <div class="chip"><%= @noteable_info %></div>
+      </div>
+      <div class="col s12">
+        <%= simple_form_for @note, remote: true do |f| %>
+          <div class="row">
+            <div class="col s10">
+              <input type="hidden" name="noteable_type" value="<%= @noteable.model_name %>">
+              <input type="hidden" name="noteable_id" value="<%= @noteable.id %>">
+              <%= f.text_field :content %>                        
+            </div>
+            <div class="col s2">
+              <button type="submit" class="btn"><i class="material-icons">save</i></button>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+      
+  </div>
+</div>

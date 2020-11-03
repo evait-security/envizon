@@ -5,6 +5,7 @@ class Port < ApplicationRecord
   belongs_to :client
   has_many :outputs, dependent: :destroy
   has_one_attached :image
+  has_many :notes, as: :noteable
 
   def screenshotable?
     case service_short

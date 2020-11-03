@@ -1,0 +1,9 @@
+// Place all the styles related to the Notes controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.note {
+    display: inline-table !important;
+    font-weight: 400 !important;
+    border-radius: unset !important;
+}

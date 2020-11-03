@@ -1,5 +1,6 @@
 class Report < ApplicationRecord
   has_many :report_parts, as: :reportable
+  has_many :notes, as: :noteable
 
   def all_issues
     issue_array = []

@@ -7,6 +7,7 @@ class User < ApplicationRecord
 
   has_many :scans, dependent: :destroy
   has_many :settings, dependent: :destroy
+  has_many :notes, as: :noteable
 
   after_create do
     parallel_scans = Setting.where(user_id: id, name: 'parallel_scans').first_or_create
