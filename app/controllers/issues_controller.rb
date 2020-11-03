@@ -1,6 +1,7 @@
 class IssuesController < ApplicationController
-  before_action :set_issue, only: [:show, :edit, :update, :destroy, :update_template, :confirm_update_template, :new_template, :confirm_create_template]
+  before_action :set_issue, only: [:show, :edit, :update, :destroy, :update_template, :confirm_update_template, :new_template, :confirm_create_template, :link_client_form]
   before_action :set_mysql_client, only: [:confirm_update_template, :update_template, :new_template]
+  before_action :set_client_and_issue, only: [:link_client]
 
   # GET /issues
   # GET /issues.json
@@ -171,12 +172,40 @@ class IssuesController < ApplicationController
     respond_with_refresh("Issue was successfully destroyed.", "success")
   end
 
+  def link_client_form
+    if @issue
+      @clients = Client.all
+      respond_to do |format|
+          format.html { redirect_back root_path }
+          format.js { render 'issues/link_client' }
+      end
+    end
+  end
+
+  def link_client
+    if @issue && @client
+      @issue.clients << @client
+      if @issue.save
+        respond_with_notify("Client linked successfully - refresh needed","success")
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_issue
       unless @issue = Issue.find_by_id(params[:id])
         respond_with_notify("Value not found in DB", "alert")
       end
+    end
+
+    def set_client_and_issue
+      unless @issue = Issue.find_by_id(params[:id])
+        respond_with_notify("Value not found in DB", "alert")
+      end
+      unless @client = Client.find_by_id(params[:client])
+        respond_with_notify("Value not found in DB", "alert")
+      end      
     end
 
     def set_mysql_client

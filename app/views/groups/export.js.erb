@@ -1,3 +1,3 @@
+$("#medium-modal").html("<%= j(render('export', :clients=> clients)) %>");
 $("#medium-modal").modal('open');
-$("#medium-modal-content").html("<%= j(render('export', :clients=> clients)) %>");
 M.updateTextFields();

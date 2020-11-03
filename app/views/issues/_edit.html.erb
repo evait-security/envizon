@@ -53,6 +53,9 @@
         <%= f.input :customtargets, label: "Custom targets", wrapper_html: { class: 'col s6' } %>
         <div class="col s6">
             <div class="pb-05"><label class="text optional active">Linked clients</label><i class="material-icons tooltipped" data-position="bottom" data-delay="50" data-tooltip="Use group view in order to link clients with issues">info_outline</i></div>
+            <%= link_to issue_link_clients_form_path, class: "btn btn-small green tooltipped", remote: true, data: {position: "bottom", tooltip: "Link an existing client"} do %>
+                <i class="material-icons">add</i>
+            <% end %>            
             <% @issue.clients.each do |client| %>
               <div class="chip">
                 <%= client.ip %><%= " (#{client.hostname})" unless client.hostname.nil? %>

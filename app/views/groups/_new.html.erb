@@ -1,10 +1,11 @@
 <%= simple_form_for :group, url: groups_path, remote: true do |f| %>
-<div class="modal-content">
-  <a href="#" class="modal-action modal-close red-text text-darken-2 right btn-flat"><i class="material-icons">close</i></a>
-  <div class="modal-header" style="border-bottom: 1px solid rgba(0, 0, 0, 0.1); padding-bottom: 20px; margin-bottom: 50px;">
-    <h5 class="center-align">Create an empty group</h5>
+<div class="modal-content p-0">
+  <div class="row green lighten-4 pt-3 pb-2">
+    <div class="col s12 center">
+        <h3 class="green-text text-darken-3">Create an empty group</h3>
+    </div>
   </div>
-  <div class="row">
+  <div class="row padding-2">
     <div class="col s6">
       <%= f.input :name, :wrapper_html => { :class => "s12" } %>
     </div>

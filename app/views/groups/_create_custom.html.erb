@@ -18,12 +18,13 @@
   }
 </style>
 <%= simple_form_for :group, url: groups_path, remote: true do |f| %>
-  <div class="modal-content">
-    <a href="#" class="modal-action modal-close red-text text-darken-2 right btn-flat"><i class="material-icons">close</i></a>
-    <div class="modal-header" style="border-bottom: 1px solid rgba(0, 0, 0, 0.1); padding-bottom: 20px; margin-bottom: 50px;">
-      <h5 class="center-align">Create new group with selected clients</h5>
+  <div class="modal-content p-0">
+    <div class="row green lighten-4 pt-3 pb-2">
+      <div class="col s12 center">
+          <h3 class="green-text text-darken-3">Create new group with selected clients</h3>
+      </div>
     </div>
-    <div class="row">
+    <div class="row padding-2">
       <div class="col s6">
         <div class="input-field">
           <input disabled value="<%= source_group.name %>" id="disabled" type="text" class="validate" autofocus>
@@ -42,7 +43,7 @@
         <%= f.input :icon, placeholder: "fab fa-windows", :input_html => {:class => "iconpicker"}, :wrapper_html => { :class => "s12" } %>
       </div>
     </div>
-    <div class="row center-align">
+    <div class="row center-align padding-2">
       <div class="col s12" style="margin-bottom: 13px;">
         <label>Selected Clients</label>
       </div>

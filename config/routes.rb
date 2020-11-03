@@ -55,6 +55,8 @@ Rails.application.routes.draw do
   get '/issues/:id/new_template' => 'issues#new_template', as: :new_template
   get '/issues/:id/confirm_update_template' => 'issues#confirm_update_template', as: :confirm_update_template
   get '/issues/:id/confirm_create_template' => 'issues#confirm_create_template', as: :confirm_create_template
+  get '/issues/:id/link_client_form' => 'issues#link_client_form', as: :issue_link_clients_form
+  get '/issues/:id/link_client/:client' => 'issues#link_client', as: :issue_link_clients
 
   get '/groups' => 'groups#index'
   get '/pages/settings' => 'pages#settings', as: :global_settings

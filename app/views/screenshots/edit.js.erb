@@ -1,3 +1,4 @@
-$("#medium-modal-content").html("<%= j render(partial: 'edit') %>");
+$("#medium-modal").html("<%= j render(partial: 'edit') %>");
 M.updateTextFields();
+$('.materialboxed').materialbox();
 $("#medium-modal").modal('open');

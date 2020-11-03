@@ -1,4 +1,4 @@
+$("#medium-modal").html("<%= j(render('move', :clients=> clients, :source_group=> source_group, :search=> search)) %>");
 $("#medium-modal").modal('open');
-$("#medium-modal-content").html("<%= j(render('move', :clients=> clients, :source_group=> source_group, :search=> search)) %>");
 $('select').formSelect();
 M.updateTextFields();

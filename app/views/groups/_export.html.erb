@@ -18,16 +18,17 @@
   }
 </style>
 <%= simple_form_for :group, url: groups_export_path do |f| %>
-  <div class="modal-content">
-    <a href="#" class="modal-action modal-close red-text text-darken-2 right btn-flat"><i class="material-icons">close</i></a>
-    <div class="modal-header" style="border-bottom: 1px solid rgba(0, 0, 0, 0.1); padding-bottom: 20px; margin-bottom: 50px;">
-      <h5 class="center-align">Export selected clients to text file</h5>
+  <div class="modal-content p-0">
+    <div class="row grey lighten-2 pt-3 pb-2">
+      <div class="col s12 center">
+          <h3 class="grey-text text-darken-3">Export selected clients to text file</h3>
+      </div>
     </div>
-    <div class="row">
+    <div class="row padding-2">
       <div class="col s12">
         <%= f.input :file_name, :wrapper_html => { :class => "s12" } %>
       </div>
-      <div class="row center-align" >
+      <div class="row center-align padding-2" >
         <div class="col s12" style="margin-bottom: 13px;">
           <label>Selected Clients</label>
         </div>
@@ -41,7 +42,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <%= f.button :submit, 'Export', :class => 'modal-action', :onclick => "close_modal();" %>
+    <%= f.button :submit, 'Export', :class => 'modal-action grey', :onclick => "close_modal();" %>
   </div>
 <% end %>
 

@@ -159,7 +159,10 @@ function init_datatables() {
             '<option value="-1">All</option>' +
             '</select></div>'
         },
-        bAutoWidth: false
+        bAutoWidth: false,
+        columnDefs: [
+            { type: 'ip-address', targets: 0 }
+        ]
     });
     // remove dt-init marker
     $('.dt_init').removeClass('dt_init');

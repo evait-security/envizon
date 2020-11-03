@@ -1,8 +1,8 @@
-<div id="screenshot-change-modal-content">
+<div class="modal-content">
     <div class="container pt-2">
         <div class="row">
             <div class="col s6">
-                <%= image_tag url_for(@screenshot.image), :class => "materialboxed tooltipped pb-05", width: '100%' %>
+                <%= image_tag url_for(@screenshot.image), :class => "materialboxed", width: '100%' %>
             </div>
             <div class="col s6">
                 <%= simple_form_for @screenshot, remote: true do |f| %>

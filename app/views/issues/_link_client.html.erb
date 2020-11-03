@@ -1,43 +1,50 @@
-<div class="row group-box scale-transition" id="box_archived">
-    <div class="col s12" id="group_content_archived">
-        <div class="card material-table">
-            <div class="table-header table-header-groups">
-            <span class="table-title truncate" style="margin-top: 15px; margin-bottom: 10px;">Archived Clients</span>
-            <div>
-                <div style="float: left;"><i class="material-icons">archive</i></div>
-                <div style="float: right;" class="actions group-actions" id="archived">
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Unarchive selected clients" class="btn-flat nopadding tooltipped grp_unarchive"><i class="material-icons">unarchive</i></a>
-                </div>
-            </div>
-            </div>
-            <table id="datatable-archived" class="dt_init">
-            <thead>
-                <tr>
-                <th>IP</th>
-                <th>Hostname</th>
-                <th>Operating System</th>
-                <th>Ports</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% Client.where(archived: true).order(:ip).to_a.each do |current_client| %>
-                <tr class="ui-selectee">
-                    <td>
-                        <%= link_to "#{current_client.ip}", client_path(current_client.id), :remote => true, :id => current_client.id, :class => 'blue-text text-darken-2' %>
-                        <% count_notes = current_client.notes.size %>
-                        <%= "<sup>#{count_notes}</sup>".html_safe if count_notes > 0 %>
-                    </td>
-                    <td><%= "#{current_client.hostname}" %></td>
-                    <td><%= "#{current_client.os}" %></td>
-                    <td><%= "#{current_client.ports.count}" %></td>
-                </tr>
-                <% end %>
-            </tbody>
-            </table>
+<div class="modal-content p-0">
+    <div class="row green lighten-4 pt-3 pb-2">
+        <div class="col s12 center">
+            <h3 class="green-text text-darken-3">Link client to issue</h3>
         </div>
     </div>
-</div>
+    <div class="container pt-2">
+        <div class="row">
+            <div class="col s12">
+                <div class="pb-05"><label class="text optional active">Linked issue</label></div>
+                <div class="chip"><%= @issue.title %></div>
+            </div>
+        </div>
+        <div class="row group-box scale-transition" id="box_archived">
+            <div class="col s12" id="group_content_archived">
+                <div class="card material-table">
 
+                    <table id="datatable-archived" class="dt_init">
+                    <thead>
+                        <tr>
+                        <th>IP</th>
+                        <th>Hostname</th>
+                        <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% @clients.order(:ip).to_a.each do |current_client| %>
+                        <tr class="ui-selectee">
+                            <td>
+                                <%= current_client.ip %>
+                            </td>
+                            <td><%= "#{current_client.hostname}" %></td>
+                            <td>
+                                <%= link_to '<i class="material-icons green-text text-darken-3">link</i>'.html_safe, issue_link_clients_path(@issue, current_client), remote: "true", :class => "secondary-content tooltipped", data: { position: "bottom", tooltip: "Link client to that issue" } %>
+                            </td>
+                        </tr>
+                        <% end %>
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>  
+    </div>
+</div>
+<div class="modal-footer">
+
+</div>
 <script>
     function init_datatables() {
         // Custom JS File for Datatables with Material Design
@@ -206,11 +213,5 @@
     // tooltip reinit
     $('document').ready(function() {
         $('.tooltipped').tooltip({delay: 50});
-    });
-
-    //Make table rows selectable except the a-Tags
-    $(".dataTable tbody").selectable({
-        filter: 'tr',
-        cancel: 'a'
     });
 </script>
