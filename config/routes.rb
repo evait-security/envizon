@@ -64,6 +64,7 @@ Rails.application.routes.draw do
   get '/images' => 'images#index', as: :images
   get '/images/scan_all' => 'images#scan_all', as: :images_scan_all
   get '/images/scan_all_overwrite' => 'images#scan_all_overwrite', as: :images_scan_all_overwrite
+  post '/images/scan_custom_overwrite' => 'images#scan_custom_overwrite', as: :scan_custom_overwrite
 
   get '/clients/search/form' => 'clients#search_form', as: :global_search_view
   post '/clients/global_search' => 'clients#global_search', as: :global_search

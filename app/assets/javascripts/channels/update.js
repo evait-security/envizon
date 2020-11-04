@@ -32,6 +32,7 @@ App.notification = App.cable.subscriptions.create("UpdateChannel", {
         $(".grp_copy").addClass("disabled");
         $(".grp_new").addClass("disabled");
         $(".grp_scan").addClass("disabled");
+        $(".grp_image").addClass("disabled");
         $(".grp_update").removeClass("hidden");
       }
     }

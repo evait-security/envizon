@@ -8,11 +8,14 @@ class ScreenshotOperatorWorker
 
   def perform(args)
     ActiveRecord::Base.connection_pool.with_connection do
-      ports = Port.all.select(&:screenshotable?)
+      if args.include? "clients"
+        ports = Port.all.where(client: args['clients']).select(&:screenshotable?)
+      else
+        ports = Port.all.select(&:screenshotable?)
+      end
       # if overwrite=false -> select only ports without image.
       ports = ports.reject { |p| p.image.attached? } unless args['overwrite']
       ports.each do |port|
-        print port
         begin
           ScreenshotWorker.perform_async({ 'port_id' => port.id })
         rescue StandardError => e
