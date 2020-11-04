@@ -1,5 +1,15 @@
 @import "materialize/components/color-variables";
-@import "*";
+@import "datatable_md";
+@import "devise";
+@import "global_search";
+@import "global";
+@import "group_list";
+@import "helper";
+@import "images";
+@import "issue_templates";
+@import "notes";
+@import "reports";
+@import "scans";
 @import "materialize";
 @import "fontawesome-iconpicker.min";
 @import 'font_awesome5_webfont';
@@ -17,7 +27,7 @@
     font-weight: 400;
     src: font-url('Material-Icons.woff2') format('woff2');
   }
-  
+
   .material-icons {
     font-family: 'Material Icons';
     font-weight: normal;

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <title>envizon by evait security</title>
+    <%= favicon_link_tag 'favicon.ico' %>
+    <%= action_cable_meta_tag %>
+    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag    'application_bootstrap', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application_bootstrap', 'data-turbolinks-track': 'reload' %>
+  </head>
+  <body>
+    <% unless devise_controller? %>
+      <%= render 'layouts/navigation' %>
+    <% end %>
+    <%= yield %>
+  </body>
+  <footer>
+    <%= render 'layouts/footer' %>
+    <%# This file is used by devise for notifications %>
+    <%= render 'layouts/messages' %>
+  </footer>
+</html>

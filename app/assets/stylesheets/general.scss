@@ -1,0 +1,9 @@
+.vh-center-wrapper {
+  height: 100vh;
+  .vh-center {
+    width: 100vw;
+    max-width: 500px;
+    padding: 15px;
+    margin: auto;
+  }
+}

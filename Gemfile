@@ -52,6 +52,9 @@ gem 'jquery-datatables-rails'
 gem 'jquery-ui-rails'
 gem 'materialize-sass'
 
+# bootstrap
+gem 'bootstrap', '~> 5.0.0.alpha1'
+
 # diff
 gem 'diffy'
 

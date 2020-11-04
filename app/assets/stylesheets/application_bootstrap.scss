@@ -1,0 +1,26 @@
+// Variables
+$primary: #1565C0;
+$secondary: #9A9A9A;
+$border-radius: 0px;
+$border-radius-sm: 0px;
+$border-radius-lg: 0px;
+
+// Utilities
+$utilities: () !default;
+$utilities: map-merge(
+  (
+    'custom-margin': (
+      property: margin-bottom,
+      class: mb,
+      values: (
+        10: 10em,
+        20: 20em
+      ),
+    ),
+  ),
+  $utilities
+);
+
+@import "bootstrap";
+@import "general";
+@import "extend";
