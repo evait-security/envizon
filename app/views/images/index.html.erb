@@ -1,3 +1,24 @@
+<div class="container-fluid pt-4">
+  <div class="row">
+    <div class="col-2">
+
+    </div>
+    <div class="col-10">
+      <div class="row">
+        <% @images.each do | image | %>
+          <div class="col-4">
+            <% image_url_ip = image.record.url_ip %>
+            <% image_url_host = image.record.url_host %>
+            <%= link_to image_url_ip, target: "_blank", class: image.record.client.groups.map {|g| g.id }.join(" ") do %>
+              <%= image_tag url_for(image), width: '100%' %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="images-page">
     <div class="row">
         <div class="col s2" id="group_list">
@@ -15,7 +36,7 @@
             <% unless @images.count > 0 %>
                 <div class="placeholder tooltipped center-align" data-position="top" data-tooltip="Start a new scan to get some fancy images">
                     <i class="material-icons blue-text text-lighten-4">add</i>
-                </div>  
+                </div>
             <% else %>
                 <div class="images-container">
                     <% @images.each_slice(4) do | images_slice | %>
@@ -37,9 +58,9 @@
                                         <% end %>
                                     </div>
                                 </div>
-                            <% end %>      
+                            <% end %>
                         </div>
-                    <% end %>  
+                    <% end %>
                 </div>
             <% end %>
         </div>
@@ -65,7 +86,7 @@
         });
     });
     // Display group on click (sidebar)
-    $(document).on("click", '.group-collection-item', function() {        
+    $(document).on("click", '.group-collection-item', function() {
         var id = this.getAttribute("gid");
 
         // get current state
@@ -73,10 +94,10 @@
         $(this).find("i").toggleClass("blue-text text-darken-2");
         if ($state){
             $('.' + id).fadeOut( "slow", "linear" );
-        } else { 
+        } else {
             $('.' + id).fadeIn( "slow", "linear" );
         }
-        
+
         $(this).blur();
     });
     $(document).on("click", '.select-all-none', function() {

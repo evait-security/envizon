@@ -1,7 +1,5 @@
 class SessionsController < Devise::SessionsController
-
   before_action :check_user_count?, only: [:new, :create]
-
 
   protected
 

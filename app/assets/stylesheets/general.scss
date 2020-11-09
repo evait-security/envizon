@@ -7,3 +7,9 @@
     margin: auto;
   }
 }
+.navbar {
+  max-height: 70px;
+  .nav-item.active {
+    background-color: #125096;
+  }
+}

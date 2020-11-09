@@ -3,7 +3,7 @@
     <%= image_tag("logo/envizon-wide-export-blue.svg", width:"100%", class: "pb-3") %>
     <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name )) do |f| %>
       <input type="hidden" name="user[username]" value="root">
-      <%= f.input :password, required: true, input_html: { autofocus: true, class: "mb-10" }, label: false, placeholder: "Provide your application password" %>
+      <%= f.input :password, required: true, input_html: { autofocus: true }, label: false, placeholder: "Provide your application password" %>
       <%= f.button :submit, "Log in", class: "hidden" %>
     <% end %>
   </div>

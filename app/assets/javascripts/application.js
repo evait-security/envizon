@@ -19,6 +19,7 @@
 //= require fontawesome-iconpicker.min
 //= require materialize
 //= require activestorage
-//= require_tree .
+//= require ip_address_datatable
+//= require cable
 //= skip
 //= require ckeditor

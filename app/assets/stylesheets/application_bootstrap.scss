@@ -1,6 +1,7 @@
 // Variables
 $primary: #1565C0;
 $secondary: #9A9A9A;
+$danger:#b71c1c;
 $border-radius: 0px;
 $border-radius-sm: 0px;
 $border-radius-lg: 0px;
@@ -24,3 +25,4 @@ $utilities: map-merge(
 @import "bootstrap";
 @import "general";
 @import "extend";
+@import 'font_awesome5_webfont';

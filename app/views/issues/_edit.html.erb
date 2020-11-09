@@ -4,7 +4,7 @@
     <div class="input-field col s3">
         <select name="new_parent" onchange="$(this).submit()">
             <% @report_parts.each do |report_part| %>
-                <option <%= (report_part.id.equal? @issue.reportable.id) ? 'selected' : '' %> value="<%= report_part.id %>"><%= report_part.title %></option> 
+                <option <%= (report_part.id.equal? @issue.reportable.id) ? 'selected' : '' %> value="<%= report_part.id %>"><%= report_part.title %></option>
             <% end %>
             <option value="0">Current report</option>
         </select>
@@ -17,11 +17,11 @@
     <%= f.input :index, wrapper_html: { class: 'col s1' } %>
     <div class="col s1 input-field">
         <button type="submit" class="btn right blue darken-2 btn-save"><i class="material-icons">save</i></button>
-    </div>   
+    </div>
 
     <div class="row">
-        <%= f.input :description, wrapper_html: { class: 'col s6' }, input_html: { class: 'editor'} %>
-        <div class="col s6">
+        <%= f.input :description, wrapper_html: { class: 'col s12' }, input_html: { class: 'editor'} %>
+        <div class="col s12">
             <div class="row"></div> <!-- empty dirty row for padding =/ -->
             <div class="row">
                 <div class="col s12 file-field input-field">
@@ -31,7 +31,7 @@
                     </div>
                     <div class="file-path-wrapper">
                         <input class="file-path validate" type="text" id="issue_screenshot_image_path">
-                    </div>            
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -47,7 +47,7 @@
                     </div>
                 <% end %>
             </div>
-        </div> 
+        </div>
     </div>
     <div class="row">
         <%= f.input :customtargets, label: "Custom targets", wrapper_html: { class: 'col s6' } %>
@@ -55,19 +55,19 @@
             <div class="pb-05"><label class="text optional active">Linked clients</label><i class="material-icons tooltipped" data-position="bottom" data-delay="50" data-tooltip="Use group view in order to link clients with issues">info_outline</i></div>
             <%= link_to issue_link_clients_form_path, class: "btn btn-small green tooltipped", remote: true, data: {position: "bottom", tooltip: "Link an existing client"} do %>
                 <i class="material-icons">add</i>
-            <% end %>            
+            <% end %>
             <% @issue.clients.each do |client| %>
               <div class="chip">
                 <%= client.ip %><%= " (#{client.hostname})" unless client.hostname.nil? %>
                 <%= link_to clients_unlink_issue_path(client, @issue),remote: true do %>
                     <i class="close red-text text-darken-2 material-icons">close</i>
                 <% end %>
-              </div>  
+              </div>
             <% end %>
         </div>
     </div>
     <div class="row">
-        <%= f.input :rating, wrapper_html: { class: 'col s6' }, input_html: { class: 'editor'} %>
-        <%= f.input :recommendation, wrapper_html: { class: 'col s6' }, input_html: { class: 'editor'} %>    
+        <%= f.input :rating, wrapper_html: { class: 'col s12 pb-2' }, input_html: { class: 'editor'} %>
+        <%= f.input :recommendation, wrapper_html: { class: 'col s12' }, input_html: { class: 'editor'} %>
     </div>
 <% end %>
