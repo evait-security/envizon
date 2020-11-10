@@ -1,6 +1,10 @@
 # @restful_api 1.0
 # Start a scan or upload an XML
 class ScansController < ApplicationController
+
+  def new
+  end
+
   # @url /scans/create
   # @action POST
   #

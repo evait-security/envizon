@@ -19,13 +19,13 @@
           <i class="fas fa-camera mr-2"></i>Images
         <% end %>
       </div>
-      <div class="nav-item <%= 'active' if current_page?(scans_path) %>">
-        <%= link_to scans_path, class: "nav-link text-white" do %>
+      <div class="nav-item <%= 'active' if current_page?(new_scan_path) %>">
+        <%= link_to new_scan_path, class: "nav-link text-white" do %>
           <i class="fas fa-project-diagram mr-2"></i>Scanning
         <% end %>
       </div>
       <div class="nav-item">
-        <a class="modal-trigger nav-link text-white" href="#sidekiq-modal">
+        <a class="nav-link text-white" data-toggle="modal" data-target="#sidekiq-modal" href="#">
           <i class="fas fa-tasks mr-2"></i>Tasks
         </a>
       </div>
@@ -59,7 +59,7 @@
           </li>
           <li><hr class="dropdown-divider"></li>
           <li>
-            <%= link_to destroy_user_session_path, class: "dropdown-item text-danger" do %>
+            <%= link_to destroy_user_session_path, method: :delete, class: "dropdown-item text-danger" do %>
               <i class="fas fa-sign-out-alt mr-2"></i>Logout
             <% end %>
           </li>

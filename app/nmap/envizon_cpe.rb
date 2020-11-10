@@ -14,7 +14,7 @@ class EnvizonCpe
     return ['Printer'] if os.include?('printer')
     return ['Net Devices'] if %w[router firewall switch].any? { |key| os.include?(key) }
     return ['Storage'] if os.include?('storage')
-    result = [] 
+    result = []
     result.push(value(client.cpe, @root[:group]))
     result.push(value(client.cpe, @root[:group_detailed]))
     result.uniq

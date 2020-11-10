@@ -1,3 +1,15 @@
 .hidden {
   display: none;
 }
+.pointer {
+  cursor: pointer;
+}
+.iframe-modal .modal-content {
+  height: 90vh;
+  .full-iframe-container {
+    display: flex; width: 100%; height: 100%; flex-direction: column; overflow: hidden;
+  }
+  .full-iframe-row {
+    flex-grow: 1; border: none; margin: 0; padding: 0; height: 100%;
+  }
+}

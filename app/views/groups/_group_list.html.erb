@@ -1,53 +1,42 @@
-<ul class="collection">
-<% if Group.all.size == 0 %>
-    <li class="collection-item">No Groups available</li>
-<% else %>
-    <!-- get all groups and cast to array -->
-    <% 
-        allGroups = Group.all.order(mod: :asc, name: :asc).to_a
-        clientlessGroups = []
+<ul class="list-group">
+  <% if Group.all.size == 0 %>
+    <li class="list-group-item d-flex justify-content-between align-items-center">No Groups available</li>
+  <% else %>
+    <%
+      allGroups = Group.all.order(mod: :asc, name: :asc).to_a
+      clientlessGroups = []
     %>
-    <!-- All groups with clients (Sidebar) -->
     <% allGroups.each do | current_group | %>
-        <% if current_group.clients.select{|c|c.archived != true}.size > 0 %>
-            <a class="collection-item group-collection-item link" id="info_<%= "#{current_group.id}" %>" gid="<%= "#{current_group.id}" %>">
-                <span class="collection-item-title truncate"><%= "#{current_group.name}" %><% unless current_group.mod %>&nbsp;*<% end %></span>
-                <div class="secondary-content">
-                    <span style="float: left;" class="chip"><span class="blue-text text-darken-3"><%= "#{current_group.clients.select{|c|c.archived == false}.size}" %></span><%= " | #{current_group.clients.size}"%></span>
-                    <div style="float: right;">
-                        <%= "#{current_group.icon}".html_safe %>
-                    </div>
-                </div>
-            </a>
-        <% else %>
-            <% clientlessGroups << current_group %>
-        <% end %>
+      <% if current_group.clients.select{|c|c.archived != true}.size > 0 %>
+        <li class="list-group-item d-flex align-items-center pointer group-collection-item" id="info_<%= "#{current_group.id}" %>" gid="<%= "#{current_group.id}" %>">
+          <div class="flex-grow-1">
+            <span class="mr-2 text-dark"><%= "#{current_group.icon}".html_safe %></span><%= "#{current_group.name}" %><% unless current_group.mod %>&nbsp;*<% end %>
+          </div>
+          <% archived_count = current_group.clients.select{|c|c.archived == true}.size %>
+          <span class="badge bg-light text-dark"><%= "#{current_group.clients.select{|c|c.archived == false}.size}" %><%= " | #{archived_count}" if archived_count > 0 %></span>
+        </li>
+      <% else %>
+          <% clientlessGroups << current_group %>
+      <% end %>
     <% end %>
-    <!-- All groups without clients (Sidebar) -->
     <% clientlessGroups.each do | current_group | %>
-        <% unless current_group.clients.select{|c|c.archived == false}.size > 0 %>
-            <a class="collection-item group-collection-item link" id="info_<%= "#{current_group.id}" %>" gid="<%= "#{current_group.id}" %>"> 
-                <span style="font-weight: 300 !important;" class="collection-item-title truncate"><%= "#{current_group.name}" %><% unless current_group.mod %>&nbsp;*<% end %></span>
-                <div class="secondary-content">
-                    <span style="float: left;" class="chip"><%= "#{current_group.clients.select{|c|c.archived == false}.size} | #{current_group.clients.size}" %></span>
-                    <div style="float: right;">
-                        <%= "#{current_group.icon}".html_safe %>
-                    </div>
-                </div>
-            </a>
-        <% end %>
+      <% unless current_group.clients.select{|c|c.archived == false}.size > 0 %>
+        <li class="list-group-item d-flex align-items-center pointer group-collection-item" id="info_<%= "#{current_group.id}" %>" gid="<%= "#{current_group.id}" %>">
+          <div class="flex-grow-1">
+            <span class="mr-2 text-light"><%= "#{current_group.icon}".html_safe %></span><%= "#{current_group.name}" %><% unless current_group.mod %>&nbsp;*<% end %>
+          </div>
+          <% archived_count = current_group.clients.select{|c|c.archived == true}.size %>
+          <span class="badge bg-light text-dark"><%= "#{current_group.clients.select{|c|c.archived == false}.size}" %><%= " | #{archived_count}" if archived_count > 0 %></span>
+        </li>
+      <% end %>
     <% end %>
-    <!-- Archived -->
     <% unless Client.select{|c|c.archived == true}.size == 0 %>
-        <hr>
-        <a class="collection-item group-collection-item link" id="info_archived" gid="archived"> 
-            <span style="font-weight: 300 !important;" class="collection-item-title truncate">Archived Clients *</span>
-            <div class="secondary-content">
-                <span style="float: left;" class="chip"><%= Client.select{|c|c.archived == true}.size %></span>
-                <div style="float: right;">
-                    <i class="material-icons">archive</i>
-                </div>
-            </div>
-        </a>
+      <li class="list-group-item d-flex align-items-center pointer group-collection-item" id="info_archived" gid="archived">
+        <div class="flex-grow-1">
+          <span class="mr-2 text-danger"><i class="fas fa-archive"></i></span>Archived Clients *
+        </div>
+        <span class="badge bg-light text-dark"><%= Client.select{|c|c.archived == true}.size %></span>
+      </li>
     <% end %>
-<% end %>
+  <% end %>
+</ul>

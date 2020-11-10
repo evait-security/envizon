@@ -8,6 +8,7 @@
     <%= action_cable_meta_tag %>
     <%= csrf_meta_tags %>
     <%= stylesheet_link_tag 'application_bootstrap', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'jquery', 'data-turbolinks-track': 'reload' %>
   </head>
   <body>
     <% unless devise_controller? %>
@@ -18,5 +19,14 @@
   <footer>
     <%= render 'layouts/notification' %>
     <%= javascript_include_tag 'application_bootstrap', 'data-turbolinks-track': 'reload' %>
+    <div class="modal iframe-modal fade" id="sidekiq-modal" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="full-iframe-container">
+            <iframe src="/sidekiq/busy?poll=true" frameborder="0" class="full-iframe-row"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
   </footer>
 </html>

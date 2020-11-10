@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   layout :layout_by_resource
 
   def layout_by_resource
-    if ["images", "sessions", "registrations", ""].include? controller_name
+    if ["images", "sessions", "registrations", "scans"].include? controller_name
       simple_form_bootstrap # dirty hotfix until initializer can be replaced
       "bootstrap"
     else

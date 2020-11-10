@@ -29,10 +29,10 @@
                 <i class="material-icons left">camera</i>Images<span class="new badge white grey-text text-darken-3" data-badge-caption="beta"></span>
               <% end %>
             </li>
-            <li class="<%= 'active' if current_page?(scans_path) %>">
-              <%= link_to scans_path do %>
+            <li class="<%= 'active' if current_page?(new_scan_path) %>">
+              <%= link_to new_scan_path do %>
                 <i class="material-icons left">gps_fixed</i>Scans
-              <% end %>        
+              <% end %>
             </li>
             <li>
               <a class="modal-trigger" href="#sidekiq-modal">
@@ -42,14 +42,14 @@
             <li class="<%= 'active' if current_page?(reports_path) %>">
               <%= link_to reports_path do %>
                 <i class="material-icons left">post_add</i>Reporting<span class="new badge white grey-text text-darken-3" data-badge-caption="beta"></span>
-              <% end %>        
+              <% end %>
             </li>
             <li><a href="#" id="user-drop-menu-trigger" class="dropdown-trigger no-autoinit" data-target="user-drop-menu"><i class="material-icons left">account_circle</i><%= current_user.username %></a></li>
             <div id="sidekiq-modal" class="modal bottom-sheet">
               <div class="full-iframe-container">
                 <iframe src="/sidekiq/busy?poll=true" frameborder="0" class="full-iframe-row"></iframe>
               </div>
-            </div>         
+            </div>
           <% else %>
             <li><a href="/"><i class="material-icons left">account_circle</i>Please sign in</a></li>
           <% end %>
@@ -79,7 +79,7 @@
   <footer>
     <div class="loader">
       <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="lds-double-ring"><circle cx="50" cy="50" ng-attr-r="{{config.radius}}" ng-attr-stroke-width="{{config.width}}" ng-attr-stroke="{{config.c1}}" ng-attr-stroke-dasharray="{{config.dasharray}}" fill="none" stroke-linecap="round" r="47" stroke-width="5" stroke="#aaaaaa" stroke-dasharray="73.82742735936014 73.82742735936014" transform="rotate(316.582 50 50)"><animateTransform attributeName="transform" type="rotate" calcMode="linear" values="0 50 50;360 50 50" keyTimes="0;1" dur="1.8s" begin="0s" repeatCount="indefinite"></animateTransform></circle><circle cx="50" cy="50" ng-attr-r="{{config.radius2}}" ng-attr-stroke-width="{{config.width}}" ng-attr-stroke="{{config.c2}}" ng-attr-stroke-dasharray="{{config.dasharray2}}" ng-attr-stroke-dashoffset="{{config.dashoffset2}}" fill="none" stroke-linecap="round" r="41" stroke-width="5" stroke="#1565C0" stroke-dasharray="64.40264939859075 64.40264939859075" stroke-dashoffset="64.40264939859075" transform="rotate(-316.582 50 50)"><animateTransform attributeName="transform" type="rotate" calcMode="linear" values="0 50 50;-360 50 50" keyTimes="0;1" dur="1.8s" begin="0s" repeatCount="indefinite"></animateTransform></circle></svg>
-    </div>  
+    </div>
   </footer>
 </html>
 

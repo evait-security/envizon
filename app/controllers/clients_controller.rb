@@ -53,7 +53,7 @@ class ClientsController < ApplicationController#
         client.archived = false
         if client.groups.count == 0
           unknown = Group.where(name: 'Unknown').first_or_create(mod: false, icon: '<i class="fas fa-desktop"></i>')
-          unknown << client 
+          unknown << client
         end
         client.save!
         archived += 1
@@ -205,7 +205,7 @@ class ClientsController < ApplicationController#
     @client = Client.find(params[:id])
     @issue = Issue.find(params[:issue])
   end
-  
+
   def output(clients, input)
     value = input[:value].downcase if input[:value].present?
     output_param_name = { name: 'name', value: value, not: 'false' }

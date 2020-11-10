@@ -1,122 +1,89 @@
 <div class="container-fluid pt-4">
   <div class="row">
     <div class="col-2">
-
+      <div class="form-check form-switch mb-3">
+        <input class="form-check-input select-all-none" type="checkbox" id="flexSwitchCheckChecked" checked>
+        <label class="form-check-label" for="flexSwitchCheckChecked">Toogle select all/none groups</label>
+      </div>
+      <%= render partial: "groups/group_list" %>
     </div>
     <div class="col-10">
       <div class="row">
-        <% @images.each do | image | %>
-          <div class="col-4">
-            <% image_url_ip = image.record.url_ip %>
-            <% image_url_host = image.record.url_host %>
-            <%= link_to image_url_ip, target: "_blank", class: image.record.client.groups.map {|g| g.id }.join(" ") do %>
-              <%= image_tag url_for(image), width: '100%' %>
-            <% end %>
-          </div>
+        <% unless @images.count > 0 %>
+        <div class="col-12">
+          <div class="alert alert-primary" role="alert">Use "Site actions" in the lower right corner to start a new screenshot scan and get some nice images</div>
+        </div>
+        <% else %>
+          <% @images.each do | image | %>
+            <div class="col-4 pb-4 <%= image.record.client.groups.map {|g| g.id }.join(" ") %>">
+              <% image_url_ip = image.record.url_ip %>
+              <% image_url_host = image.record.url_host %>
+              <%= link_to image_url_ip, target: "_blank" do %>
+                <%= image_tag url_for(image), width: '100%' %>
+              <% end %>
+            </div>
+          <% end %>
         <% end %>
       </div>
     </div>
   </div>
 </div>
-
-<div class="images-page">
-    <div class="row">
-        <div class="col s2" id="group_list">
-            <p class="checkbox-toogle">
-                <label>
-                    <input type="checkbox" class="filled-in select-all-none" checked="checked" />
-                    <span>Toogle select all/none groups</span>
-                </label><br />
-                <label>* Refresh on change is disabled on this page</label>
-            </p>
-            <%= render partial: "groups/group_list" %>
-        </div>
-        <div class="col s10 offset-s2 images-col">
-            <!-- if no images available show placeholder -->
-            <% unless @images.count > 0 %>
-                <div class="placeholder tooltipped center-align" data-position="top" data-tooltip="Start a new scan to get some fancy images">
-                    <i class="material-icons blue-text text-lighten-4">add</i>
-                </div>
-            <% else %>
-                <div class="images-container">
-                    <% @images.each_slice(4) do | images_slice | %>
-                        <div class="row images-row">
-                            <% images_slice.each do | image | %>
-                                <div class="col s3 <%= image.record.client.groups.map {|g| g.id }.join(" ") %>">
-                                    <%= image_tag url_for(image), :class => "materialboxed", width: '100%' %>
-                                    <div class="images-meta center">
-                                        <% image_url_ip = image.record.url_ip %>
-                                        <%= link_to image_url_ip, target: "_blank" do %>
-                                            <div class="chip white grey-text text-darken-4"><%= "#{image_url_ip}" %></div>
-                                        <% end %>
-                                        <!-- show custom button for link with hostname if exists -->
-                                        <% image_url_host = image.record.url_host %>
-                                        <% if image_url_host %>
-                                            <%= link_to image_url_host, target: "_blank", class: "btn-floating" do %>
-                                                <i class="material-icons tooltipped" data-position="top" data-tooltip="Open link with hostname instead of IP">http</i>
-                                            <% end %>
-                                        <% end %>
-                                    </div>
-                                </div>
-                            <% end %>
-                        </div>
-                    <% end %>
-                </div>
-            <% end %>
-        </div>
-    </div>
-</div>
-
-<div class="fixed-action-btn toolbar direction-top no-autoinit">
-    <a class="btn-floating btn-large blue darken-3"><i class="large material-icons">mode_edit</i></a>
-    <ul>
-        <li>
-            <%= link_to images_scan_all_path, remote: true, class: "tooltipped", data: { position: "top", tooltip: "Re-Scan all webservices"} do %><i class="material-icons">linked_camera</i><% end %>
-        </li>
-        <li>
-            <%= link_to images_scan_all_overwrite_path, remote: true, class: "tooltipped", data: { position: "top", tooltip: "Re-Scan all webservices and overwrite older images"} do %><i class="material-icons">flip_camera_ios</i><% end %>
-        </li>
+<div class="site-action">
+  <div class="btn-group dropup">
+    <button type="button" class="btn btn-primary dropdown-toggle border border-white" data-toggle="dropdown" aria-expanded="false">
+      <i class="fas fa-terminal mr-2"></i>Site actions
+    </button>
+    <ul class="dropdown-menu dropdown-menu-right">
+      <li>
+        <%= link_to images_scan_all_path, remote: true, class: "dropdown-item" do %>
+          <i class="far fa-image mr-2"></i>Screenshot new webservices
+        <% end %>
+      <li>
+        <%= link_to images_scan_all_overwrite_path, remote: true, class: "dropdown-item" do %>
+          <i class="far fa-images mr-2"></i>Re-Scan all webservices (overwrite)
+        <% end %>
+      </li>
     </ul>
+  </div>
 </div>
-
 <script>
-    $(document).ready(function(){
-        $(".group-collection-item").each(function( index ) {
-            $(this).find("i").addClass("blue-text text-darken-2");
-        });
+  $(document).ready(function(){
+    $(".group-collection-item").each(function( index ) {
+      $(this).find("i").addClass("text-primary");
     });
+
     // Display group on click (sidebar)
     $(document).on("click", '.group-collection-item', function() {
-        var id = this.getAttribute("gid");
+      var id = this.getAttribute("gid");
 
-        // get current state
-        $state = $(this).find("i").hasClass("blue-text")
-        $(this).find("i").toggleClass("blue-text text-darken-2");
-        if ($state){
-            $('.' + id).fadeOut( "slow", "linear" );
-        } else {
-            $('.' + id).fadeIn( "slow", "linear" );
-        }
-
-        $(this).blur();
+      // get current state
+      $state = $(this).find("i").hasClass("text-primary")
+      $(this).find("i").toggleClass("text-primary");
+      if ($state){
+        $('.' + id).fadeOut( "slow", "linear" );
+      } else {
+        $('.' + id).fadeIn( "slow", "linear" );
+      }
+      $(this).blur();
     });
     $(document).on("click", '.select-all-none', function() {
-        if (this.checked) {
-            $(".group-collection-item").each(function() {
-                var id = this.getAttribute("gid");
-                $(this).find("i").addClass("blue-text text-darken-2");
-                $('.' + id).fadeIn( "slow", "linear" );
-            });
-        } else {
-            $(".group-collection-item").each(function() {
-                var id = this.getAttribute("gid");
-                $(this).find("i").removeClass("blue-text text-darken-2");
-                $('.' + id).fadeOut( "slow", "linear" );
-            });
-        }
-       $(this).blur();
+      if (this.checked) {
+        $(".group-collection-item").each(function() {
+          var id = this.getAttribute("gid");
+          $(this).find("i").addClass("text-primary");
+          $('.' + id).fadeIn( "slow", "linear" );
+        });
+      } else {
+        $(".group-collection-item").each(function() {
+          var id = this.getAttribute("gid");
+          $(this).find("i").removeClass("text-primary");
+          $('.' + id).fadeOut( "slow", "linear" );
+        });
+      }
+      $(this).blur();
     });
     $(".placeholder").click(function() {
-        $(".fixed-action-btn").trigger( "click" );
+      $(".fixed-action-btn").trigger( "click" );
     });
+  });
 </script>

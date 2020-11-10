@@ -11,9 +11,9 @@ Rails.application.routes.draw do
   resources :issue_templates
   devise_for :users, controllers: { registrations: "registrations", sessions: "sessions"}
   mount ActionCable.server => '/cable'
-  root to: redirect(path: '/scans')
+  root to: redirect(path: '/scans/new')
 
-  get '/scans' => 'pages#scans'
+  get '/scans/new' => 'scans#new', as: :new_scan
   get "/notes/new/:noteable_type/:noteable_id" => 'notes#new', as: :new_note
   get '/issue_templates/create_from_issue/:issue_id' => 'issue_templates#create_from_issue', as: :issue_template_create_from_issue
   post '/issue_templates/search' => 'issue_templates#search', as: :issue_templates_search
