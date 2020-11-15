@@ -257,13 +257,6 @@ class ClientsController < ApplicationController#
     result.nil? ? input : @clients.where(id: result.pluck(:id)).or(@clients.where(id: input.pluck(:id))).group(:id)
   end
 
-  def respond_with_notify(message = 'Please make a selection', type = 'alert')
-    respond_to do |format|
-      format.html { redirect_to root_path }
-      format.js { render 'pages/notify', locals: { message: message, type: type, close: true } }
-    end
-  end
-
   def respond_with_refresh(message, mod_gids, delete, type = 'notice')
     if current_user.settings.find_by_name('global_notify').value.include? "true"
       ActionCable.server.broadcast 'notification_channel', message: message

@@ -4,7 +4,7 @@ class ScreenshotsController < ApplicationController
     # GET /screenshots/1/edit
     def edit
     end
-    
+
     # PATCH/PUT /screenshots/1
     # PATCH/PUT /screenshots/1.json
     def update
@@ -36,13 +36,6 @@ class ScreenshotsController < ApplicationController
 
     def screenshot_params
         params.require(:screenshot).permit(:description, :order)
-    end
-
-    def respond_with_notify(message = 'Unknown error', type = 'alert')
-        respond_to do |format|
-          format.html { redirect_to root_path }
-          format.js { render 'pages/notify', locals: { message: message, type: type } }
-        end
     end
 
     def respond_with_refresh(message = 'Unknown error', type = 'alert', issue = 0)

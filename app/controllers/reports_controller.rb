@@ -150,8 +150,8 @@ class ReportsController < ApplicationController
     workbook = package.workbook
 
     workbook.styles do |s|
-      #head = s.add_style :bg_color => "00", :fg_color => "FF", :b => true  
-      head = s.add_style :b => true  
+      #head = s.add_style :bg_color => "00", :fg_color => "FF", :b => true
+      head = s.add_style :b => true
       severity =[
         (s.add_style :fg_color => "3fb079"),
         (s.add_style :fg_color => "0b5394"),
@@ -186,7 +186,7 @@ class ReportsController < ApplicationController
             else
               severity_text = 'unknown'
             end
-            
+
             sheet.add_row [
                 Nokogiri::HTML(issue.title).text,
                 severity_text,
@@ -280,13 +280,6 @@ class ReportsController < ApplicationController
       # yes...ofc. this is ugly. #quick&dirty
       # there exists no routine atm to reload the sidebar
       format.js { render js: "window.location.href='" + reports_path + "'" }
-    end
-  end
-
-  def respond_with_notify(message = 'Unknown error', type = 'alert')
-    respond_to do |format|
-      format.html { redirect_to root_path }
-      format.js { render('pages/notify', locals: { message: message, type: type }) && return }
     end
   end
 

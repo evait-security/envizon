@@ -171,7 +171,7 @@ class SettingsController < ApplicationController
         setting.save
         result = { message: 'The mysql connection was successfully established and saved', type: 'success' }
       rescue => exception
-        result = { message: exception, type: 'alert' }
+        result = { message: exception.message, type: 'alert' }
       end
     else
       result = { message: 'Mysql connection string not set', type: 'alert' }
@@ -183,16 +183,7 @@ class SettingsController < ApplicationController
     begin
       @mysql_client = Mysql2::Client.new(JSON.parse(current_user.settings.where(name: 'mysql_connection').first_or_create.value))
     rescue => exception
-      respond_with_notify(exception, "alert")
-    end
-  end
-
-  def respond_with_notify(locals)
-    return unless locals
-
-    respond_to do |format|
-      format.html { redirect_back fallback_location: root_path }
-      format.js { render 'pages/notify', locals: locals }
+      respond_with_notify(exception.message, "alert")
     end
   end
 

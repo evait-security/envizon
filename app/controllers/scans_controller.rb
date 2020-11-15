@@ -12,29 +12,29 @@ class ScansController < ApplicationController
   # @required [String] :name name of the scan
   # @optional [String] :command space-separated String of nmap options
   def create
-    if %i[target name].all? { |key| params[key].present? }
-      params[:command] ||= ''
+    if %i[target name].all? { |key| params[:scan][key].present? }
+      params[:scan][:command] ||= ''
       args = {
-        'scan_name' => params[:name],
+        'scan_name' => params[:scan][:name],
         'user_id' => current_user.id,
-        'command' => params[:command],
-        'target' => params[:target]
+        'command' => params[:scan][:command],
+        'target' => params[:scan][:target]
       }
-      # ScanWorker.perform_async(args)
-      command = NmapCommand.new(params[:command], current_user.id, params[:target])
+
+      command = NmapCommand.new(args['command'], current_user.id, args['target'])
       scan = Scan.new(name: args['scan_name'], user_id: args['user_id'])
       scan.command = 'Scan in progress…'
       scan.save
       command.run_worker(scan)
 
       respond_to do |format|
-        format.html { redirect_to scans_path }
+        format.html { redirect_to new_scan_path }
         # that's used because otherwise multipart-file-upload-js-async-things won't work as they should.
         if params[:fromGroupView].present?
           locals = { message: "Scan '#{args['scan_name']}' created", type: 'success', close: true }
           format.js { render 'pages/notify', locals: locals }
         else
-          format.js { render(js: %(window.location.href='#{scans_path}')) && return }
+          format.js { render(js: %(window.location.href='#{new_scan_path}')) && return }
         end
       end
     else
@@ -69,14 +69,9 @@ class ScansController < ApplicationController
         }
         ScanParseWorker.perform_async(args_parse)
       end
-      respond_to do |format|
-        format.html { redirect_to scans_path }
-        format.js { render(js: %(window.location.href='#{scans_path}')) && return }
-      end
+      respond_with_notify("Files uploaded and will be now processed")
     else
-      locals = { message: 'You need to provide a name and a file for your upload!',
-                 type: 'alert' }
-      respond_with_notify(locals)
+      respond_with_notify("You need to provide a name and a file for your upload!", "alert")
     end
   end
 
@@ -86,16 +81,5 @@ class ScansController < ApplicationController
     file = Scan.find(params[:id]).file
     filename = File.basename(file)
     send_file file, type: 'text/xml', filename: filename, disposition: 'attachment'
-  end
-
-  private
-
-  def respond_with_notify(locals = nil)
-    # locals ||= { message: 'You need to specify a name for your scan!',
-    # type: 'alert' }
-    respond_to do |format|
-      format.html { redirect_to scans_path }
-      format.js { render 'pages/notify', locals: locals }
-    end
   end
 end

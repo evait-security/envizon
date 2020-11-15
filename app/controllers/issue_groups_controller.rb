@@ -70,13 +70,7 @@ class IssueGroupsController < ApplicationController
     def issue_group_params
       params.require(:issue_group).permit(:title, :severity, :description, :customtargets, :rating, :recommendation, :type, :index)
     end
-    
-    def respond_with_notify(message = 'Unknown error', type = 'alert')
-      respond_to do |format|
-        format.html { redirect_to root_path }
-        format.js { render 'pages/notify', locals: { message: message, type: type } }
-      end
-    end
+
     def respond_with_refresh(message = 'Unknown error', type = 'alert', issue = 0)
       @report_parts = ReportPart.where(type: "IssueGroup")
       respond_to do |format|

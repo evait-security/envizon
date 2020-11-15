@@ -29,13 +29,6 @@ class ImagesController < ApplicationController
 
     private
 
-    def respond_with_notify(message = 'Please make a selection', type = 'alert', close = "true")
-        respond_to do |format|
-          format.html { redirect_to images_path }
-          format.js { render 'pages/notify', locals: { message: message, type: type, close: close } }
-        end
-    end
-
     def set_clients
         begin
             @clients = []
@@ -45,6 +38,6 @@ class ImagesController < ApplicationController
         rescue => exception
             respond_with_notify("Invalid client in request", "alert")
         end
-        
+
     end
 end

@@ -17,7 +17,9 @@
     <%= yield %>
   </body>
   <footer>
-    <%= render 'layouts/notification' %>
+    <div id="notification_container">
+      <%= render 'layouts/notification' %>
+    </div>
     <%= javascript_include_tag 'application_bootstrap', 'data-turbolinks-track': 'reload' %>
     <div class="modal iframe-modal fade" id="sidekiq-modal" aria-hidden="true">
       <div class="modal-dialog modal-xl">

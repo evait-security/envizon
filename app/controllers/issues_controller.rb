@@ -47,9 +47,9 @@ class IssuesController < ApplicationController
     severity = @mysql_client.escape(@issue.severity.to_s)
     begin
       @mysql_client.query("INSERT INTO issue_templates (title, description, rating, recommendation, severity) VALUES ('#{title}','#{description}','#{rating}','#{recommendation}','#{severity}')")
-      
+
       # get the ID from the current insert.
-      # the function `last_id` use the last inserted id from the current session, so it's thread save. 
+      # the function `last_id` use the last inserted id from the current session, so it's thread save.
       # https://stackoverflow.com/questions/8161211/get-affected-row-in-ruby-after-doing-an-insert-in-mysql
       @issue.uuid = @mysql_client.last_id
       @issue.save
@@ -78,7 +78,7 @@ class IssuesController < ApplicationController
     severity = @mysql_client.escape(@issue.severity.to_s)
     begin
       @mysql_client.query("UPDATE issue_templates SET title = '#{title}', description = '#{description}', rating = '#{rating}', recommendation = '#{recommendation}', severity = '#{severity}' WHERE id=#{uid}")
-      
+
       # update local cached issue template (create if uuid didn't exist)
       it = IssueTemplate.find_or_create_by(uuid: @issue.uuid)
       it.title = @issue.title
@@ -205,7 +205,7 @@ class IssuesController < ApplicationController
       end
       unless @client = Client.find_by_id(params[:client])
         respond_with_notify("Value not found in DB", "alert")
-      end      
+      end
     end
 
     def set_mysql_client
@@ -230,13 +230,6 @@ class IssuesController < ApplicationController
       respond_to do |format|
         format.html { redirect_to root_path }
         format.js { render 'issues/refresh', locals: { message: message, type: type } }
-      end
-    end
-
-    def respond_with_notify(message = 'Unknown error', type = 'alert')
-      respond_to do |format|
-        format.html { redirect_to root_path }
-        format.js { render 'pages/notify', locals: { message: message, type: type } }
       end
     end
 end

@@ -17,7 +17,7 @@ class NotesController < ApplicationController
   def new
     @note = Note.new
 
-    case @noteable.model_name 
+    case @noteable.model_name
     when "Client"
       @noteable_info = @noteable.ip
     when "Group"
@@ -63,14 +63,8 @@ class NotesController < ApplicationController
       return unless ActiveRecord::Base.connection.tables.map{
                                                             |x|x.capitalize.singularize.camelize
                                                             }.include?(params[:noteable_type])
-  
+
       noteable_type = params[:noteable_type].constantize
       @noteable = noteable_type.find(params[:noteable_id])
-    end
-    def respond_with_notify(message = 'Unknown error', type = 'alert')
-      respond_to do |format|
-        format.html { redirect_to root_path }
-        format.js { render 'pages/notify', locals: { message: message, type: type, close: true } }
-      end
     end
 end

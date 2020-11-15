@@ -55,7 +55,7 @@ class GroupsController < ApplicationController
     destination_group.mod = true
 
     affected_group = "-2"
-    
+
     render(:create_custom) && return unless destination_group.save # warn instead?
     message = "New empty group '#{destination_group.name}' created"
     respond_with_refresh(message, "-2,-2", "-2") && return unless selected_clients.present?
@@ -111,7 +111,7 @@ class GroupsController < ApplicationController
     search ? source_group = "-2" : source_group = Group.find(params[:source_group])
     edited_groups = move_do(params[:selected_clients], destination_group, source_group, search)
     edited_groups << destination_group.id
-    
+
     message = "Moved #{params[:selected_clients].length} client(s) to group '#{destination_group.name}'"
     respond_with_refresh(message, "#{edited_groups.join(',')}", "-2")
   end
@@ -310,13 +310,6 @@ class GroupsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to root_path }
       format.js { render 'groups/group_refresh', locals: {  message: message, delete: delete, close: true, type: type } }
-    end
-  end
-
-  def respond_with_notify(message = 'Please make a selection', type = 'alert')
-    respond_to do |format|
-      format.html { redirect_to root_path }
-      format.js { render 'pages/notify', locals: { message: message, type: type } }
     end
   end
 

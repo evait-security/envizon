@@ -1,0 +1,6 @@
+<% if close == "true" %>
+  $(".modal").modal("hide");
+<% end %>
+
+$("#notification_container").html("<%= j(render('layouts/notification')) %>");
+$('div.toast').toast('show');

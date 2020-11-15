@@ -2,9 +2,19 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
-  before_action :authenticate_user!
+  before_action :authenticate_user!, :remove_flash
 
   layout :layout_by_resource
+
+  # overwrite default path after sign in
+  def after_sign_in_path_for(ressource)
+    new_scan_path
+  end
+
+  # remove all flash messages
+  def remove_flash
+    flash.clear
+  end
 
   def layout_by_resource
     if ["images", "sessions", "registrations", "scans"].include? controller_name
@@ -12,6 +22,22 @@ class ApplicationController < ActionController::Base
       "bootstrap"
     else
       "application"
+    end
+  end
+
+  protected
+
+  def respond_with_notify(message = 'Please make a selection', type = 'notice', close = "true")
+    if message.is_a?(Hash) # if called from settings controller (only one argument can passed in this situation)
+      @message = message[:message]
+      @type = message[:type]
+    else
+      @message = message
+      @type = type
+    end
+    respond_to do |format|
+      format.html { render 'scans/new' }
+      format.js { render 'layouts/notification', locals: { close: close } }
     end
   end
 

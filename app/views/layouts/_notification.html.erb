@@ -1,16 +1,26 @@
-<div class="toast-container" style="position: absolute; top: 60px; right: 20px;">
+<% if @message %>
   <%
-    notice = flash.now[:notice]
-    alert = flash.now[:alert]
-    color = alert ? 'danger' : 'dark'
-    message = notice.to_s + alert.to_s
+    if defined?(@type).nil?
+      classes = 'dark'
+    else
+      case @type
+        when  'alert'
+          classes = 'danger'
+        when 'notice'
+          classes = 'dark'
+        when 'success'
+          classes = 'success'
+        else
+          classes = 'dark'
+      end
+    end
   %>
-  <% unless message.blank? %>
-    <div class="toast d-flex indigo align-items-center bg-<%= color %> text-white" role="alert" aria-live="assertive" data-delay="3000" aria-atomic="true">
+  <div class="toast-container" style="position: absolute; top: 60px; right: 20px;">
+    <div class="toast d-flex align-items-center bg-<%= classes %> text-white" role="alert" aria-live="assertive" data-delay="3000" aria-atomic="true">
       <div class="toast-body">
-        <%= message %>
+        <%= @message %>
       </div>
       <button type="button" class="close ml-auto mr-2 text-white" data-dismiss="toast" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     </div>
-  <% end %>
-</div>
+  </div>
+<% end %>
