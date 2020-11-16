@@ -1,38 +1,56 @@
 <% @report_parts.order(:index).each do |rp| %>
-    <% if rp.is_a? Issue %>
-        <p class="report_part">
-            <%= link_to edit_issue_path(rp), remote: true do %>
-                <i class="material-icons left <%= rp.color %>-text text-darken-2">bug_report</i><%= rp.title %> - #<%= rp.index %>
+  <% if rp.is_a? Issue %>
+    <div class="btn-group d-flex btn-group-action-wrapper" role="group">
+      <%= link_to edit_issue_path(rp), class: "btn flex-grow-1 text-left list-group-item-action", remote: true do %>
+        <i style="color: <%= rp.color_hex %>" class="fas fa-bug mr-2"></i><%= rp.title %> - #<%= rp.index %>
+      <% end %>
+      <div class="btn-group" role="group">
+        <button id="btnIDrpp<%= rp.id %>" type="button" class="btn dropdown-toggle btn-group-action" data-toggle="dropdown" aria-expanded="false"></button>
+        <ul class="dropdown-menu" aria-labelledby="btnDrpp<%= rp.id %>">
+          <li>
+            <%= link_to confirm_create_template_path(rp), class: "dropdown-item", remote: :true do %>
+              <i class="fas fa-plus text-success mr-2"></i>Add as new issue template to remote database
             <% end %>
-            <%= link_to confirm_create_template_path(rp), remote: :true do %>
-                <i class="material-icons right green-text text-darken-2 report_part_action tooltipped" data-position="top" data-tooltip="Add as new issue template to remote database">add</i>
+          </li>
+          <li>
+            <%= link_to confirm_update_template_path(rp), class: "dropdown-item", remote: :true do %>
+              <i class="fas fa-save text-warning mr-2"></i>Update linked issue template on remote database
             <% end %>
-            <%= link_to confirm_update_template_path(rp), remote: true do %>
-                <i class="material-icons right orange-text text-darken-2 report_part_action tooltipped" data-position="top" data-tooltip="Update linked issue template on remote database">save</i>
+          </li>
+          <li>
+            <%= link_to issue_path(rp), method: :delete, class: "dropdown-item", data: { confirm: 'The issue and according screenshots will be deleted. Are you sure?' }, remote: :true do %>
+              <i class="fas fa-trash text-danger mr-2"></i>Delete issue
             <% end %>
-            <%= link_to issue_path(rp), method: :delete, data: { confirm: 'The issue and according screenshots will be deleted. Are you sure?' }, remote: :true do %>
-                <i class="material-icons right red-text text-darken-2 report_part_action tooltipped" data-position="top" data-tooltip="Delete issue">delete</i>
+          </li>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+  <% if rp.is_a? IssueGroup %>
+    <div class="btn-group" role="group">
+      <%= link_to edit_issue_group_path(rp), remote: true, class: "btn list-group-item list-group-item-action active" do %>
+        <% if rp.title.to_s.empty? %>
+          <i class="fas fa-folder-open mr-2"></i>Issue Group  - #<%= rp.index %>
+        <% else %>
+          <i class="fas fa-folder mr-2"></i><%= rp.title %> - #<%= rp.index %>
+        <% end %>
+      <% end %>
+      <div class="btn-group" role="group">
+        <button id="btnIGDrpp<%= rp.id %>" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false"></button>
+        <ul class="dropdown-menu" aria-labelledby="btnDrpp<%= rp.id %>">
+          <li>
+            <%= link_to issue_group_path(rp), class: "dropdown-item", method: :delete, data: { confirm: 'The issue group will be deleted. Are you sure?' }, remote: :true do %>
+              <i class="fas fa-trash mr-2 text-danger"></i>Delete issue group
             <% end %>
-        </p>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <% unless rp.report_parts.empty? %>
+      <% @report_parts = rp.report_parts %>
+      <div class="ml-4">
+        <%= render partial: "report_parts/report_part_tree" %>
+      </div>
     <% end %>
-    <% if rp.is_a? IssueGroup %>
-        <p class="report_part">
-            <%= link_to edit_issue_group_path(rp), remote: true do %>
-                <% if rp.title.to_s.empty? %>
-                    <i class="material-icons left teal-text text-darken-2">folder_open</i>Issue Group  - #<%= rp.index %>
-                <% else %>
-                    <i class="material-icons left teal-text text-darken-2">folder</i><%= rp.title %> - #<%= rp.index %>
-                <% end %>
-            <% end %>
-            <%= link_to issue_group_path(rp), method: :delete, data: { confirm: 'The issue group will be deleted. Are you sure?' }, remote: :true do %>
-                <i class="material-icons right red-text text-darken-2 report_part_action">delete_forever</i>
-            <% end %>      
-        </p>
-        <% unless rp.report_parts.empty? %>
-            <% @report_parts = rp.report_parts %>
-            <div class="pl-2">
-                <%= render partial: "report_parts/report_part_tree" %>
-            </div>
-        <% end %>       
-    <% end %>
+  <% end %>
 <% end %>

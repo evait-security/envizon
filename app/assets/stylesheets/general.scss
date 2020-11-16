@@ -24,3 +24,10 @@ label {
 .input-group, .form-group {
   margin-bottom: 1rem !important;
 }
+.btn:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.text-critical {
+  color: $purple;
+}

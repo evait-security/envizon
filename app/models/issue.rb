@@ -1,7 +1,7 @@
 class Issue < ReportPart
   belongs_to :reportable, polymorphic: true
   has_many :notes, as: :noteable
-  
+
   def self.create_from_template(issue_group, issue_template)
     Issue.create(
       reportable: issue_group,
@@ -17,17 +17,17 @@ class Issue < ReportPart
   def color
     case severity
     when 0
-      'green'
+      'success'
     when 1
-      'blue'
+      'primary'
     when 2
-      'orange'
+      'warning'
     when 3
-      'red'
+      'danger'
     when 4
-      'purple'
+      'critical'
     else
-      'grey'
+      'dark'
     end
   end
 

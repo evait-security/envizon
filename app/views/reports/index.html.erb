@@ -1,3 +1,18 @@
+<div class="row mt-4">
+  <div class="col-3">
+    <div id="report_tree">
+      <%= render partial: "report_parts/report_tree" %>
+    </div>
+  </div>
+  <div class="col-9 editor-container"><!-- scrollbar -->
+    <!-- partial render issue (selected) siehe -> issue template -->
+    <!-- partial render report edit -->
+  </div>
+</div>
+
+
+
+
 <div class="reports-page">
   <% if @report_parts.empty? %>
     <div class="row">
@@ -6,23 +21,11 @@
           <div class="placeholder tooltipped modal-trigger center-align" data-position="top" data-tooltip="Add new issue group">
               <i class="material-icons blue-text text-lighten-4">add</i>
           </div>
-        <% end %>  
+        <% end %>
       </div>
     </div>
   <% end %>
-  <div class="row">
-    <div class="col s3 reports-container pl-1">
-      <div class="row">
-        <div id="report_tree" class="col s12">
-          <%= render partial: "report_parts/report_tree" %>
-        </div>
-      </div>
-    </div>
-    <div class="col s9 offset-s3 editor-container"><!-- scrollbar -->
-      <!-- partial render issue (selected) siehe -> issue template -->
-      <!-- partial render report edit -->
-    </div>
-  </div>
+
 </div>
 
 <!-- Modal (medium) -->
@@ -31,42 +34,56 @@
   </div>
 </div>
 
-<% case current_user.settings.where(name: 'report_mode').first_or_create.value %>
-<% when "presentation" %>
-  <div class="fixed-action-btn">
-    <%= simple_form_for :settings, url: update_settings_path do |f| %>
-      <input type="hidden" value="edit" name="report_mode"/>
-      <button class="btn-floating btn-large green darken-2 submit tooltipped" data-position="left" data-tooltip="Disable presentation mode"><i class="material-icons">stop_screen_share</i></button>
-    <% end %>
-  </div>
-<% else %>
-  <div class="fixed-action-btn toolbar direction-top no-autoinit">
-    <a class="btn-floating btn-large blue darken-3"><i class="large material-icons">mode_edit</i></a>
-    <ul>
-      <li>
-        <%= link_to new_issue_path, remote: true, class: "tooltipped", data: { position: "top", tooltip: "Add new issue"} do %><i class="material-icons">add</i><% end %>
-      </li>
-      <li>
-        <%= link_to export_odt_path(@current_report), class: "tooltipped", data: { position: "top", tooltip: "Export current report as docx"} do %><i class="material-icons">post_add</i><% end %>
-      </li>
-      <li>
-        <%= link_to export_xlsx_path(@current_report), class: "tooltipped", data: { position: "top", tooltip: "Export current report as xlsx"} do %><i class="material-icons">table_chart</i><% end %>
-      </li>
-      <li>
-        <%= link_to new_issue_group_path, remote: true, class: "tooltipped", data: { position: "top", tooltip: "Add new issue group"} do %><i class="material-icons">playlist_add</i><% end %>
-      </li>
-      <li class="waves-effect waves-light">
-        <%= link_to edit_report_path(@current_report), remote: true, class: "tooltipped", data: { position: "top", tooltip: "Edit current report"} do %><i class="material-icons">edit</i><% end %>
-      </li>
-      <li>
-        <%= simple_form_for :settings, url: update_settings_path do |f| %>
-          <input type="hidden" value="presentation" name="report_mode"/>
-          <a href="#" onclick='$(this).parent().submit();' class="submit tooltipped" data-position="top" data-tooltip="Enable presentation mode"><i class="material-icons">screen_share</i></a>
-        <% end %>
-      </li>
+<div class="site-action">
+  <div class="btn-group dropup">
+    <button type="button" class="btn btn-primary dropdown-toggle border border-white" data-toggle="dropdown" aria-expanded="false">
+      <i class="fas fa-terminal mr-2"></i>Site actions
+    </button>
+    <ul class="dropdown-menu dropdown-menu-right">
+      <% case current_user.settings.where(name: 'report_mode').first_or_create.value %>
+      <% when "presentation" %>
+        <li>
+          <%= simple_form_for :settings, url: update_settings_path do |f| %>
+            <input type="hidden" value="edit" name="report_mode"/>
+            <a href="#" onclick='$(this).parent().submit();' class="dropdown-item"><i class="fab fa-chromecast mr-2"></i>Disable presentation mode</a>
+          <% end %>
+        </li>
+      <% else %>
+        <li>
+          <%= link_to new_issue_path, remote: true, class: "dropdown-item" do %>
+            <i class="fas fa-plus mr-2"></i>Add new issue
+          <% end %>
+        </li>
+        <li>
+          <%= link_to export_odt_path(@current_report), class: "dropdown-item" do %>
+            <i class="fas fa-file-word mr-2"></i>Export current report as docx
+          <% end %>
+        </li>
+        <li>
+          <%= link_to export_xlsx_path(@current_report), class: "dropdown-item" do %>
+            <i class="fas fa-file-excel mr-2"></i>Export current report as xlsx
+          <% end %>
+        </li>
+        <li>
+          <%= link_to new_issue_group_path, remote: true, class: "dropdown-item" do %>
+            <i class="fas fa-folder-plus mr-2"></i>Add new issue group
+          <% end %>
+        </li>
+        <li>
+          <%= link_to edit_report_path(@current_report), remote: true, class: "dropdown-item" do %>
+            <i class="fas fa-edit mr-2"></i>Edit current report
+          <% end %>
+        </li>
+        <li>
+          <%= simple_form_for :settings, url: update_settings_path do |f| %>
+            <input type="hidden" value="presentation" name="report_mode"/>
+            <a href="#" onclick='$(this).parent().submit();' class="dropdown-item"><i class="fab fa-chromecast mr-2"></i>Enable presentation mode</a>
+          <% end %>
+        </li>
+      <% end %>
     </ul>
   </div>
-<% end %>
+</div>
 
 <script>
   var pasteTarget = document.getElementsByTagName("body");
