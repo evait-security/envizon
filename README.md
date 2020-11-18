@@ -12,6 +12,9 @@ This tool is designed, developed and supported by evait security. In order to gi
 ## Website
 https://evait-security.github.io/envizon/
 
+## Requirements
+This is not a low-resource application. It is not recommended to run this software on embedded devices such as a raspberry pi. You should use a 64-bit architecture and at least 8 GB of RAM to get full experience (e.g. screenshotting multiple web services).
+
 ## Use Case
 
 We use envizon for our pentests in order to get an overview of a network and quickly identify the most promising targets. The version 3.0 introduce new features such as screenshotting web services, organizing vulnerabilities or generating reports with custom docx templates.

@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  def respond_with_notify(message = 'Please make a selection', type = 'notice', close = "true")
+  def respond_with_notify(message = 'Please make a selection', type = 'notice', js = '')
     if message.is_a?(Hash) # if called from settings controller (only one argument can passed in this situation)
       @message = message[:message]
       @type = message[:type]
@@ -35,9 +35,10 @@ class ApplicationController < ActionController::Base
       @message = message
       @type = type
     end
+    @js = js
     respond_to do |format|
       format.html { render 'scans/new' }
-      format.js { render 'layouts/notification', locals: { close: close } }
+      format.js { render 'layouts/notification' }
     end
   end
 

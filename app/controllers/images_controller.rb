@@ -12,19 +12,19 @@ class ImagesController < ApplicationController
     def scan_all
         args = {'overwrite' => false}
         ScreenshotOperatorWorker.perform_async(args)
-        respond_with_notify("Re-Scan started. Please refresh this page to get new results!", "notice", "true")
+        respond_with_notify("Re-Scan started. Please refresh this page to get new results!", "notice")
     end
 
     def scan_all_overwrite
         args = {'overwrite' => true}
         ScreenshotOperatorWorker.perform_async(args)
-        respond_with_notify("Re-Scan with overwrite started. Please refresh this page to get new results!", "notice", "true")
+        respond_with_notify("Re-Scan with overwrite started. Please refresh this page to get new results!", "notice")
     end
 
     def scan_custom_overwrite
         args = {'clients' => @clients, 'overwrite' => true}
         ScreenshotOperatorWorker.perform_async(args)
-        respond_with_notify("Selected clients add no screenshot queue. Please refresh image page to view the results!", "success", "true")
+        respond_with_notify("Selected clients add no screenshot queue. Please refresh image page to view the results!", "success")
     end
 
     private

@@ -225,7 +225,7 @@ class IssuesController < ApplicationController
       params.require(:issue).require(:screenshot).permit(:image, :description, :order)
     end
 
-    def respond_with_refresh(message = 'Unknown error', type = 'alert', issue = 0)
+    def respond_with_refresh(message = 'Unknown error', type = 'alert')
       @current_report = Report.first_or_create
       @report_parts = @current_report.report_parts
       @report_parts_ig = ReportPart.where(type: "IssueGroup")

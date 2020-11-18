@@ -1,6 +1,5 @@
-<% if close == "true" %>
-  $(".modal").modal("hide");
-<% end %>
 
+$(".modal").modal("hide");
 $("#notification_container").html("<%= j(render('layouts/notification')) %>");
 $('div.toast').toast('show');
+<%= @js.html_safe if @js %><%# no user input =) %>

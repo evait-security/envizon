@@ -105,7 +105,7 @@ class ClientsController < ApplicationController#
     if @issue && @client
       @issue.clients.delete(@client)
       if @issue.save
-        respond_with_notify("Client unlinked successfully","success")
+        respond_with_notify("Client unlinked successfully","success", "$('#link_client_id-#{@client.id}').remove();")
       end
     end
   end
