@@ -19,7 +19,6 @@ class IssueGroupsController < ApplicationController
 
   # GET /issue_groups/1/edit
   def edit
-    @report_parts = ReportPart.where(type: "IssueGroup")
   end
 
   # POST /issue_groups
@@ -72,10 +71,14 @@ class IssueGroupsController < ApplicationController
     end
 
     def respond_with_refresh(message = 'Unknown error', type = 'alert', issue = 0)
-      @report_parts = ReportPart.where(type: "IssueGroup")
+      @current_report = Report.first_or_create
+      @report_parts = @current_report.report_parts
+      @report_parts_ig = ReportPart.where(type: "IssueGroup")
+      @message = message
+      @type = type
       respond_to do |format|
         format.html { redirect_to root_path }
-        format.js { render 'issues/refresh', locals: { message: message, type: type } }
+        format.js { render 'issues/refresh' }
       end
     end
 end

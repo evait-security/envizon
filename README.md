@@ -1,7 +1,7 @@
 # envizon - by evait security
 ## network visualization & vulnerability management/reporting
 
-Version 4.1
+Version 4.2
 
 Fancy shields: Coming Soon™
 

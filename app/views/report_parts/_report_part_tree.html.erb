@@ -22,6 +22,19 @@
               <i class="fas fa-trash text-danger mr-2"></i>Delete issue
             <% end %>
           </li>
+          <li><hr class="dropdown-divider"></li>
+          <% @report_parts_ig.each do |report_part_ig| %>
+            <li>
+              <%= link_to change_parent_path(@current_report,rp,report_part_ig.id), class: "dropdown-item", remote: true do %>
+                <i class="fas fa-layer-group mr-2"></i><%= "Change parent to #{report_part_ig.title}" %>
+              <% end %>
+            </li>
+          <% end %>
+          <li>
+            <%= link_to change_parent_path(@current_report,rp,"0"), class: "dropdown-item", remote: true do %>
+              <i class="fas fa-layer-group mr-2"></i><%= "Change parent to current report (root level)" %>
+            <% end %>
+          </li>
         </ul>
       </div>
     </div>
@@ -41,6 +54,20 @@
           <li>
             <%= link_to issue_group_path(rp), class: "dropdown-item", method: :delete, data: { confirm: 'The issue group will be deleted. Are you sure?' }, remote: :true do %>
               <i class="fas fa-trash mr-2 text-danger"></i>Delete issue group
+            <% end %>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <% @report_parts_ig.each do |report_part_ig| %>
+            <li>
+              <% next if report_part_ig.id.equal? rp.id %>
+              <%= link_to change_parent_path(@current_report,rp,report_part_ig.id), class: "dropdown-item", remote: true do %>
+                <i class="fas fa-layer-group mr-2"></i><%= "Change parent to #{report_part_ig.title}" %>
+              <% end %>
+            </li>
+          <% end %>
+          <li>
+            <%= link_to change_parent_path(@current_report,rp,"0"), class: "dropdown-item", remote: true do %>
+              <i class="fas fa-layer-group mr-2"></i><%= "Change parent to current report (root level)" %>
             <% end %>
           </li>
         </ul>

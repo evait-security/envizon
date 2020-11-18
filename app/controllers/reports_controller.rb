@@ -33,6 +33,7 @@ class ReportsController < ApplicationController
   def index
     @current_report = Report.first_or_create
     @report_parts = @current_report.report_parts
+    @report_parts_ig = ReportPart.where(type: "IssueGroup")
   end
 
   # GET /reports/1

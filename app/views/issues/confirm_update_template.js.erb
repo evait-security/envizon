@@ -1,7 +1,7 @@
 <% if @issue_template_remote %>
-    $("#medium-modal").modal('open');
-    $("#medium-modal").html("<%= j(render('confirm_update_template_diff')) %>");
+  $("#general-modal-content").html("<%= j render('confirm_update_template_diff') %>");
+  new bootstrap.Modal(document.getElementById('general-modal')).show();
 <% else %>
-    $("#medium-modal").modal('open');
-    $("#medium-modal").html("<%= j(render('confirm_update_template_new')) %>");
+  $("#general-modal-content").html("<%= j render('confirm_update_template_new') %>");
+  new bootstrap.Modal(document.getElementById('general-modal')).show();
 <% end %>

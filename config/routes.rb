@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   post '/issue_templates/search' => 'issue_templates#search', as: :issue_templates_search
   post '/issue_templates/search_add' => 'issue_templates#search_add', as: :issue_templates_search_add
 
-  post '/reports/change_parent' => 'reports#change_parent', as: :change_parent
+  get '/reports/:id/change_parent/:source/:new_parent' => 'reports#change_parent', as: :change_parent
   match '/reports/:id/export_docx' => 'reports#export_docx', as: :export_odt, via: [:get, :post]
   match '/reports/:id/export_xlsx' => 'reports#export_xlsx', as: :export_xlsx, via: [:get, :post]
   match '/reports/:id/export_verinice' => 'reports#export_verinice', as: :export_verinice, via: [:get, :post]

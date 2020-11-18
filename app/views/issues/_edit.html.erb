@@ -1,73 +1,57 @@
-<%= simple_form_for :report, url: change_parent_path, remote: true do |f| %>
-    <input type="hidden" value="<%= form_authenticity_token() %>" name="authenticity_token"/>
-    <input type="hidden" value="<%= @issue.id %>" name="source"/>
-    <div class="input-field col s3">
-        <select name="new_parent" onchange="$(this).submit()">
-            <% @report_parts.each do |report_part| %>
-                <option <%= (report_part.id.equal? @issue.reportable.id) ? 'selected' : '' %> value="<%= report_part.id %>"><%= report_part.title %></option>
-            <% end %>
-            <option value="0">Current report</option>
-        </select>
-        <label>New parent</label>
+<%= simple_form_for @issue, remote: true, authenticity_token: true, html: { multipart: true } do |f| %>
+  <div class="row">
+    <%= f.input :title, required: true, wrapper_html: { class: 'col-7' } %>
+    <%= f.input :severity, collection: [['information', '0'],['low', '1'], ['medium', '2'], ['high', '3'], ['critical', '4']], include_blank: false, wrapper_html: { class: 'col-2' } %>
+    <%= f.input :index, wrapper_html: { class: 'col-1' } %>
+    <div class="col-2 form-group d-flex align-items-end">
+      <button type="submit" class="btn btn-primary btn-save"><i class="fas fa-save"></i></button>
     </div>
-<% end %>
-<%= simple_form_for @issue, remote: true do |f| %>
-    <%= f.input :title, required: true, wrapper_html: { class: 'col s5' } %>
-    <%= f.input :severity, collection: [['information', '0'],['low', '1'], ['medium', '2'], ['high', '3'], ['critical', '4']], include_blank: false, wrapper_html: { class: 'col s2' } %>
-    <%= f.input :index, wrapper_html: { class: 'col s1' } %>
-    <div class="col s1 input-field">
-        <button type="submit" class="btn right blue darken-2 btn-save"><i class="material-icons">save</i></button>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <%= f.input :description, wrapper_html: { class: 'col s12' }, input_html: { class: 'editor'} %>
     </div>
-
-    <div class="row">
-        <%= f.input :description, wrapper_html: { class: 'col s12' }, input_html: { class: 'editor'} %>
-        <div class="col s12">
-            <div class="row"></div> <!-- empty dirty row for padding =/ -->
-            <div class="row">
-                <div class="col s12 file-field input-field">
-                    <div class="btn tooltipped" data-position="top" data-tooltip="To insert images from clipbloard just press STRG + V">
-                        <span>new screenshot</span>
-                        <input type="file" name="issue[screenshot][image]" id="issue_screenshot_image">
-                    </div>
-                    <div class="file-path-wrapper">
-                        <input class="file-path validate" type="text" id="issue_screenshot_image_path">
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <% @issue.screenshots.each do |screenshot| %>
-                    <div class="col s3">
-                        <%= image_tag url_for(screenshot.image), :class => "materialboxed tooltipped pb-05", width: '100%', data: { position: "top", tooltip: screenshot.description.nil? ? "No description yet" : screenshot.description } %>
-                        <%= link_to edit_screenshot_path(screenshot), class: "btn-flat left grey lighten-3", remote: true do %>
-                            <i class="material-icons orange-text text-darken-3">description</i>
-                        <% end %>
-                        <%= link_to screenshot, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn-flat right grey lighten-3", remote: true do %>
-                            <i class="material-icons red-text text-darken-3">delete</i>
-                        <% end %>
-                    </div>
-                <% end %>
-            </div>
-        </div>
+  </div>
+  <div class="row">
+    <div class="col-4 mb-2">
+      <label for="issue_screenshot_image" class="form-label">New screenshot</label>
+      <input class="form-control" name="issue[screenshot][image]" id="issue_screenshot_image" type="file">
     </div>
-    <div class="row">
-        <%= f.input :customtargets, label: "Custom targets", wrapper_html: { class: 'col s6' } %>
-        <div class="col s6">
-            <div class="pb-05"><label class="text optional active">Linked clients</label><i class="material-icons tooltipped" data-position="bottom" data-delay="50" data-tooltip="Use group view in order to link clients with issues">info_outline</i></div>
-            <%= link_to issue_link_clients_form_path, class: "btn btn-small green tooltipped", remote: true, data: {position: "bottom", tooltip: "Link an existing client"} do %>
-                <i class="material-icons">add</i>
-            <% end %>
-            <% @issue.clients.each do |client| %>
-              <div class="chip">
-                <%= client.ip %><%= " (#{client.hostname})" unless client.hostname.nil? %>
-                <%= link_to clients_unlink_issue_path(client, @issue),remote: true do %>
-                    <i class="close red-text text-darken-2 material-icons">close</i>
-                <% end %>
-              </div>
-            <% end %>
-        </div>
+    <% @issue.screenshots.each do |screenshot| %>
+      <div class="col-2">
+        <%= image_tag url_for(screenshot.image), :class => "materialboxed tooltipped pb-05", width: '100%', data: { position: "top", tooltip: screenshot.description.nil? ? "No description yet" : screenshot.description } %>
+        <%= link_to edit_screenshot_path(screenshot), class: "btn-flat left grey lighten-3", remote: true do %>
+          <i class="material-icons orange-text text-darken-3">description</i>
+        <% end %>
+        <%= link_to screenshot, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn-flat right grey lighten-3", remote: true do %>
+          <i class="material-icons red-text text-darken-3">delete</i>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  <div class="row">
+    <%= f.input :customtargets, label: "Custom targets", wrapper_html: { class: 'col-6' } %>
+    <div class="col-6">
+      <label for="linked_clients" class="form-label">Linked clients</label>
+      <div class="col-auto"><!-- needed for line break -->
+        <% @issue.clients.each do |client| %>
+          <div class="btn-group btn-group-sm pb-2 pr-2" id="linked_clients" role="group">
+            <button type="button" class="btn btn-dark" disabled><%= client.ip %><%= " (#{client.hostname})" unless client.hostname.nil? %></button>
+              <%= link_to clients_unlink_issue_path(client, @issue),remote: true, class: "btn btn-light" do %>
+                <i class="fas fa-times text-danger"></i>
+              <% end %>
+          </div>
+        <% end %>
+        <%= link_to issue_link_clients_form_path, class: "btn btn-outline-success btn-sm align-top", remote: true do %>
+          <i class="fas fa-plus"></i>
+        <% end %>
+      </div>
     </div>
-    <div class="row">
-        <%= f.input :rating, wrapper_html: { class: 'col s12 pb-2' }, input_html: { class: 'editor'} %>
-        <%= f.input :recommendation, wrapper_html: { class: 'col s12' }, input_html: { class: 'editor'} %>
-    </div>
+  </div>
+  <div class="row">
+      <%= f.input :rating, wrapper_html: { class: 'col-12' }, input_html: { class: 'editor'} %>
+  </div>
+  <div class="row">
+      <%= f.input :recommendation, wrapper_html: { class: 'col-12' }, input_html: { class: 'editor'} %>
+  </div>
 <% end %>

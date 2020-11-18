@@ -1,4 +1,3 @@
-$('.material-tooltip').remove();
 <% if @issue.present? && Issue.exists?(@issue.id) %>
     $(".editor-container").html("<%= j render(partial: 'issues/edit') %>");
 <% else %>
@@ -25,14 +24,8 @@ $(".editor").each(function(index, value) {
                 'redo'
             ]
         },
-        language: 'de'				
+        language: 'de'
     });
 });
-M.updateTextFields();
-$(document).ready(function(){
-    $('select').formSelect();
-    $('.tooltipped').tooltip({delay: 50});
-    $('.materialboxed').materialbox();
-});
-$("#medium-modal").modal('close');
-<%= render(:template => 'pages/notify', :handlers => [:erb], :formats => [:js], locals:{message: message, type: type}) %>
+$("#notification_container").html("<%= j render(partial: 'layouts/notification') %>");
+$('div.toast').toast('show');
