@@ -39,13 +39,9 @@
             <% end %>
           </li>
           <li>
-            <%= link_to export_odt_path(@current_report), class: "dropdown-item" do %>
-              <i class="fas fa-file-word mr-2"></i>Export current report as docx
-            <% end %>
-          </li>
-          <li>
-            <%= link_to export_xlsx_path(@current_report), class: "dropdown-item" do %>
-              <i class="fas fa-file-excel mr-2"></i>Export current report as xlsx
+            <%= simple_form_for :settings, url: update_settings_path do |f| %>
+              <input type="hidden" value="presentation" name="report_mode"/>
+              <a href="#" onclick='$(this).parent().submit();' class="dropdown-item"><i class="fab fa-chromecast mr-2"></i>Enable presentation mode</a>
             <% end %>
           </li>
           <li>
@@ -54,9 +50,13 @@
             <% end %>
           </li>
           <li>
-            <%= simple_form_for :settings, url: update_settings_path do |f| %>
-              <input type="hidden" value="presentation" name="report_mode"/>
-              <a href="#" onclick='$(this).parent().submit();' class="dropdown-item"><i class="fab fa-chromecast mr-2"></i>Enable presentation mode</a>
+            <%= link_to export_odt_path(@current_report), class: "dropdown-item" do %>
+              <i class="fas fa-file-word mr-2"></i>Export current report as docx
+            <% end %>
+          </li>
+          <li>
+            <%= link_to export_xlsx_path(@current_report), class: "dropdown-item" do %>
+              <i class="fas fa-file-excel mr-2"></i>Export current report as xlsx
             <% end %>
           </li>
         <% end %>

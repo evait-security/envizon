@@ -21,3 +21,5 @@ $(".editor").each(function(index, value) {
         language: 'de'
     });
 });
+$(".list-group-item-action-active").removeClass("list-group-item-action-active");
+$(".issue-<%= @issue.id %>").addClass("list-group-item-action-active");

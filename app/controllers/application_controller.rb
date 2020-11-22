@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
     end
     @js = js
     respond_to do |format|
-      format.html { render 'scans/new' }
+      format.html { redirect_to request.referrer } # nice workaround for not working redirect_to :back but without notification
       format.js { render 'layouts/notification' }
     end
   end

@@ -1,20 +1,26 @@
 <% @report_parts.order(:index).each do |rp| %>
   <% if rp.is_a? Issue %>
     <div class="btn-group d-flex btn-group-action-wrapper" role="group">
-      <%= link_to edit_issue_path(rp), class: "btn flex-grow-1 text-left list-group-item-action", remote: true do %>
-        <i style="color: <%= rp.color_hex %>" class="fas fa-bug mr-2"></i><%= rp.title %> - #<%= rp.index %>
+      <%= link_to edit_issue_path(rp), class: "btn flex-grow-1 text-left list-group-item-action issue-#{rp.id}", remote: true do %>
+        <i style="color: <%= rp.color_hex %>" class="fas fa-bug mr-2"></i><%= rp.title %><span class="badge bg-secondary ml-2"><%= rp.index %></span>
       <% end %>
       <div class="btn-group" role="group">
         <button id="btnIDrpp<%= rp.id %>" type="button" class="btn dropdown-toggle btn-group-action" data-toggle="dropdown" aria-expanded="false"></button>
         <ul class="dropdown-menu" aria-labelledby="btnDrpp<%= rp.id %>">
           <li>
             <%= link_to confirm_create_template_path(rp), class: "dropdown-item", remote: :true do %>
-              <i class="fas fa-plus text-success mr-2"></i>Add as new issue template to remote database
+              <i class="fas fa-plus text-primary mr-2"></i>Add as new issue template to remote database
             <% end %>
           </li>
           <li>
             <%= link_to confirm_update_template_path(rp), class: "dropdown-item", remote: :true do %>
               <i class="fas fa-save text-primary mr-2"></i>Update linked issue template on remote database
+            <% end %>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+          <li>
+            <%= link_to "#", class: "dropdown-item", remote: :true do %>
+              <i class="fas fa-check text-success mr-2"></i>Comming soon: Mark as solved already
             <% end %>
           </li>
           <li>

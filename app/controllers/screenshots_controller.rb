@@ -38,11 +38,16 @@ class ScreenshotsController < ApplicationController
         params.require(:screenshot).permit(:description, :order)
     end
 
-    def respond_with_refresh(message = 'Unknown error', type = 'alert', issue = 0)
-        @issue = @screenshot.report_part
-        respond_to do |format|
-          format.html { redirect_to root_path }
-          format.js { render 'issues/refresh', locals: { message: message, type: type } }
-        end
+    def respond_with_refresh(message = 'Unknown error', type = 'alert')
+      @current_report = Report.first_or_create
+      @report_parts = @current_report.report_parts
+      @report_parts_ig = ReportPart.where(type: "IssueGroup")
+      @message = message
+      @type = type
+      @issue = @screenshot.report_part
+      respond_to do |format|
+        format.html { redirect_to root_path }
+        format.js { render 'issues/refresh' }
+      end
     end
 end

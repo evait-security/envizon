@@ -18,6 +18,11 @@
   bottom: 20px;
   right: 20px;
 }
+.toast-container {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+}
 label {
   margin-bottom: 5px !important;
 }
@@ -30,4 +35,10 @@ label {
 }
 .text-critical {
   color: $purple;
+}
+.list-group-item-action:focus, .list-group-item-action-active {
+  background-color:#e8eaed;
+}
+.list-group-item-action.active:focus {
+  background-color: $primary;
 }

@@ -275,12 +275,15 @@ class ReportsController < ApplicationController
                                    :company_name, :street, :postalcode, :city, :title)
   end
 
-  def respond_with_refresh(_message = 'Unknown error', _type = 'alert', _issue = 0)
+  def respond_with_refresh(message = 'Unknown error', type = 'alert')
+    @current_report = Report.first_or_create
+    @report_parts = @current_report.report_parts
+    @report_parts_ig = ReportPart.where(type: "IssueGroup")
+    @message = message
+    @type = type
     respond_to do |format|
       format.html { redirect_to root_path }
-      # yes...ofc. this is ugly. #quick&dirty
-      # there exists no routine atm to reload the sidebar
-      format.js { render js: "window.location.href='" + reports_path + "'" }
+      format.js { render 'issues/refresh' }
     end
   end
 

@@ -236,5 +236,4 @@ class IssuesController < ApplicationController
         format.js { render 'issues/refresh' }
       end
     end
-
 end

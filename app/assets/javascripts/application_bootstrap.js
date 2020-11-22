@@ -5,5 +5,4 @@
 //= require cable
 //= require datatables_bs
 //= require ip_address_datatable
-//= skip
 //= require ckeditor

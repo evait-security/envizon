@@ -1,20 +1,24 @@
 <div class="modal-content">
-    <div class="container pt-2">
+  <div class="modal-header bg-primary">
+    <h5 class="modal-title text-white">Edit screenshot description</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span class="text-white" aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+      <%= simple_form_for @screenshot, remote: true do |f| %>
         <div class="row">
-            <div class="col s6">
-                <%= image_tag url_for(@screenshot.image), :class => "materialboxed", width: '100%' %>
-            </div>
-            <div class="col s6">
-                <%= simple_form_for @screenshot, remote: true do |f| %>
-                    <%= f.input :description, wrapper_html: { class: 's12' } %>
-                    <div class="col s12 input-field">
-                        <button type="submit" class="btn left blue darken-2"> <i class="material-icons left">cached</i>Update</button>
-                    </div>
-                <% end %>
-            </div>
+          <div class="col-10">
+            <%= f.input :description, :input_html => { :rows => 1 } %>
+          </div>
+          <div class="col-2 d-flex align-items-end form-group">
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save mr-2"></i>Update</button>
+          </div>
         </div>
+      <% end %>
+    <div class="row">
+      <%= image_tag url_for(@screenshot.image), :class => "", width: '100%' %>
     </div>
+  </div>
 </div>
-
-
-

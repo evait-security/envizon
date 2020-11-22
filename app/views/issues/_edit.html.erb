@@ -4,7 +4,7 @@
     <%= f.input :severity, collection: [['information', '0'],['low', '1'], ['medium', '2'], ['high', '3'], ['critical', '4']], include_blank: false, wrapper_html: { class: 'col-2' } %>
     <%= f.input :index, wrapper_html: { class: 'col-1' } %>
     <div class="col-2 form-group d-flex align-items-end">
-      <button type="submit" class="btn btn-primary btn-save"><i class="fas fa-save"></i></button>
+      <button type="submit" class="btn btn-primary btn-save mr-2"><i class="fas fa-save"></i></button><small class="text-muted">or use CTRL + s</small>
     </div>
   </div>
   <div class="row">
@@ -13,7 +13,7 @@
     </div>
   </div>
   <div class="row">
-    <%= f.input :customtargets, label: "Custom targets", wrapper_html: { class: 'col-6' } %>
+    <%= f.input :customtargets, label: "Custom targets", wrapper_html: { class: 'col-6' }, :input_html => { :rows => 1 } %>
     <div class="col-6">
       <label class="form-label">Linked clients</label>
       <div class="col-auto"><!-- needed for line break -->
@@ -33,7 +33,7 @@
   </div>
   <div class="row">
     <div class="col-12 mb-2">
-      <label for="issue_screenshot_image" class="form-label">New screenshot</label>
+      <label for="issue_screenshot_image" class="form-label mr-2">New screenshot</label><small class="text-muted">Hint: use CTRL + v if your image is placed in your clipboard</small>
       <input class="form-control" name="issue[screenshot][image]" id="issue_screenshot_image" type="file">
     </div>
   </div>
@@ -55,7 +55,7 @@
   <div class="row">
     <%= f.input :rating, wrapper_html: { class: 'col-12' }, input_html: { class: 'editor'} %>
   </div>
-  <div class="row">
+  <div class="row mb-10">
     <%= f.input :recommendation, wrapper_html: { class: 'col-12' }, input_html: { class: 'editor'} %>
   </div>
 <% end %>
