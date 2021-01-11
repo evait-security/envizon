@@ -291,7 +291,7 @@ GEM
       ffi (~> 1.0)
     rchardet (1.8.0)
     rdoc (6.2.1)
-    redcarpet (3.5.0)
+    redcarpet (3.5.1)
     redis (4.2.1)
     regexp_parser (1.7.1)
     reline (0.1.4)
