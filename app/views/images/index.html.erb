@@ -10,9 +10,9 @@
     <div class="col-10">
       <div class="row">
         <% unless @images.count > 0 %>
-        <div class="col-12">
-          <div class="alert alert-primary" role="alert">Use "Site actions" in the lower right corner to start a new screenshot scan and get some nice images</div>
-        </div>
+          <div class="col-12">
+            <div class="alert alert-primary" role="alert">Use "Site actions" in the lower right corner to start a new screenshot scan and get some nice images</div>
+          </div>
         <% else %>
           <% @images.each do | image | %>
             <div class="col-4 pb-4 <%= image.record.client.groups.map {|g| g.id }.join(" ") %>">
@@ -30,18 +30,18 @@
 </div>
 <div class="site-action">
   <div class="btn-group dropup">
-    <button type="button" class="btn btn-primary dropdown-toggle border border-white" data-toggle="dropdown" aria-expanded="false">
-      <i class="fas fa-terminal mr-2"></i>Site actions
+    <button type="button" class="btn btn-primary dropdown-toggle border border-white" data-bs-toggle="dropdown" id="actionDropdown" aria-expanded="false">
+      <i class="fas fa-terminal me-2"></i>Site actions
     </button>
-    <ul class="dropdown-menu dropdown-menu-right">
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="actionDropdown">
       <li>
         <%= link_to images_scan_all_path, remote: true, class: "dropdown-item" do %>
-          <i class="far fa-image mr-2"></i>Screenshot new webservices
+          <i class="far fa-image me-2"></i>Screenshot new webservices
         <% end %>
       </li>
       <li>
         <%= link_to images_scan_all_overwrite_path, remote: true, class: "dropdown-item" do %>
-          <i class="far fa-images mr-2"></i>Re-Scan all webservices (overwrite)
+          <i class="far fa-images me-2"></i>Re-Scan all webservices (overwrite)
         <% end %>
       </li>
     </ul>

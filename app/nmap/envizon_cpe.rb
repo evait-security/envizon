@@ -25,6 +25,7 @@ class EnvizonCpe
     return '<i class="fas fa-print"></i>' if os.include?('printer')
     return '<i class="fas fa-shield-alt"></i>' if %w[router firewall switch].any? { |key| os.include?(key) }
     return '<i class="fas fa-hdd"></i>' if os.include?('storage')
+    return '<i class="fas fa-mobile"></i>' if os.include?('mobile')
     "<i class=\"fab fa-#{value(client.cpe, @root[:icon])}\"></i>"
   end
 

@@ -10,7 +10,7 @@
       <% if current_group.clients.select{|c|c.archived != true}.size > 0 %>
         <li class="list-group-item d-flex align-items-center pointer group-collection-item" id="info_<%= "#{current_group.id}" %>" gid="<%= "#{current_group.id}" %>">
           <div class="flex-grow-1">
-            <span class="mr-2 text-dark"><%= "#{current_group.icon}".html_safe %></span><%= "#{current_group.name}" %><% unless current_group.mod %>&nbsp;*<% end %>
+            <span class="me-2 text-dark"><%= "#{current_group.icon}".html_safe %></span><%= "#{current_group.name}" %><% unless current_group.mod %>&nbsp;*<% end %>
           </div>
           <% archived_count = current_group.clients.select{|c|c.archived == true}.size %>
           <span class="badge bg-light text-dark"><%= "#{current_group.clients.select{|c|c.archived == false}.size}" %><%= " | #{archived_count}" if archived_count > 0 %></span>
@@ -23,7 +23,7 @@
       <% unless current_group.clients.select{|c|c.archived == false}.size > 0 %>
         <li class="list-group-item d-flex align-items-center pointer group-collection-item" id="info_<%= "#{current_group.id}" %>" gid="<%= "#{current_group.id}" %>">
           <div class="flex-grow-1">
-            <span class="mr-2 text-light"><%= "#{current_group.icon}".html_safe %></span><%= "#{current_group.name}" %><% unless current_group.mod %>&nbsp;*<% end %>
+            <span class="me-2 text-light"><%= "#{current_group.icon}".html_safe %></span><%= "#{current_group.name}" %><% unless current_group.mod %>&nbsp;*<% end %>
           </div>
           <% archived_count = current_group.clients.select{|c|c.archived == true}.size %>
           <span class="badge bg-light text-dark"><%= "#{current_group.clients.select{|c|c.archived == false}.size}" %><%= " | #{archived_count}" if archived_count > 0 %></span>
@@ -33,7 +33,7 @@
     <% unless Client.select{|c|c.archived == true}.size == 0 %>
       <li class="list-group-item d-flex align-items-center pointer group-collection-item" id="info_archived" gid="archived">
         <div class="flex-grow-1">
-          <span class="mr-2 text-danger"><i class="fas fa-archive"></i></span>Archived Clients *
+          <span class="me-2 text-danger"><i class="fas fa-archive"></i></span>Archived Clients *
         </div>
         <span class="badge bg-light text-dark"><%= Client.select{|c|c.archived == true}.size %></span>
       </li>

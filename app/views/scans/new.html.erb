@@ -4,8 +4,8 @@
     <label class="string required" for="command">Scan parameters <abbr title="required">*</abbr></label>
     <div class="input-group">
       <input type="text" id="command" name="scan[command]" class="form-control" placeholder="Use your own nmap fu ... ">
-      <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">or predefined parameters</button>
-      <ul class="dropdown-menu dropdown-menu-right">
+      <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">or predefined parameters</button>
+      <ul class="dropdown-menu dropdown-menu-end">
         <% SavedScan.all.to_a.each do | saved_scan | %>
           <li>
             <a class="dropdown-item" href="#" onclick="$('#command').val('<%= saved_scan.parameter %>');">
@@ -16,7 +16,7 @@
       </ul>
     </div>
     <%= f.input :target, label: "Targets", placeholder: "e.g. 192.168.1.0/24 192.168.1-10.0/24 192.168.1.0-192.168.10.0/255.255.255.0" %>
-    <button type="submit" class="btn btn-primary"><i class="fas fa-coffee mr-2"></i>Start new scan</button>
+    <button type="submit" class="btn btn-primary"><i class="fas fa-coffee me-2"></i>Start new scan</button>
   <% end %>
   <%= simple_form_for :scan, url: scans_upload_path, remote: true, authenticity_token: true, html: {multipart: true, class: "mt-5"} do |f| %>
     <input id="scan_name" name="name" type="hidden" value="Custom scan">
@@ -28,10 +28,8 @@
         </div>
       </div>
       <div class="col-auto">
-        <button type="submit" class="btn btn-primary"><i class="fas fa-coffee mr-2"></i>Import</button>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-coffee me-2"></i>Import</button>
       </div>
     </div>
-
-
   <% end %>
 </div>

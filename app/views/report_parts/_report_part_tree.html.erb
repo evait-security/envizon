@@ -2,43 +2,43 @@
   <% if rp.is_a? Issue %>
     <div class="btn-group d-flex btn-group-action-wrapper" role="group">
       <%= link_to edit_issue_path(rp), class: "btn flex-grow-1 text-left list-group-item-action issue-#{rp.id}", remote: true do %>
-        <i style="color: <%= rp.color_hex %>" class="fas fa-bug mr-2"></i><%= rp.title %><span class="badge bg-secondary ml-2"><%= rp.index %></span>
+        <i style="color: <%= rp.color_hex %>" class="fas fa-bug me-2"></i><%= rp.title %><span class="badge bg-secondary ms-2"><%= rp.index %></span>
       <% end %>
       <div class="btn-group" role="group">
-        <button id="btnIDrpp<%= rp.id %>" type="button" class="btn dropdown-toggle btn-group-action" data-toggle="dropdown" aria-expanded="false"></button>
+        <button id="btnIDrpp<%= rp.id %>" type="button" class="btn dropdown-toggle btn-group-action" data-bs-toggle="dropdown" aria-expanded="false"></button>
         <ul class="dropdown-menu" aria-labelledby="btnDrpp<%= rp.id %>">
           <li>
             <%= link_to confirm_create_template_path(rp), class: "dropdown-item", remote: :true do %>
-              <i class="fas fa-plus text-primary mr-2"></i>Add as new issue template to remote database
+              <i class="fas fa-plus text-primary me-2"></i>Add as new issue template to remote database
             <% end %>
           </li>
           <li>
             <%= link_to confirm_update_template_path(rp), class: "dropdown-item", remote: :true do %>
-              <i class="fas fa-save text-primary mr-2"></i>Update linked issue template on remote database
+              <i class="fas fa-save text-primary me-2"></i>Update linked issue template on remote database
             <% end %>
           </li>
           <li><hr class="dropdown-divider"></li>
           <li>
             <%= link_to "#", class: "dropdown-item", remote: :true do %>
-              <i class="fas fa-check text-success mr-2"></i>Comming soon: Mark as solved already
+              <i class="fas fa-check text-success me-2"></i>Comming soon: Mark as solved already
             <% end %>
           </li>
           <li>
             <%= link_to issue_path(rp), method: :delete, class: "dropdown-item", data: { confirm: 'The issue and according screenshots will be deleted. Are you sure?' }, remote: :true do %>
-              <i class="fas fa-trash text-danger mr-2"></i>Delete issue
+              <i class="fas fa-trash text-danger me-2"></i>Delete issue
             <% end %>
           </li>
           <li><hr class="dropdown-divider"></li>
           <% @report_parts_ig.each do |report_part_ig| %>
             <li>
               <%= link_to change_parent_path(@current_report,rp,report_part_ig.id), class: "dropdown-item", remote: true do %>
-                <i class="fas fa-layer-group mr-2"></i><%= "Change parent to #{report_part_ig.title}" %>
+                <i class="fas fa-layer-group me-2"></i><%= "Change parent to #{report_part_ig.title}" %>
               <% end %>
             </li>
           <% end %>
           <li>
             <%= link_to change_parent_path(@current_report,rp,"0"), class: "dropdown-item", remote: true do %>
-              <i class="fas fa-layer-group mr-2"></i><%= "Change parent to current report (root level)" %>
+              <i class="fas fa-layer-group me-2"></i><%= "Change parent to current report (root level)" %>
             <% end %>
           </li>
         </ul>
@@ -49,17 +49,17 @@
     <div class="btn-group" role="group">
       <%= link_to edit_issue_group_path(rp), remote: true, class: "btn list-group-item list-group-item-action active" do %>
         <% if rp.title.to_s.empty? %>
-          <i class="fas fa-folder-open mr-2"></i>Issue Group  - #<%= rp.index %>
+          <i class="fas fa-folder-open me-2"></i>Issue Group  - #<%= rp.index %>
         <% else %>
-          <i class="fas fa-folder mr-2"></i><%= rp.title %> - #<%= rp.index %>
+          <i class="fas fa-folder me-2"></i><%= rp.title %> - #<%= rp.index %>
         <% end %>
       <% end %>
       <div class="btn-group" role="group">
-        <button id="btnIGDrpp<%= rp.id %>" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false"></button>
+        <button id="btnIGDrpp<%= rp.id %>" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"></button>
         <ul class="dropdown-menu" aria-labelledby="btnDrpp<%= rp.id %>">
           <li>
             <%= link_to issue_group_path(rp), class: "dropdown-item", method: :delete, data: { confirm: 'The issue group will be deleted. Are you sure?' }, remote: :true do %>
-              <i class="fas fa-trash mr-2 text-danger"></i>Delete issue group
+              <i class="fas fa-trash me-2 text-danger"></i>Delete issue group
             <% end %>
           </li>
           <li><hr class="dropdown-divider"></li>
@@ -67,13 +67,13 @@
             <li>
               <% next if report_part_ig.id.equal? rp.id %>
               <%= link_to change_parent_path(@current_report,rp,report_part_ig.id), class: "dropdown-item", remote: true do %>
-                <i class="fas fa-layer-group mr-2"></i><%= "Change parent to #{report_part_ig.title}" %>
+                <i class="fas fa-layer-group me-2"></i><%= "Change parent to #{report_part_ig.title}" %>
               <% end %>
             </li>
           <% end %>
           <li>
             <%= link_to change_parent_path(@current_report,rp,"0"), class: "dropdown-item", remote: true do %>
-              <i class="fas fa-layer-group mr-2"></i><%= "Change parent to current report (root level)" %>
+              <i class="fas fa-layer-group me-2"></i><%= "Change parent to current report (root level)" %>
             <% end %>
           </li>
         </ul>

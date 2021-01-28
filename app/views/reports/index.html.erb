@@ -14,49 +14,49 @@
     </div>
   </div>
   <div class="site-action">
-    <div class="btn-group dropup">
-      <button type="button" class="btn btn-primary dropdown-toggle border border-white" data-toggle="dropdown" aria-expanded="false">
-        <i class="fas fa-terminal mr-2"></i>Site actions
+    <div class="dropup">
+      <button type="button" class="btn btn-primary dropdown-toggle border border-white" data-bs-toggle="dropdown" aria-expanded="false" id="dropdownSiteActions">
+        <i class="fas fa-terminal me-2"></i>Site actions
       </button>
-      <ul class="dropdown-menu dropdown-menu-right">
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownSiteActions">
         <% case current_user.settings.where(name: 'report_mode').first_or_create.value %>
         <% when "presentation" %>
           <li>
             <%= simple_form_for :settings, url: update_settings_path do |f| %>
               <input type="hidden" value="edit" name="report_mode"/>
-              <a href="#" onclick='$(this).parent().submit();' class="dropdown-item"><i class="fab fa-chromecast mr-2"></i>Disable presentation mode</a>
+              <a href="#" onclick='$(this).parent().submit();' class="dropdown-item"><i class="fab fa-chromecast me-2"></i>Disable presentation mode</a>
             <% end %>
           </li>
         <% else %>
           <li>
             <%= link_to new_issue_group_path, remote: true, class: "dropdown-item" do %>
-              <i class="fas fa-folder-plus mr-2"></i>Add new issue group
+              <i class="fas fa-folder-plus me-2"></i>Add new issue group
             <% end %>
           </li>
           <li>
             <%= link_to new_issue_path, remote: true, class: "dropdown-item" do %>
-              <i class="fas fa-plus mr-2"></i>Add new issue
+              <i class="fas fa-plus me-2"></i>Add new issue
             <% end %>
           </li>
           <li>
             <%= simple_form_for :settings, url: update_settings_path do |f| %>
               <input type="hidden" value="presentation" name="report_mode"/>
-              <a href="#" onclick='$(this).parent().submit();' class="dropdown-item"><i class="fab fa-chromecast mr-2"></i>Enable presentation mode</a>
+              <a href="#" onclick='$(this).parent().submit();' class="dropdown-item"><i class="fab fa-chromecast me-2"></i>Enable presentation mode</a>
             <% end %>
           </li>
           <li>
             <%= link_to edit_report_path(@current_report), remote: true, class: "dropdown-item" do %>
-              <i class="fas fa-edit mr-2"></i>Edit report meta and summary
+              <i class="fas fa-edit me-2"></i>Edit report meta and summary
             <% end %>
           </li>
           <li>
             <%= link_to export_odt_path(@current_report), class: "dropdown-item" do %>
-              <i class="fas fa-file-word mr-2"></i>Export current report as docx
+              <i class="fas fa-file-word me-2"></i>Export current report as docx
             <% end %>
           </li>
           <li>
             <%= link_to export_xlsx_path(@current_report), class: "dropdown-item" do %>
-              <i class="fas fa-file-excel mr-2"></i>Export current report as xlsx
+              <i class="fas fa-file-excel me-2"></i>Export current report as xlsx
             <% end %>
           </li>
         <% end %>

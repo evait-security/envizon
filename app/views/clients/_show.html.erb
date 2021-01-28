@@ -1,165 +1,161 @@
-<style>
-  .chip-icon {
-    cursor: pointer;
-    float: right;
-    font-size: 16px;
-    line-height: 32px;
-    padding-left: 8px;
-  }
-  .host-icon {
-    padding: 0 8px;
-  }
-  .hostview_link {
-    font-size: 22px;
-    margin-left: 10px;
-    vertical-align: middle;
-  }
-  .collapsible-header {
-    border-bottom: none !important;
-  }
-  .collapsible-body {
-    border-bottom: none !important;
-  }
-</style>
-<span class="card-title">
-  <span id="hostview_ip"><%= "#{client.ip}" %></span>
-  <button class="btn-flat host-icon" id="hostview_copy_ip"><i class="material-icons green-text text-darken-2">content_copy</i></button>
-  <%= link_to clients_new_issue_form_path(client), remote: true, class: "btn-flat host-icon tooltipped", data: { position: "bottom", tooltip: "Link client to new issue"} do %><i class="material-icons grey-text text-darken-2">bug_report</i><% end %>
-  <%= link_to clients_link_issue_form_path(client), remote: true, class: "btn-flat host-icon tooltipped", data: { position: "bottom", tooltip: "Link client to existing issue"} do %><i class="material-icons blue-text text-darken-2">bug_report</i><% end %>
-  <%= link_to new_note_path(client.model_name, client), remote: true, class: "btn-flat host-icon tooltipped", data: { position: "bottom", tooltip: "Create a new note"} do %><i class="material-icons green-text text-darken-1">note_add</i><% end %>
-</span>
-<table class="responsive-table">
-  <thead>
-    <tr>
-      <th>Hostname</th>
-      <th>MAC</th>
-      <th>Labels</th>
-      <th>Groups</th>
-    </tr>
-  <thead>
-  <div class="notes-container">
-    <% client.notes.each do |note| %>
-      <div class="chip note"><%= note.content %><i id="<%= note.id %>" class="material-icons close red-text text-darken-3" onclick="delete_note(this.id)">close</i></div>
-    <% end %>
+<div class="btn-toolbar border-bottom pb-3" role="toolbar">
+  <div class="btn-group me-2" role="group" aria-label="group-actions">
+    <button type="button" class="btn btn-sm btn-primary hostview_copy_ip"><i class="fas fa-copy me-2"></i><%= "#{client.ip}" %></button>
   </div>
-  <tbody>
-    <tr>
-      <td><%= "#{client.hostname}" %></td>
-      <td><%= "#{client.mac}" %>
-        <% if client.vendor.to_s.length > 0 %>
-            <br />(<%= "#{client.vendor}" %>)
-        <% end %>
-      </td>
-      <td>
-        <% client.labels.uniq.to_a.each do |label|%>
-            <div class="chip tooltipped <%= label.priority%>" data-tooltip="<%= label.description%>"><%= label.name%></div>
-        <% end %>
-      </td>
-      <td>
-        <% client.groups.to_a.each do |group|%>
-            <div class="chip"><%= group.name%></div>
-        <% end %>
-      </td>
-    </tr>
-  </tbody>
-</table>
-<div class="valign-wrapper" style="padding-bottom: 10px; padding-top: 20px">
-  <i class="material-icons grey-text text-darken-2" style="margin-right: 5px;">settings</i><b>Operating System</b>
+  <div class="btn-group me-2" role="group" aria-label="group-actions">
+    <%= link_to clients_new_issue_form_path(client), remote: true, class: "btn btn-sm btn-danger" do %><i class="fas fa-bug me-2"></i>new<% end %>
+    <%= link_to clients_new_issue_form_path(client), remote: true, class: "btn btn-sm btn-warning" do %><i class="fas fa-bug me-2"></i>link<% end %>
+  </div>
+  <div class="btn-group" role="group" aria-label="group-actions">
+    <%= link_to clients_new_issue_form_path(client), remote: true, class: "btn btn-sm btn-success" do %><i class="fas fa-sticky-note"></i><% end %>
+  </div>
 </div>
-<p style="padding-bottom: 20px;"><%= "#{client.os}" %></p>
-<table class="responsive-table">
-  <thead>
-    <tr>
-      <th>Port</th>
-      <th>Desc</th>
-      <th>Content</th>
-      <th></th>
-    </tr>
-  <thead>
-  <tbody>
-    <% client.ports.all.order(:number).to_a.each do |port| %>
-        <tr>
-          <td>
-            <span><%= "#{port.number}" %></span>
-            <% if port.service_short %>
-              <!-- HTTP Service -->
-              <% if port.service_short.include? "http" %>
-                <%= link_to port.url_ip, target: "_blank" do %>
-                  <i class="material-icons hostview_link grey-text text-darken-2">link</i>
-                <% end %>
-                <!-- show custom button for link with hostname if exists -->
-                <% url_host = port.url_host %>
-                <% if url_host %>
-                  <%= link_to url_host, target: "_blank" do %>
-                    <i class="material-icons hostview_link tooltipped" data-position="top" data-tooltip="Open link with hostname instead of IP">link</i>
-                  <% end %>
-                <% end %>
-              <% end %>
-            <% end %>
-          </td>
-          <td><%= "#{port.service}" %></td>
-          <% if port.image.attached? %>
-            <td><%= "#{port.description}" %></td>
-            <td><%= image_tag url_for(port.image), :class => "materialboxed", width: '120' %></td>
-          <% else %>
-            <td colspan="2"><%= "#{port.description}" %></td>
-          <% end %>
-        </tr>
-        <% if port.outputs.count > 0 %>
-            <tr>
-              <td colspan="4">
-                <ul class="collapsible" data-collapsible="expandable">
-                  <% port.outputs.to_a.each do |output| %>
-                    <li>
-                      <div class="collapsible-header"><i class="material-icons rotate">keyboard_arrow_right</i><%= "#{output.name}" %></div>
-                      <div class="collapsible-body mono">
-                        <% output.value.split(/\n/).each do |line| %>
-                          <pre class="script-output-line"><%= line %></pre>
-                        <% end%>
-                      </div>
-                    </li>
-                  <% end%>
-                </ul>
-              </td>
-            </tr>
+<div class="d-flex mt-2 pb-2 align-items-center text-muted border-bottom">
+  <i class="fas fa-fingerprint fs-5 me-3"></i>
+  <span>
+    <strong class="d-block small">Hostname, MAC (Vendor)</strong>
+    <span class="badge bg-light text-primary"><%= "#{client.hostname}" %></span>
+    <span class="badge bg-light text-dark"><%= "#{client.mac}" %></span>
+    <span class="badge bg-light text-dark"><%= "#{client.vendor}" %></span>
+  </span>
+</div>
+<div class="d-flex mt-2 pb-2 align-items-center text-muted border-bottom">
+  <i class="fas fa-cogs fs-5 me-3"></i>
+  <span class="small">
+    <strong class="d-block">Operating System</strong>
+    <%= "#{client.os}" if client.os %>
+  </span>
+</div>
+<div class="row">
+  <div class="col">
+    <div class="d-flex mt-2 pb-2 align-items-center text-muted border-bottom">
+      <i class="fas fa-layer-group fs-5 me-3"></i>
+      <span class="small">
+        <strong class="d-block">Groups</strong>
+        <% client.groups.to_a.each do |group|%>
+          <span class="badge bg-primary"><%= "#{group.name}" %></span>
         <% end %>
-    <% end %>
-  </tbody>
-</table>
-<% if client.outputs.count > 0 %>
-  <div class="valign-wrapper" style="padding-bottom: 20px; padding-top: 20px">
-    <i class="material-icons grey-text text-darken-2" style="margin-right: 5px;">extension</i><b>Hostscripts</b>
-    <span class="badge"><%= "#{client.outputs.count}"%></span>
+      </span>
+    </div>
   </div>
-  <ul class="collapsible" data-collapsible="expandable">
-    <% client.outputs.to_a.each do |output| %>
-      <li>
-        <div class="collapsible-header"><i class="material-icons rotate">keyboard_arrow_right</i><%= "#{output.name}" %></div>
-        <div class="collapsible-body mono">
-          <div>
-            <% output.value.split(/\n/).each do |line| %>
-              <pre class="script-output-line"><%= line %></pre>
-            <% end%>
+  <div class="col">
+    <div class="d-flex mt-2 pb-2 align-items-center text-muted border-bottom">
+      <i class="fas fa-tags fs-5 me-3"></i>
+      <span class="small">
+        <strong class="d-block">Labels</strong>
+        <% if client.labels.size == 0 %>
+          <span class="badge bg-light text-dark">No Label</span>
+        <% else %>
+          <% client.labels.uniq.to_a.each do |label|%>
+            <span class="badge bg-<%= label.priority %>"><%= label.name %></span>
+          <% end %>
+        <% end %>
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="notes-container">
+  <% client.notes.each do |note| %>
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+      <%= note.content %>
+      <button type="button" id="<%= note.id %>" onclick="delete_note(this.id)" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <% end %>
+</div>
+
+<div class="list-group mt-3">
+  <% client.ports.all.order(:number).to_a.each do |port| %>
+  <div class="d-flex mb-3 align-items-center">
+    <div class="flex-fill">
+      <% if port.outputs.size > 0  %>
+        <a data-bs-target="#collapsePort<%= port.number %>" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapsePort<%= port.number %>" class="list-group-item">
+          <div class="d-flex align-items-center">
+            <span class="badge bg-light text-dark me-2"><%= "#{port.number}" %> / <%= "#{port.service}" %></span>
+            <span class="flex-fill"><%= "#{port.description}" %></span>
+            <i class="fas fa-caret-down"></i>
+          </div>
+        </a>
+      <% else %>
+        <div class="list-group-item">
+          <div class="d-flex align-items-center">
+            <span class="badge bg-light text-dark me-2"><%= "#{port.number}" %> / <%= "#{port.service}" %></span>
+            <span><%= "#{port.description}" %></span>
           </div>
         </div>
-      </li>
-    <% end%>
-  </ul>
+      <% end %>
+    </div>
+    <% if port.service_short %>
+      <div class="ms-3 btn-group" role="group">
+      <!-- HTTP Service -->
+        <% if port.service_short.include? "http" %>
+          <%= link_to port.url_ip, target: "_blank", class: "btn btn-outline-secondary" do %>
+            <i class="fas fa-link"></i>
+          <% end %>
+          <!-- show custom button for link with hostname if exists -->
+          <% url_host = port.url_host %>
+          <% if url_host %>
+            <%= link_to url_host, target: "_blank", class: "btn btn-outline-primary" do %>
+              <i class="fas fa-link"></i>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+    <% if port.image.attached? %>
+      <button type="button" class="ms-3 btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalPortImage<%= port.number %>"><i class="fas fa-image"></i></button>
+      <div class="modal fade" id="modalPortImage<%= port.number %>" tabindex="-1" aria-labelledby="modalPortImage<%= port.number %>" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header mb-2">
+              <h5 class="modal-title"></h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <%= image_tag url_for(port.image), class: 'w-100' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+    <% if port.outputs.size > 0 %>
+      <div class="collapse" id="collapsePort<%= port.number %>">
+        <% port.outputs.to_a.each do |output| %>
+          <div class="bg-light p-4 mt-1 mb-3">
+            <span class="badge bg-primary mb-3"><%= "#{output.name}" %></span>
+            <% output.value.split(/\n/).each do |line| %>
+              <pre class="font-monospace"><%= line %></pre>
+            <% end%>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+<% if client.outputs.count > 0 %>
+  <div class="list-group mt-1">
+    <% client.outputs.to_a.each do |output| %>
+      <a data-bs-target="#collapsePort<%= output.name %>" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="collapsePort<%= output.name %>" class="list-group-item">
+        <div class="d-flex align-items-center">
+          <span class="badge bg-primary"><%= "#{output.name}" %></span>
+          <span class="flex-fill"></span>
+          <i class="fas fa-caret-down"></i>
+        </div>
+      </a>
+      <div class="collapse" id="collapsePort<%= output.name %>">
+        <div class="bg-light p-4 mt-3 mb-3">
+          <% output.value.split(/\n/).each do |line| %>
+            <pre class="font-monospace"><%= line %></pre>
+          <% end%>
+        </div>
+      </div>
+    <% end %>
   </div>
 <% end %>
-
-<script>
-  function delete_note(note_id) {
-    var r = confirm("Do you want to delete the note permanently?");
-    if (r == true) {
-      $.ajax({
-        url: "/notes/" + note_id,
-        dataType : "script",
-        cache: true,
-        method: "delete"
-      });
-    } else {
-      event.stopPropagation()
-    }
-  }
-</script>
+<div class="toast-container">
+  <div class="toast d-flex align-items-center bg-success text-white" id="ip_clip_success" role="alert" aria-live="assertive" data-delay="3000" aria-atomic="true">
+    <div class="toast-body">
+      IP address copied to clipboard!
+    </div>
+    <button type="button" class="btn-close btn-close-white ms-auto me-2" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+</div>

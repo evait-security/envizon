@@ -148,9 +148,15 @@ class GroupsController < ApplicationController
   #
   # Render a single group html datatable
   def group
+    if params[:group_id] != 'archived'
+      @group = Group.find(params[:group_id])
+    else
+      @archived = true
+    end
+
     respond_to do |format|
       format.html {}
-      format.js { render 'groups/group', locals: { group_id: params[:group_id] } }
+      format.js { render 'groups/group' }
     end
   end
 

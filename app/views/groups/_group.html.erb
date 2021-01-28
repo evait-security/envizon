@@ -1,230 +1,50 @@
-<% current_group = Group.find(group_id) %>
-<div class="row group-box scale-transition" id="box_<%= "#{current_group.id}" %>">
-    <div class="col s12" id="group_content_<%= "#{current_group.id}" %>">
-        <div class="card material-table">
-            <div class="table-header table-header-groups">
-            <span class="table-title truncate" style="margin-top: 15px; margin-bottom: 10px;"><%= "#{current_group.name}" %></span>
-            <div>
-                <div style="float: left;"><%= "#{current_group.icon}".html_safe %></div>
-                <div style="float: right;" class="actions group-actions" id="<%= "#{current_group.id}" %>">
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Update current group content" class="btn tooltipped hidden grp_update green darken-2"><i class="material-icons white-text">update</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Archive selected clients" class="btn-flat nopadding tooltipped grp_archive"><i class="material-icons">archive</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Export selected clients" class="btn-flat nopadding tooltipped grp_export"><i class="material-icons">file_download</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Select all visible clients in group" class="btn-flat nopadding tooltipped grp_mark_all"><i class="material-icons">check_box</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Unselect all visible clients in group" class="btn-flat nopadding tooltipped grp_unmark_all"><i class="material-icons">check_box_outline_blank</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Delete whole group" class="btn-flat nopadding tooltipped grp_delete"><i class="material-icons red-text text-darken-4">delete_forever</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Delete selected clients" class="btn-flat nopadding tooltipped grp_delete_clients"><i class="material-icons red-text text-darken-4">delete</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Move selected clients to another group" class="btn-flat nopadding tooltipped grp_move"><i class="material-icons blue-text text-darken-2">forward</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Copy selected clients to another group" class="btn-flat nopadding tooltipped grp_copy"><i class="material-icons blue-text text-darken-2">content_copy</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Add new group with selected clients" class="btn-flat nopadding tooltipped grp_new"><i class="material-icons green-text text-darken-2">group_add</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Start scan with selected client" class="btn-flat nopadding tooltipped grp_scan"><i class="material-icons blue-text text-darken-2">gps_fixed</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Screenshot all http based services on selected clients" class="btn-flat nopadding tooltipped grp_image"><i class="material-icons blue-text text-darken-2">camera</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Search in group" class="btn-flat nopadding tooltipped grp_search-toggle"><i class="material-icons yellow-text text-darken-4">search</i></a>
-                    <a href="#" data-position="bottom" data-delay="50" data-tooltip="Close group" class="btn-flat nopadding tooltipped grp_close"><i class="material-icons red-text text-darken-2">close</i></a>
-                </div>
-            </div>
-            </div>
-            <table id="datatable-<%= "#{current_group.id}" %>" class="dt_init">
-            <thead>
-                <tr>
-                <th>IP</th>
-                <th>Hostname</th>
-                <th>Operating System</th>
-                <th>Ports</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% current_group.clients.where.not(archived: true).order(:ip).to_a.each do |current_client| %>
-                <tr class="ui-selectee">
-                    <td>
-                        <%= link_to "#{current_client.ip}", client_path(current_client.id), :remote => true, :id => current_client.id, :class => 'blue-text text-darken-2' %>
-                        <% count_notes = current_client.notes.size %>
-                        <%= "<sup>#{count_notes}</sup>".html_safe if count_notes > 0 %>
-                    </td>
-                    <td><%= "#{current_client.hostname}" %></td>
-                    <td><%= "#{current_client.os}" %></td>
-                    <td><%= "#{current_client.ports.count}" %></td>
-                </tr>
-                <% end %>
-            </tbody>
-            </table>
+<table class="table table-striped table-bordered dt-init w-100">
+  <div class="d-flex">
+    <div class="flex-grow-1">
+      <div class="group-actions" id="<%= "#{@group.id}" %>">
+        <div class="btn-toolbar mb-3" role="toolbar">
+          <div class="btn-group me-2" role="group" aria-label="group-actions">
+            <button type="button" class="btn btn-sm btn-light grp_archive"><i class="fas fa-archive"></i></button>
+            <button type="button" class="btn btn-sm btn-light grp_export"><i class="fas fa-download me-1"></i>wget</button>
+            <button type="button" class="btn btn-sm btn-light grp_mark_all"><i class="fas fa-check-square"></i></i></button>
+            <button type="button" class="btn btn-sm btn-light grp_unmark_all"><i class="far fa-check-square"></i></i></button>
+          </div>
+          <div class="btn-group me-2" role="group" aria-label="group-actions">
+            <button type="button" class="btn btn-sm btn-danger grp_delete"><i class="fas fa-trash me-1"></i>rm -r</button>
+            <button type="button" class="btn btn-sm btn-warning grp_delete_clients"><i class="far fa-trash-alt me-1"></i>rm</button>
+          </div>
+          <div class="btn-group me-2" role="group" aria-label="group-actions">
+            <button type="button" class="btn btn-sm btn-primary grp_move"><i class="fas fa-angle-right me-1"></i>mv</button>
+            <button type="button" class="btn btn-sm btn-primary grp_copy"><i class="fas fa-copy me-1"></i>cp</button>
+            <button type="button" class="btn btn-sm btn-success grp_new"><i class="fas fa-plus me-1"></i>new</button>
+          </div>
         </div>
+     </div>
     </div>
-</div>
-
-<script>
-    function init_datatables() {
-        // Custom JS File for Datatables with Material Design
-        // Credits: https://codepen.io/anon/pen/BddNxJ
-
-        var factory = function($, DataTable) {
-            "use strict";
-
-            /* Set the defaults for DataTables initialisation */
-            $.extend(true, DataTable.defaults, {
-                dom: "<'hiddensearch'f'>" +
-                "tr" +
-                "<'table-footer'lip'>",
-                renderer: 'material'
-            });
-
-            /* Default class modification */
-            $.extend(DataTable.ext.classes, {
-                sWrapper: "dataTables_wrapper",
-                sFilterInput: "form-control input-sm",
-                sLengthSelect: "form-control input-sm"
-            });
-
-            /* Bootstrap paging button renderer */
-            DataTable.ext.renderer.pageButton.material = function(settings, host, idx, buttons, page, pages) {
-                var api = new DataTable.Api(settings);
-                var classes = settings.oClasses;
-                var lang = settings.oLanguage.oPaginate;
-                var btnDisplay, btnClass, counter = 0;
-
-                var attach = function(container, buttons) {
-                    var i, ien, node, button;
-                    var clickHandler = function(e) {
-                        e.preventDefault();
-                        if (!$(e.currentTarget).hasClass('disabled')) {
-                            api.page(e.data.action).draw(false);
-                        }
-                    };
-
-                    for (i = 0, ien = buttons.length; i < ien; i++) {
-                        button = buttons[i];
-
-                        if ($.isArray(button)) {
-                            attach(container, button);
-                        } else {
-                            btnDisplay = '';
-                            btnClass = '';
-
-                            switch (button) {
-
-                                case 'first':
-                                    btnDisplay = lang.sFirst;
-                                    btnClass = button + (page > 0 ?
-                                        '' : ' disabled');
-                                    break;
-
-                                case 'previous':
-                                    btnDisplay = '<i class="material-icons">chevron_left</i>';
-                                    btnClass = button + (page > 0 ?
-                                        '' : ' disabled');
-                                    break;
-
-                                case 'next':
-                                    btnDisplay = '<i class="material-icons">chevron_right</i>';
-                                    btnClass = button + (page < pages - 1 ?
-                                        '' : ' disabled');
-                                    break;
-
-                                case 'last':
-                                    btnDisplay = lang.sLast;
-                                    btnClass = button + (page < pages - 1 ?
-                                        '' : ' disabled');
-                                    break;
-
-                            }
-
-                            if (btnDisplay) {
-                                node = $('<li>', {
-                                    'class': classes.sPageButton + ' ' + btnClass,
-                                    'id': idx === 0 && typeof button === 'string' ?
-                                        settings.sTableId + '_' + button : null
-                                })
-                                    .append($('<a>', {
-                                            'href': '#',
-                                            'aria-controls': settings.sTableId,
-                                            'data-dt-idx': counter,
-                                            'tabindex': settings.iTabIndex
-                                        })
-                                            .html(btnDisplay)
-                                    )
-                                    .appendTo(container);
-
-                                settings.oApi._fnBindAction(
-                                    node, {
-                                        action: button
-                                    }, clickHandler
-                                );
-
-                                counter++;
-                            }
-                        }
-                    }
-                };
-
-                // IE9 throws an 'unknown error' if document.activeElement is used
-                // inside an iframe or frame.
-                var activeEl;
-
-                try {
-                    // Because this approach is destroying and recreating the paging
-                    // elements, focus is lost on the select button which is bad for
-                    // accessibility. So we want to restore focus once the draw has
-                    // completed
-                    activeEl = $(document.activeElement).data('dt-idx');
-                } catch (e) {}
-
-                attach(
-                    $(host).empty().html('<ul class="material-pagination"/>').children('ul'),
-                    buttons
-                );
-
-                if (activeEl) {
-                    $(host).find('[data-dt-idx=' + activeEl + ']').focus();
-                }
-            };
-        }; // /factory
-
-        // Define as an AMD module if possible
-        if (typeof define === 'function' && define.amd) {
-            define(['jquery', 'datatables'], factory);
-        } else if (typeof exports === 'object') {
-            // Node/CommonJS
-            factory(require('jquery'), require('datatables'));
-        } else if (jQuery) {
-            // Otherwise simply initialise as normal, stopping multiple evaluation
-            factory(jQuery, jQuery.fn.dataTable);
-        }
-
-        $('.dt_init').dataTable({
-            "oLanguage": {
-                "sStripClasses": "",
-                "sSearch": "",
-                "sSearchPlaceholder": "Enter Keywords Here",
-                "sInfo": "_START_ -_END_ of _TOTAL_",
-                "sLengthMenu": '<span>Rows per page:</span><select class="browser-default">' +
-                '<option value="10">10</option>' +
-                '<option value="20">20</option>' +
-                '<option value="30">30</option>' +
-                '<option value="40">40</option>' +
-                '<option value="50">50</option>' +
-                '<option value="-1">All</option>' +
-                '</select></div>'
-            },
-            bAutoWidth: false,
-            columnDefs: [
-                { type: 'ip-address', targets: 0 }
-            ]
-        });
-        // remove dt-init marker
-        $('.dt_init').removeClass('dt_init');
-    }
-
-    // Call init datatables
-    $('document').ready(init_datatables());
-
-    // tooltip reinit
-    $('document').ready(function() {
-        $('.tooltipped').tooltip({delay: 50});
-    });
-
-    //Make table rows selectable except the a-Tags
-    $(".dataTable tbody").selectable({
-        filter: 'tr',
-        cancel: 'a'
-    });
-</script>
+    <span class="text-primary">
+      <%= "#{@group.icon}".html_safe %><span class="me-2"></span><%= "#{@group.name}" %>
+    </span>
+  </div>
+  <thead>
+    <tr>
+      <th>IP</th>
+      <th>Hostname</th>
+      <th>Operating System</th>
+      <th>Ports</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @group.clients.where.not(archived: true).order(:ip).to_a.each do |current_client| %>
+    <tr class="ui-selectee">
+      <td>
+        <%= link_to "#{current_client.ip}", client_path(current_client.id), :remote => true, :id => current_client.id, :class => 'blue-text text-darken-2' %>
+        <% count_notes = current_client.notes.size %>
+        <%= "<sup>#{count_notes}</sup>".html_safe if count_notes > 0 %>
+      </td>
+      <td><%= "#{current_client.hostname}" %></td>
+      <td><%= "#{current_client.os}" %></td>
+      <td><%= "#{current_client.ports.count}" %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

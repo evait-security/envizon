@@ -1,10 +1,8 @@
 $("#hostview").html("<%= j(render('show', :client=> client)) %>");
-$('.collapsible').collapsible();
-$("#hostview_copy_ip").click(function () {
+$(".hostview_copy_ip").click(function () {
     copyToClipboard('#hostview_ip');
-    M.toast({html: "IP address copied to clipboard!", displayLength: "2000", classes: "green"});
+    $('#ip_clip_success').toast('show');
 });
-
 function copyToClipboard(element) {
     var $temp = $("<input>");
     $("body").append($temp);
@@ -12,10 +10,16 @@ function copyToClipboard(element) {
     document.execCommand("copy");
     $temp.remove();
 }
-
-$(document).ready(function(){
-    $('.collapsible').collapsible();
-    $('.materialboxed').materialbox();
-    $('.tooltipped').tooltip();
-});
-
+function delete_note(note_id) {
+  var r = confirm("Do you want to delete the note permanently?");
+  if (r == true) {
+    $.ajax({
+      url: "/notes/" + note_id,
+      dataType : "script",
+      cache: true,
+      method: "delete"
+    });
+  } else {
+    event.stopPropagation()
+  }
+}

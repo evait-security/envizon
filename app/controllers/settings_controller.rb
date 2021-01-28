@@ -120,6 +120,7 @@ class SettingsController < ApplicationController
     unziped_data_sql = File.join(extract_dir, 'envizon.db.tar')
     out_data_sql = Rails.root.join('db', 'envizon.db.tar')
 
+    # bug: if storage dir not exists -> die hard
     Dir.children(Rails.root.join('storage')).each do |ch|
       FileUtils.rm_rf(Rails.root.join('storage', ch))
     end

@@ -27,6 +27,15 @@ GIT
       nokogiri (~> 1.3)
       rprogram (~> 0.3)
 
+GIT
+  remote: https://github.com/twbs/bootstrap-rubygem
+  revision: 615e415ec4c4de8852bbc826f78d881a845e8da0
+  specs:
+    bootstrap (5.0.0.beta1)
+      autoprefixer-rails (>= 9.1.0)
+      popper_js (>= 2.6.0, < 3)
+      sassc-rails (>= 2.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -85,10 +94,6 @@ GEM
       rubyzip (>= 0.9.5)
     bcrypt (3.1.15)
     bindex (0.8.1)
-    bootstrap (5.0.0.alpha1)
-      autoprefixer-rails (>= 9.1.0)
-      popper_js (>= 1.14.3, < 2)
-      sassc-rails (>= 2.0.0)
     brakeman (4.9.0)
     builder (3.2.4)
     byebug (11.1.3)
@@ -239,7 +244,7 @@ GEM
     parser (2.7.1.4)
       ast (~> 2.4.1)
     pg (0.21.0)
-    popper_js (1.16.0)
+    popper_js (2.6.0)
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -413,7 +418,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-import
   axlsx
-  bootstrap (~> 5.0.0.alpha1)
+  bootstrap!
   brakeman
   byebug
   capybara (~> 2.13)
@@ -471,4 +476,4 @@ DEPENDENCIES
   zip-zip
 
 BUNDLED WITH
-   2.1.4
+   2.2.6

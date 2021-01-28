@@ -1,7 +1,7 @@
 // Variables
 $primary: #1565C0;
-$secondary: #9A9A9A;
-$light: #dfdfdf;
+$secondary: #6c757d;
+$light: #f5f5f5;
 $danger:#b71c1c;
 $border-radius: 0px;
 $border-radius-sm: 0px;
@@ -26,5 +26,6 @@ $utilities: map-merge(
 @import "bootstrap";
 @import "general";
 @import "extend";
+@import "groups";
 @import "datatable_bs";
 @import 'font_awesome5_webfont';

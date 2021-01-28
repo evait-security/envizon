@@ -1,10 +1,16 @@
-<% if group_id == "archived" %>
+<% if @archived %>
     $(".selected-group").html("<%= j(render('groups/group_archived')) %>");
-    $(".selected-group").attr('gid', '<%= group_id %>');
-    $(".loader").hide();
+    $(".selected-group").attr('gid', '<%= @group.id %>');
+<% else %>
+    $(".selected-group").html("<%= j(render('groups/group')) %>");
+    $(".selected-group").attr('gid', '<%= @group.id %>');
 <% end %>
-<% if Group.exists?(id: group_id) %>
-    $(".selected-group").html("<%= j(render('groups/group', group_id: group_id)) %>");
-    $(".selected-group").attr('gid', '<%= group_id %>');
-    $(".loader").hide();
-<% end %>
+$(document).ready(function() {
+  $('.dt-init').each(function() {
+    $( this ).DataTable({
+      columnDefs: [
+        { type: 'ip-address', targets: 0 }
+      ]
+    });
+  });
+});

@@ -2,9 +2,7 @@
 <div class="modal-content">
   <div class="modal-header bg-primary">
     <h5 class="modal-title text-white">Apply changes to issue template</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-      <span class="text-white" aria-hidden="true">&times;</span>
-    </button>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
   </div>
   <div class="modal-body">
     <div class="row">
@@ -46,7 +44,7 @@
   </div>
   <div class="modal-footer">
     <%= link_to update_template_path(@issue), remote: :true, class: "btn btn-sm btn-primary" do %>
-      <i class="fas fa-cloud-upload-alt mr-2"></i>Save to cloud
+      <i class="fas fa-cloud-upload-alt me-2"></i>Save to cloud
     <% end %>
   </div>
 </div>

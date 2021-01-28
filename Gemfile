@@ -53,7 +53,7 @@ gem 'jquery-ui-rails'
 gem 'materialize-sass'
 
 # bootstrap
-gem 'bootstrap', '~> 5.0.0.alpha1'
+gem 'bootstrap', git:"https://github.com/twbs/bootstrap-rubygem"
 
 # diff
 gem 'diffy'
