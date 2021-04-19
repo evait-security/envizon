@@ -16,11 +16,11 @@
     end
   %>
   <div class="toast-container">
-    <div class="toast d-flex align-items-center bg-<%= classes %> text-white" role="alert" aria-live="assertive" data-delay="3000" aria-atomic="true">
+    <div class="toast d-flex align-items-center bg-<%= classes %> text-white" role="alert" aria-live="assertive" data-delay="3000" id="general-notification" aria-atomic="true">
       <div class="toast-body">
         <%= @message %>
       </div>
-      <button type="button" class="btn-close btn-close-white ms-auto me-2" data-bs-dismiss="toast" aria-label="Close"></button>
+      <button type="button" class="btn-close ms-auto me-2" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
   </div>
 <% end %>

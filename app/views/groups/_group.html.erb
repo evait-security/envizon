@@ -3,21 +3,17 @@
     <div class="flex-grow-1">
       <div class="group-actions" id="<%= "#{@group.id}" %>">
         <div class="btn-toolbar mb-3" role="toolbar">
-          <div class="btn-group me-2" role="group" aria-label="group-actions">
-            <button type="button" class="btn btn-sm btn-light grp_archive"><i class="fas fa-archive"></i></button>
-            <button type="button" class="btn btn-sm btn-light grp_export"><i class="fas fa-download me-1"></i>wget</button>
-            <button type="button" class="btn btn-sm btn-light grp_mark_all"><i class="fas fa-check-square"></i></i></button>
-            <button type="button" class="btn btn-sm btn-light grp_unmark_all"><i class="far fa-check-square"></i></i></button>
+          <div class="btn-group me-3" role="group" aria-label="group-actions">
+            <button type="button" class="btn btn-sm btn-outline-secondary grp_archive"><i class="fas fa-archive"></i></button>
+            <button type="button" class="btn btn-sm btn-outline-secondary grp_export"><i class="fas fa-download me-1"></i>wget</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary grp_mark_all"><i class="fas fa-check-square"></i></i></button>
+            <button type="button" class="btn btn-sm btn-outline-secondary grp_unmark_all"><i class="far fa-check-square"></i></i></button>
           </div>
-          <div class="btn-group me-2" role="group" aria-label="group-actions">
-            <button type="button" class="btn btn-sm btn-danger grp_delete"><i class="fas fa-trash me-1"></i>rm -r</button>
-            <button type="button" class="btn btn-sm btn-warning grp_delete_clients"><i class="far fa-trash-alt me-1"></i>rm</button>
-          </div>
-          <div class="btn-group me-2" role="group" aria-label="group-actions">
-            <button type="button" class="btn btn-sm btn-primary grp_move"><i class="fas fa-angle-right me-1"></i>mv</button>
-            <button type="button" class="btn btn-sm btn-primary grp_copy"><i class="fas fa-copy me-1"></i>cp</button>
-            <button type="button" class="btn btn-sm btn-success grp_new"><i class="fas fa-plus me-1"></i>new</button>
-          </div>
+          <button type="button" class="btn btn-sm btn-outline-danger grp_delete me-1"><i class="fas fa-trash me-1"></i>rm -r</button>
+          <button type="button" class="btn btn-sm btn-outline-warning grp_delete_clients me-3"><i class="far fa-trash-alt me-1"></i>rm</button>
+          <button type="button" class="btn btn-sm btn-outline-primary grp_move me-1"><i class="fas fa-angle-right me-1"></i>mv</button>
+          <button type="button" class="btn btn-sm btn-outline-primary grp_copy me-1"><i class="fas fa-copy me-1"></i>cp</button>
+          <button type="button" class="btn btn-sm btn-outline-success grp_new me-1"><i class="fas fa-plus me-1"></i>new</button>
         </div>
      </div>
     </div>

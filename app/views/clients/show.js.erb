@@ -1,8 +1,11 @@
 $("#hostview").html("<%= j(render('show', :client=> client)) %>");
 $(".hostview_copy_ip").click(function () {
     copyToClipboard('#hostview_ip');
-    $('#ip_clip_success').toast('show');
-});
+    $("#hostview_ip_icon").toggleClass("fa-check");
+    $("#hostview_ip_icon").toggleClass("fa-copy");
+    setTimeout(() => {  $("#hostview_ip_icon").toggleClass("fa-check"); $("#hostview_ip_icon").toggleClass("fa-copy");}, 800);
+
+})
 function copyToClipboard(element) {
     var $temp = $("<input>");
     $("body").append($temp);
