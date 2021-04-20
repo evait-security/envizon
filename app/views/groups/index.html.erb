@@ -388,4 +388,15 @@
           cache: true
       });
   });
+
+  // view client
+  $(document).on("click", '.client_view', function() {
+      var id = $('.selected-group').attr('gid');
+      $("#datatable-" +  id + "_wrapper").find(".ui-selectable tr").each(function() {
+        $(this).removeClass("fw-bold");
+      });
+
+      $(this).closest('tr').addClass("fw-bold");
+      $(this).blur();
+  });
 </script>
