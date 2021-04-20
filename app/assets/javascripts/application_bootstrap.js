@@ -6,3 +6,4 @@
 //= require datatables_bs
 //= require ip_address_datatable
 //= require ckeditor
+//= require toastr_rails

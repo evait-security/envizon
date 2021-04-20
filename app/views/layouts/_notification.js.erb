@@ -1,0 +1,22 @@
+$(".modal").modal("hide");
+<% if @message %>
+  <%
+    if defined?(@type).nil?
+      classes = 'info'
+    else
+      case @type
+        when 'alert'
+          classes = 'error'
+        when 'notice'
+          classes = 'info'
+        when 'warning'
+          classes = 'warning'
+        when 'success'
+          classes = 'success'
+        else
+          classes = 'info'
+      end
+    end
+  %>
+  toastr.<%= classes %>('<%= @message %>');
+<% end %>

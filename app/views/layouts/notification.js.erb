@@ -1,5 +1,1 @@
-
-$(".modal").modal("hide");
-$("#notification_container").html("<%= j(render('layouts/notification')) %>");
-$('#general-notification').toast('show');
-<%= @js.html_safe if @js %><%# no user input =) %>
+<%= render('layouts/notification') %>

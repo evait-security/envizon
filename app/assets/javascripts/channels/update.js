@@ -9,9 +9,8 @@ App.notification = App.cable.subscriptions.create("UpdateChannel", {
 
   received: function(data) {
     // Called when there's incoming data on the websocket for this channel
-
     // refresh sidebar if user is on group page
-    if ($(".groups-page").size()){
+    if ($(".selected-group").length != 0){
       $.ajax({
         url: "/groups/group_list",
         dataType : "script",
@@ -23,7 +22,7 @@ App.notification = App.cable.subscriptions.create("UpdateChannel", {
     // check if selected group should be rerendered
     if( $('.selected-group').attr('gid') !== undefined ){
       var mod_gids = data["ids"].split(",");
-      var selected_id = $('.selected-group').attr('gid'); 
+      var selected_id = $('.selected-group').attr('gid');
       if ((mod_gids.indexOf(selected_id) > -1)){
         // disable db commands for selected group
         $(".grp_delete").addClass("disabled");

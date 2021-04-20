@@ -27,6 +27,4 @@ $(".editor").each(function(index, value) {
         language: 'de'
     });
 });
-$("#notification_container").html("<%= j render(partial: 'layouts/notification') %>");
-$('div.toast').toast('show');
-$(".modal").modal("hide");
+<%= render('layouts/notification') %>

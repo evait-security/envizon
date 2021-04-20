@@ -18,10 +18,8 @@
   bottom: 20px;
   right: 20px;
 }
-.toast-container {
-  //position: fixed;
-  //top: 60px;
-  //right: 20px;
+.toast-info {
+  background-color: $primary !important;
 }
 label {
   margin-bottom: 5px !important;
@@ -41,4 +39,13 @@ label {
 }
 .list-group-item-action.active:focus {
   background-color: $primary;
+}
+.ui-selected{
+  background: #edf4fd;
+}
+.ui-selecting{
+  background: #edf4fd;
+}
+.dt-init > :not(:last-child) > :last-child > * {
+  border-bottom-color: #c9ced4;
 }

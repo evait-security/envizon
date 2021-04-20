@@ -51,6 +51,7 @@ gem 'font_awesome5_rails'
 gem 'jquery-datatables-rails'
 gem 'jquery-ui-rails'
 gem 'materialize-sass'
+gem 'toastr_rails'
 
 # bootstrap
 gem 'bootstrap', git:"https://github.com/twbs/bootstrap-rubygem"

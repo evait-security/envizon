@@ -2,18 +2,13 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
-  before_action :authenticate_user!, :remove_flash
+  before_action :authenticate_user!
 
   layout :layout_by_resource
 
   # overwrite default path after sign in
   def after_sign_in_path_for(ressource)
     new_scan_path
-  end
-
-  # remove all flash messages
-  def remove_flash
-    flash.clear
   end
 
   def layout_by_resource
@@ -27,7 +22,7 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  def respond_with_notify(message = 'Please make a selection', type = 'notice', js = '')
+  def respond_with_notify(message = 'Please make a selection', type = 'warning', js = '')
     if message.is_a?(Hash) # if called from settings controller (only one argument can passed in this situation)
       @message = message[:message]
       @type = message[:type]
@@ -35,7 +30,6 @@ class ApplicationController < ActionController::Base
       @message = message
       @type = type
     end
-    @js = js
     respond_to do |format|
       format.html { redirect_to request.referrer } # nice workaround for not working redirect_to :back but without notification
       format.js { render 'layouts/notification' }

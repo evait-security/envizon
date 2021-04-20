@@ -12,5 +12,9 @@ $(document).ready(function() {
         { type: 'ip-address', targets: 0 }
       ]
     });
+    $( this ).children("tbody").selectable({
+      filter: 'tr',
+      cancel: 'a'
+    });
   });
 });

@@ -21,9 +21,9 @@
     <% end %>
     <% clientlessGroups.each do | current_group | %>
       <% unless current_group.clients.select{|c|c.archived == false}.size > 0 %>
-        <li class="list-group-item d-flex align-items-center pointer group-collection-item" id="info_<%= "#{current_group.id}" %>" gid="<%= "#{current_group.id}" %>">
+        <li class="list-group-item d-flex align-items-center pointer group-collection-item bg-light" id="info_<%= "#{current_group.id}" %>" gid="<%= "#{current_group.id}" %>">
           <div class="flex-grow-1">
-            <span class="me-2 text-light"><%= "#{current_group.icon}".html_safe %></span><%= "#{current_group.name}" %><% unless current_group.mod %>&nbsp;*<% end %>
+            <span class="me-2"><%= "#{current_group.icon}".html_safe %></span><%= "#{current_group.name}" %><% unless current_group.mod %>&nbsp;*<% end %>
           </div>
           <% archived_count = current_group.clients.select{|c|c.archived == true}.size %>
           <span class="badge bg-light text-dark"><%= "#{current_group.clients.select{|c|c.archived == false}.size}" %><%= " | #{archived_count}" if archived_count > 0 %></span>
@@ -31,7 +31,7 @@
       <% end %>
     <% end %>
     <% unless Client.select{|c|c.archived == true}.size == 0 %>
-      <li class="list-group-item d-flex align-items-center pointer group-collection-item" id="info_archived" gid="archived">
+      <li class="list-group-item d-flex align-items-center pointer group-collection-item bg-light" id="info_archived" gid="archived">
         <div class="flex-grow-1">
           <span class="me-2 text-danger"><i class="fas fa-archive"></i></span>Archived Clients *
         </div>
