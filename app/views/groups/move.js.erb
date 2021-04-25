@@ -1,4 +1,2 @@
-$("#medium-modal").html("<%= j(render('move', :clients=> clients, :source_group=> source_group, :search=> search)) %>");
-$("#medium-modal").modal('open');
-$('select').formSelect();
-M.updateTextFields();
+$("#general-modal-content").html("<%= j(render('move', :clients=> clients, :source_group=> source_group, :search=> search)) %>");
+new bootstrap.Modal(document.getElementById('general-modal')).show();

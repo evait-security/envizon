@@ -3,6 +3,7 @@ $(".hostview_copy_ip").click(function () {
     copyToClipboard('#hostview_ip');
     $("#hostview_ip_icon").toggleClass("fa-check");
     $("#hostview_ip_icon").toggleClass("fa-copy");
+    toastr.success('IP address copied to clipboard');
     setTimeout(() => {  $("#hostview_ip_icon").toggleClass("fa-check"); $("#hostview_ip_icon").toggleClass("fa-copy");}, 800);
 })
 function copyToClipboard(element) {

@@ -1,53 +1,27 @@
-<style>
-  .iconsholder {
-    box-sizing: unset;
-  }
-  .howl-iconpicker-close {
-    width: 260px;
-  }
-  .srchicons {
-    text-align: center !important;
-  }
-  .howl-iconpicker {
-    background: #fff;
-  }
-  .selectedicon {
-    background: #1976D2!important;
-    border-color: #1976D2!important;
-    color: #fff;
-  }
-</style>
 <%= simple_form_for :group, url: groups_export_path do |f| %>
-  <div class="modal-content p-0">
-    <div class="row grey lighten-2 pt-3 pb-2">
-      <div class="col s12 center">
-          <h3 class="grey-text text-darken-3">Export selected clients to text file</h3>
-      </div>
+  <div class="modal-content">
+    <div class="modal-header bg-secondary">
+      <h5 class="modal-title text-white">Export selected clients to text file</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
-    <div class="row padding-2">
-      <div class="col s12">
-        <%= f.input :file_name, :wrapper_html => { :class => "s12" } %>
-      </div>
-      <div class="row center-align padding-2" >
-        <div class="col s12" style="margin-bottom: 13px;">
-          <label>Selected Clients</label>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col">
+          <%= f.input :file_name, placeholder: "Provide your filename without extension", hint: '"exported_clients" will be default, .txt will be appended always' %>
         </div>
-        <div class="col s12">
+      </div>
+      <div class="row">
+        <div class="col">
+          <%= f.label :selected_clients %>
           <% clients.each do | temp_client | %>
-              <div class="chip"><%= temp_client.ip %></div>
-              <input type="hidden" name="selected_clients[]" value="<%= temp_client.id %>" />
+            <span class="badge bg-secondary"><%= temp_client.ip %></span>
+            <input type="hidden" name="selected_clients[]" value="<%= temp_client.id %>" />
           <% end %>
         </div>
       </div>
     </div>
-  </div>
-  <div class="modal-footer">
-    <%= f.button :submit, 'Export', :class => 'modal-action grey', :onclick => "close_modal();" %>
+    <div class="modal-footer">
+      <%= f.button :submit, 'Export', :class => 'btn-primary', :onclick => "bootstrap.Modal.getInstance(document.getElementById('general-modal')).hide();" %>
+    </div>
   </div>
 <% end %>
-
-<script>
-  function close_modal() {
-      $(".modal").modal("close");
-  }
-</script>
