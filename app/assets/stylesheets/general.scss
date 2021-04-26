@@ -49,3 +49,17 @@ label {
 .dt-init > :not(:last-child) > :last-child > * {
   border-bottom-color: #c9ced4;
 }
+#toast-container{
+  // needed for removing default behavior of toastr gem
+  top: unset !important;
+}
+.iconpicker .iconpicker-item {
+  .fa, .fas, .far, .fal, .fad, .fab {
+    font-size: 24px !important;
+  }
+  width: 30px !important;
+  height: 30px !important;
+}
+.iconpicker-popover.popover {
+  width: 22em !important;
+}

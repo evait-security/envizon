@@ -16,7 +16,7 @@
       <% end %>
       <div class="row">
         <div class="col">
-          <%= f.input :target_group, disabled: true, input_html: { value: source_group.name } %>
+          <%= f.input :source_group, disabled: true, input_html: { value: source_group.name } %>
           <input type="hidden" name="source_group" value="<%= source_group.id %>">
         </div>
       </div>

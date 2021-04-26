@@ -7,8 +7,9 @@
     <div class="modal-body">
       <div class="row">
         <div class="col-6">
-          <%= f.input :target_group, disabled: true, input_html: { value: source_group.name } %>
+          <%= f.input :source_group, disabled: true, input_html: { value: source_group.name } %>
           <input type="hidden" name="source_group" value="<%= source_group.id %>">
+          <input type="hidden" name="search" value="<%= search %>">
         </div>
         <div class="col-6">
           <%= f.input :destination_group, input_html: { name: 'destination_group' }, collection: Group.where.not(id: source_group.id).order(mod: :desc, name: :asc), include_blank: false %>
