@@ -11,6 +11,10 @@ class ApplicationController < ActionController::Base
     new_scan_path
   end
 
+  def after_sign_out_path_for(resource_or_scope)
+    new_user_session_path
+  end
+
   def layout_by_resource
     if ["images", "sessions", "registrations", "scans", "reports", 'groups'].include? controller_name
       simple_form_bootstrap # dirty hotfix until initializer can be replaced

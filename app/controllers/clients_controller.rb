@@ -1,6 +1,6 @@
 # @restful_api 1.0
 # Client display and search
-class ClientsController < ApplicationController#
+class ClientsController < ApplicationController
   before_action :set_client, only: [:new_issue_form, :link_issue_form]
   before_action :set_client_and_issue, only: [:link_issue, :unlink_issue]
 

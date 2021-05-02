@@ -52,6 +52,9 @@ label {
 #toast-container{
   // needed for removing default behavior of toastr gem
   top: unset !important;
+  right: unset !important;
+  left: 25px !important;
+  bottom: 20px !important;
 }
 .iconpicker .iconpicker-item {
   .fa, .fas, .far, .fal, .fad, .fab {

@@ -9,11 +9,6 @@
           <i class="fas fa-server me-2"></i>Groups
         <% end %>
       </div>
-      <% if current_page?(groups_path) %>
-        <div class="nav-item">
-          <a href="#" class="search_header nav-link text-white"><i class="fas fa-search me-2"></i>Search</a>
-        </div>
-      <% end %>
       <div class="nav-item <%= 'active' if current_page?(images_path) %>">
         <%= link_to images_path, class: "nav-link text-white" do %>
           <i class="fas fa-camera me-2"></i>Images

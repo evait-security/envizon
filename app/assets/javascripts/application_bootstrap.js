@@ -1,6 +1,6 @@
 //= require popper
 //= require bootstrap
-//= require init_bootstrap
+//= require global
 //= require fontawesome-iconpicker.min
 //= require cable
 //= require datatables_bs
