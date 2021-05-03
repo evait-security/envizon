@@ -9,7 +9,7 @@ App.notification = App.cable.subscriptions.create("NotificationChannel", {
 
   received: function(data) {
     // Called when there's incoming data on the websocket for this channel
-    toastr.options.positionClass = "toast-bottom-right";
+    toastr.options.positionClass = "toast-bottom-left";
     toastr.info(data['message']);
   },
 

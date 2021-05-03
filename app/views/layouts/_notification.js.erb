@@ -1,3 +1,6 @@
+// close modal
+bootstrap.Modal.getInstance(document.getElementById('general-modal')).hide();
+
 <% if @message %>
   <%
     if defined?(@type).nil?

@@ -1,2 +1,89 @@
 $("#general-modal-content-full").html("<%= j(render('search_form')) %>");
 new bootstrap.Modal(document.getElementById('general-modal-full')).show();
+
+// global form counter
+var forms = 1;
+
+function load_port_entropy(){
+  pre_load();
+  $("#search_result").html("<%= j(render('port_entropy')) %>");
+}
+
+$(document).on('click','.form_row_delete',function(){
+  $(this).parents('.form_row').remove();
+  forms = forms - 1;
+  if (forms == 1){
+    $("#submit-search").prop('disabled', true);
+  }
+});
+
+function addSearchOption(model, name, without_name, value) {
+  $("#submit-search").prop('disabled', false);
+  forms = forms + 1;
+
+  if(without_name == 0) {
+    var raw = `<div class="form_row">
+      <label>${model} / ${name}</label>
+      <div class="input-group">
+        <input name="search[val${forms}[table]]" value="${model.toLowerCase()}" type="hidden">
+        <input name="search[val${forms}[name]]" value="${name.toLowerCase()}" type="hidden">
+        <a class="btn btn-primary" onclick="reverse(this);">=</a>
+        <input type="hidden" name="search[val${forms}[not]]" class="not" value="false">
+        <input name="search[val${forms}[value]]" value="${value}" type="text" class="form-control">
+        <a class="btn btn-danger form_row_delete"><i class="fas fa-trash"></i></a>
+      </div>
+      <div class="d-flex justify-content-center">
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" name="search[val${forms}[or]]" value="true" id="search[val${forms}[or]]">
+          <label class="form-check-label" for="search[val${forms}[or]]">AND / OR</label>
+        </div>
+      </div>
+    </div>`;
+  } else {
+    var raw = `<div class="form_row">
+      <label>${model}</label>
+      <div class="input-group">
+        <input name="search[val${forms}[table]]" value="${model.toLowerCase()}" type="hidden">
+        <input name="search[val${forms}[name]]" value="name" type="hidden">
+        <a class="btn btn-primary" onclick="reverse(this);">=</a>
+        <input type="hidden" name="search[val${forms}[not]]" class="not" value="false">
+        <input name="search[val${forms}[value]]" value="${name}" type="text" class="form-control">
+        <a class="btn btn-danger form_row_delete"><i class="fas fa-trash"></i></a>
+      </div>
+      <div class="d-flex justify-content-center">
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" name="search[val${forms}[or]]" value="true" id="search[val${forms}[or]]">
+          <label class="form-check-label" for="search[val${forms}[or]]">AND / OR</label>
+        </div>
+      </div>
+    </div>`;
+  }
+  $(raw).insertBefore("#end_of_form").hide().fadeIn(300);
+}
+
+// = --> != --> =
+function reverse(x) {
+  if (x.innerHTML == "="){
+    x.innerHTML = "!=";
+    $(x).siblings(".not").val("true");
+  } else {
+    x.innerHTML = "=";
+    $(x).siblings(".not").val("false");
+  }
+  x.blur();
+}
+
+function pre_load() {
+  $("#search_result").html('<center><div class="preloader-svg" style="padding-top: 5em;">\n' +
+    '<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="lds-double-ring"><circle cx="50" cy="50" ng-attr-r="{{config.radius}}" ng-attr-stroke-width="{{config.width}}" ng-attr-stroke="{{config.c1}}" ng-attr-stroke-dasharray="{{config.dasharray}}" fill="none" stroke-linecap="round" r="47" stroke-width="5" stroke="#aaaaaa" stroke-dasharray="73.82742735936014 73.82742735936014" transform="rotate(316.582 50 50)"><animateTransform attributeName="transform" type="rotate" calcMode="linear" values="0 50 50;360 50 50" keyTimes="0;1" dur="1.8s" begin="0s" repeatCount="indefinite"></animateTransform></circle><circle cx="50" cy="50" ng-attr-r="{{config.radius2}}" ng-attr-stroke-width="{{config.width}}" ng-attr-stroke="{{config.c2}}" ng-attr-stroke-dasharray="{{config.dasharray2}}" ng-attr-stroke-dashoffset="{{config.dashoffset2}}" fill="none" stroke-linecap="round" r="41" stroke-width="5" stroke="#1565C0" stroke-dasharray="64.40264939859075 64.40264939859075" stroke-dashoffset="64.40264939859075" transform="rotate(-316.582 50 50)"><animateTransform attributeName="transform" type="rotate" calcMode="linear" values="0 50 50;-360 50 50" keyTimes="0;1" dur="1.8s" begin="0s" repeatCount="indefinite"></animateTransform></circle></svg>\n' +
+    '</div></center>');
+}
+
+$('#add_to_group_view').click(function () {
+  $(".selected-group").html("");
+  $("#search_result_table").appendTo(".selected-group");
+  $(".selected-group").attr('gid', '-1');
+  $(".selected-group table").attr('id', 'datatable-search');
+  $("#search_result_table").attr('id', '');
+  $("#group-placeholder").addClass("hidden");
+});
