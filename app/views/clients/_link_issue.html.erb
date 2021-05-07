@@ -16,13 +16,13 @@
                 <ul class="collection issue-template-collection">
                     <% @issues.each do |issue| %>
                         <li class="collection-item issue-template-collection-item">
-                            <i class="material-icons left <%= issue.color %>-text text-darken-2">bug_report</i><%= issue.title %>    
+                            <i class="material-icons left <%= issue.color_hex %>-text text-darken-2">bug_report</i><%= issue.title %>
                             <%= link_to '<i class="material-icons green-text text-darken-3">link</i>'.html_safe, clients_link_issue_path(@client, issue), remote: "true", :class => "secondary-content tooltipped", data: { position: "bottom", tooltip: "Link client to that issue" } %>
                         </li>
-                    <% end %>   
-                </ul> 
+                    <% end %>
+                </ul>
             </div>
-        </div>    
+        </div>
     </div>
 </div>
 <div class="modal-footer">
