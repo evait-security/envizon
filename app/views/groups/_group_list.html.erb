@@ -1,6 +1,6 @@
 <div class="form-check form-switch mb-3">
-  <input class="form-check-input toogle_group_view" type="checkbox" id="toogle_group_view">
-  <label class="form-check-label" for="toogle_group_view">Toggle group / subnet view</label>
+  <input class="form-check-input toggle_group_view" type="checkbox" id="toggle_group_view">
+  <label class="form-check-label" for="toggle_group_view">Toggle group / subnet view</label>
 </div>
 <% if current_page?(images_path) %>
   <div class="form-check form-switch mb-3">
@@ -97,7 +97,8 @@
   </ul>
 </div>
 <script>
-  $(document).on("click", '#toogle_group_view', function() {
+  $(document).off("click", '.toggle_group_view');
+  $(document).on("click", '.toggle_group_view', function() {
     $(".subnet_view").toggleClass("hidden");
     $(".groups_view").toggleClass("hidden");
     $(this).blur();
