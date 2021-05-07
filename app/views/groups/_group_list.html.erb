@@ -1,12 +1,21 @@
-<ul class="list-group">
-  <% if Group.all.size == 0 %>
+<div class="form-check form-switch mb-3">
+  <input class="form-check-input toogle_group_view" type="checkbox" id="toogle_group_view">
+  <label class="form-check-label" for="toogle_group_view">Toggle group / subnet view</label>
+</div>
+<% if current_page?(images_path) %>
+  <div class="form-check form-switch mb-3">
+    <input class="form-check-input select-all-none" type="checkbox" id="flexSwitchCheckChecked" checked>
+    <label class="form-check-label" for="flexSwitchCheckChecked">Toggle select all / none</label>
+  </div>
+<% end %>
+<ul class="list-group groups_view">
+  <% if @all_groups.size == 0 %>
     <li class="list-group-item d-flex justify-content-between align-items-center">No Groups available</li>
   <% else %>
     <%
-      allGroups = Group.all.order(mod: :asc, name: :asc).to_a
       clientlessGroups = []
     %>
-    <% allGroups.each do | current_group | %>
+    <% @all_groups.each do | current_group | %>
       <% if current_group.clients.select{|c|c.archived != true}.size > 0 %>
         <li class="list-group-item d-flex align-items-center pointer group-collection-item" id="info_<%= "#{current_group.id}" %>" gid="<%= "#{current_group.id}" %>">
           <div class="flex-grow-1">
@@ -40,3 +49,57 @@
     <% end %>
   <% end %>
 </ul>
+<div class="subnet_view hidden">
+  <ul class="list-group">
+    <% @segments_24.each do |segment, clients_count, groups| %>
+      <li class="list-group-item d-flex align-items-center pointer">
+        <div class="flex-grow-1">
+          <i class="fas fa-network-wired me-2 text-dark"></i><%= "#{segment}.0/24" %>
+        </div>
+        <span class="badge bg-light text-dark"><%= "#{clients_count}" %></span>
+      </li>
+      <li class="list-group-item d-flex align-items-center">
+        <% groups.each do |group| %>
+          <span class="badge bg-light text-dark me-1"><%= "#{group}" %></span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+  <ul class="list-group mt-3">
+    <% @segments_16.each do |segment, clients_count, groups| %>
+      <li class="list-group-item d-flex align-items-center pointer">
+        <div class="flex-grow-1">
+          <i class="fas fa-network-wired me-2 text-dark"></i><%= "#{segment}.0.0/16" %>
+        </div>
+        <span class="badge bg-light text-dark"><%= "#{clients_count}" %></span>
+      </li>
+      <li class="list-group-item d-flex align-items-center">
+        <% groups.each do |group| %>
+          <span class="badge bg-light text-dark me-1"><%= "#{group}" %></span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+  <ul class="list-group mt-3">
+    <% @segments_8.each do |segment, clients_count, groups| %>
+      <li class="list-group-item d-flex align-items-center pointer">
+        <div class="flex-grow-1">
+          <i class="fas fa-network-wired me-2 text-dark"></i><%= "#{segment}.0.0.0/8" %>
+        </div>
+        <span class="badge bg-light text-dark"><%= "#{clients_count}" %></span>
+      </li>
+      <li class="list-group-item d-flex align-items-center">
+        <% groups.each do |group| %>
+          <span class="badge bg-light text-dark me-1"><%= "#{group}" %></span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>
+<script>
+  $(document).on("click", '#toogle_group_view', function() {
+    $(".subnet_view").toggleClass("hidden");
+    $(".groups_view").toggleClass("hidden");
+    $(this).blur();
+  });
+</script>

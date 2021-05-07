@@ -28,10 +28,15 @@ class GroupsController < ApplicationController
   #
   # Render the sidebar in the group view
   def group_list
+    load_groups_and_segments
     respond_to do |format|
       format.html {}
       format.js { render 'groups/group_list' }
     end
+  end
+
+  def index
+    load_groups_and_segments
   end
 
   # @url /groups
@@ -307,6 +312,31 @@ class GroupsController < ApplicationController
   end
 
   private
+
+  def load_groups_and_segments
+    @all_groups = Group.all.order(mod: :asc, name: :asc).to_a
+    @all_clients = Client.where(archived: false)
+    all_ips = @all_clients.pluck(:ip)
+    ip_t = Client.arel_table[:ip]
+
+    # /24
+    @segments_24 = []
+    all_ips.group_by {|ip|ip.split(".")[0,3]}.each do |segment,clients|
+      @segments_24 << [segment.join("."), clients.size, @all_clients.where(ip_t.matches("%#{segment.join(".")}%")).map{|c|c.groups.pluck(:name)}.flatten.uniq.sort]
+    end
+
+    # /16
+    @segments_16 = []
+    all_ips.group_by {|ip|ip.split(".")[0,2]}.each do |segment,clients|
+      @segments_16 << [segment.join("."), clients.size, @all_clients.where(ip_t.matches("%#{segment.join(".")}%")).map{|c|c.groups.pluck(:name)}.flatten.uniq.sort]
+    end
+
+    # /8
+    @segments_8 = []
+    all_ips.group_by {|ip|ip.split(".")[0,1]}.each do |segment,clients|
+      @segments_8 << [segment.join("."), clients.size, @all_clients.where(ip_t.matches("%#{segment.join(".")}%")).map{|c|c.groups.pluck(:name)}.flatten.uniq.sort]
+    end
+  end
 
   def respond_with_refresh(message, mod_gids, delete, type = 'notice')
     if current_user.settings.find_by_name('global_notify').value.include? "true"
