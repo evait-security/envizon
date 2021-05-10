@@ -6,10 +6,10 @@
     <%= link_to clients_new_issue_form_path(client), remote: true, class: "btn btn-sm btn-outline-danger" do %><i class="fas fa-bug me-2"></i>new<% end %>
   </div>
   <div class="btn-group me-1" role="group" aria-label="group-actions">
-    <%= link_to clients_new_issue_form_path(client), remote: true, class: "btn btn-sm btn-outline-warning" do %><i class="fas fa-bug me-2"></i>ln -s<% end %>
+    <%= link_to clients_link_issue_form_path(client), remote: true, class: "btn btn-sm btn-outline-warning" do %><i class="fas fa-bug me-2"></i>ln -s<% end %>
   </div>
   <div class="btn-group" role="group" aria-label="group-actions">
-    <%= link_to clients_new_issue_form_path(client), remote: true, class: "btn btn-sm btn-outline-success" do %><i class="fas fa-sticky-note me-2"></i>echo "note" ><% end %>
+    <%= link_to new_note_path(client.model_name, client), remote: true, class: "btn btn-sm btn-outline-success" do %><i class="fas fa-sticky-note me-2"></i>echo "note"<% end %>
   </div>
 </div>
 <div class="d-flex mt-2 pb-2 align-items-center text-muted border-bottom">
@@ -60,7 +60,7 @@
   <% client.notes.each do |note| %>
     <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
       <%= note.content %>
-      <button type="button" id="<%= note.id %>" onclick="delete_note(this.id)" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      <button type="button" id="<%= note.id %>" onclick="this.blur();delete_note(this.id);" class="btn-close" aria-label="Close"></button>
   </div>
   <% end %>
 </div>

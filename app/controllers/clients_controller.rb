@@ -39,7 +39,7 @@ class ClientsController < ApplicationController
         archived += 1
       end
       message = "Archived #{archived} client(s)"
-      respond_with_refresh(message, params[:source_group],"-2", "-2")
+      respond_with_refresh(message, params[:source_group], false)
     end
   end
 
@@ -59,7 +59,7 @@ class ClientsController < ApplicationController
         archived += 1
       end
       message = "Unarchived #{archived} client(s)"
-      respond_with_refresh(message, params[:source_group],"-2", "-2")
+      respond_with_refresh(message, params[:source_group], false)
     end
   end
 
@@ -261,10 +261,12 @@ class ClientsController < ApplicationController
     if current_user.settings.find_by_name('global_notify').value.include? "true"
       ActionCable.server.broadcast 'notification_channel', message: message
     end
+    @message = message
+    @type = type
     ActionCable.server.broadcast 'update_channel', ids: mod_gids
     respond_to do |format|
       format.html { redirect_to root_path }
-      format.js { render 'groups/group_refresh', locals: {  message: message, delete: delete, close: true, type: type } }
+      format.js { render 'groups/group_refresh', locals: { delete: delete } }
     end
   end
 end

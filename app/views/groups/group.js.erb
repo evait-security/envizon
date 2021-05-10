@@ -1,6 +1,6 @@
 <% if @archived %>
     $(".selected-group").html("<%= j(render('groups/group_archived')) %>");
-    $(".selected-group").attr('gid', '<%= @group.id %>');
+    $(".selected-group").attr('gid', 'archived');
 <% else %>
     $(".selected-group").html("<%= j(render('groups/group')) %>");
     $(".selected-group").attr('gid', '<%= @group.id %>');

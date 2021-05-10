@@ -1,6 +1,3 @@
-// close modal
-bootstrap.Modal.getInstance(document.getElementById('general-modal')).hide();
-
 <% if @message %>
   <%
     if defined?(@type).nil?
@@ -23,3 +20,6 @@ bootstrap.Modal.getInstance(document.getElementById('general-modal')).hide();
   toastr.options.positionClass = "toast-bottom-right";
   toastr.<%= classes %>('<%= @message %>');
 <% end %>
+
+general_modal = bootstrap.Modal.getInstance(document.getElementById('general-modal'))
+if (general_modal) { general_modal.hide(); }

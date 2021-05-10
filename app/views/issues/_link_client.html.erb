@@ -1,6 +1,6 @@
 <div class="modal-content">
-  <div class="modal-header bg-primary">
-    <h5 class="modal-title text-white">Current issue: <%= @issue.title %></h5>
+  <div class="modal-header bg-warning">
+    <h5 class="modal-title">Current issue: <%= @issue.title %></h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
   </div>
   <div class="modal-body">
@@ -18,8 +18,8 @@
             <td><%= current_client.ip %></td>
             <td><%= current_client.hostname %></td>
             <td>
-              <%= link_to issue_link_clients_path(@issue, current_client), remote: "true", class: "btn btn-sm btn-light" do %>
-                <i class="fas fa-link me-2"></i>Link issue
+              <%= link_to issue_link_clients_path(@issue, current_client), remote: "true" do %>
+                <button type="button" class="btn btn-warning"><i class="fas fa-link me-2"></i>Link client</button>
               <% end %>
             </td>
           </tr>
