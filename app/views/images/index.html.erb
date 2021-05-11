@@ -11,7 +11,8 @@
           </div>
         <% else %>
           <% @images.each do | image | %>
-            <div class="col-4 pb-4 <%= image.record.client.groups.map {|g| g.id }.join(" ") %>">
+            <% image_client = image.record.client %>
+            <div class="col-4 pb-4 <%= image_client.groups.map {|g| g.id }.join(" ") %> <%= "archived" if image_client.archived? %> <%= "#{image_client.ip.split(".")[0,1].join("_")}_" %> <%= "#{image_client.ip.split(".")[0,2].join("_")}_" %> <%= "#{image_client.ip.split(".")[0,3].join("_")}_" %>">
               <% image_url_ip = image.record.url_ip %>
               <% image_url_host = image.record.url_host %>
               <%= link_to image_url_ip, target: "_blank" do %>
@@ -48,6 +49,26 @@
     $(".group-collection-item").each(function( index ) {
       $(this).find("i").addClass("text-primary");
     });
+    $(".filter_segment").each(function( index ) {
+      $(this).find("i").addClass("text-primary");
+    });
+
+    // filter clients on subnet (sidebar)
+    $(document).on("click", '.filter_segment', function () {
+      $("#group-placeholder").addClass("hidden");
+      var segment = this.getAttribute("segment").replaceAll(".", "_");
+
+      // get current state
+      $state = $(this).find("i").hasClass("text-primary")
+      $(this).find("i").toggleClass("text-primary");
+      if ($state){
+        $('.' + segment).fadeOut( "slow", "linear" );
+      } else {
+        $('.' + segment).fadeIn( "slow", "linear" );
+      }
+
+      $(this).blur();
+    });
 
     // Display group on click (sidebar)
     $(document).on("click", '.group-collection-item', function() {
@@ -70,11 +91,21 @@
           $(this).find("i").addClass("text-primary");
           $('.' + id).fadeIn( "slow", "linear" );
         });
+        $(".filter_segment").each(function() {
+          var segment = this.getAttribute("segment").replaceAll(".", "_");;
+          $(this).find("i").addClass("text-primary");
+          $('.' + segment).fadeIn( "slow", "linear" );
+        });
       } else {
         $(".group-collection-item").each(function() {
           var id = this.getAttribute("gid");
           $(this).find("i").removeClass("text-primary");
           $('.' + id).fadeOut( "slow", "linear" );
+        });
+        $(".filter_segment").each(function() {
+          var segment = this.getAttribute("segment").replaceAll(".", "_");;
+          $(this).find("i").removeClass("text-primary");
+          $('.' + segment).fadeOut( "slow", "linear" );
         });
       }
       $(this).blur();

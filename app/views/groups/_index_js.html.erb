@@ -1,4 +1,30 @@
 <script>
+  // filter clients on subnet (sidebar)
+  $(document).on("click", '.filter_segment', function () {
+    $("#group-placeholder").addClass("hidden");
+    var segment = this.getAttribute("segment");
+
+    $(".filter_segment").each(function (index) {
+      $(this).find("i").removeClass("text-primary");
+    });
+    $(this).find("i").addClass("text-primary");
+
+    $.ajax({
+      url: "<%= global_search_path %>",
+      dataType: "script",
+      cache: true,
+      method: "post",
+      data: {
+        filter_clients: "true",
+        "search[val1[table]]" : "client",
+        "search[val1[name]]" : "ip",
+        "search[val1[not]]" : "false",
+        "search[val1[value]]" : segment
+      }
+    });
+    $(this).blur();
+  });
+
   // Display group on click (sidebar)
   $(document).on("click", '.group-collection-item', function () {
     $("#group-placeholder").addClass("hidden");

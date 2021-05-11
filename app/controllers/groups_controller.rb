@@ -69,7 +69,7 @@ class GroupsController < ApplicationController
       if search
         tmp_array = []
         selected_clients.each { |client| Client.find(client).groups.each { |group| tmp_array << group.id}}
-        affected_group = tmp_array.uniq.join(",")
+        affected_group = tmp_array.uniq.join('.')
       else
         affected_group = source_group.id
       end
@@ -321,20 +321,20 @@ class GroupsController < ApplicationController
 
     # /24
     @segments_24 = []
-    all_ips.group_by {|ip|ip.split(".")[0,3]}.each do |segment,clients|
-      @segments_24 << [segment.join("."), clients.size, @all_clients.where(ip_t.matches("%#{segment.join(".")}%")).map{|c|c.groups.pluck(:name)}.flatten.uniq.sort]
+    all_ips.group_by {|ip|ip.split('.')[0,3]}.each do |segment,clients|
+      @segments_24 << [segment.join('.'), clients.size, @all_clients.where(ip_t.matches("%#{segment.join('.')}%")).map{|c|c.groups.pluck(:name)}.flatten.uniq.sort]
     end
 
     # /16
     @segments_16 = []
-    all_ips.group_by {|ip|ip.split(".")[0,2]}.each do |segment,clients|
-      @segments_16 << [segment.join("."), clients.size, @all_clients.where(ip_t.matches("%#{segment.join(".")}%")).map{|c|c.groups.pluck(:name)}.flatten.uniq.sort]
+    all_ips.group_by {|ip|ip.split('.')[0,2]}.each do |segment,clients|
+      @segments_16 << [segment.join('.'), clients.size, @all_clients.where(ip_t.matches("%#{segment.join('.')}%")).map{|c|c.groups.pluck(:name)}.flatten.uniq.sort]
     end
 
     # /8
     @segments_8 = []
-    all_ips.group_by {|ip|ip.split(".")[0,1]}.each do |segment,clients|
-      @segments_8 << [segment.join("."), clients.size, @all_clients.where(ip_t.matches("%#{segment.join(".")}%")).map{|c|c.groups.pluck(:name)}.flatten.uniq.sort]
+    all_ips.group_by {|ip|ip.split('.')[0,1]}.each do |segment,clients|
+      @segments_8 << [segment.join('.'), clients.size, @all_clients.where(ip_t.matches("%#{segment.join('.')}%")).map{|c|c.groups.pluck(:name)}.flatten.uniq.sort]
     end
   end
 
@@ -359,12 +359,11 @@ class GroupsController < ApplicationController
   end
 
   def prepare_form(sym)
-    search = ActiveModel::Type::Boolean.new.cast params[:search]
-    if search
+    if params[:source_group] == 'search'
+      search = true
       Struct.new('FakeGroup', :name, :id)
       source_group = Struct::FakeGroup.new('Custom search result', -1)
     end
-
     if params.key?(:clients)
       params[:clients].each do |tmpclient|
         unless Client.exists?(tmpclient)
@@ -373,7 +372,7 @@ class GroupsController < ApplicationController
         end
       end
       clients = Client.find(params[:clients])
-      source_group ||= Group.find(params[:source_group]) unless params[:source_group].nil?
+      source_group ||= Group.find(params[:source_group]) unless search
     end
     if clients.blank? || source_group.blank?
       respond_with_notify

@@ -150,12 +150,20 @@ class ClientsController < ApplicationController
 
       respond_to do |format|
         format.html { redirect_back fallback_location: root_path }
-        format.js { render :search_result }
+        format.js {
+          if params[:filter_clients].present?
+            render 'groups/filter_clients'
+          else
+            render :search_result
+          end
+        }
       end
     else
       respond_to do |format|
         format.html { redirect_back fallback_location: root_path }
-        format.js { render :select_error }
+        @message = 'Error while parsing arguments'
+        @type = 'alert'
+        format.js { render 'layouts/notification' }
       end
     end
   end
