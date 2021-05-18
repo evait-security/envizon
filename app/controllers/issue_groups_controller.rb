@@ -1,5 +1,5 @@
 class IssueGroupsController < ApplicationController
-  before_action :set_issue_group, only: [:show, :edit, :update, :destroy]
+  before_action :set_issue_group, only: %i[show edit update destroy]
 
   # GET /issue_groups
   # GET /issue_groups.json
@@ -9,8 +9,7 @@ class IssueGroupsController < ApplicationController
 
   # GET /issue_groups/1
   # GET /issue_groups/1.json
-  def show
-  end
+  def show; end
 
   # GET /issue_groups/new
   def new
@@ -18,8 +17,7 @@ class IssueGroupsController < ApplicationController
   end
 
   # GET /issue_groups/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /issue_groups
   # POST /issue_groups.json
@@ -52,33 +50,35 @@ class IssueGroupsController < ApplicationController
   # DELETE /issue_groups/1.json
   def destroy
     if @issue_group.report_parts.count > 0
-      respond_with_notify("Issue group is not empty.","alert")
+      respond_with_notify('Issue group is not empty.', 'alert')
     else
       @issue_group.destroy
-      respond_with_refresh("Issue group was successfully destroyed.", "success")
+      respond_with_refresh('Issue group was successfully destroyed.', 'success')
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_issue_group
-      @issue_group = IssueGroup.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def issue_group_params
-      params.require(:issue_group).permit(:title, :severity, :description, :customtargets, :rating, :recommendation, :type, :index)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_issue_group
+    @issue_group = IssueGroup.find(params[:id])
+  end
 
-    def respond_with_refresh(message = 'Unknown error', type = 'alert', issue = 0)
-      @current_report = Report.first_or_create
-      @report_parts = @current_report.report_parts
-      @report_parts_ig = ReportPart.where(type: "IssueGroup")
-      @message = message
-      @type = type
-      respond_to do |format|
-        format.html { redirect_to root_path }
-        format.js { render 'issues/refresh' }
-      end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def issue_group_params
+    params.require(:issue_group).permit(:title, :severity, :description, :customtargets, :rating, :recommendation,
+                                        :type, :index)
+  end
+
+  def respond_with_refresh(message = 'Unknown error', type = 'alert', _issue = 0)
+    @current_report = Report.first_or_create
+    @report_parts = @current_report.report_parts
+    @report_parts_ig = ReportPart.where(type: 'IssueGroup')
+    @message = message
+    @type = type
+    respond_to do |format|
+      format.html { redirect_to root_path }
+      format.js { render 'issues/refresh' }
     end
+  end
 end

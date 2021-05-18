@@ -1,6 +1,8 @@
 class IssuesController < ApplicationController
-  before_action :set_issue, only: [:show, :edit, :update, :destroy, :update_template, :confirm_update_template, :new_template, :confirm_create_template, :link_client_form]
-  before_action :set_mysql_client, only: [:confirm_update_template, :update_template, :new_template]
+  before_action :set_issue,
+                only: %i[show edit update destroy update_template confirm_update_template new_template confirm_create_template
+                         link_client_form]
+  before_action :set_mysql_client, only: %i[confirm_update_template update_template new_template]
   before_action :set_client_and_issue, only: [:link_client]
 
   # GET /issues
@@ -11,8 +13,7 @@ class IssuesController < ApplicationController
 
   # GET /issues/1
   # GET /issues/1.json
-  def show
-  end
+  def show; end
 
   def confirm_create_template
     @issue_template_remote = nil
@@ -27,14 +28,10 @@ class IssuesController < ApplicationController
     uid = @mysql_client.escape(@issue.uuid.to_s)
     begin
       rt = @mysql_client.query("SELECT * FROM issue_templates WHERE id=#{uid}")
-      if rt.size == 1
-        @issue_template_remote = rt.first
-      else
-        @issue_template_remote = nil
-      end
-    rescue => exception
-      #respond_with_notify(exception.to_s, "alert")
-      respond_with_notify("something went wrong with the mysql query: 90842", "alert")
+      @issue_template_remote = (rt.first if rt.size == 1)
+    rescue StandardError => e
+      # respond_with_notify(exception.to_s, "alert")
+      respond_with_notify('something went wrong with the mysql query: 90842', 'alert')
       # redirect_back(fallback_location: root_path, alert: "something went wrong with the mysql connection2")
     end
   end
@@ -62,10 +59,10 @@ class IssuesController < ApplicationController
       it.recommendation = @issue.recommendation
       it.severity = @issue.severity
       it.save
-    rescue => exception
-      respond_with_notify("something went wrong with the mysql connection: 9080231", "alert")
+    rescue StandardError => e
+      respond_with_notify('something went wrong with the mysql connection: 9080231', 'alert')
     end
-    respond_with_refresh("Issue was successfully synced to the remote database.", "success")
+    respond_with_refresh('Issue was successfully synced to the remote database.', 'success')
   end
 
   # GET /issues/1/update_template/
@@ -87,10 +84,10 @@ class IssuesController < ApplicationController
       it.recommendation = @issue.recommendation
       it.severity = @issue.severity
       it.save
-    rescue => exception
-      respond_with_notify("something went wrong with the mysql connection: 2090203", "alert")
+    rescue StandardError => e
+      respond_with_notify('something went wrong with the mysql connection: 2090203', 'alert')
     end
-    respond_with_refresh("Issue was successfully synced to the remote database.", "success")
+    respond_with_refresh('Issue was successfully synced to the remote database.', 'success')
   end
 
   # GET /issues/new
@@ -101,14 +98,13 @@ class IssuesController < ApplicationController
 
   # GET /issues/1/edit
   def edit
-    @report_parts = ReportPart.where(type: "IssueGroup")
+    @report_parts = ReportPart.where(type: 'IssueGroup')
     case current_user.settings.where(name: 'report_mode').first_or_create.value
-    when "presentation"
+    when 'presentation'
       respond_to do |format|
         format.html { redirect_to root_path }
         format.js { render 'issues/present' }
       end
-    else
     end
   end
 
@@ -117,21 +113,25 @@ class IssuesController < ApplicationController
   def create
     respond_to do |format|
       current_report = Report.first_or_create
-      unless current_report.report_parts.empty?
+      if current_report.report_parts.empty?
+        format.html do
+          redirect_to reports_path, alert: 'No issue group found in current report. Please create a new one first.'
+        end
+      else
         lastIssueGroup = current_report.report_parts.last
-        if lastIssueGroup.type == "IssueGroup"
+        if lastIssueGroup.type == 'IssueGroup'
           if params.key?(:issue_template) && (IssueTemplate.exists? params[:issue_template])
             issue_clone = Issue.create_from_template(lastIssueGroup, IssueTemplate.find(params[:issue_template]))
-            if (params.key?(:client) && client = Client.find_by_id(params[:client]))
+            if params.key?(:client) && client = Client.find_by_id(params[:client])
               issue_clone.clients << client
             end
             format.html { redirect_to reports_path, notice: 'Issue was successfully created from template.' }
           else
             empty_issue_template = IssueTemplate.new
-            empty_issue_template.title = "New blank issue"
-            empty_issue_template.description = ""
-            empty_issue_template.rating = ""
-            empty_issue_template.recommendation = ""
+            empty_issue_template.title = 'New blank issue'
+            empty_issue_template.description = ''
+            empty_issue_template.rating = ''
+            empty_issue_template.recommendation = ''
             empty_issue_template.severity = -1
             empty_issue_template.uuid = 0
 
@@ -141,8 +141,6 @@ class IssuesController < ApplicationController
         else
           format.html { redirect_to reports_path, alert: 'Last report part is no issue group' }
         end
-      else
-        format.html { redirect_to reports_path, alert: 'No issue group found in current report. Please create a new one first.' }
       end
     end
   end
@@ -155,11 +153,13 @@ class IssuesController < ApplicationController
       screenshot.description = params[:issue][:screenshot][:description]
       screenshot.save
       screenshot.image.attach(params[:issue][:screenshot][:image])
+    else
+      @no_rerender_issue = true
     end
     if @issue.update(issue_params)
-      respond_with_refresh("Issue was successfully updated.", "success")
+      respond_with_refresh('Issue was successfully updated.', 'success')
     else
-      respond_with_notify(@issue.errors, "alert")
+      respond_with_notify(@issue.errors, 'alert')
     end
   end
 
@@ -169,15 +169,15 @@ class IssuesController < ApplicationController
     @issue.clients.delete_all
     @issue.screenshots.delete_all
     @issue.destroy
-    respond_with_refresh("Issue was successfully destroyed.", "success")
+    respond_with_refresh('Issue was successfully destroyed.', 'success')
   end
 
   def link_client_form
     if @issue
       @clients = Client.all
       respond_to do |format|
-          format.html { redirect_back root_path }
-          format.js { render 'issues/link_client' }
+        format.html { redirect_back root_path }
+        format.js { render 'issues/link_client' }
       end
     end
   end
@@ -185,55 +185,47 @@ class IssuesController < ApplicationController
   def link_client
     if @issue && @client
       @issue.clients << @client
-      if @issue.save
-        respond_with_notify("Client linked successfully - refresh needed","success")
-      end
+      respond_with_notify('Client linked successfully - refresh needed', 'success') if @issue.save
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_issue
-      unless @issue = Issue.find_by_id(params[:id])
-        respond_with_notify("Value not found in DB", "alert")
-      end
-    end
 
-    def set_client_and_issue
-      unless @issue = Issue.find_by_id(params[:id])
-        respond_with_notify("Value not found in DB", "alert")
-      end
-      unless @client = Client.find_by_id(params[:client])
-        respond_with_notify("Value not found in DB", "alert")
-      end
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_issue
+    respond_with_notify('Value not found in DB', 'alert') unless @issue = Issue.find_by_id(params[:id])
+  end
 
-    def set_mysql_client
-      begin
-        @mysql_client = Mysql2::Client.new(JSON.parse(current_user.settings.where(name: 'mysql_connection').first_or_create.value))
-      rescue => exception
-        respond_with_notify(exception, "alert")
-      end
-    end
+  def set_client_and_issue
+    respond_with_notify('Value not found in DB', 'alert') unless @issue = Issue.find_by_id(params[:id])
+    respond_with_notify('Value not found in DB', 'alert') unless @client = Client.find_by_id(params[:client])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def issue_params
-      params.require(:issue).permit(:title, :severity, :description, :customtargets, :rating, :recommendation, :type, :index)
-    end
+  def set_mysql_client
+    @mysql_client = Mysql2::Client.new(JSON.parse(current_user.settings.where(name: 'mysql_connection').first_or_create.value))
+  rescue StandardError => e
+    respond_with_notify(e, 'alert')
+  end
 
-    def screenshot_params
-      params.require(:issue).require(:screenshot).permit(:image, :description, :order)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def issue_params
+    params.require(:issue).permit(:title, :severity, :description, :customtargets, :rating, :recommendation, :type,
+                                  :index)
+  end
 
-    def respond_with_refresh(message = 'Unknown error', type = 'alert')
-      @current_report = Report.first_or_create
-      @report_parts = @current_report.report_parts
-      @report_parts_ig = ReportPart.where(type: "IssueGroup")
-      @message = message
-      @type = type
-      respond_to do |format|
-        format.html { redirect_to root_path }
-        format.js { render 'issues/refresh' }
-      end
+  def screenshot_params
+    params.require(:issue).require(:screenshot).permit(:image, :description, :order)
+  end
+
+  def respond_with_refresh(message = 'Unknown error', type = 'alert')
+    @current_report = Report.first_or_create
+    @report_parts = @current_report.report_parts
+    @report_parts_ig = ReportPart.where(type: 'IssueGroup')
+    @message = message
+    @type = type
+    respond_to do |format|
+      format.html { redirect_to root_path }
+      format.js { render 'issues/refresh' }
     end
+  end
 end
