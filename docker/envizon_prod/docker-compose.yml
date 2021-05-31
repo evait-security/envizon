@@ -30,6 +30,7 @@ services:
       - nmap-uploads:/usr/src/app/envizon/nmap/uploads/
       - storage:/usr/src/app/envizon/storage
       - socket-volume:/var/run
+      - ./envizon_backup:/backup
     environment:
       POSTGRES_PASSWORD: 'envizon'
       POSTGRES_USER: 'envizon'

@@ -14,7 +14,7 @@ default: &default
 
 development:
   <<: *default
-  database: <%= ENV['POSTGRES_DEVELOPMENT_DB'] ? ENV['POSTGRES_DEVELOPMENT_DB'] : 'envizon_development' %>
+  database: <%= ENV['POSTGRES_DB'] ? ENV['POSTGRES_DB'] : 'envizon' %>
   # url: <%= ENV['DATABASE_URL'] %>
 
   # The specified database role being used to connect to postgres.

@@ -1,12 +1,13 @@
 #!/bin/sh
-pg_dump -h /var/run/postgresql -U envizon envizon > /tmp/dump_envizon
-pg_dump -h /var/run/postgresql -U envizon envizon_development > /tmp/dump_envizon_development
-pg_dump -h /var/run/postgresql -U envizon envizon_test > /tmp/dump_envizon_test
 
-tar -zcf /tmp/storage.tar.gz storage/
-tar -cf backup.tar -C /tmp/ storage.tar.gz dump_envizon dump_envizon_development dump_envizon_test
+if [ -z ${1} ]; then file=$(date +"%Y-%m-%d_%H-%M"); else file=$1; fi
+db_connection_string="--dbname=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@:5432/${POSTGRES_DB}?host=${POSTGRES_HOST}"
+echo "[*] Backup database ..."
+pg_dump -c -b -F tar -f /tmp/envizon.db.tar ${db_connection_string} || exit
+echo "[*] Backup images ..."
+tar -cf /tmp/envizon.storage.tar storage/
+echo "[*] Packing archive ..."
 
-rm -f /tmp/dump_envizon
-rm -f /tmp/dump_envizon_development
-rm -f /tmp/dump_envizon_test
-rm -f /tmp/storage.tar.gz
+tar -zcf /backup/envizon_$file.tar.gz -C /tmp envizon.storage.tar envizon.db.tar
+rm /tmp/envizon.storage.tar /tmp/envizon.db.tar
+echo "[+] Done. File is located in ./envizon_backup/envizon_$file.tar.gz"

@@ -16,7 +16,6 @@ class SettingsController < ApplicationController
     %w[parallel_scans global_notify
        max_host_per_scan hosts
        mysql_connection
-       export_db import_db
        import_issue_templates report_mode].each do |param|
       param_sym = param.to_sym
       next unless params[param_sym]
@@ -44,48 +43,6 @@ class SettingsController < ApplicationController
     setting.save
   end
 
-  def export_db(_param)
-    app = Rake.application
-    app.init
-    app.add_import "#{Gem::Specification.find_by_name('yaml_db').gem_dir}/lib/tasks/yaml_db_tasks.rake"
-    app.load_rakefile
-
-    ENV['exclude'] = 'users,ar_internal_metadata'
-    app['db:data:dump'].invoke
-    app['db:data:dump'].reenable
-    file_name = 'data.yml'
-    pg_dump_name = 'envizon.db.tar'
-    pg_dump_file = Rails.root.join('db', pg_dump_name)
-
-    db_conf = Rails.configuration.database_configuration[Rails.env]
-    db_connection_string = "--dbname=postgresql://#{db_conf['username']}:#{db_conf['password']}@:5432/#{db_conf['database']}?host=#{db_conf['host']}"
-    pg_cmd = ['pg_dump',
-              '-c', '-b',
-              '-F', 'tar',
-              '-f', pg_dump_file,
-              db_connection_string]
-    `#{pg_cmd.join(' ')}`
-
-    # zip storage folder
-    output_filename = 'data.zip'
-    active_storage_filename = 'storage'
-    FileUtils.mkdir_p(Rails.root.join(active_storage_filename)) unless Dir.exist?('storage')
-    output_file = Tempfile.new(output_filename)
-
-    # fix error by open tempfile
-    Zip::OutputStream.open(output_file) { |zos| }
-    # zip the files
-    ::Zip::File.open(output_file, ::Zip::File::CREATE) do |zipfile|
-      write_entries (Dir.entries(Rails.root.join(active_storage_filename)) - %w[. ..]),
-                    active_storage_filename, zipfile, Rails.root
-      zipfile.add(file_name, Rails.root.join('db', file_name))
-      zipfile.add(pg_dump_name, pg_dump_file)
-    end
-
-    FileUtils.remove_file(pg_dump_file, force: true)
-    send_file output_file, filename: output_filename, type: 'application/zip' and return
-  end
-
   def import_issue_templates(_param)
     set_mysql_client
 
@@ -111,30 +68,6 @@ class SettingsController < ApplicationController
     rescue => exception
       { message: exception, type: 'alert' }
     end
-  end
-
-  def import_db(file)
-    extract_dir = Dir.mktmpdir
-    system("unzip #{file.first.tempfile.path} -d #{extract_dir}")
-    unziped_storage = File.join(extract_dir, 'storage')
-    unziped_data_sql = File.join(extract_dir, 'envizon.db.tar')
-    out_data_sql = Rails.root.join('db', 'envizon.db.tar')
-
-    # bug: if storage dir not exists -> die hard
-    Dir.children(Rails.root.join('storage')).each do |ch|
-      FileUtils.rm_rf(Rails.root.join('storage', ch))
-    end
-    Dir.children(unziped_storage).each do |ch|
-      FileUtils.mv(File.join(unziped_storage, ch), Rails.root.join('storage'))
-    end
-
-    app = Rake.application
-    app.init
-    app.add_import "#{Gem::Specification.find_by_name('yaml_db').gem_dir}/lib/tasks/yaml_db_tasks.rake"
-    app.load_rakefile
-
-    FileUtils.cp(Pathname.new(unziped_data_sql), out_data_sql)
-    { message: 'Import complete, now restart your Docker containers', type: 'success' }
   end
 
   def hosts(hosts_given)

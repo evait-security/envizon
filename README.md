@@ -1,9 +1,7 @@
 # envizon - by evait security
 ## network visualization & vulnerability management/reporting
 
-Version 4.2
-
-Fancy shields: Coming Soon™
+Version 5.0
 
 <img src="https://evait-security.github.io/envizon/envizon-wide-export-blue.svg" width="400px" />
 
@@ -147,9 +145,54 @@ In the `templates` section you can create issue templates you want to reuse for 
 
 In order to create a great looking report you have to edit the docx template file under `./report-templates/envizon_template.docx`. All variables used are included in the default template.
 
-## Import / Export
+## Backup / Restore
 
-The complete project / database can be exported in the settings.
+The complete project / database can be exported and imported using docker-compose and some fancy scripts located in the containers. For security reasons this function were moved from the web application to external scripts that are triggered manually.
+
+## Backup
+
+Example export current instance to `envizon_backup` volume / folder.
+
+```bash
+docker-compose exec envizon /bin/sh backup.sh
+[*] Backup database ...
+[*] Backup images ...
+[*] Packing archive ...
+[+] Done. File is located in ./envizon_backup/envizon_2021-05-31_20-58.tar.gz
+```
+
+Example export current instance to `envizon_backup` volume / folder with custom filename.
+
+```bash
+docker-compose exec envizon /bin/sh backup.sh customername
+[*] Backup database ...
+[*] Backup images ...
+[*] Packing archive ...
+[+] Done. File is located in ./envizon_backup/envizon_customername.tar.gz
+```
+## Restore
+
+Example restoring a backup and **overwriting the current instance**.
+
+```bash
+docker-compose exec envizon /bin/sh restore.sh envizon_customername.tar.gz
+[*] Copy backup to /tmp/
+[*] Extracting ...
+[*] Clean up ...
+[*] Restore images ...
+[*] Copy database backup ...
+[*] Clean up ...
+-----------------------------------------------------
+[!] Success. Please restart the container now in order to restore the database.
+[*] Use: docker-compose restart envizon
+```
+
+After executing the `restore.sh` you need to restart the envizon app container.
+
+```bash
+docker-compose restart envizon
+```
+
 
 To import an exported zip file, you can select and upload it in the settings as well.
 
