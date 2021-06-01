@@ -1,6 +1,6 @@
 // replace search result div with data table
 $(".selected-group").html("<%= j(render('clients/search_result')) %>");
-$(".selected-group").attr('gid', 'search');
+$(".selected-group").attr('gid', 'search-view');
 $(".selected-group table").attr('id', 'datatable-search-view');
 $("#group-placeholder").addClass("hidden");
 
