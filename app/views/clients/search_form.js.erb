@@ -84,6 +84,7 @@ $('#add_to_group_view').click(function () {
   $("#search_result_table").appendTo(".selected-group");
   $(".selected-group").attr('gid', 'search-view');
   $(".selected-group table").attr('id', 'datatable-search-view');
+  $("#datatable-search_wrapper").attr('id', 'datatable-search-view_wrapper');
   $("#search_result_table").attr('id', '');
   $("#group-placeholder").addClass("hidden");
 });
