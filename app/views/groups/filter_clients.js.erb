@@ -1,11 +1,11 @@
 // replace search result div with data table
 $(".selected-group").html("<%= j(render('clients/search_result')) %>");
 $(".selected-group").attr('gid', 'search');
-$(".selected-group table").attr('id', 'datatable-search');
+$(".selected-group table").attr('id', 'datatable-search-view');
 $("#group-placeholder").addClass("hidden");
 
 $(document).ready(function() {
-  $('#datatable-search').each(function() {
+  $('#datatable-search-view').each(function() {
     $( this ).DataTable({
       columnDefs: [
         { type: 'ip-address', targets: 0 }
