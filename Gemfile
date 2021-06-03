@@ -39,7 +39,6 @@ gem 'ipaddress', git: 'https://github.com/ipaddress-gem/ipaddress.git'
 gem 'devise'
 
 # Form
-gem 'materialize-form'
 gem 'simple_form'
 
 # fix multipart upload not rendering js
@@ -50,7 +49,6 @@ gem 'remotipart'
 gem 'font_awesome5_rails'
 gem 'jquery-datatables-rails'
 gem 'jquery-ui-rails'
-gem 'materialize-sass'
 gem 'toastr_rails'
 
 # bootstrap

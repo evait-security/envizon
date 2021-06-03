@@ -11,7 +11,7 @@
     <%= javascript_include_tag 'jquery', 'data-turbolinks-track': 'reload' %>
   </head>
   <body>
-    <% unless devise_controller? %>
+    <% unless (controller.controller_name == "sessions" || ( controller.controller_name == "registrations" && controller.action_name == "new")) %>
       <%= render 'layouts/navigation' %>
     <% end %>
     <%= yield %>
@@ -23,7 +23,6 @@
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="full-iframe-container" id="sidekiq-modal-iframe">
-
           </div>
         </div>
       </div>

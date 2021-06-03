@@ -5,8 +5,6 @@ class RegistrationsController < Devise::RegistrationsController
   protected
 
   def one_user_registered?
-    flash.clear
-
     if ((User.count == 1) & (user_signed_in?))
       redirect_to root_path
     elsif User.count == 1
