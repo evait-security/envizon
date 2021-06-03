@@ -2,7 +2,7 @@ require 'yaml'
 
 class EnvizonCpe
   def initialize
-    @root = YAML.load_file(Rails.root.join('config', 'cpe.yml'))
+    @root = YAML.unsafe_load_file(Rails.root.join('config', 'cpe.yml')) # unsafe is okay, no user controlled input
   end
 
   def name(client)

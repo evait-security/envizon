@@ -103,6 +103,7 @@
         :windows_server_2012: Windows Server 2012
         :windows_server_2016: Windows Server 2016
         :windows_server_2019: Windows Server 2019
+        :windows_server_2022: Windows Server 2022
         :windows:
           :2000: Windows 2000
           :3.0: Windows 3.0
