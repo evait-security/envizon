@@ -12,6 +12,8 @@ class ScansController < ApplicationController
   # @required [String] :name name of the scan
   # @optional [String] :command space-separated String of nmap options
   def create
+    params[:scan][:target] = Client.where(archived: false).pluck(:ip).join(' ') if params[:all_clients].present?
+
     if %i[target name].all? { |key| params[:scan][key].present? }
       params[:scan][:command] ||= ''
       args = {
@@ -20,7 +22,6 @@ class ScansController < ApplicationController
         'command' => params[:scan][:command],
         'target' => params[:scan][:target]
       }
-
       command = NmapCommand.new(args['command'], current_user.id, args['target'])
       scan = Scan.new(name: args['scan_name'], user_id: args['user_id'])
       scan.command = 'Scan in progress…'
@@ -29,18 +30,12 @@ class ScansController < ApplicationController
 
       respond_to do |format|
         format.html { redirect_to new_scan_path }
-        # that's used because otherwise multipart-file-upload-js-async-things won't work as they should.
-        if params[:fromGroupView].present?
-          locals = { message: "Scan '#{args['scan_name']}' created", type: 'success', close: true }
-          format.js { render 'pages/notify', locals: locals }
-        else
-          format.js { render(js: %(window.location.href='#{new_scan_path}')) && return }
-        end
+        format.js {
+          respond_with_notify("Scan '#{args['scan_name']}' created", 'success')
+        }
       end
     else
-      locals = { message: 'You need to specify name and target for your scan!',
-                 type: 'alert' }
-      respond_with_notify(locals)
+      respond_with_notify('You need to specify name and target for your scan!', 'alert')
     end
   end
 
