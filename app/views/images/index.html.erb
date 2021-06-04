@@ -10,7 +10,7 @@
             <div class="alert alert-primary" role="alert">Use "Site actions" in the lower right corner to start a new screenshot scan and get some nice images</div>
           </div>
         <% else %>
-          <% @images.each do | image | %>
+          <% @images.compact.each do | image | %>
             <% image_client = image.record.client %>
             <div class="col-4 pb-4 <%= image_client.groups.map {|g| g.id }.join(" ") %> <%= "archived" if image_client.archived? %> <%= "#{image_client.ip.split(".")[0,1].join("_")}_" %> <%= "#{image_client.ip.split(".")[0,2].join("_")}_" %> <%= "#{image_client.ip.split(".")[0,3].join("_")}_" %>">
               <% image_url_ip = image.record.url_ip %>
