@@ -327,13 +327,13 @@ class GroupsController < ApplicationController
     # /16
     @segments_16 = []
     all_ips.group_by {|ip|ip.split('.')[0,2]}.each do |segment,clients|
-      @segments_16 << [segment.join('.'), clients.size, @all_clients.select{|c| c.ip.start_with?("%#{segment.join('.')}.")}.map{|c|c.groups.pluck(:name)}.flatten.uniq.sort]
+      @segments_16 << [segment.join('.'), clients.size, @all_clients.select{|c| c.ip.start_with?("#{segment.join('.')}.")}.map{|c|c.groups.pluck(:name)}.flatten.uniq.sort]
     end
 
     # /8
     @segments_8 = []
     all_ips.group_by {|ip|ip.split('.')[0,1]}.each do |segment,clients|
-      @segments_8 << [segment.join('.'), clients.size, @all_clients.select{|c| c.ip.start_with?("%#{segment.join('.')}.")}.map{|c|c.groups.pluck(:name)}.flatten.uniq.sort]
+      @segments_8 << [segment.join('.'), clients.size, @all_clients.select{|c| c.ip.start_with?("#{segment.join('.')}.")}.map{|c|c.groups.pluck(:name)}.flatten.uniq.sort]
     end
   end
 
