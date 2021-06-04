@@ -36,12 +36,11 @@ class ImagesController < ApplicationController
     @all_groups = Group.all.order(mod: :asc, name: :asc).to_a
     @all_clients = Client.where(archived: false)
     all_ips = @all_clients.pluck(:ip)
-    ip_t = Client.arel_table[:ip]
 
     # /24
     @segments_24 = []
     all_ips.group_by { |ip| ip.split('.')[0, 3] }.each do |segment, clients|
-      @segments_24 << [segment.join('.'), clients.size, @all_clients.where(ip_t.matches("%#{segment.join('.')}%")).map do |c|
+      @segments_24 << [segment.join('.'), clients.size, @all_clients.select{|c| c.ip.start_with?("#{segment.join('.')}.")}.map do |c|
                                                           c.groups.pluck(:name)
                                                         end.flatten.uniq.sort]
     end
@@ -49,7 +48,7 @@ class ImagesController < ApplicationController
     # /16
     @segments_16 = []
     all_ips.group_by { |ip| ip.split('.')[0, 2] }.each do |segment, clients|
-      @segments_16 << [segment.join('.'), clients.size, @all_clients.where(ip_t.matches("%#{segment.join('.')}%")).map do |c|
+      @segments_16 << [segment.join('.'), clients.size, @all_clients.select{|c| c.ip.start_with?("#{segment.join('.')}.")}.map do |c|
                                                           c.groups.pluck(:name)
                                                         end.flatten.uniq.sort]
     end
@@ -57,7 +56,7 @@ class ImagesController < ApplicationController
     # /8
     @segments_8 = []
     all_ips.group_by { |ip| ip.split('.')[0, 1] }.each do |segment, clients|
-      @segments_8 << [segment.join('.'), clients.size, @all_clients.where(ip_t.matches("%#{segment.join('.')}%")).map do |c|
+      @segments_8 << [segment.join('.'), clients.size, @all_clients.select{|c| c.ip.start_with?("#{segment.join('.')}.")}.map do |c|
                                                          c.groups.pluck(:name)
                                                        end.flatten.uniq.sort]
     end
