@@ -97,6 +97,29 @@
     $(this).blur();
   });
 
+  // archive clients 0 ports - group header
+  $(document).on("click", '.grp_archive_empty_ports', function () {
+    var id = $('.selected-group').attr('gid');
+    var clients = new Array();
+    $("#datatable-" + id + "_wrapper").find(".ui-selectable tr a").each(function () {
+      if ($(this).parents(".ui-selectee")) {
+        clients.push($(this).attr("id"));
+      }
+    });
+    $.ajax({
+      url: "<%= clients_archive_path %>",
+      dataType: "script",
+      cache: true,
+      method: "post",
+      data: {
+        clients: clients,
+        empty_ports: true,
+        source_group: id
+      }
+    });
+    $(this).blur();
+  });
+
   // unarchive clients - group header
   $(document).on("click", '.grp_unarchive', function () {
     var id = $('.selected-group').attr('gid');

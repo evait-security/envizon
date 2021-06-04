@@ -28,6 +28,7 @@ class ClientsController < ApplicationController
 
   def archive
     clients = Client.find(params[:clients]) if params.key?(:clients)
+    clients = clients.select{|c| c.ports.empty? } if (params.key?(:empty_ports) && params[:empty_ports] == 'true')
     if clients.blank?
       respond_with_notify
     else
