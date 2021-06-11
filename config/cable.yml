@@ -1,5 +1,4 @@
 development:
-  adapter: async
   adapter: redis
   url: <%= ENV['REDIS_URL'] ? ENV['REDIS_URL'] : 'redis://localhost:6379/0' %>
   channel_prefix: envizon_production
@@ -7,10 +6,7 @@ development:
 test:
   adapter: async
 
-# let's skip redis for now
 production:
-  adapter: async
-# production:
-#   adapter: redis
-#   url: redis://localhost:6379/1
-#   channel_prefix: envizon_production
+  adapter: redis
+  url: <%= ENV['REDIS_URL'] ? ENV['REDIS_URL'] : 'redis://localhost:6379/0' %>
+  channel_prefix: envizon_production
