@@ -54,7 +54,7 @@ class ScanWorker
           'xmlpath' => args['filename'],
           'scan_id' => args['scan_id'],
           'user_id' => args['user_id'],
-          'run_coutner' => args['run_counter'],
+          'run_counter' => args['run_counter'],
           'max_run_counter' => args['max_run_counter']
         }
         ScanParseWorker.perform_async(args_parse)

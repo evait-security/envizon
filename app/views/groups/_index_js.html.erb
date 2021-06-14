@@ -62,7 +62,6 @@
   // update group content
   $(document).on("click", '.grp_update', function () {
     var id = $('.selected-group').attr('gid');
-    $('.grp_update').tooltip('destroy');
     $.ajax({
       url: "<%= single_group_html_path %>",
       dataType: "script",

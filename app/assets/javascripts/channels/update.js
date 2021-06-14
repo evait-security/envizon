@@ -25,6 +25,8 @@ App.notification = App.cable.subscriptions.create("UpdateChannel", {
       var selected_id = $('.selected-group').attr('gid');
       if ((mod_gids.indexOf(selected_id) > -1)){
         // disable db commands for selected group
+        $(".grp_archive").addClass("disabled");
+        $(".grp_archive_empty_ports").addClass("disabled");
         $(".grp_delete").addClass("disabled");
         $(".grp_delete_clients").addClass("disabled");
         $(".grp_move").addClass("disabled");

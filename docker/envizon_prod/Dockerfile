@@ -27,7 +27,7 @@ RUN \
   cd envizon && \
   mkdir .ssl && \
   bundle config set --local without 'test:development' && \
-  bundle install --without test:development
+  bundle install
 
 RUN \
   cp /usr/src/app/envizon/docker/envizon_prod/entrypoint.sh /entrypoint.sh && \
