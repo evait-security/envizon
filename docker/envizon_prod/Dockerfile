@@ -26,6 +26,7 @@ RUN \
   git clone https://github.com/evait-security/envizon.git && \
   cd envizon && \
   mkdir .ssl && \
+  bundle config set --local without 'test:development' && \
   bundle install --without test:development
 
 RUN \

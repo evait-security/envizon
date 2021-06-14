@@ -1,9 +1,10 @@
 //= require popper
 //= require bootstrap
 //= require global
-//= require fontawesome-iconpicker.min
 //= require cable
 //= require datatables_bs
 //= require ip_address_datatable
-//= require ckeditor
 //= require toastr_rails
+//= skip
+//= require ckeditor
+//= require fontawesome-iconpicker.min

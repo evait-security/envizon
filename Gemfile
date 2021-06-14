@@ -31,9 +31,8 @@ gem 'jbuilder', '~> 2.5'
 gem 'ruby-nmap', git: 'https://github.com/sophsec/ruby-nmap.git'
 gem 'ipaddress', git: 'https://github.com/ipaddress-gem/ipaddress.git'
 
-# Icon-Pack
-# Use Material Icons directly without gem. Gem maintailer not update the gem frequently
-# gem 'material_icons', git: 'https://github.com/Angelmmiguel/material_icons'
+# psych > 4 needed
+gem 'psych', '~> 4.0', '>= 4.0.1'
 
 # Login
 gem 'devise'
@@ -70,8 +69,6 @@ gem 'e2mmap'
 gem 'thwait'
 
 # db import/export
-gem 'activerecord-import'
-gem 'yaml_db', git: 'https://github.com/evs-ch/yaml_db.git'
 gem 'mysql2'
 
 # zip
