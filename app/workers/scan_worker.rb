@@ -14,18 +14,9 @@ class ScanWorker
       return_value = nil
       scan = Scan.find(args['scan_id'])
       cmd = args['cmd']
-      options = args['options'].split
-
+      options = args['options'].split(/("[^"]+"|[^\s"]+)/).reject { |c| c.strip.empty? }.map { |c| c.gsub('"', '') }
       env = ENV
-      unless Process.uid.zero? # && askpass # wut?
-        env = askpass
-        options.unshift 'nmap'
-        options.unshift '-A'
-        cmd = 'sudo'
-      end
-
       Open3.popen3(env, cmd, *options) do |_stdin, stdout, _stderr, thread|
-
         stdout.each do |l|
           l.match(/About (.*) done/) do |m|
             puts m
@@ -66,22 +57,5 @@ class ScanWorker
         scan.save
       end
     end
-  end
-
-  def askpass
-    env = ENV.clone
-    env['SUDO_ASKPASS'] = if ENV['SUDO_ASKPASS'].present? && File.exist?(ENV['SUDO_ASKPASS'])
-                            ENV['SUDO_ASKPASS']
-                          elsif File.exist?('/usr/lib/ssh/x11-ssh-askpass')
-                            '/usr/lib/ssh/x11-ssh-askpass'
-                          else
-                            ''
-                          end
-    # TODO: that was somewhat stupid. probably should only send out a message if
-    # nmap itself returns privilege-related failure.
-    # So basically: rewrite sudo handling
-    # message = 'Couldn\'t get root privileges, please set SUDO_ASKPASS'
-    # ActionCable.server.broadcast 'notification_channel', message: message
-    env['SUDO_ASKPASS'].present? ? env : false
   end
 end
