@@ -358,7 +358,7 @@ class GroupsController < ApplicationController
   end
 
   def prepare_form(sym)
-    if params[:source_group] == 'search'
+    if params[:source_group] == 'search-view'
       search = true
       Struct.new('FakeGroup', :name, :id)
       source_group = Struct::FakeGroup.new('Custom search result', -1)

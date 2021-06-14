@@ -30,7 +30,7 @@ class ClientsController < ApplicationController
     clients = Client.find(params[:clients]) if params.key?(:clients)
     clients = clients.select{|c| c.ports.empty? } if (params.key?(:empty_ports) && params[:empty_ports] == 'true')
     if clients.blank?
-      respond_with_notify
+      respond_with_notify(params.key?(:empty_ports) ? 'No clients with 0 port count visible. Try to change the datatables length.' : 'Please make a selection')
     else
       archived = 0
       clients.each do |client|
