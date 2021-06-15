@@ -15,7 +15,7 @@ RUN \
   echo 'gem: --no-document' >> ~/.gemrc && \
   cp ~/.gemrc /etc/gemrc && \
   chmod uog+r /etc/gemrc && \
-  gem install bundler:2.1.4 && \
+  gem install bundler:2.2.6 && \
   bundle config --global build.nokogiri "--use-system-libraries" && \
   bundle config --global build.nokogumbo "--use-system-libraries" && \
   # Clean up

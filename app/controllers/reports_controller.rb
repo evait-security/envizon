@@ -33,6 +33,7 @@ class ReportsController < ApplicationController
   def index
     @current_report = Report.first_or_create
     @report_parts = @current_report.report_parts
+    @report_parts_ig = ReportPart.where(type: "IssueGroup")
   end
 
   # GET /reports/1
@@ -150,8 +151,8 @@ class ReportsController < ApplicationController
     workbook = package.workbook
 
     workbook.styles do |s|
-      #head = s.add_style :bg_color => "00", :fg_color => "FF", :b => true  
-      head = s.add_style :b => true  
+      #head = s.add_style :bg_color => "00", :fg_color => "FF", :b => true
+      head = s.add_style :b => true
       severity =[
         (s.add_style :fg_color => "3fb079"),
         (s.add_style :fg_color => "0b5394"),
@@ -186,7 +187,7 @@ class ReportsController < ApplicationController
             else
               severity_text = 'unknown'
             end
-            
+
             sheet.add_row [
                 Nokogiri::HTML(issue.title).text,
                 severity_text,
@@ -274,19 +275,15 @@ class ReportsController < ApplicationController
                                    :company_name, :street, :postalcode, :city, :title)
   end
 
-  def respond_with_refresh(_message = 'Unknown error', _type = 'alert', _issue = 0)
+  def respond_with_refresh(message = 'Unknown error', type = 'alert')
+    @current_report = Report.first_or_create
+    @report_parts = @current_report.report_parts
+    @report_parts_ig = ReportPart.where(type: "IssueGroup")
+    @message = message
+    @type = type
     respond_to do |format|
       format.html { redirect_to root_path }
-      # yes...ofc. this is ugly. #quick&dirty
-      # there exists no routine atm to reload the sidebar
-      format.js { render js: "window.location.href='" + reports_path + "'" }
-    end
-  end
-
-  def respond_with_notify(message = 'Unknown error', type = 'alert')
-    respond_to do |format|
-      format.html { redirect_to root_path }
-      format.js { render('pages/notify', locals: { message: message, type: type }) && return }
+      format.js { render 'issues/refresh' }
     end
   end
 

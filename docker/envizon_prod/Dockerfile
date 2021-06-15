@@ -13,7 +13,7 @@ RUN \
   echo 'gem: --no-document' >> ~/.gemrc && \
   cp ~/.gemrc /etc/gemrc && \
   chmod uog+r /etc/gemrc && \
-  gem install bundler:2.1.4 && \
+  gem install bundler:2.2.6 && \
   bundle config --global build.nokogiri "--use-system-libraries" && \
   bundle config --global build.nokogumbo "--use-system-libraries" && \
   # Clean up
@@ -26,7 +26,8 @@ RUN \
   git clone https://github.com/evait-security/envizon.git && \
   cd envizon && \
   mkdir .ssl && \
-  bundle install --without test:development
+  bundle config set --local without 'test:development' && \
+  bundle install
 
 RUN \
   cp /usr/src/app/envizon/docker/envizon_prod/entrypoint.sh /entrypoint.sh && \

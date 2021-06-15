@@ -44,3 +44,4 @@ config/secret
 /report-templates/*
 
 **/.envizon_secret.env
+docker/*/envizon_backup

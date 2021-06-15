@@ -1,4 +1,2 @@
-$("#medium-modal").html("<%= j(render('clients/link_issue')) %>");
-$("#medium-modal").modal('open');
-M.updateTextFields();
-$('.tooltipped').tooltip({delay: 50});
+$("#general-modal-content").html("<%= j render(partial: 'clients/link_issue') %>");
+new bootstrap.Modal(document.getElementById('general-modal')).show();

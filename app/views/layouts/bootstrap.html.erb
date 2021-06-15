@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <title>envizon by evait security</title>
+    <%= favicon_link_tag 'favicon.ico' %>
+    <%= action_cable_meta_tag %>
+    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag 'application_bootstrap', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'jquery', 'data-turbolinks-track': 'reload' %>
+  </head>
+  <body>
+    <% unless (controller.controller_name == "sessions" || ( controller.controller_name == "registrations" && controller.action_name == "new")) %>
+      <%= render 'layouts/navigation' %>
+    <% end %>
+    <%= yield %>
+  </body>
+  <footer>
+    <%= render 'toastr_rails/flash' %>
+    <%= javascript_include_tag 'application_bootstrap', 'data-turbolinks-track': 'reload' %>
+    <div class="modal iframe-modal fade" id="sidekiq-modal" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="full-iframe-container" id="sidekiq-modal-iframe">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" aria-hidden="true" id="general-modal-full">
+      <div class="modal-dialog modal-fullscreen" id="general-modal-content-full">
+        <!-- Modal placeholder for inner application stuff -->
+      </div>
+    </div>
+    <div class="modal fade" aria-hidden="true" id="general-modal">
+      <div class="modal-dialog modal-xl" id="general-modal-content">
+        <!-- Modal placeholder for inner application stuff -->
+      </div>
+    </div>
+    <div class="modal fade" aria-hidden="true" id="general-modal-s">
+      <div class="modal-dialog" id="general-modal-content-s">
+        <!-- Modal placeholder for inner application stuff -->
+      </div>
+    </div>
+  </footer>
+</html>

@@ -1,61 +1,35 @@
-<style>
-  .iconsholder {
-    box-sizing: unset;
-  }
-  .howl-iconpicker-close {
-    width: 260px;
-  }
-  .srchicons {
-    text-align: center !important;
-  }
-  .howl-iconpicker {
-    background: #fff;
-  }
-  .selectedicon {
-    background: #1976D2!important;
-    border-color: #1976D2!important;
-    color: #fff;
-  }
-</style>
 <%= simple_form_for :group, url: groups_delete_path, remote: true do |f| %>
-  <div class="modal-content p-0">
-    <div class="row red lighten-4 pt-3 pb-2">
-      <div class="col s12 center">
-          <h3 class="red-text text-darken-3">Delete whole group with selected clients</h3>
-      </div>
+  <div class="modal-content">
+    <div class="modal-header bg-danger">
+      <h5 class="modal-title text-white">Delete whole group with selected clients</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
-    <div class="row padding-2">
-      <div class="col s12">
-        <div class="card red lighten-4">
-          <div class="card-content red-text text-darken-3">
-            <span class="card-title">Warning</span>
-            <p>This task will remove the group and unlink the clients from it. All clients with no group membership will be removed from the database. (Archived clients will be ignored)</p>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col">
+          <div class="alert alert-danger" role="alert">
+            This task will remove the group and unlink the clients from it. All clients with no group membership will be removed from the database. (Archived clients will be ignored)
           </div>
         </div>
       </div>
-    </div>
-    <div class="row padding-2">
-      <div class="col s12">
-        <div class="input-field">
-          <input disabled value="<%= source_group.name %>" id="disabled" type="text" class="validate" autofocus>
-          <label for="disabled">Source Group</label>
+      <div class="row">
+        <div class="col">
+          <%= f.input :target_group, disabled: true, input_html: { value: source_group.name } %>
           <input type="hidden" name="source_group" value="<%= source_group.id %>">
         </div>
       </div>
-    </div>
-    <div class="row center-align padding-2">
-      <div class="col s12" style="margin-bottom: 13px;">
-        <label>Clients in group</label>
-      </div>
-      <div class="col s12">
-        <% clients.each do | temp_client | %>
-            <div class="chip"><%= temp_client.ip %></div>
+      <div class="row">
+        <div class="col">
+          <%= f.label :selected_clients %>
+          <% clients.each do | temp_client | %>
+            <span class="badge bg-secondary"><%= temp_client.ip %></span>
             <input type="hidden" name="selected_clients[]" value="<%= temp_client.id %>" />
-        <% end %>
+          <% end %>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="modal-footer">
-    <%= f.button :submit, 'Delete', :class => 'modal-action red darken-4' %>
+    <div class="modal-footer">
+      <%= f.button :submit, 'Delete', :class => 'btn-danger' %>
+    </div>
   </div>
 <% end %>

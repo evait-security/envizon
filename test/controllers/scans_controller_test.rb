@@ -1,15 +1,15 @@
 require 'test_helper'
 
 class ScansControllerTest < ActionDispatch::IntegrationTest
-  test 'should redirect to scans_path' do
+  test 'should redirect to new_scan_path' do
     post scans_create_url
-    assert_redirected_to scans_path
+    assert_redirected_to new_scan_path
   end
 
   test 'should not create a scan if no params given' do
     start_length = Scan.all.length
     post scans_create_url
-    assert_redirected_to scans_path
+    assert_redirected_to new_scan_path
     assert_not start_length < Scan.all.length
   end
 

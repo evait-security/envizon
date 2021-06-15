@@ -1,47 +1,8 @@
-<style>
-  #form-margin {
-    margin-top: 20%;
-    padding: 40px;
-    background-color: white;
-  }
-  .form_logo {
-    width: 50%;
-    margin-bottom: 30px;
-    margin-top: 30px;
-  }
-</style>
-
-<div class="container">
-  <div class="row">
-    <div class="col s4"></div>
-    <div class="col s4">
-      <div class="row z-depth-3" id="form-margin">
-        <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name ), html: { method: :put }) do |f| %>
-          <%= f.error_notification %>
-            <div class="row right-align" >
-              <div class="chip ">Change password</div>
-            </div>
-            <input type="hidden" name="user[username]" value="root">
-            <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-                <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
-            <% end %>
-            <div class="row">
-              <%= f.input :password, autocomplete: "off", required: true, :wrapper_html => { :class => 's12' } %>
-            </div>
-            <div class="row">
-              <%= f.input :password_confirmation, required: true, :wrapper_html => { :class => 's12' }  %>
-            </div>
-            <div class="row">
-              <%= f.input :current_password, hint: "we need your current password to confirm your changes", required: true, :wrapper_html => { :class => 's12' }  %>
-            </div>
-            <div class="row">
-              <div class="form-actions">
-                <%= f.button :submit, "Update" %>
-              </div>
-            </div>
-          <% end %>
-        </div>
-      </div>
-    </div>
-    <div class="col s4"></div>
-  </div>
+<div class="d-flex justify-content-center mt-5">
+  <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name ), html: { method: :put }) do |f| %>
+    <%= f.input :password, autocomplete: "off", required: true %>
+    <%= f.input :password_confirmation, required: true %>
+    <%= f.input :current_password, hint: "we need your current password to confirm your changes", required: true  %>
+    <%= f.button :submit, "Update password", class: "btn-primary" %>
+  <% end %>
+</div>

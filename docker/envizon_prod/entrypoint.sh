@@ -26,10 +26,16 @@ if [[ ! -f report-templates/envizon_template.docx ]]; then
   cp report-templates/envizon_template.docx.example report-templates/envizon_template.docx
 fi
 
-if [[ -f db/envizon.db.tar ]]
-then
+if [[ -f db/envizon.storage.tar ]]; then
+  echo "Importing images ..."
+  rm -rf storage/
+  tar -xf db/envizon.storage.tar
+  rm -f db/envizon.storage.tar
+fi
+
+if [[ -f db/envizon.db.tar ]]; then
   file_date=$(date +"%Y-%m-%d-%H:%M")
-  echo "Importing existing database dump."
+  echo "Importing existing database dump ..."
   echo "A backup of the current database will be placed in db/envizon.db.${file_date}.tar"
   db_connection_string="--dbname=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@:5432/${POSTGRES_DB}?host=${POSTGRES_HOST}"
   pg_dump -c -b  -F tar -f db/envizon.db.${file_date}.tar ${db_connection_string} || exit

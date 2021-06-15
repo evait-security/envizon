@@ -1,38 +1,34 @@
-$('.material-tooltip').remove();
-<% if @issue.present? && Issue.exists?(@issue.id) %>
-    $(".editor-container").html("<%= j render(partial: 'issues/edit') %>");
-<% else %>
-    $(".editor-container").html("")
+<% if @issue.present? && Issue.exists?(@issue.id) && @no_rerender_issue.blank? %>
+  $(".editor-container").html("<%= j render(partial: 'issues/edit') %>");
+<% elsif @issue.present? && !Issue.exists?(@issue.id) # remove editor if issue deleted %>
+  $(".editor-container").html("");
 <% end %>
 
 $("#report_tree").html("<%= j render(partial: 'report_parts/report_tree') %>");
-$(".editor").each(function(index, value) {
+
+<% if  @no_rerender_issue.blank? %>
+  $(".editor").each(function(index, value) {
     ClassicEditor
     .create( value, {
-        toolbar: {
-            items: [
-                'bold',
-                'italic',
-                'fontColor',
-                'fontBackgroundColor',
-                'codeBlock',
-                'highlight',
-                'fontFamily',
-                'horizontalLine',
-                'specialCharacters',
-                'link',
-                'undo',
-                'redo'
-            ]
-        },
-        language: 'de'				
+      toolbar: {
+        items: [
+          'bold',
+          'italic',
+          'fontColor',
+          'fontBackgroundColor',
+          'codeBlock',
+          'highlight',
+          'fontFamily',
+          'horizontalLine',
+          'specialCharacters',
+          'link',
+          'undo',
+          'redo'
+        ]
+      },
+      language: 'de'
     });
-});
-M.updateTextFields();
-$(document).ready(function(){
-    $('select').formSelect();
-    $('.tooltipped').tooltip({delay: 50});
-    $('.materialboxed').materialbox();
-});
-$("#medium-modal").modal('close');
-<%= render(:template => 'pages/notify', :handlers => [:erb], :formats => [:js], locals:{message: message, type: type}) %>
+  });
+<% end %>
+
+<%= render('layouts/notification') %>

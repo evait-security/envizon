@@ -1,0 +1,25 @@
+<% if @message %>
+  <%
+    if defined?(@type).nil?
+      classes = 'info'
+    else
+      case @type
+        when 'alert'
+          classes = 'error'
+        when 'notice'
+          classes = 'info'
+        when 'warning'
+          classes = 'warning'
+        when 'success'
+          classes = 'success'
+        else
+          classes = 'info'
+      end
+    end
+  %>
+  toastr.options.positionClass = "toast-bottom-right";
+  toastr.<%= classes %>('<%= @message %>');
+<% end %>
+
+general_modal = bootstrap.Modal.getInstance(document.getElementById('general-modal'))
+if (general_modal) { general_modal.hide(); }

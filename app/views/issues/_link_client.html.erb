@@ -1,217 +1,30 @@
-<div class="modal-content p-0">
-    <div class="row green lighten-4 pt-3 pb-2">
-        <div class="col s12 center">
-            <h3 class="green-text text-darken-3">Link client to issue</h3>
-        </div>
-    </div>
-    <div class="container pt-2">
-        <div class="row">
-            <div class="col s12">
-                <div class="pb-05"><label class="text optional active">Linked issue</label></div>
-                <div class="chip"><%= @issue.title %></div>
-            </div>
-        </div>
-        <div class="row group-box scale-transition" id="box_archived">
-            <div class="col s12" id="group_content_archived">
-                <div class="card material-table">
-
-                    <table id="datatable-archived" class="dt_init">
-                    <thead>
-                        <tr>
-                        <th>IP</th>
-                        <th>Hostname</th>
-                        <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% @clients.order(:ip).to_a.each do |current_client| %>
-                        <tr class="ui-selectee">
-                            <td>
-                                <%= current_client.ip %>
-                            </td>
-                            <td><%= "#{current_client.hostname}" %></td>
-                            <td>
-                                <%= link_to '<i class="material-icons green-text text-darken-3">link</i>'.html_safe, issue_link_clients_path(@issue, current_client), remote: "true", :class => "secondary-content tooltipped", data: { position: "bottom", tooltip: "Link client to that issue" } %>
-                            </td>
-                        </tr>
-                        <% end %>
-                    </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>  
-    </div>
+<div class="modal-content">
+  <div class="modal-header bg-warning">
+    <h5 class="modal-title">Current issue: <%= @issue.title %></h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  </div>
+  <div class="modal-body">
+    <table class="table table-striped table-bordered dt-init" style="width:100%">
+      <thead>
+        <tr>
+          <th>IP</th>
+          <th>Hostname</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @clients.order(:ip).to_a.each do |current_client| %>
+          <tr>
+            <td><%= current_client.ip %></td>
+            <td><%= current_client.hostname %></td>
+            <td>
+              <%= link_to issue_link_clients_path(@issue, current_client), remote: "true" do %>
+                <button type="button" class="btn btn-warning"><i class="fas fa-link me-2"></i>Link client</button>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
-<div class="modal-footer">
-
-</div>
-<script>
-    function init_datatables() {
-        // Custom JS File for Datatables with Material Design
-        // Credits: https://codepen.io/anon/pen/BddNxJ
-
-        var factory = function($, DataTable) {
-            "use strict";
-
-            /* Set the defaults for DataTables initialisation */
-            $.extend(true, DataTable.defaults, {
-                dom: "<'hiddensearch'f'>" +
-                "tr" +
-                "<'table-footer'lip'>",
-                renderer: 'material'
-            });
-
-            /* Default class modification */
-            $.extend(DataTable.ext.classes, {
-                sWrapper: "dataTables_wrapper",
-                sFilterInput: "form-control input-sm",
-                sLengthSelect: "form-control input-sm"
-            });
-
-            /* Bootstrap paging button renderer */
-            DataTable.ext.renderer.pageButton.material = function(settings, host, idx, buttons, page, pages) {
-                var api = new DataTable.Api(settings);
-                var classes = settings.oClasses;
-                var lang = settings.oLanguage.oPaginate;
-                var btnDisplay, btnClass, counter = 0;
-
-                var attach = function(container, buttons) {
-                    var i, ien, node, button;
-                    var clickHandler = function(e) {
-                        e.preventDefault();
-                        if (!$(e.currentTarget).hasClass('disabled')) {
-                            api.page(e.data.action).draw(false);
-                        }
-                    };
-
-                    for (i = 0, ien = buttons.length; i < ien; i++) {
-                        button = buttons[i];
-
-                        if ($.isArray(button)) {
-                            attach(container, button);
-                        } else {
-                            btnDisplay = '';
-                            btnClass = '';
-
-                            switch (button) {
-
-                                case 'first':
-                                    btnDisplay = lang.sFirst;
-                                    btnClass = button + (page > 0 ?
-                                        '' : ' disabled');
-                                    break;
-
-                                case 'previous':
-                                    btnDisplay = '<i class="material-icons">chevron_left</i>';
-                                    btnClass = button + (page > 0 ?
-                                        '' : ' disabled');
-                                    break;
-
-                                case 'next':
-                                    btnDisplay = '<i class="material-icons">chevron_right</i>';
-                                    btnClass = button + (page < pages - 1 ?
-                                        '' : ' disabled');
-                                    break;
-
-                                case 'last':
-                                    btnDisplay = lang.sLast;
-                                    btnClass = button + (page < pages - 1 ?
-                                        '' : ' disabled');
-                                    break;
-
-                            }
-
-                            if (btnDisplay) {
-                                node = $('<li>', {
-                                    'class': classes.sPageButton + ' ' + btnClass,
-                                    'id': idx === 0 && typeof button === 'string' ?
-                                        settings.sTableId + '_' + button : null
-                                })
-                                    .append($('<a>', {
-                                            'href': '#',
-                                            'aria-controls': settings.sTableId,
-                                            'data-dt-idx': counter,
-                                            'tabindex': settings.iTabIndex
-                                        })
-                                            .html(btnDisplay)
-                                    )
-                                    .appendTo(container);
-
-                                settings.oApi._fnBindAction(
-                                    node, {
-                                        action: button
-                                    }, clickHandler
-                                );
-
-                                counter++;
-                            }
-                        }
-                    }
-                };
-
-                // IE9 throws an 'unknown error' if document.activeElement is used
-                // inside an iframe or frame.
-                var activeEl;
-
-                try {
-                    // Because this approach is destroying and recreating the paging
-                    // elements, focus is lost on the select button which is bad for
-                    // accessibility. So we want to restore focus once the draw has
-                    // completed
-                    activeEl = $(document.activeElement).data('dt-idx');
-                } catch (e) {}
-
-                attach(
-                    $(host).empty().html('<ul class="material-pagination"/>').children('ul'),
-                    buttons
-                );
-
-                if (activeEl) {
-                    $(host).find('[data-dt-idx=' + activeEl + ']').focus();
-                }
-            };
-        }; // /factory
-
-        // Define as an AMD module if possible
-        if (typeof define === 'function' && define.amd) {
-            define(['jquery', 'datatables'], factory);
-        } else if (typeof exports === 'object') {
-            // Node/CommonJS
-            factory(require('jquery'), require('datatables'));
-        } else if (jQuery) {
-            // Otherwise simply initialise as normal, stopping multiple evaluation
-            factory(jQuery, jQuery.fn.dataTable);
-        }
-
-        $('.dt_init').dataTable({
-            "oLanguage": {
-                "sStripClasses": "",
-                "sSearch": "",
-                "sSearchPlaceholder": "Enter Keywords Here",
-                "sInfo": "_START_ -_END_ of _TOTAL_",
-                "sLengthMenu": '<span>Rows per page:</span><select class="browser-default">' +
-                '<option value="10">10</option>' +
-                '<option value="20">20</option>' +
-                '<option value="30">30</option>' +
-                '<option value="40">40</option>' +
-                '<option value="50">50</option>' +
-                '<option value="-1">All</option>' +
-                '</select></div>'
-            },
-            bAutoWidth: false,
-            columnDefs: [
-                { type: 'ip-address', targets: 0 }
-            ]
-        });
-        // remove dt-init marker
-        $('.dt_init').removeClass('dt_init');
-    }
-
-    // Call init datatables
-    $('document').ready(init_datatables());
-
-    // tooltip reinit
-    $('document').ready(function() {
-        $('.tooltipped').tooltip({delay: 50});
-    });
-</script>

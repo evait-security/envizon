@@ -1,181 +1,76 @@
-<div class="modal-content global-search-content">
-  <a href="#" class="modal-action modal-close red-text text-darken-2 right btn-flat"><i class="material-icons">close</i></a>
-  <div class="row">
-    <span>
-      <a class='dropdown-trigger btn-large btn-flat grey lighten-3 blue-text text-darken-3' href='#' data-target='client'><i class="material-icons left">laptop</i>Client</a>
-      <ul id='client' class='dropdown-content'>
-        <li><a href="#" onclick="addSearchOption('Client', 'Hostname', 0, '');">Hostname</a></li>
-        <li><a href="#" onclick="addSearchOption('Client', 'IP', 0, '');">IP Adress</a></li>
-        <li><a href="#" onclick="addSearchOption('Client', 'MAC', 0, '');">MAC Adress</a></li>
-        <li><a href="#" onclick="addSearchOption('Client', 'OS', 0, '');">Operating System</a></li>
-        <li><a href="#" onclick="addSearchOption('Client', 'CPE', 0, '');">CPE</a></li>
+<div class="modal-content">
+  <div class="modal-header bg-primary">
+    <h5 class="modal-title text-white me-4">Global client search</h5>
+    <div class="btn-group me-2">
+      <button class="btn btn-outline-light dropdown-toggle" type="button" id="dd_client" data-bs-toggle="dropdown" aria-expanded="false">
+       <i class="fas fa-laptop me-2"></i>Client
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dd_client">
+        <li><a class="dropdown-item" href="#" onclick="addSearchOption('Client', 'Hostname', 0, '');">Hostname</a></li>
+        <li><a class="dropdown-item" href="#" onclick="addSearchOption('Client', 'IP', 0, '');">IP Adress</a></li>
+        <li><a class="dropdown-item" href="#" onclick="addSearchOption('Client', 'MAC', 0, '');">MAC Adress</a></li>
+        <li><a class="dropdown-item" href="#" onclick="addSearchOption('Client', 'OS', 0, '');">Operating System</a></li>
+        <li><a class="dropdown-item" href="#" onclick="addSearchOption('Client', 'CPE', 0, '');">CPE</a></li>
       </ul>
-    </span>
-    <span class="pl-2">
-      <a class='dropdown-trigger btn-large btn-flat grey lighten-3 blue-text text-darken-3' href='#' data-target='port'><i class="material-icons left">select_all</i>Port</a>
-      <ul id='port' class='dropdown-content'>
-        <li><a href="#" onclick="addSearchOption('Port', 'Number', 0, '');">Number</a></li>
-        <li><a href="#" onclick="addSearchOption('Port', 'Service', 0, '');">Service</a></li>
-        <li><a href="#" onclick="addSearchOption('Port', 'Description', 0, '');">Description</a></li>
+    </div>
+    <div class="btn-group me-2">
+      <button class="btn btn-outline-light dropdown-toggle" type="button" id="dd_port" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-sitemap me-2"></i>Port
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dd_port">
+        <li><a class="dropdown-item" href="#" onclick="addSearchOption('Port', 'Number', 0, '');">Number</a></li>
+        <li><a class="dropdown-item" href="#" onclick="addSearchOption('Port', 'Service', 0, '');">Service</a></li>
+        <li><a class="dropdown-item" href="#" onclick="addSearchOption('Port', 'Description', 0, '');">Description</a></li>
       </ul>
-    </span>
-    <span class="pl-2">
-      <a class='dropdown-trigger btn-large btn-flat grey lighten-3 blue-text text-darken-3' href='#' data-target='dropdown_group_name'><i class="material-icons left">devices</i>Group</a>
-      <ul id='dropdown_group_name' class='dropdown-content'>
+    </div>
+    <div class="btn-group me-2">
+      <button class="btn btn-outline-light dropdown-toggle" type="button" id="dd_group" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-server me-2"></i>Group
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dd_group">
         <% Group.all.pluck(:name).uniq.each do |grp| %>
-          <li><a href="#" onclick="this.blur(); addSearchOption('Group', '<%= grp %>', 1);"><%= grp %></a></li>
+          <li><a class="dropdown-item" href="#" onclick="this.blur(); addSearchOption('Group', '<%= grp %>', 1);"><%= grp %></a></li>
         <% end %>
       </ul>
-    </span>
-    <span class="pl-2">
-      <a class='dropdown-trigger btn-large btn-flat grey lighten-3 blue-text text-darken-3' href='#' data-target='label'><i class="material-icons left">label</i>Label</a>
-      <ul id='label' class='dropdown-content'>
+    </div>
+    <div class="btn-group me-2">
+      <button class="btn btn-outline-light dropdown-toggle" type="button" id="dd_label" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-tags me-2"></i>Label
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dd_label">
         <% Label.all.uniq.each do |lbl| %>
           <% lbl_count = lbl.clients.size %>
-          <li><a href="#" onclick="this.blur(); addSearchOption('Label', '<%= lbl.name %>', 1);"><%= lbl.name %><span class="new badge <%= lbl_count > 0 ? 'blue': 'grey' %> darken-2" data-badge-caption=""><%= lbl_count %></span></a></li>
+          <li><a class="dropdown-item" href="#" onclick="this.blur(); addSearchOption('Label', '<%= lbl.name %>', 1);"><%= lbl.name %><span class="badge ms-2 <%= lbl_count > 0 ? 'bg-primary': 'bg-secondary' %>"><%= lbl_count %></span></a></li>
         <% end %>
       </ul>
-    </span>
-    <span class="pl-2">
-      <a class="btn-large btn-flat grey lighten-3 blue-text text-darken-3" onclick="addSearchOption('Output', 'Value', 0, '');"><i class="material-icons left">code</i>Script</a>
-    </span>
-    <span class="pl-2">
-      <a class="btn-large btn-flat grey lighten-3 orange-text text-darken-3" onclick="load_port_entropy()"><i class="material-icons left">bubble_chart</i>Port partition</a>
-    </span>
+    </div>
+    <a class="btn btn-outline-light me-2" onclick="addSearchOption('Output', 'Value', 0, '');"><i class="fas fa-file-code me-2"></i>Script output</a>
+    <a class="btn btn-light" onclick="load_port_entropy();"><i class="fas fa-chart-pie me-2"></i>Reload port entropy</a>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
   </div>
-  <div class="section">
+  <div class="modal-body">
     <div class="row">
-      <div class="col s4">
+      <div class="col-4">
         <%= simple_form_for :search, url: global_search_path, remote: true, multipart: true, :html => { :onsubmit => 'pre_load();', :id => 'global_search_form' } do |f| %>
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div class="form-check form-switch">
+              <input class="form-check-input" name="search_in_archived" value="true" type="checkbox" id="search_in_archived">
+              <label class="form-check-label" for="search_in_archived">Include archived</label>
+            </div>
+            <button type="submit" id="submit-search" class="btn btn-primary submit-search" disabled><i class="fas fa-play me-2"></i>Run query</button>
+          </div>
           <div id="end_of_form"></div>
         <% end %>
       </div>
-      <div class="col s8">
+      <div class="col-8 border-start">
         <div id="search_result">
           <%= render partial: "port_entropy" %>
         </div>
       </div>
     </div>
   </div>
-</div>
-
-<div class="modal-footer global-search-footer row mb-0">
-  <div class="col s6 valign-wrapper">
-    <a class="btn green darken-2 left submit-search"><i class="material-icons">search</i></a>
-    <div class="switch left tooltipped" data-position="top" data-tooltip="Toogle include archived clients in search">
-      <label><input type="checkbox" name="search_in_archived" value="true" id="search_in_archived"><span class="lever"></span></label>
-    </div>
+  <div class="modal-footer">
+    <a href="#" class="btn btn-success" data-bs-dismiss="modal" id="add_to_group_view">Add to Group-View</a>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
   </div>
-  <div class="col s6"><a href="#" class="btn modal-action blue darken-2 right" id="add_to_group_view">Add to Group-View</a></div>
-
- 
 </div>
-
-<script>
-  function load_port_entropy(){
-    pre_load();
-    $("#search_result").html("<%= j(render('port_entropy')) %>");
-  }
-  // global form counter
-  var forms = 1;
-
-  // init dropdown button
-  $('.dropdown-trigger').dropdown({ constrainWidth: false });
-
-  function addSearchOption(model, name, without_name, value) {
-    if(without_name == 0) {
-      var raw = `<div class="form_row">
-        <div class="row">
-        <input name="search[val${forms}[table]]" value="${model.toLowerCase()}" type="hidden">
-        <input name="search[val${forms}[name]]" value="${name.toLowerCase()}" type="hidden">
-          <div class="col s3" style="margin-top: 2em;">
-            <a class="btn btn-small" onclick="reverse(this);">=</a>
-            <input type="hidden" name="search[val${forms}[not]]" class="not" value="false">
-          </div>
-          <div class="input-field col s6">
-            <input name="search[val${forms}[value]]" value="${value}" type="text" class="validate">
-            <label class="active">${model} -> ${name}</label>
-          </div>
-          <div class="col s3" style="margin-top: 2em;">
-            <a class="btn btn-small red darken-1 form_row_delete"><i class="material-icons">delete</i></a>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col s11">
-            <div class="switch center-align">
-              <label>AND<input type="checkbox" name="search[val${forms}[or]]" value="true"><span class="lever"></span>OR</label>
-            </div>
-          </div>
-        </div>
-      </div>`;
-    } else {
-      var raw = `<div class="form_row">
-        <div class="row">
-        <input name="search[val${forms}[table]]" value="${model.toLowerCase()}" type="hidden">
-        <input name="search[val${forms}[name]]" value="name" type="hidden">
-          <div class="col s3" style="margin-top: 2em;">
-            <a class="btn btn-small" onclick="reverse(this);">=</a>
-            <input type="hidden" name="search[val${forms}[not]]" class="not" value="false">
-          </div>
-          <div class="input-field col s6">
-            <input name="search[val${forms}[value]]" value="${name}" type="text" class="validate">
-            <label class="active">${model}</label>
-          </div>
-          <div class="col s3" style="margin-top: 2em;">
-            <a class="btn btn-small red darken-1 form_row_delete"><i class="material-icons">delete</i></a>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col s11">
-            <div class="switch center-align">
-              <label>AND<input type="checkbox" name="search[val${forms}[or]]" value="true"><span class="lever"></span>OR</label>
-            </div>
-          </div>
-        </div>
-      </div>`;
-    }
-      // insert form row
-      $(raw).insertBefore("#end_of_form").hide().fadeIn(300);
-
-      // delete row button
-      $('.form_row_delete').click(function () {
-          $(this).parents('.form_row').fadeOut(300, function() {$(this).remove();});
-      });
-
-      // counter + 1
-      forms = forms + 1;
-  }
-
-  // = --> != --> =
-  function reverse(x) {
-      if (x.innerHTML == "="){
-          x.innerHTML = "!=";
-          $(x).siblings(".not").val("true");
-      } else {
-          x.innerHTML = "=";
-          $(x).siblings(".not").val("false");
-      }
-      x.blur();
-  }
-
-  function pre_load() {
-    // add spinner until query is ready
-    $("#search_result").html('<center><div class="preloader-svg" style="padding-top: 5em;">\n' + 
-          '<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="lds-double-ring"><circle cx="50" cy="50" ng-attr-r="{{config.radius}}" ng-attr-stroke-width="{{config.width}}" ng-attr-stroke="{{config.c1}}" ng-attr-stroke-dasharray="{{config.dasharray}}" fill="none" stroke-linecap="round" r="47" stroke-width="5" stroke="#aaaaaa" stroke-dasharray="73.82742735936014 73.82742735936014" transform="rotate(316.582 50 50)"><animateTransform attributeName="transform" type="rotate" calcMode="linear" values="0 50 50;360 50 50" keyTimes="0;1" dur="1.8s" begin="0s" repeatCount="indefinite"></animateTransform></circle><circle cx="50" cy="50" ng-attr-r="{{config.radius2}}" ng-attr-stroke-width="{{config.width}}" ng-attr-stroke="{{config.c2}}" ng-attr-stroke-dasharray="{{config.dasharray2}}" ng-attr-stroke-dashoffset="{{config.dashoffset2}}" fill="none" stroke-linecap="round" r="41" stroke-width="5" stroke="#1565C0" stroke-dasharray="64.40264939859075 64.40264939859075" stroke-dashoffset="64.40264939859075" transform="rotate(-316.582 50 50)"><animateTransform attributeName="transform" type="rotate" calcMode="linear" values="0 50 50;-360 50 50" keyTimes="0;1" dur="1.8s" begin="0s" repeatCount="indefinite"></animateTransform></circle></svg>\n' +
-          '</div></center>');
-  }
-
-  $('#add_to_group_view').click(function () {
-    $(".selected-group").html($("#search_result .group-box"));
-    $(".selected-group").attr('gid', '-1');
-    $("#group-placeholder").addClass("hidden");
-    $("#wide-modal").modal('close');
-  });
-
-  $(document).on("click", '.submit-search', function() {
-    if ($("#search_in_archived").is(":checked")){
-      $('<input>').attr({type: 'hidden',name: 'search_in_archived', value: '1'}).appendTo('#global_search_form');
-    }
-    $('#global_search_form').submit();
-  });
-</script>

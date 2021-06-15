@@ -1,20 +1,20 @@
 class IssueTemplate < ApplicationRecord
   has_many :issues
 
-  def color
+  def color_hex
     case severity
     when 0
-      'green'
+      '#3fb079;'
     when 1
-      'blue'
+      '#0b5394;'
     when 2
-      'orange'
+      '#b45f06;'
     when 3
-      'red'
+      '#990000;'
     when 4
-      'purple'
+      '#9900ff;'
     else
-      'grey'
+      '#999999;'
     end
   end
 end

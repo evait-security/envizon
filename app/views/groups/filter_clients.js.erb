@@ -1,0 +1,20 @@
+// replace search result div with data table
+$(".selected-group").html("<%= j(render('clients/search_result')) %>");
+$(".selected-group").attr('gid', 'search-view');
+$(".selected-group table").attr('id', 'datatable-search-view');
+$("#group-placeholder").addClass("hidden");
+
+$(document).ready(function() {
+  $('#datatable-search-view').each(function() {
+    $( this ).DataTable({
+      columnDefs: [
+        { type: 'ip-address', targets: 0 }
+      ],
+      lengthMenu: [ [10, 50, 100, -1], [10, 50, 100, "All"] ]
+    });
+    $( this ).children("tbody").selectable({
+      filter: 'tr',
+      cancel: 'a'
+    });
+  });
+});

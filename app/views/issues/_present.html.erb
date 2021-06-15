@@ -1,8 +1,8 @@
 <div class="row">
     <% @issue.screenshots.each do |screenshot| %>
-        <div class="col s6">
-            <%= image_tag url_for(screenshot.image), :class => "materialboxed pb-05", width: '100%' %>
-            <span><%= screenshot.description %></span><br /><br />
+        <div class="col-12 mb-5">
+          <p class="lead"><%= screenshot.description %></p>
+          <%= image_tag url_for(screenshot.image), :class => 'img-fluid' %>
         </div>
     <% end %>
 </div>

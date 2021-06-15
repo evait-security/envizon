@@ -1,13 +1,14 @@
-new_note_element = document.createElement('div');
-new_note_element.innerText = "<%= @new_note.content %>";
-new_note_element.setAttribute('class', 'chip note');
-close_note_element = document.createElement('i');
-close_note_element.innerText = "close";
-close_note_element.setAttribute('class', 'material-icons close note-delete red-text text-darken-3');
-close_note_element.setAttribute('id', '<%= @new_note.id %>');
-close_note_element.setAttribute('onclick','delete_note(this.id)');
+general_modal = bootstrap.Modal.getInstance(document.getElementById('general-modal'))
+if (general_modal) { general_modal.hide(); }
 
-new_note_element.append(close_note_element);
-$(".notes-container").append(new_note_element);
+toastr.options.positionClass = "toast-bottom-right";
+toastr.success('Note has been created successfully');
 
-$(".modal").modal("close");
+<% if @noteable.class.name == "Client" %>
+  $.ajax({
+    url: "/clients/<%= @noteable.id %>",
+    dataType : "script",
+    cache: true,
+    method: "get"
+  });
+<% end %>

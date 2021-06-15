@@ -1,5 +1,5 @@
-$("#medium-modal").html("<%= j render(partial: 'reports/edit') %>");
-$(".report-editor").each(function(index, value) {
+$(".editor-container").html("<%= j render(partial: 'reports/edit') %>");
+$(".editor").each(function(index, value) {
     ClassicEditor
     .create( value, {
         toolbar: {
@@ -18,8 +18,6 @@ $(".report-editor").each(function(index, value) {
                 'redo'
             ]
         },
-        language: 'de'				
+        language: 'de'
     });
 });
-M.updateTextFields();
-$("#medium-modal").modal('open');

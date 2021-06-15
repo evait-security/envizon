@@ -1,42 +1,39 @@
-
-<div class="modal-content p-0">
-    <div class="row green lighten-4 pt-3 pb-2">
-        <div class="col s12 center">
-            <h3 class="green-text text-darken-3">Create a new issue template</h3>
-            <p class="green-text text-darken-3">Notice: The issue uuid was not found on the remote database or is empty</p>
-        </div>
+<div class="modal-content">
+  <div class="modal-header bg-success">
+    <h5 class="modal-title text-white">Create a new issue template</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-6">
+        <h5>Title</h5>
+        <p><%= @issue.title %></p>
+      </div>
+      <div class="col-6">
+        <h5>Severity</h5>
+        <i style="color: <%= @issue.color_hex %>" class="fas fa-bug me-2"></i>
+      </div>
     </div>
-    <div class="container">
-        <div class="row">
-            <div class="col s6">
-                <h5>Title</h5>
-                <p><%= @issue.title %></p>
-            </div>
-            <div class="col s6">
-                <h5>Severity</h5>
-                <i class="material-icons left <%= @issue.color %>-text text-darken-2">bug_report</i>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col s6">
-                <h5>Description</h5>
-                <p><%= @issue.description %></p>
-            </div>
-            <div class="col s6">
-                <h5>Rating</h5>
-                <p><%= @issue.rating %></p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col s12">
-                <h5>Recommendation</h5>
-                <p><%= @issue.recommendation %></p>
-            </div>
-        </div>
+    <div class="row">
+      <div class="col-12">
+        <h5>Description</h5>
+        <p><%= @issue.description %></p>
+      </div>
     </div>
-</div>
-<div class="modal-footer">
-    <%= link_to new_template_path(@issue), remote: :true, class: "btn-flat green-text text-darken-2" do %>
-        <i class="material-icons left">backup</i>Save to cloud
+    <div class="row">
+      <div class="col-6">
+        <h5>Rating</h5>
+        <p><%= @issue.rating %></p>
+      </div>
+      <div class="col-6">
+        <h5>Recommendation</h5>
+        <p><%= @issue.recommendation %></p>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <%= link_to new_template_path(@issue), remote: :true, class: "btn btn-sm btn-primary" do %>
+      <i class="fas fa-cloud-upload-alt me-2"></i>Save to cloud
     <% end %>
+  </div>
 </div>

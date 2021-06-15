@@ -3,8 +3,7 @@ volumes:
   socket-volume:
 services:
   postgres:
-    build:
-      context: ../postgres
+    image: postgres:alpine
     container_name: envizon_postgres_local
     volumes:
       - socket-volume:/var/run
@@ -12,8 +11,6 @@ services:
       POSTGRES_PASSWORD: 'envizon'
       POSTGRES_USER: 'envizon'
       POSTGRES_DB: 'envizon'
-      POSTGRES_DEVELOPMENT_DB: 'envizon_development'
-      POSTGRES_TEST_DB: 'envizon_test'
       REDIS_URL: 'redis://redis:6379/0'
   envizon:
     build:
@@ -29,6 +26,7 @@ services:
     volumes:
       - ../../:/usr/src/app/envizon
       - socket-volume:/var/run
+      - ./envizon_backup:/backup
     environment:
       POSTGRES_PASSWORD: 'envizon'
       POSTGRES_USER: 'envizon'

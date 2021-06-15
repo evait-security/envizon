@@ -1,3 +1,7 @@
-$("#medium-modal").html("<%= j render(partial: 'issues/new') %>");
-M.updateTextFields();
-$("#medium-modal").modal('open');
+$("#general-modal-content").html("<%= j render(partial: 'issues/new') %>");
+new bootstrap.Modal(document.getElementById('general-modal')).show();
+$(document).ready(function() {
+  $('.dt-init').each(function() {
+    $( this ).DataTable();
+  });
+});

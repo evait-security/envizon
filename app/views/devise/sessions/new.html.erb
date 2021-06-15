@@ -1,38 +1,10 @@
-<style>
-  #form-margin {
-    margin-top: 20%;
-    padding: 40px;
-    background-color: white;
-  }
-  .form_logo {
-    width: 70%;
-    margin-bottom: 30px;
-    margin-top: 30px;
-  }
-</style>
-
-<div class="container">
-  <div class="row">
-    <div class="col offset-s4 s4">
-      <div class="row z-depth-1" id="form-margin">
-        <div class="row center-align" id="logo">
-          <%= image_tag("logo/envizon-wide-export-blue.svg", class:"form_logo") %>
-        </div>
-        <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name )) do |f| %>
-          <div class="row center-align" >
-                <div class="chip blue pulse lighten-5 blue-text text-darken-3">Please login with your defined password</div>
-          </div>
-          <input type="hidden" name="user[username]" value="root">
-          <div class="row">
-            <%= f.input :password, required: false, :wrapper_html => { :class => 's12' }, :input_html => { :autofocus => true } %>
-          </div>
-          <div class="row">
-            <div class="form-actions">
-              <%= f.button :submit, "Log in", class: "hidden"%>
-            </div>
-          </div>
-        <% end %>
-      </div>
-    </div>
+<div class="d-flex vh-center-wrapper">
+  <div class="vh-center">
+    <%= image_tag("logo/envizon-wide-export-blue.svg", width:"100%", class: "pb-3") %>
+    <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name )) do |f| %>
+      <input type="hidden" name="user[username]" value="root">
+      <%= f.input :password, required: true, input_html: { autofocus: true, class: ("is-invalid" unless resource.username.blank?) }, label: false, placeholder: "Provide your application password" %>
+      <%= f.button :submit, "Log in", class: "hidden" %>
+    <% end %>
   </div>
 </div>

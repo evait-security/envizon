@@ -1,3 +1,2 @@
-$("#medium-modal").modal('open');
-$("#medium-modal").html("<%= j render(partial: 'issue_groups/new') %>");
-M.updateTextFields();
+$("#general-modal-content-s").html("<%= j render(partial: 'issue_groups/new') %>");
+new bootstrap.Modal(document.getElementById('general-modal-s')).show();

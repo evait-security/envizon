@@ -28,10 +28,15 @@ class GroupsController < ApplicationController
   #
   # Render the sidebar in the group view
   def group_list
+    load_groups_and_segments
     respond_to do |format|
       format.html {}
       format.js { render 'groups/group_list' }
     end
+  end
+
+  def index
+    load_groups_and_segments
   end
 
   # @url /groups
@@ -55,16 +60,16 @@ class GroupsController < ApplicationController
     destination_group.mod = true
 
     affected_group = "-2"
-    
+
     render(:create_custom) && return unless destination_group.save # warn instead?
     message = "New empty group '#{destination_group.name}' created"
-    respond_with_refresh(message, "-2,-2", "-2") && return unless selected_clients.present?
+    respond_with_refresh(message, "-2,-2", false) && return unless selected_clients.present?
 
     if params[:move].present? && params[:move].casecmp('true').zero?
       if search
         tmp_array = []
         selected_clients.each { |client| Client.find(client).groups.each { |group| tmp_array << group.id}}
-        affected_group = tmp_array.uniq.join(",")
+        affected_group = tmp_array.uniq.join('.')
       else
         affected_group = source_group.id
       end
@@ -76,7 +81,7 @@ class GroupsController < ApplicationController
     destination_group.save
 
     message = "New group '#{destination_group.name}' with #{selected_clients.length} client(s) saved."
-    respond_with_refresh(message, "#{affected_group},-2", "-2")
+    respond_with_refresh(message, "#{affected_group},-2", false)
   end
 
   # @url /groups/create_form
@@ -111,9 +116,9 @@ class GroupsController < ApplicationController
     search ? source_group = "-2" : source_group = Group.find(params[:source_group])
     edited_groups = move_do(params[:selected_clients], destination_group, source_group, search)
     edited_groups << destination_group.id
-    
+
     message = "Moved #{params[:selected_clients].length} client(s) to group '#{destination_group.name}'"
-    respond_with_refresh(message, "#{edited_groups.join(',')}", "-2")
+    respond_with_refresh(message, "#{edited_groups.join(',')}", false)
   end
 
   def move_do(selected_clients, destination_group, source_group, search)
@@ -148,9 +153,15 @@ class GroupsController < ApplicationController
   #
   # Render a single group html datatable
   def group
+    if params[:group_id] != 'archived'
+      @group = Group.find(params[:group_id])
+    else
+      @archived = true
+    end
+
     respond_to do |format|
       format.html {}
-      format.js { render 'groups/group', locals: { group_id: params[:group_id] } }
+      format.js { render 'groups/group' }
     end
   end
 
@@ -167,7 +178,7 @@ class GroupsController < ApplicationController
     params[:selected_clients].each { |selected| destination_group.clients << Client.find(selected) }
 
     message = "Copied #{params[:selected_clients].length} client(s) to group '#{destination_group.name}'"
-    respond_with_refresh(message, "#{destination_group.id},-2", "-2")
+    respond_with_refresh(message, "#{destination_group.id},-2", false)
   end
 
   # @url /groups/delete_clients_form
@@ -205,7 +216,7 @@ class GroupsController < ApplicationController
     message = "Deleted group '#{source_group.name}'"
     source_group.destroy
 
-    respond_with_refresh(message, "#{source_group.id},-2", source_group.id)
+    respond_with_refresh(message, "#{source_group.id},-2", "true")
   end
 
   # @url /groups/delete_clients
@@ -243,7 +254,7 @@ class GroupsController < ApplicationController
       message = "Deleted #{selected_clients.length} client(s) from group '#{source_group.name}'"
     end
 
-    respond_with_refresh(message, "#{edited_groups.join(',')}", "-2")
+    respond_with_refresh(message, "#{edited_groups.join(',')}", false)
   end
 
   def scan_form
@@ -302,21 +313,40 @@ class GroupsController < ApplicationController
 
   private
 
+  def load_groups_and_segments
+    @all_groups = Group.all.order(mod: :asc, name: :asc).to_a
+    @all_clients = Client.where(archived: false)
+    all_ips = @all_clients.pluck(:ip)
+
+    # /24
+    @segments_24 = []
+    all_ips.group_by {|ip|ip.split('.')[0,3]}.each do |segment,clients|
+      @segments_24 << [segment.join('.'), clients.size, @all_clients.select{|c| c.ip.start_with?("#{segment.join('.')}.")}.map{|c|c.groups.pluck(:name)}.flatten.uniq.sort]
+    end
+
+    # /16
+    @segments_16 = []
+    all_ips.group_by {|ip|ip.split('.')[0,2]}.each do |segment,clients|
+      @segments_16 << [segment.join('.'), clients.size, @all_clients.select{|c| c.ip.start_with?("#{segment.join('.')}.")}.map{|c|c.groups.pluck(:name)}.flatten.uniq.sort]
+    end
+
+    # /8
+    @segments_8 = []
+    all_ips.group_by {|ip|ip.split('.')[0,1]}.each do |segment,clients|
+      @segments_8 << [segment.join('.'), clients.size, @all_clients.select{|c| c.ip.start_with?("#{segment.join('.')}.")}.map{|c|c.groups.pluck(:name)}.flatten.uniq.sort]
+    end
+  end
+
   def respond_with_refresh(message, mod_gids, delete, type = 'notice')
     if current_user.settings.find_by_name('global_notify').value.include? "true"
       ActionCable.server.broadcast 'notification_channel', message: message
     end
     ActionCable.server.broadcast 'update_channel', ids: mod_gids
+    @message = message
+    @type = type
     respond_to do |format|
       format.html { redirect_to root_path }
-      format.js { render 'groups/group_refresh', locals: {  message: message, delete: delete, close: true, type: type } }
-    end
-  end
-
-  def respond_with_notify(message = 'Please make a selection', type = 'alert')
-    respond_to do |format|
-      format.html { redirect_to root_path }
-      format.js { render 'pages/notify', locals: { message: message, type: type } }
+      format.js { render 'groups/group_refresh', locals: { delete: delete } }
     end
   end
 
@@ -328,12 +358,11 @@ class GroupsController < ApplicationController
   end
 
   def prepare_form(sym)
-    search = ActiveModel::Type::Boolean.new.cast params[:search]
-    if search
+    if params[:source_group] == 'search-view'
+      search = true
       Struct.new('FakeGroup', :name, :id)
       source_group = Struct::FakeGroup.new('Custom search result', -1)
     end
-
     if params.key?(:clients)
       params[:clients].each do |tmpclient|
         unless Client.exists?(tmpclient)
@@ -342,7 +371,7 @@ class GroupsController < ApplicationController
         end
       end
       clients = Client.find(params[:clients])
-      source_group ||= Group.find(params[:source_group]) unless params[:source_group].nil?
+      source_group ||= Group.find(params[:source_group]) unless search
     end
     if clients.blank? || source_group.blank?
       respond_with_notify

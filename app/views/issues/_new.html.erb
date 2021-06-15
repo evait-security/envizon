@@ -1,49 +1,39 @@
-<div class="modal-content p-0">
-    <div class="row blue lighten-5 pt-3 pb-2">
-        <div class="col s12 center">
-            <h3 class="blue-text text-darken-3">Create a new issue</h3>
-        </div>
-    </div>
-    <div class="container">
-        <div class="row issue_templates">
-            <div class="col s12">
-                <div class="row search-field">
-                    <%= simple_form_for :search, url: issue_templates_search_add_path, method: "POST", remote: "true" do |f| %>
-                        <div class="input-field col s6 ">
-                            <% if @client %>
-                                <input type="hidden" name="client" value="<%= @client.id %>">
-                            <% end %>
-                            <input placeholder="Type any issue title..." id="title" name="title" type="text" autofocus>
-                            <label for="title">Search</label> 
-                        </div>
-                    <% end %>
-                    <% if @client %>
-                        <div class="col s6">
-                            <div class="pb-05"><label class="text optional active">Linked client</label></div>
-                            <div class="chip"><%= @client.ip %><%= " (#{@client.hostname})" unless @client.hostname.nil? %></div>
-                        </div>
-                    <% end %>
-                </div>
-                <ul class="collection issue-template-collection">
-                    <% @issue_templates.each do |issue_template| %>
-                        <li class="collection-item issue-template-collection-item">                        
-                            <i class="material-icons left <%= issue_template.color %>-text text-darken-2">bug_report</i><%= issue_template.title %>
-                            <%= simple_form_for @issue do |f| %>
-                                <% if @client %>
-                                    <input type="hidden" name="client" value="<%= @client.id %>">
-                                <% end %>
-                                <input type="hidden" name="issue_template" value="<%= issue_template.id %>">
-                                <button type="submit" class="btn-flat grey lighten-2 green-text text-darken-1"> <i class="material-icons left">add</i>create issue</button>
-                            <% end %>                        
-                        </li>
-                    <% end %>   
-                </ul> 
-            </div>
-        </div>    
-    </div>
-</div>
-<div class="modal-footer">
+<div class="modal-content">
+  <div class="modal-header bg-primary">
+    <h5 class="modal-title text-white">Create a new issue</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  </div>
+  <div class="modal-body">
+    <table class="table table-striped table-bordered dt-init w-100">
+      <thead>
+        <tr>
+          <th>Severity</th>
+          <th>Title</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @issue_templates.each do |issue_template| %>
+          <tr>
+            <td><i style="color: <%= issue_template.color_hex %>" class="fas fa-bug"></i></td>
+            <td><%= issue_template.title %></td>
+            <td>
+              <%= simple_form_for @issue do |f| %>
+                <% if @client %>
+                    <input type="hidden" name="client" value="<%= @client.id %>">
+                <% end %>
+                <input type="hidden" name="issue_template" value="<%= issue_template.id %>">
+                <button type="submit" class="btn btn-sm btn-light"><i class="fas fa-plus me-2"></i>create issue</button>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
     <%= simple_form_for @issue do |f| %>
-        <button type="submit" class="btn blue darken-3"> <i class="material-icons left">add</i>create blank issue</button>
+      <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-plus me-2"></i>create blank issue</button>
     <% end %>
+  </div>
 </div>

@@ -1,3 +1,8 @@
-$("#medium-modal").html("<%= j(render('new')) %>");
-$("#medium-modal").modal('open');
-M.updateTextFields();
+$("#general-modal-content").html("<%= j(render('new')) %>");
+new bootstrap.Modal(document.getElementById('general-modal')).show();
+var options = {
+  animation: false, // fade in/out on show/hide ?
+  inputSearch: true, // use the input as a search box too?
+  container: false //  Appends the popover to a specific element. If not set, the selected element or element parent is used
+};
+$('.iconpicker').iconpicker(options);

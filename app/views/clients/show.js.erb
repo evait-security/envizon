@@ -1,21 +1,32 @@
 $("#hostview").html("<%= j(render('show', :client=> client)) %>");
-$('.collapsible').collapsible();
-$("#hostview_copy_ip").click(function () {
-    copyToClipboard('#hostview_ip');
-    M.toast({html: "IP address copied to clipboard!", displayLength: "2000", classes: "green"});
-});
-
+$(".hostview_copy_ip").click(function () {
+  copyToClipboard('#hostview_ip');
+  $("#hostview_ip_icon").toggleClass("fa-check");
+  $("#hostview_ip_icon").toggleClass("fa-copy");
+  toastr.success('IP address copied to clipboard');
+  setTimeout(() => {  $("#hostview_ip_icon").toggleClass("fa-check"); $("#hostview_ip_icon").toggleClass("fa-copy");}, 800);
+})
 function copyToClipboard(element) {
-    var $temp = $("<input>");
-    $("body").append($temp);
-    $temp.val($(element).text()).select();
-    document.execCommand("copy");
-    $temp.remove();
+  var $temp = $("<input>");
+  $("body").append($temp);
+  $temp.val($(element).text()).select();
+  document.execCommand("copy");
+  $temp.remove();
 }
-
-$(document).ready(function(){
-    $('.collapsible').collapsible();
-    $('.materialboxed').materialbox();
-    $('.tooltipped').tooltip();
-});
-
+function delete_note(note_id) {
+  var r = confirm("Do you want to delete the note permanently?");
+  if (r == true) {
+    $.ajax({
+      url: "/notes/" + note_id,
+      dataType : "script",
+      cache: true,
+      method: "delete"
+    });
+    $.ajax({
+      url: "/clients/" + note_id,
+      dataType : "script",
+      cache: true,
+      method: "get"
+    });
+  }
+}

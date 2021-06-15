@@ -1,30 +1,19 @@
-<div class="modal-content p-0">
-    <div class="row blue lighten-4 pt-3 pb-2">
-        <div class="col s12 center">
-            <h3 class="blue-text text-darken-3">Link client to issue</h3>
-        </div>
-    </div>
-    <div class="container pt-2">
-        <div class="row">
-            <div class="col s12">
-                <div class="pb-05"><label class="text optional active">Linked client</label></div>
-                <div class="chip"><%= @client.ip %><%= " (#{@client.hostname})" unless @client.hostname.nil? %></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col s12">
-                <ul class="collection issue-template-collection">
-                    <% @issues.each do |issue| %>
-                        <li class="collection-item issue-template-collection-item">
-                            <i class="material-icons left <%= issue.color %>-text text-darken-2">bug_report</i><%= issue.title %>    
-                            <%= link_to '<i class="material-icons green-text text-darken-3">link</i>'.html_safe, clients_link_issue_path(@client, issue), remote: "true", :class => "secondary-content tooltipped", data: { position: "bottom", tooltip: "Link client to that issue" } %>
-                        </li>
-                    <% end %>   
-                </ul> 
-            </div>
-        </div>    
-    </div>
-</div>
-<div class="modal-footer">
-
+<div class="modal-content">
+  <div class="modal-header bg-warning">
+    <h5 class="modal-title">Link client to issue: <%= @client.ip %><%= " (#{@client.hostname})" unless @client.hostname.nil? %></h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  </div>
+  <div class="modal-body">
+    <ul class="list-group">
+      <% @issues.each do |issue| %>
+        <li class="list-group-item border-top-0 border-end-0 border-start-0 d-flex align-items-center">
+          <i style="color: <%= issue.color_hex %>" class="fas fa-bug me-2"></i>
+          <span class="flex-fill"><%= issue.title %></span>
+          <%= link_to clients_link_issue_path(@client, issue), remote: "true" do %>
+            <button type="button" class="btn btn-outline-warning"><i class="fas fa-link me-2"></i>Link issue</button>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
 </div>

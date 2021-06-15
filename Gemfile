@@ -31,15 +31,13 @@ gem 'jbuilder', '~> 2.5'
 gem 'ruby-nmap', git: 'https://github.com/sophsec/ruby-nmap.git'
 gem 'ipaddress', git: 'https://github.com/ipaddress-gem/ipaddress.git'
 
-# Icon-Pack
-# Use Material Icons directly without gem. Gem maintailer not update the gem frequently
-# gem 'material_icons', git: 'https://github.com/Angelmmiguel/material_icons'
+# psych > 4 needed
+gem 'psych', '~> 4.0', '>= 4.0.1'
 
 # Login
 gem 'devise'
 
 # Form
-gem 'materialize-form'
 gem 'simple_form'
 
 # fix multipart upload not rendering js
@@ -50,7 +48,10 @@ gem 'remotipart'
 gem 'font_awesome5_rails'
 gem 'jquery-datatables-rails'
 gem 'jquery-ui-rails'
-gem 'materialize-sass'
+gem 'toastr_rails'
+
+# bootstrap
+gem 'bootstrap', git:"https://github.com/twbs/bootstrap-rubygem"
 
 # diff
 gem 'diffy'
@@ -68,8 +69,6 @@ gem 'e2mmap'
 gem 'thwait'
 
 # db import/export
-gem 'activerecord-import'
-gem 'yaml_db', git: 'https://github.com/evs-ch/yaml_db.git'
 gem 'mysql2'
 
 # zip

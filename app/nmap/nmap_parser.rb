@@ -236,7 +236,7 @@ class NmapParser
     client.labels << Label.where(
       :name => "#{script_name}",
       :description => "Generated label: #{likely ? 'Likely vulnerable' : 'Vulnerable'} to '#{vulns.join("', '")}'",
-      :priority => likely ? 'orange darken-1 white-text' : 'red darken-1 white-text' ).first_or_create
+      :priority => likely ? 'warning' : 'danger' ).first_or_create
     client.save
   end
 

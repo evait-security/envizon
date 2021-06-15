@@ -1,53 +1,106 @@
-<ul class="collection">
-<% if Group.all.size == 0 %>
-    <li class="collection-item">No Groups available</li>
-<% else %>
-    <!-- get all groups and cast to array -->
-    <% 
-        allGroups = Group.all.order(mod: :asc, name: :asc).to_a
-        clientlessGroups = []
-    %>
-    <!-- All groups with clients (Sidebar) -->
-    <% allGroups.each do | current_group | %>
-        <% if current_group.clients.select{|c|c.archived != true}.size > 0 %>
-            <a class="collection-item group-collection-item link" id="info_<%= "#{current_group.id}" %>" gid="<%= "#{current_group.id}" %>">
-                <span class="collection-item-title truncate"><%= "#{current_group.name}" %><% unless current_group.mod %>&nbsp;*<% end %></span>
-                <div class="secondary-content">
-                    <span style="float: left;" class="chip"><span class="blue-text text-darken-3"><%= "#{current_group.clients.select{|c|c.archived == false}.size}" %></span><%= " | #{current_group.clients.size}"%></span>
-                    <div style="float: right;">
-                        <%= "#{current_group.icon}".html_safe %>
-                    </div>
-                </div>
-            </a>
-        <% else %>
-            <% clientlessGroups << current_group %>
-        <% end %>
-    <% end %>
-    <!-- All groups without clients (Sidebar) -->
-    <% clientlessGroups.each do | current_group | %>
-        <% unless current_group.clients.select{|c|c.archived == false}.size > 0 %>
-            <a class="collection-item group-collection-item link" id="info_<%= "#{current_group.id}" %>" gid="<%= "#{current_group.id}" %>"> 
-                <span style="font-weight: 300 !important;" class="collection-item-title truncate"><%= "#{current_group.name}" %><% unless current_group.mod %>&nbsp;*<% end %></span>
-                <div class="secondary-content">
-                    <span style="float: left;" class="chip"><%= "#{current_group.clients.select{|c|c.archived == false}.size} | #{current_group.clients.size}" %></span>
-                    <div style="float: right;">
-                        <%= "#{current_group.icon}".html_safe %>
-                    </div>
-                </div>
-            </a>
-        <% end %>
-    <% end %>
-    <!-- Archived -->
-    <% unless Client.select{|c|c.archived == true}.size == 0 %>
-        <hr>
-        <a class="collection-item group-collection-item link" id="info_archived" gid="archived"> 
-            <span style="font-weight: 300 !important;" class="collection-item-title truncate">Archived Clients *</span>
-            <div class="secondary-content">
-                <span style="float: left;" class="chip"><%= Client.select{|c|c.archived == true}.size %></span>
-                <div style="float: right;">
-                    <i class="material-icons">archive</i>
-                </div>
-            </div>
-        </a>
-    <% end %>
+<div class="form-check form-switch mb-3">
+  <input class="form-check-input toggle_group_view" type="checkbox" id="toggle_group_view">
+  <label class="form-check-label" for="toggle_group_view">Toggle group / subnet view</label>
+</div>
+<% if current_page?(images_path) %>
+  <div class="form-check form-switch mb-3">
+    <input class="form-check-input select-all-none" type="checkbox" id="flexSwitchCheckChecked" checked>
+    <label class="form-check-label" for="flexSwitchCheckChecked">Toggle select all / none</label>
+  </div>
 <% end %>
+<ul class="list-group groups_view">
+  <% if @all_groups.size == 0 %>
+    <li class="list-group-item d-flex justify-content-between align-items-center">No Groups available</li>
+  <% else %>
+    <%
+      clientlessGroups = []
+    %>
+    <% @all_groups.each do | current_group | %>
+      <% if current_group.clients.select{|c|c.archived != true}.size > 0 %>
+        <li class="list-group-item d-flex align-items-center pointer group-collection-item" id="info_<%= "#{current_group.id}" %>" gid="<%= "#{current_group.id}" %>">
+          <div class="flex-grow-1">
+            <span class="me-2 text-dark"><%= "#{current_group.icon}".html_safe %></span><%= "#{current_group.name}" %><% unless current_group.mod %>&nbsp;*<% end %>
+          </div>
+          <% archived_count = current_group.clients.select{|c|c.archived == true}.size %>
+          <span class="badge bg-light text-dark"><%= "#{current_group.clients.select{|c|c.archived == false}.size}" %><%= " | #{archived_count}" if archived_count > 0 %></span>
+        </li>
+      <% else %>
+          <% clientlessGroups << current_group %>
+      <% end %>
+    <% end %>
+    <% clientlessGroups.each do | current_group | %>
+      <% unless current_group.clients.select{|c|c.archived == false}.size > 0 %>
+        <li class="list-group-item d-flex align-items-center pointer group-collection-item bg-light" id="info_<%= "#{current_group.id}" %>" gid="<%= "#{current_group.id}" %>">
+          <div class="flex-grow-1">
+            <span class="me-2"><%= "#{current_group.icon}".html_safe %></span><%= "#{current_group.name}" %><% unless current_group.mod %>&nbsp;*<% end %>
+          </div>
+          <% archived_count = current_group.clients.select{|c|c.archived == true}.size %>
+          <span class="badge bg-light text-dark"><%= "#{current_group.clients.select{|c|c.archived == false}.size}" %><%= " | #{archived_count}" if archived_count > 0 %></span>
+        </li>
+      <% end %>
+    <% end %>
+    <% unless Client.select{|c|c.archived == true}.size == 0 %>
+      <li class="list-group-item d-flex align-items-center pointer group-collection-item bg-light" id="info_archived" gid="archived">
+        <div class="flex-grow-1">
+          <span class="me-2 text-danger"><i class="fas fa-archive"></i></span>Archived Clients *
+        </div>
+        <span class="badge bg-light text-dark"><%= Client.select{|c|c.archived == true}.size %></span>
+      </li>
+    <% end %>
+  <% end %>
+</ul>
+<div class="subnet_view hidden">
+  <ul class="list-group">
+    <% @segments_24.each do |segment, clients_count, groups| %>
+      <li class="list-group-item d-flex align-items-center pointer filter_segment" segment="<%= "#{segment}." %>">
+        <div class="flex-grow-1">
+          <i class="fas fa-network-wired me-2"></i><%= "#{segment}.0/24" %>
+        </div>
+        <span class="badge bg-light text-dark"><%= "#{clients_count}" %></span>
+      </li>
+      <li class="list-group-item">
+        <% groups.each do |group| %>
+          <span class="badge bg-light text-dark me-1"><%= "#{group}" %></span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+  <ul class="list-group mt-3">
+    <% @segments_16.each do |segment, clients_count, groups| %>
+      <li class="list-group-item d-flex align-items-center pointer filter_segment" segment="<%= "#{segment}." %>">
+        <div class="flex-grow-1">
+          <i class="fas fa-network-wired me-2"></i><%= "#{segment}.0.0/16" %>
+        </div>
+        <span class="badge bg-light text-dark"><%= "#{clients_count}" %></span>
+      </li>
+      <li class="list-group-item">
+        <% groups.each do |group| %>
+          <span class="badge bg-light text-dark me-1"><%= "#{group}" %></span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+  <ul class="list-group mt-3">
+    <% @segments_8.each do |segment, clients_count, groups| %>
+      <li class="list-group-item d-flex align-items-center pointer filter_segment" segment="<%= "#{segment}." %>">
+        <div class="flex-grow-1">
+          <i class="fas fa-network-wired me-2"></i><%= "#{segment}.0.0.0/8" %>
+        </div>
+        <span class="badge bg-light text-dark"><%= "#{clients_count}" %></span>
+      </li>
+      <li class="list-group-item">
+        <% groups.each do |group| %>
+          <span class="badge bg-light text-dark me-1"><%= "#{group}" %></span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>
+<script>
+  $(document).off("click", '.toggle_group_view');
+  $(document).on("click", '.toggle_group_view', function() {
+    $(".subnet_view").toggleClass("hidden");
+    $(".groups_view").toggleClass("hidden");
+    $(this).blur();
+  });
+</script>

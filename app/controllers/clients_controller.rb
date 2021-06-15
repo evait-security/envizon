@@ -1,6 +1,6 @@
 # @restful_api 1.0
 # Client display and search
-class ClientsController < ApplicationController#
+class ClientsController < ApplicationController
   before_action :set_client, only: [:new_issue_form, :link_issue_form]
   before_action :set_client_and_issue, only: [:link_issue, :unlink_issue]
 
@@ -28,8 +28,9 @@ class ClientsController < ApplicationController#
 
   def archive
     clients = Client.find(params[:clients]) if params.key?(:clients)
+    clients = clients.select{|c| c.ports.empty? } if (params.key?(:empty_ports) && params[:empty_ports] == 'true')
     if clients.blank?
-      respond_with_notify
+      respond_with_notify(params.key?(:empty_ports) ? 'No clients with 0 port count visible. Try to change the datatables length.' : 'Please make a selection')
     else
       archived = 0
       clients.each do |client|
@@ -39,7 +40,7 @@ class ClientsController < ApplicationController#
         archived += 1
       end
       message = "Archived #{archived} client(s)"
-      respond_with_refresh(message, params[:source_group],"-2", "-2")
+      respond_with_refresh(message, params[:source_group], false)
     end
   end
 
@@ -53,13 +54,13 @@ class ClientsController < ApplicationController#
         client.archived = false
         if client.groups.count == 0
           unknown = Group.where(name: 'Unknown').first_or_create(mod: false, icon: '<i class="fas fa-desktop"></i>')
-          unknown << client 
+          unknown << client
         end
         client.save!
         archived += 1
       end
       message = "Unarchived #{archived} client(s)"
-      respond_with_refresh(message, params[:source_group],"-2", "-2")
+      respond_with_refresh(message, params[:source_group], false)
     end
   end
 
@@ -105,7 +106,7 @@ class ClientsController < ApplicationController#
     if @issue && @client
       @issue.clients.delete(@client)
       if @issue.save
-        respond_with_notify("Client unlinked successfully","success")
+        respond_with_notify("Client unlinked successfully","success", "$('#link_client_id-#{@client.id}').remove();")
       end
     end
   end
@@ -150,12 +151,20 @@ class ClientsController < ApplicationController#
 
       respond_to do |format|
         format.html { redirect_back fallback_location: root_path }
-        format.js { render :search_result }
+        format.js {
+          if params[:filter_clients].present?
+            render 'groups/filter_clients'
+          else
+            render :search_result
+          end
+        }
       end
     else
       respond_to do |format|
         format.html { redirect_back fallback_location: root_path }
-        format.js { render :select_error }
+        @message = 'Error while parsing arguments'
+        @type = 'alert'
+        format.js { render 'layouts/notification' }
       end
     end
   end
@@ -205,7 +214,7 @@ class ClientsController < ApplicationController#
     @client = Client.find(params[:id])
     @issue = Issue.find(params[:issue])
   end
-  
+
   def output(clients, input)
     value = input[:value].downcase if input[:value].present?
     output_param_name = { name: 'name', value: value, not: 'false' }
@@ -257,21 +266,16 @@ class ClientsController < ApplicationController#
     result.nil? ? input : @clients.where(id: result.pluck(:id)).or(@clients.where(id: input.pluck(:id))).group(:id)
   end
 
-  def respond_with_notify(message = 'Please make a selection', type = 'alert')
-    respond_to do |format|
-      format.html { redirect_to root_path }
-      format.js { render 'pages/notify', locals: { message: message, type: type, close: true } }
-    end
-  end
-
   def respond_with_refresh(message, mod_gids, delete, type = 'notice')
     if current_user.settings.find_by_name('global_notify').value.include? "true"
       ActionCable.server.broadcast 'notification_channel', message: message
     end
+    @message = message
+    @type = type
     ActionCable.server.broadcast 'update_channel', ids: mod_gids
     respond_to do |format|
       format.html { redirect_to root_path }
-      format.js { render 'groups/group_refresh', locals: {  message: message, delete: delete, close: true, type: type } }
+      format.js { render 'groups/group_refresh', locals: { delete: delete } }
     end
   end
 end
