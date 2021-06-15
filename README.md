@@ -36,3 +36,6 @@ We use envizon for our pentests in order to get an overview of a network and qui
 ## Okay, i will use this tool - how to start?
 
 https://github.com/evait-security/envizon/wiki/How-to-start
+
+## Usage instructions
+https://github.com/evait-security/envizon/wiki/Usage
