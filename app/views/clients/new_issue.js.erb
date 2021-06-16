@@ -1,7 +1,7 @@
 $("#general-modal-content").html("<%= j render(partial: 'issues/new') %>");
 new bootstrap.Modal(document.getElementById('general-modal')).show();
 $(document).ready(function() {
-  $('.dt-init').each(function() {
+  $('#new_issue_dt').each(function() {
     $( this ).DataTable();
   });
 });
