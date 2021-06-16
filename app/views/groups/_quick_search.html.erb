@@ -28,8 +28,8 @@
             <% end %>
           </tbody>
         </table>
-
       </div>
+    </div>
   </div>
 </div>
 
@@ -42,6 +42,18 @@
         $('#quick-search-modal').modal('hide');
         new bootstrap.Modal(document.getElementById('quick-search-modal')).show();
         $(':input[aria-controls="datatable-quick-search"]').last().focus();
+        break;
+      case 'a':
+        event.preventDefault();
+        if ($(".grp_mark_all").length) {
+          $(".grp_mark_all").click();
+        }
+        break;
+      case 's':
+        event.preventDefault();
+        if ($(".grp_export").length) {
+          $(".grp_export").click();
+        }
         break;
       }
     }
