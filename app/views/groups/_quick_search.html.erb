@@ -1,0 +1,64 @@
+<div class="modal" tabindex="-1" id="quick-search-modal">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Quick search</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table w-100" id="datatable-quick-search">
+          <thead>
+            <tr>
+              <th>IP</th>
+              <th>Hostname</th>
+              <th>Operating System</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @all_clients.order(:ip).to_a.each do |current_client| %>
+              <tr class="ui-selectee">
+                <td>
+                  <%= link_to "#{current_client.ip}", client_path(current_client.id), :remote => true, :id => current_client.id, :class => "client_view_quick_search" %>
+                  <% count_notes = current_client.notes.size %>
+                  <%= "<sup>#{count_notes}</sup>".html_safe if count_notes > 0 %>
+                </td>
+                <td><%= "#{current_client.hostname}" %></td>
+                <td><%= "#{current_client.os}" %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+
+      </div>
+  </div>
+</div>
+
+<script>
+  $(window).bind('keydown', function(event) {
+    if (event.ctrlKey || event.metaKey) {
+      switch (String.fromCharCode(event.which).toLowerCase()) {
+      case 'f':
+        event.preventDefault();
+        $('#quick-search-modal').modal('hide');
+        new bootstrap.Modal(document.getElementById('quick-search-modal')).show();
+        $(':input[aria-controls="datatable-quick-search"]').last().focus();
+        break;
+      }
+    }
+  });
+  $(document).ready(function() {
+    $('#datatable-quick-search').each(function() {
+      $( this ).DataTable({
+        columnDefs: [
+          { type: 'ip-address', targets: 0 }
+        ],
+        lengthMenu: [ [-1], ["All"] ]
+      });
+    });
+  });
+
+  $(document).on("click", '.client_view_quick_search', function () {
+    $('#quick-search-modal').modal('hide');
+    $(this).blur();
+  });
+</script>

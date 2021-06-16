@@ -36,16 +36,16 @@
   </thead>
   <tbody>
     <% @group.clients.where.not(archived: true).order(:ip).to_a.each do |current_client| %>
-    <tr class="ui-selectee">
-      <td>
-        <%= link_to "#{current_client.ip}", client_path(current_client.id), :remote => true, :id => current_client.id, :class => "client_view" %>
-        <% count_notes = current_client.notes.size %>
-        <%= "<sup>#{count_notes}</sup>".html_safe if count_notes > 0 %>
-      </td>
-      <td><%= "#{current_client.hostname}" %></td>
-      <td><%= "#{current_client.os}" %></td>
-      <td><%= "#{current_client.ports.count}" %></td>
-    </tr>
+      <tr class="ui-selectee">
+        <td>
+          <%= link_to "#{current_client.ip}", client_path(current_client.id), :remote => true, :id => current_client.id, :class => "client_view" %>
+          <% count_notes = current_client.notes.size %>
+          <%= "<sup>#{count_notes}</sup>".html_safe if count_notes > 0 %>
+        </td>
+        <td><%= "#{current_client.hostname}" %></td>
+        <td><%= "#{current_client.os}" %></td>
+        <td><%= "#{current_client.ports.count}" %></td>
+      </tr>
     <% end %>
   </tbody>
 </table>
