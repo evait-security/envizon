@@ -2,6 +2,21 @@
   <div class="btn-group me-auto" role="group" aria-label="group-actions">
     <button type="button" class="btn btn-sm btn-primary hostview_copy_ip"><i id="hostview_ip_icon" class="fas fa-copy me-2"></i><span id="hostview_ip"><%= "#{client.ip}" %></span></button>
   </div>
+  <% report_parts = client.report_parts %>
+  <% if report_parts.size > 0 %>
+    <div class="btn-group me-1" role="group" aria-label="group-actions">
+      <button class="btn btn-sm btn-outline-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-bug me-1"></i><%= report_parts.size %>
+      </button>
+      <ul class="dropdown-menu">
+      <% report_parts.order(:index).each do |rp| %>
+        <% if rp.is_a? Issue %>
+          <li><span class="dropdown-item disabled" style="color: <%= rp.color_hex %>"><%= rp.title %></span></li>
+        <% end %>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
   <div class="btn-group me-1" role="group" aria-label="group-actions">
     <%= link_to clients_new_issue_form_path(client), remote: true, class: "btn btn-sm btn-outline-danger" do %><i class="fas fa-bug me-2"></i>new<% end %>
   </div>

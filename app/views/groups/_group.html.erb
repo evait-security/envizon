@@ -36,10 +36,11 @@
   </thead>
   <tbody>
     <% @group.clients.where.not(archived: true).order(:ip).to_a.each do |current_client| %>
-      <tr class="ui-selectee">
+      <% count_notes = current_client.notes.size %>
+      <% has_issue = current_client.report_parts.size > 0 %>
+      <tr class="ui-selectee <%= 'alert-danger' if has_issue %>">
         <td>
           <%= link_to "#{current_client.ip}", client_path(current_client.id), :remote => true, :id => current_client.id, :class => "client_view" %>
-          <% count_notes = current_client.notes.size %>
           <%= "<sup>#{count_notes}</sup>".html_safe if count_notes > 0 %>
         </td>
         <td><%= "#{current_client.hostname}" %></td>
