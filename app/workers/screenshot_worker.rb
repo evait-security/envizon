@@ -1,6 +1,9 @@
 class ScreenshotWorker
   include Sidekiq::Worker
-  sidekiq_options queue: 'background'
+  # do not use the background que!!.
+  # This is a Worker to manage secondary Workers.
+  # if both use the the same que, this can plug them.
+  sidekiq_options queue: 'default' # !
 
   def perform(args)
     ActiveRecord::Base.connection_pool.with_connection do
