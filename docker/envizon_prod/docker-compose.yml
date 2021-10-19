@@ -50,7 +50,7 @@ services:
   sidekiq-default:
     image: evait/envizon
     container_name: envizon_sidekiq_default
-    command: bundle exec sidekiq -q default -c 5 & bundle exec sidekiq -q scan -c 5 & bundle exec sidekiq -q background -c 5
+    command: bundle exec sidekiq -q default -c 5
     depends_on:
       - postgres
       - redis

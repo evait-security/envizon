@@ -12,7 +12,7 @@ class Report < ApplicationRecord
     issue_array
   end
 
-  def self.prepare_text_docx(text) 
-    text.gsub('<pre>', '<p>').gsub('</pre>', '</p>') if text
+  def self.prepare_text_docx(text)
+    text.gsub('<pre>', '<p>').gsub('</pre>', '</p>').gsub(/(<mark class="marker-)\w+(">)/,'').gsub(/(<\/mark>)/, '') if text
   end
 end

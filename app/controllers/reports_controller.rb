@@ -77,6 +77,7 @@ class ReportsController < ApplicationController
     template = Sablon.template(File.expand_path(Rails.root.join(template_path, 'envizon_template.docx')))
 
     # init strukts
+    s_date = Struct.new(:year, :month, :day, :hour, :hour12, :meridian, :min, :second)
     s_report = Struct.new(:item, :summary, :conclusion, :issue_groups)
     s_issue_group = Struct.new(:item, :index, :issues)
     s_issue = Struct.new(:item, :index, :targets, :description, :rating, :recommendation, :screenshots)
@@ -85,6 +86,16 @@ class ReportsController < ApplicationController
     # init template context
     context = {
       title: report_file_name,
+      date: s_date.new(
+        Time.now.strftime("%Y"),
+        Time.now.strftime("%m"),
+        Time.now.strftime("%d"),
+        Time.now.strftime("%H"),
+        Time.now.strftime("%I"),
+        Time.now.strftime("%p"),
+        Time.now.strftime("%M"),
+        Time.now.strftime("%S")
+       ),
       report: s_report.new(
         @report, # report.summary
         Sablon.content(:html, <<-HTML.strip
@@ -104,15 +115,15 @@ class ReportsController < ApplicationController
                 issue, # report.issue_groups->issues->item
                 index_issue, # report.issue_groups->issues->index
                 (issue.clients.map { |c| c.ip.to_s + (c.hostname.present? ? " (#{c.hostname})" : '') } + (issue.customtargets.present? ? issue.customtargets.lines : [])).map(&:strip).reject(&:empty?), # report.issue_groups->issues->targets
-                Sablon.content(:html, <<-HTML.strip
+                issue.description.blank? ? '' : Sablon.content(:html, <<-HTML.strip
                 #{Report.prepare_text_docx(issue.description)}
                 HTML
                 ), # report.issue_groups->issues->description
-                Sablon.content(:html, <<-HTML.strip
+                issue.rating.blank? ? '' : Sablon.content(:html, <<-HTML.strip
                 #{Report.prepare_text_docx(issue.rating)}
                 HTML
                 ), # report.issue_groups->issues->rating
-                Sablon.content(:html, <<-HTML.strip
+                issue.recommendation.blank? ? '' : Sablon.content(:html, <<-HTML.strip
                 #{Report.prepare_text_docx(issue.recommendation)}
                 HTML
                 ), # report.issue_groups->issues->recommendation
