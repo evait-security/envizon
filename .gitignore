@@ -45,3 +45,4 @@ config/secret
 
 **/.envizon_secret.env
 docker/*/envizon_backup
+db/envizon.db.*.tar
