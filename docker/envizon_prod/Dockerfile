@@ -3,7 +3,7 @@ FROM ruby:2.7-alpine
 ENV BUILD_PACKAGES="curl-dev git curl ruby-dev git nmap@edge" \
     NMAP_PACKAGES="nmap@edge nmap-doc@edge nmap-ncat@edge nmap-nping@edge nmap-nselibs@edge nmap-scripts@edge" \
     DEV_PACKAGES="zlib-dev libxml2-dev libxslt-dev tzdata yaml-dev less" \
-    PACKAGES="nodejs graphviz yarn libpq@edge postgresql-dev postgresql-client@edge openssl imagemagick mariadb-dev mariadb-connector-c-dev" \
+    PACKAGES="nodejs graphviz yarn libpq postgresql-dev postgresql-client openssl imagemagick mariadb-dev mariadb-connector-c-dev" \
     RAILS_ENV="production"
 
 RUN \
@@ -28,6 +28,11 @@ RUN \
   mkdir .ssl && \
   bundle config set --local without 'test:development' && \
   bundle install
+
+RUN \
+  apk --no-cache del postgresql-dev postgresql-client && \
+  # add edge versions for pg_dump etc.
+  apk --no-cache add libpq@edge postgresql-dev@edge postgresql-client@edge
 
 RUN \
   cp /usr/src/app/envizon/docker/envizon_prod/entrypoint.sh /entrypoint.sh && \

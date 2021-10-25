@@ -227,7 +227,7 @@ GEM
     parallel (1.20.1)
     parser (3.0.1.1)
       ast (~> 2.4.1)
-    pg (0.21.0)
+    pg (1.2.3)
     popper_js (2.9.2)
     pry (0.14.1)
       coderay (~> 1.1)
@@ -399,7 +399,7 @@ GEM
       rubyzip (>= 1.0.0)
 
 PLATFORMS
-  x86_64-linux-musl
+  x86_64-linux
 
 DEPENDENCIES
   axlsx
@@ -425,7 +425,7 @@ DEPENDENCIES
   minitest-rails
   minitest-reporters
   mysql2
-  pg (~> 0.18)
+  pg (~> 1.2)
   pry
   pry-rails
   psych (~> 4.0, >= 4.0.1)
@@ -460,4 +460,4 @@ DEPENDENCIES
   zip-zip
 
 BUNDLED WITH
-   2.2.6
+   2.2.16
