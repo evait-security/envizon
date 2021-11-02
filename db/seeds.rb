@@ -12,7 +12,7 @@ if SavedScan.all.empty?
                     { name: 'Quick OS SMB detection - SMB', parameter: '--script smb-os-discovery.nse -p445 -T4' },
                     { name: 'Quick OS SMB detection - NetBIOS', parameter: '-sU -sS --script=smb-os-discovery.nse -p U:137,T:139 -T4' },
                     { name: 'Default scripts, top ports, OS detection', parameter: '-O -sC -T4' },
-                    { name: 'Default scripts, top ports, OS detection - light', parameter: '-O -sC -T4 --version-light --max-retries 2 --script-timeout 15s' },
+                    { name: 'Default scripts, top ports, OS detection - light', parameter: '-O -sC -T4 --exclude-ports 9100-9107 --version-light --max-retries 2 --script-timeout 15s' },
                     { name: 'Default scripts, top 300 ports, OS detection, service detection', parameter: '--top-ports 300 -O -sC -sV -T4' },
                     { name: 'Default scripts, top 300 ports, OS detection, service detection - light', parameter: '--top-ports 300 -O -sC -sV --exclude-ports 9100-9107 -T4 --max-retries 2 --script-timeout 15s' },
                     { name: 'Scan all ports', parameter: '-p- -T4' },
