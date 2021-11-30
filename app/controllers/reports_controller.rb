@@ -127,7 +127,7 @@ class ReportsController < ApplicationController
                 #{Report.prepare_text_docx(issue.recommendation)}
                 HTML
                 ), # report.issue_groups->issues->recommendation
-                issue.screenshots.each_with_index.map do |screenshot, index_screenshot|
+                issue.screenshots.order(:description).each_with_index.map do |screenshot, index_screenshot|
                   s_image.new( # report.issue_groups->issues->screenshots
                     screenshot, # report.issue_groups->issues->screenshots->item
                     index_screenshot, # report.issue_groups->issues->screenshots->index

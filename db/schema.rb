@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_02_211655) do
+ActiveRecord::Schema.define(version: 2021_11_09_094507) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,6 +94,24 @@ ActiveRecord::Schema.define(version: 2020_11_02_211655) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "methodologies", force: :cascade do |t|
+    t.string "name"
+    t.string "title"
+    t.string "author"
+    t.string "category"
+    t.text "refs"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "methodology_placeholders", force: :cascade do |t|
+    t.bigint "methodology_id"
+    t.bigint "placeholder_id"
+    t.index ["methodology_id"], name: "index_methodology_placeholders_on_methodology_id"
+    t.index ["placeholder_id"], name: "index_methodology_placeholders_on_placeholder_id"
+  end
+
   create_table "notes", force: :cascade do |t|
     t.text "content"
     t.string "noteable_type"
@@ -112,6 +130,12 @@ ActiveRecord::Schema.define(version: 2020_11_02_211655) do
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_outputs_on_client_id"
     t.index ["port_id"], name: "index_outputs_on_port_id"
+  end
+
+  create_table "placeholders", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "ports", force: :cascade do |t|
@@ -214,6 +238,8 @@ ActiveRecord::Schema.define(version: 2020_11_02_211655) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "client_report_parts", "clients"
   add_foreign_key "client_report_parts", "report_parts"
+  add_foreign_key "methodology_placeholders", "methodologies"
+  add_foreign_key "methodology_placeholders", "placeholders"
   add_foreign_key "outputs", "clients"
   add_foreign_key "outputs", "ports"
   add_foreign_key "ports", "clients"

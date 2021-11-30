@@ -38,7 +38,7 @@
     </div>
   </div>
   <div class="row">
-    <% @issue.screenshots.each do |screenshot| %>
+    <% @issue.screenshots.order(:description).each do |screenshot| %>
       <div class="col-3 mb-2 mt-2">
         <%= link_to edit_screenshot_path(screenshot), remote: true do %>
           <%= image_tag url_for(screenshot.image), width: "100%" %>

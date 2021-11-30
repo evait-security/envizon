@@ -19,8 +19,8 @@
               <tr class="ui-selectee">
                 <td>
                   <%= link_to "#{current_client.ip}", client_path(current_client.id), :remote => true, :id => current_client.id, :class => "client_view_quick_search" %>
-                  <% count_notes = current_client.notes.size %>
-                  <%= "<sup>#{count_notes}</sup>".html_safe if count_notes > 0 %>
+                  <% count_notes = current_client.notes.present? %>
+                  <%= "<sup>#{count_notes}</sup>".html_safe if count_notes %>
                 </td>
                 <td><%= "#{current_client.hostname}" %></td>
                 <td><%= "#{current_client.os}" %></td>

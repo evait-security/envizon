@@ -34,7 +34,7 @@ class ImagesController < ApplicationController
 
   def load_groups_and_segments
     @all_groups = Group.all.order(mod: :asc, name: :asc).to_a
-    @all_clients = Client.where(archived: false)
+    @all_clients = Client.includes(:groups, :notes).where(archived: false)
     all_ips = @all_clients.pluck(:ip)
 
     # /24
