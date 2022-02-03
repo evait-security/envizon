@@ -17,9 +17,9 @@
     <div class="col-6">
       <label class="form-label">Linked clients</label>
       <div class="col-auto"><!-- needed for line break -->
-        <% @issue.clients.each do |client| %>
+        <% @issue.clients.uniq.each do |client| %>
           <div class="btn-group btn-group-sm pb-2 pr-2" id="link_client_id-<%= client.id %>" role="group">
-            <button type="button" class="btn btn-dark" disabled><%= client.ip %><%= " (#{client.hostname})" unless client.hostname.nil? %></button>
+            <button type="button" class="btn btn-dark" disabled> <%= client.mac.present? ? "#{client.mac} / " : '' %><%= client.ip %><%= " (#{client.hostname})" unless client.hostname.nil? %></button>
               <%= link_to clients_unlink_issue_path(client, @issue),remote: true, class: "btn btn-light" do %>
                 <i class="fas fa-times text-danger"></i>
               <% end %>

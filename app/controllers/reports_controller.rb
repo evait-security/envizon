@@ -114,7 +114,8 @@ class ReportsController < ApplicationController
               s_issue.new(
                 issue, # report.issue_groups->issues->item
                 index_issue, # report.issue_groups->issues->index
-                (issue.clients.map { |c| c.ip.to_s + (c.hostname.present? ? " (#{c.hostname})" : '') } + (issue.customtargets.present? ? issue.customtargets.lines : [])).map(&:strip).reject(&:empty?), # report.issue_groups->issues->targets
+                (issue.clients.uniq.map { |c| (c.mac.present? ? "#{c.mac} / " : '') + c.ip.to_s + (c.hostname.present? ? " (#{c.hostname})" : '') } + (issue.customtargets.present? ? issue.customtargets.lines : [])).map(&:strip).reject(&:empty?), # report.issue_groups->issues->targets
+                #(issue.clients.map { |c| c.ip.to_s + (c.hostname.present? ? " (#{c.hostname})" : '') } + (issue.customtargets.present? ? issue.customtargets.lines : [])).map(&:strip).reject(&:empty?), # report.issue_groups->issues->targets
                 issue.description.blank? ? '' : Sablon.content(:html, <<-HTML.strip
                 #{Report.prepare_text_docx(issue.description)}
                 HTML
