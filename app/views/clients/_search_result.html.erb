@@ -5,19 +5,30 @@
         <div class="group-actions">
           <div class="btn-toolbar mb-3" role="toolbar">
             <div class="btn-group me-3" role="group" aria-label="group-actions">
-            <button id="dropdown-archive" type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-archive"></i></button>
-            <ul class="dropdown-menu" aria-labelledby="dropdown-archive">
-              <li><a class="dropdown-item grp_archive" href="#">Selection</a></li>
-              <li><a class="dropdown-item grp_archive_empty_ports" href="#">All visible entries with 0 port count</a></li>
-            </ul>
+              <button id="dropdown-archive" type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-archive"></i></button>
+              <ul class="dropdown-menu" aria-labelledby="dropdown-archive">
+                <li><a class="dropdown-item grp_archive" href="#">Selection</a></li>
+                <li><a class="dropdown-item grp_archive_empty_ports" href="#">All visible entries with 0 port count</a></li>
+              </ul>
               <button type="button" class="btn btn-sm btn-outline-secondary grp_export"><i class="fas fa-download me-1"></i>wget</button>
               <button type="button" class="btn btn-sm btn-outline-secondary grp_mark_all"><i class="fas fa-check-square"></i></i></button>
               <button type="button" class="btn btn-sm btn-outline-secondary grp_unmark_all"><i class="far fa-check-square"></i></i></button>
             </div>
-            <button type="button" class="btn btn-sm btn-outline-warning grp_delete_clients me-3"><i class="far fa-trash-alt me-1"></i>rm</button>
-            <button type="button" class="btn btn-sm btn-outline-primary grp_move me-1"><i class="fas fa-angle-right me-1"></i>mv</button>
-            <button type="button" class="btn btn-sm btn-outline-primary grp_copy me-1"><i class="fas fa-copy me-1"></i>cp</button>
-            <button type="button" class="btn btn-sm btn-outline-success grp_new me-1"><i class="fas fa-plus me-1"></i>new</button>
+            <button type="button" class="btn btn-sm btn-outline-success grp_new me-3"><i class="fas fa-plus me-1"></i>new</button>
+            <button id="dropdown-action" type="button" class="btn btn-sm btn-outline-primary dropdown-toggle me-1" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-key me-1"></i>action with selection&trade;</button>
+            <ul class="dropdown-menu" aria-labelledby="dropdown-action">
+              <li><button class="dropdown-item text-primary grp_image me-1"><i class="fas fa-camera me-1"></i>screenshot</button></li>
+              <li><button class="dropdown-item text-primary grp_scan me-1"><i class="fas fa-project-diagram me-1"></i>scan</button></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><button class="dropdown-item grp_delete_clients text-danger"><i class="far fa-trash-alt me-1"></i>remove</button></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><button class="dropdown-item text-primary grp_move me-1"><i class="fas fa-file-export me-1"></i>move</button></li>
+              <li><button class="dropdown-item text-primary grp_copy me-1"><i class="fas fa-copy me-1"></i>copy</button></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><button class="dropdown-item text-success grp_new me-1"><i class="fas fa-plus me-1"></i>new</button></li>
+              <li></li>
+              <li></li>
+            </ul>
           </div>
       </div>
       </div>

@@ -1,86 +1,32 @@
-<div class="modal-content p-0">
-  <div class="row blue lighten-4 pt-3 pb-2">
-    <div class="col s12 center">
-        <h3 class="blue-text text-darken-3">Start scan with selected targets</h3>
-    </div>
+<div class="modal-content">
+  <div class="modal-header bg-primary">
+    <h5 class="modal-title text-white">Scan selected clients</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
   </div>
-  <div class="row">
-    <ul class="tabs tabs-fixed-width">
-      <li class="tab col s3"><a href="#prescan">Preconfigured Scan</a></li>
-      <li class="tab col s3"><a href="#manscan">Manual Scan</a></li>
-    </ul>
-    <div id="prescan">
-      <div class="white">
-        <div class="container">
-          <div class="row" style="padding: 2em;">
-            <%= simple_form_for :scan, url: scans_create_path, remote: true, authenticity_token: true,  html: {multipart: true} do |f| %>
-              <div class="input-field col s12">
-                <select name="command" onchange="if (this.selectedIndex) setSavedScanLabel(this.options[this.selectedIndex].value);">
-                  <option value="" disabled selected>Choose an option</option>
-                  <% SavedScan.all.to_a.each do | saved_scan | %>
-                    <option value="<%= saved_scan.parameter %>"><%= saved_scan.name %></option>
-                  <% end %>
-                </select>
-                <label id="savedScanLabel">Scan Parameters*</label>
-              </div>
-              <div class="col s12" style="padding-bottom: 10px;">
-                <label>Selected Clients* </label>
-                <% strTarget = "" %>
-                <% clients.each do | temp_client | %>
-                  <div class="chip"><%= temp_client.ip %></div>
-                  <% strTarget += temp_client.ip + " " %>
-                <% end %>
-              <input type="hidden" name="target" value="<%= strTarget.strip %>" />
-              <input type="hidden" name="fromGroupView" value="1" />
-              </div>
-              <div class="input-field col s9">
-                <input id="scan_name" placeholder="e.g. internal network" name="name" type="text" class="validate">
-                <label for="scan_name">Name*</label>
-              </div>
-              <div class="input-field col s3">
-                <button class="btn" type="submit" name="action"><i class="fas fa-coffee white-text"></i></button>
-              </div>
-            <% end %>
-          </div>
-        </div>
+  <div class="modal-body">
+    <%= simple_form_for :scan, url: scans_create_path, remote: true, authenticity_token: true,  html: {multipart: true} do |f| %>
+      <input id="scan_name" name="scan[name]" type="hidden" value="Custom scan">
+      <label class="string required" for="command">Scan parameters <abbr title="required">*</abbr></label>
+      <div class="input-group">
+        <input type="text" id="command" name="scan[command]" class="form-control" placeholder="Use your own nmap fu ... ">
+        <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">or predefined parameters</button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <% SavedScan.all.to_a.each do | saved_scan | %>
+            <li>
+              <a class="dropdown-item" href="#" onclick="$('#command').val('<%= saved_scan.parameter %>');">
+                <%= saved_scan.name %>
+              </a>
+            </li>
+          <% end %>
+        </ul>
       </div>
-    </div>
-    <div id="manscan">
-      <div class="white">
-        <div class="container">
-          <div class="row" style="padding: 2em;">
-            <%= simple_form_for :scan, url: scans_create_path, remote: true, authenticity_token: true,  html: {multipart: true} do |f| %>
-              <div class="input-field col s12">
-                <input id="scan_paramater" placeholder="e.g. -sV -p 8000,252,447 -n" name="command" type="text" class="validate">
-                <label for="scan_paramater">Nmap Parameter*</label>
-              </div>
-              <div class="col s12" style="padding-bottom: 10px;">
-                <label>Selected Clients* </label>
-                <% strTarget = "" %>
-                <% clients.each do | temp_client | %>
-                  <div class="chip"><%= temp_client.ip %></div>
-                  <% strTarget += ", " + temp_client.ip %>
-                <% end %>
-              <input type="hidden" name="target" value="<%= strTarget %>" />
-              <input type="hidden" name="fromGroupView" value="1" />
-              </div>
-              <div class="input-field col s9">
-                <input id="scan_name" placeholder="e.g. internal network" name="name" type="text" class="validate">
-                <label for="scan_name">Name*</label>
-              </div>
-              <div class="input-field col s3">
-                <button class="btn" type="submit" name="action"><i class="fas fa-coffee white-text"></i></button>
-              </div>
-            <% end %>
-          </div>
-        </div>
+      <label class="string required" for="scan_target">Targets <abbr title="required">*</abbr></label>
+      <div class="input-group">
+        <input class="form-control string required" required="required" readonly aria-required="true" value="<%= clients.pluck(:ip).join(" ") %>" type="text" name="scan[target]" id="scan_target">
+        <button type="submit" class="btn btn-primary"><i class="fas fa-coffee me-2"></i>Start new scan</button>
       </div>
-    </div>
+    <% end %>
   </div>
 </div>
 
-<script>
-  function setSavedScanLabel(saved_scan){
-    $("#savedScanLabel")[0].innerHTML = "Scan Parameter* ( " + saved_scan + " )";
-  }
-</script>
+

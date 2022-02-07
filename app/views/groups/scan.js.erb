@@ -1,5 +1,2 @@
-$("#medium-modal").html("<%= j(render('scan', :clients=> clients)) %>");
-$("#medium-modal").modal('open');
-$('ul.tabs').tabs();
-M.updateTextFields();
-$('select').formSelect();
+$("#general-modal-content").html("<%= j(render('scan', :clients=> clients)) %>");
+new bootstrap.Modal(document.getElementById('general-modal')).show();

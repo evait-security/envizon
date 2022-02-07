@@ -9,9 +9,9 @@ class ScreenshotOperatorWorker
   def perform(args)
     ActiveRecord::Base.connection_pool.with_connection do
       if args.include? "clients"
-        ports = Port.all.where(client: args['clients']).select(&:screenshotable?)
+        ports = Port.screenshotable.includes(:client).where('clients.id' => args['clients'], 'clients.archived' => false)
       else
-        ports = Port.all.select(&:screenshotable?)
+        ports = Port.screenshotable.includes(:client).where('clients.archived' => false)
       end
       # if overwrite=false -> select only ports without image.
       ports = ports.reject { |p| p.image.attached? } unless args['overwrite']
@@ -23,7 +23,7 @@ class ScreenshotOperatorWorker
         end
       end
       # ScreenshotWorker.wait_until_finish
-      ActionCable.server.broadcast 'notification_channel', message: 'Screenshot-Job finished'
+      ActionCable.server.broadcast 'notification_channel', message: 'Screenshot jobs scheduled'
     end
   end
 end

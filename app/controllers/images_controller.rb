@@ -7,10 +7,6 @@ class ImagesController < ApplicationController
     @images = Port.joins(:image_attachment).map { |p| p.image }.sort { |i| i.created_at }
   end
 
-  def nuke
-    Port.joins(:image_attachment).map { |p| p.image }.sort { |i| i.created_at }.each { |i| i.purge }
-  end
-
   def scan_all
     args = { 'overwrite' => false }
     ScreenshotOperatorWorker.perform_async(args)
@@ -24,6 +20,7 @@ class ImagesController < ApplicationController
   end
 
   def scan_custom_overwrite
+    (respond_with_notify && return) if @clients.blank?
     args = { 'clients' => @clients, 'overwrite' => true }
     ScreenshotOperatorWorker.perform_async(args)
     respond_with_notify('Selected clients add no screenshot queue. Please refresh image page to view the results!',
@@ -63,11 +60,6 @@ class ImagesController < ApplicationController
   end
 
   def set_clients
-    @clients = []
-    params[:clients].each do |client|
-      @clients << Client.find_by_id(client).id
-    end
-  rescue StandardError => e
-    respond_with_notify('Invalid client in request', 'alert')
+    @clients = Client.find(params[:clients]).pluck(:id) if params.key?(:clients)
   end
 end
