@@ -7,6 +7,8 @@ class Port < ApplicationRecord
   has_one_attached :image
   has_many :notes, as: :noteable
 
+  scope :screenshotable, -> { where('service ILIKE ?', '%http%') }
+
   def screenshotable?
     case service_short
     when 'http', 'https'
