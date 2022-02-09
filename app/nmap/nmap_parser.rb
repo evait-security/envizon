@@ -29,7 +29,7 @@ class NmapParser
 
   def prepare_client(host)
     client = Client.where(ip: host.ip).first_or_create
-    client.hostname = host.hostname
+    client.hostname = host.hostname if client.hostname.blank?
     client.ip = host.ip unless client.ip?
     client.mac = host.mac unless client.mac?
     client.vendor = host.vendor unless client.vendor?
