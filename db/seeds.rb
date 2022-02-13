@@ -9,8 +9,9 @@
 if SavedScan.all.empty?
   SavedScan.create([{ name: 'ARP scan', parameter: '-sP -PR' },
                     { name: 'Enumerate devices only', parameter: '-sn -T4' },
-                    { name: 'Quick OS SMB detection - SMB', parameter: '--script smb-os-discovery.nse -p445 -T4' },
-                    { name: 'Quick OS SMB detection - NetBIOS', parameter: '-sU -sS --script=smb-os-discovery.nse -p U:137,T:139 -T4' },
+                    { name: 'Quick OS SMB detection', parameter: '-n -sU -sS --script=smb-os-discovery.nse -p U:137,T:139,T:445 -T4' },
+                    { name: 'Quick Java RMI / JMX scan', parameter: '-n -p 1098,1099,1090,8901,8902,8903,9999 -sV --script rmi-vuln-classloader,rmi-dumpregistry -T4' },
+                    { name: 'Quick FTP-Anonymous detection', parameter: '-n -p 21 --script ftp-anon -T4' },
                     { name: 'Default scripts, top ports, OS detection', parameter: '-O -sC -T4' },
                     { name: 'Default scripts, top ports, OS detection - light', parameter: '-O -sC -T4 --exclude-ports 9100-9107 --version-light --max-retries 2 --script-timeout 15s' },
                     { name: 'Default scripts, top 300 ports, OS detection, service detection', parameter: '--top-ports 300 -O -sC -sV -T4' },
