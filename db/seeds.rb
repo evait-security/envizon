@@ -23,7 +23,7 @@ if SavedScan.all.empty?
                     { name: 'Fast scan with OS-Discovery', parameter: '-F -T4 --max-retries 1 -O --version-light --script=smb-os-discovery --script-timeout 10s' },
                     { name: 'Scripts: Web', parameter: '-p 80,443,3000 -sV --script "http-* and not(dos or brute)"'},
                     { name: 'Scripts: SMB', parameter: '--script "smb* and not(dos or brute)" -p 139,445 -sU -sT' },
-
+                    { name: 'Scripts: Broadcast', parameter: '--script=broadcast --max-retries 2 --script-timeout 30s -T4' },
                     { name: 'Vuln: all', parameter: '--script=vuln --max-retries 2 --script-timeout 30s' },
                     { name: 'Vuln: Exploit', parameter: '--script=exploit --max-retries 2 --script-timeout 30s' },
                     { name: 'Vuln: MS08-067 - TCP', parameter: '--script smb-vuln-ms08-067.nse -p445' },
