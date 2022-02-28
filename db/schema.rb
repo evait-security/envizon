@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_09_094507) do
+ActiveRecord::Schema.define(version: 2022_02_28_223130) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,9 +98,16 @@ ActiveRecord::Schema.define(version: 2021_11_09_094507) do
     t.string "name"
     t.string "title"
     t.string "author"
-    t.string "category"
     t.text "refs"
     t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "methodology_category_id"
+    t.index ["methodology_category_id"], name: "index_methodologies_on_methodology_category_id"
+  end
+
+  create_table "methodology_categories", force: :cascade do |t|
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -130,6 +137,27 @@ ActiveRecord::Schema.define(version: 2021_11_09_094507) do
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_outputs_on_client_id"
     t.index ["port_id"], name: "index_outputs_on_port_id"
+  end
+
+  create_table "placeholder_sets", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "placeholder_v_placeholder_s", force: :cascade do |t|
+    t.bigint "placeholder_value_id"
+    t.bigint "placeholder_set_id"
+    t.index ["placeholder_set_id"], name: "index_placeholder_v_placeholder_s_on_placeholder_set_id"
+    t.index ["placeholder_value_id"], name: "index_placeholder_v_placeholder_s_on_placeholder_value_id"
+  end
+
+  create_table "placeholder_values", force: :cascade do |t|
+    t.string "content"
+    t.bigint "placeholder_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["placeholder_id"], name: "index_placeholder_values_on_placeholder_id"
   end
 
   create_table "placeholders", force: :cascade do |t|
@@ -238,10 +266,14 @@ ActiveRecord::Schema.define(version: 2021_11_09_094507) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "client_report_parts", "clients"
   add_foreign_key "client_report_parts", "report_parts"
+  add_foreign_key "methodologies", "methodology_categories"
   add_foreign_key "methodology_placeholders", "methodologies"
   add_foreign_key "methodology_placeholders", "placeholders"
   add_foreign_key "outputs", "clients"
   add_foreign_key "outputs", "ports"
+  add_foreign_key "placeholder_v_placeholder_s", "placeholder_sets"
+  add_foreign_key "placeholder_v_placeholder_s", "placeholder_values"
+  add_foreign_key "placeholder_values", "placeholders"
   add_foreign_key "ports", "clients"
   add_foreign_key "scans", "users"
   add_foreign_key "screenshots", "report_parts"

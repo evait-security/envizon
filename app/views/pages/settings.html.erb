@@ -48,6 +48,21 @@
       </div>
     </div>
   </div>
+  <div class="row">
+    <div class="col">
+      <p class="lead text-center mt-5">Methodologies</p>
+      <div class="alert alert-warning p-2" role="alert">
+        All methodologies in local db / project will be wiped while importing."
+      </div>
+      <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
+        <input type="hidden" name="methodologies_url" value="true">
+        <div class="input-group">
+          <input id="methodologies_url_setting" name="methodologies_url_setting" placeholder='https://github.com/evait-security/envizon-methodologies/archive/refs/heads/main.zip' type="text" class="form-control" value="<%= @methodologies_url %>">
+          <button type="submit" class="btn btn-outline-success" type="button"><i class="fas fa-cloud-download-alt me-2"></i>Clear & Import</button>
+        </div>
+      <% end %>
+    </div>
+  </div>
   <p class="lead text-center mt-5">Scan options</p>
   <div class="row">
     <div class="col-6">
@@ -70,7 +85,7 @@
           hosts = YAML.safe_load(current_user.settings.where(name: 'exclude_hosts').first_or_create.value)
           hosts ||= ''
         %>
-        <label for="max_host_per_scan_setting" class="form-label">Hosts to exclude</label>
+        <label for="hosts" class="form-label">Hosts to exclude</label>
         <div class="input-group">
           <textarea id="hosts" name="hosts" class="form-control"><%= hosts.strip %></textarea>
           <button type="submit" name="action" class="btn btn-outline-dark"><i class="fas fa-sync"></i></button>
@@ -82,7 +97,7 @@
     <div class="col">
       <p class="lead text-center mt-5">General options</p>
       <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
-         <input type="hidden" name="global_notify" value="true">
+        <input type="hidden" name="global_notify" value="true">
         <div class="input-group mt-3 ">
           <span class="input-group-text">Enable / disable global notifications</span>
           <div class="input-group-text">

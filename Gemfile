@@ -70,6 +70,7 @@ gem 'thwait'
 
 # db import/export
 gem 'mysql2'
+gem 'down'
 
 # zip
 gem 'rubyzip', '>= 1.0.0' # will load new rubyzip version

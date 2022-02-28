@@ -118,6 +118,7 @@ GEM
       responders
       warden (~> 1.2.3)
     diffy (3.4.0)
+    down (4.5.0)
     e2mmap (0.1.0)
     erubi (1.10.0)
     erubis (2.7.0)
@@ -410,6 +411,7 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   devise
   diffy
+  down
   e2mmap
   font_awesome5_rails
   image_processing

@@ -1,6 +1,8 @@
 require 'rake'
 require 'fileutils'
 require 'json'
+require 'uri'
+require 'down'
 
 # @restful_api 1.0
 # Handle user settings
@@ -15,7 +17,7 @@ class SettingsController < ApplicationController
   def update
     %w[parallel_scans global_notify
        max_host_per_scan hosts
-       mysql_connection
+       mysql_connection methodologies_url
        import_issue_templates report_mode].each do |param|
       param_sym = param.to_sym
       next unless params[param_sym]
@@ -67,6 +69,44 @@ class SettingsController < ApplicationController
       { message: "Issue templates successfully imported / synced", type: 'success' }
     rescue => exception
       { message: exception, type: 'alert' }
+    end
+  end
+
+  def methodologies_url(methodologies_url)
+    if params[:methodologies_url_setting].present?
+      m_url = params[:methodologies_url_setting]
+      return { message: "Invalid URL provided", type: 'alert' } unless m_url =~ URI::DEFAULT_PARSER.regexp[:ABS_URI]
+      begin
+        # remove old directories
+        FileUtils.rm_rf("/tmp/envizon-methodologies-dest")
+        # download zip file to temp location
+        tempfile = Down.download(m_url)
+        extract_zip(tempfile.path, "/tmp/envizon-methodologies-dest")
+        Dir.glob("/tmp/envizon-methodologies-dest/**/*.yaml").each do |f|
+          temp_yml = YAML.load_file(f)
+          if temp_yml
+            temp_yml.deep_symbolize_keys!
+
+          end
+        end
+        { message: tempfile.path, type: 'success' }
+      rescue => exception
+        { message: exception, type: 'alert' }
+      end
+    else
+      { message: "No URL was given", type: 'alert' }
+    end
+
+  end
+
+  def extract_zip(file, destination)
+    FileUtils.mkdir_p(destination)
+
+    Zip::File.open(file) do |zip_file|
+      zip_file.each do |f|
+        fpath = File.join(destination, f.name)
+        zip_file.extract(f, fpath) unless File.exist?(fpath)
+      end
     end
   end
 

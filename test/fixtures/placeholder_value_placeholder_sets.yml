@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  PlaceholderValue: one
+  PlaceholderSet: one
+
+two:
+  PlaceholderValue: two
+  PlaceholderSet: two
