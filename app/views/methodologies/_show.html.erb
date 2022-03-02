@@ -1,0 +1,21 @@
+<div class="modal-content">
+  <div class="modal-header bg-primary">
+    <h5 class="modal-title text-white"><%= @methodology.methodology_category.name %><i class="fas fa-angle-right mx-2"></i><%= @methodology.title %><span class="badge bg-primary"><%= "@#{@methodology.author}" %></span></h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  </div>
+  <div class="modal-body methodology-modal-body">
+    <%= @methodology.content&.html_safe %>
+    <hr>
+    <span class="badge bg-primary small">Refereces</span><br>
+    <span class="small"><%= @methodology.refs&.html_safe %></span>
+  </div>
+  <div class="modal-footer">
+    <%= link_to methodologies_check_path(@methodology), class: "btn btn-success" do %>
+      <% if @methodology.checked %>
+        <i class="fas me-2 fa-undo text-white"></i>Mark as unchecked
+      <% else %>
+        <i class="fas me-2 fa-check text-white"></i>Mark as checked
+      <% end %>
+    <% end %>
+  </div>
+</div>

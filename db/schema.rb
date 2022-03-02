@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_28_223130) do
+ActiveRecord::Schema.define(version: 2022_03_01_220513) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -103,7 +103,16 @@ ActiveRecord::Schema.define(version: 2022_02_28_223130) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "methodology_category_id"
+    t.boolean "checked", default: false
+    t.bigint "methodology_book_id"
+    t.index ["methodology_book_id"], name: "index_methodologies_on_methodology_book_id"
     t.index ["methodology_category_id"], name: "index_methodologies_on_methodology_category_id"
+  end
+
+  create_table "methodology_books", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "methodology_categories", force: :cascade do |t|
@@ -266,6 +275,7 @@ ActiveRecord::Schema.define(version: 2022_02_28_223130) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "client_report_parts", "clients"
   add_foreign_key "client_report_parts", "report_parts"
+  add_foreign_key "methodologies", "methodology_books"
   add_foreign_key "methodologies", "methodology_categories"
   add_foreign_key "methodology_placeholders", "methodologies"
   add_foreign_key "methodology_placeholders", "placeholders"

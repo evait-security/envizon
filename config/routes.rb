@@ -27,29 +27,29 @@ Rails.application.routes.draw do
   # index ever used, ever?
   resources :groups, only: %i[create new]
 
-  post 'groups/group' => 'groups#group', as: :single_group_html
+  post '/groups/group' => 'groups#group', as: :single_group_html
 
-  post 'groups/create_form' => 'groups#create_form'
+  post '/groups/create_form' => 'groups#create_form'
 
-  post 'groups/copy_form' => 'groups#copy_form'
-  post 'groups/copy' => 'groups#copy'
+  post '/groups/copy_form' => 'groups#copy_form'
+  post '/groups/copy' => 'groups#copy'
 
-  post 'groups/move_form' => 'groups#move_form'
-  post 'groups/move' => 'groups#move'
+  post '/groups/move_form' => 'groups#move_form'
+  post '/groups/move' => 'groups#move'
 
-  post 'groups/export_form' => 'groups#export_form'
-  post 'groups/export' => 'groups#export'
+  post '/groups/export_form' => 'groups#export_form'
+  post '/groups/export' => 'groups#export'
 
-  post 'groups/delete_form' => 'groups#delete_form'
-  post 'groups/delete' => 'groups#delete'
+  post '/groups/delete_form' => 'groups#delete_form'
+  post '/groups/delete' => 'groups#delete'
 
-  post 'groups/delete_clients_form' => 'groups#delete_clients_form'
-  post 'groups/delete_clients' => 'groups#delete_clients'
+  post '/groups/delete_clients_form' => 'groups#delete_clients_form'
+  post '/groups/delete_clients' => 'groups#delete_clients'
 
-  post 'groups/scan_form' => 'groups#scan_form'
+  post '/groups/scan_form' => 'groups#scan_form'
 
-  get 'groups/refresh' => 'groups#refresh', as: :group_refresh
-  get 'groups/group_list' => 'groups#group_list', as: :group_list
+  get '/groups/refresh' => 'groups#refresh', as: :group_refresh
+  get '/groups/group_list' => 'groups#group_list', as: :group_list
 
   get '/issues/:id/update_template' => 'issues#update_template', as: :update_template
   get '/issues/:id/new_template' => 'issues#new_template', as: :new_template
@@ -78,9 +78,15 @@ Rails.application.routes.draw do
   post 'setting/update_user_settings' => 'setting#update_user_settings', as: :update_user_settings
   post 'settings/update' => 'settings#update', as: :update_settings
 
-  post 'scans/create' => 'scans#create'
-  post 'scans/upload' => 'scans#upload'
-  post 'scans/download' => 'scans#download', as: :download_scan
+  post '/scans/create' => 'scans#create'
+  post '/scans/upload' => 'scans#upload'
+  post '/scans/download' => 'scans#download', as: :download_scan
+
+  get '/methodologies' => 'methodologies#index', as: :methodologies_index
+  get '/methodologies/book/:id' => 'methodologies#book', as: :methodologies_book
+  get '/methodologies/:id/check' => 'methodologies#check', as: :methodologies_check
+  get '/methodologies/:id' => 'methodologies#show', as: :methodologies_show
+
   authenticate :user do
     mount Sidekiq::Web => '/sidekiq'
   end

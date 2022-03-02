@@ -1,0 +1,39 @@
+<div class="row m-3 px-2">
+  <ul class="nav nav-tabs">
+    <% @books.each do | book | %>
+      <li class="nav-item">
+        <%= link_to methodologies_book_path(book), class: "nav-link #{'active' if book == @current_book}" do %>
+          <%= book.name %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>
+<div class="row m-3">
+  <% @current_methodologies_by_cat.each do | category, methodologies | %>
+    <div class="col">
+      <div class="card border-bottom-0">
+        <h5 class="card-header"><%= category.name %></h5>
+          <ul class="list-group">
+            <% methodologies.each do | methodology| %>
+              <div class="d-flex justify-content-between align-items-center border-bottom">
+                <%= link_to methodologies_show_path(methodology), class: "border-0 list-group-item list-group-item-action #{'list-group-item-secondary' if methodology.checked}", :remote => true do %>
+                  <%= methodology.title %>
+                <% end %>
+                <%= link_to methodologies_check_path(methodology), class: "border-0 btn btn-sm list-group-item" do %>
+                  <% if methodology.checked %>
+                    <i class="fas fa-undo text-secondary"></i>
+                  <% else %>
+                    <i class="fas fa-check text-success"></i>
+                  <% end %>
+                <% end %>
+              </div>
+            <% end %>
+          </ul>
+      </div>
+    </div>
+  <% end %>
+</div>
+<div class="site-action">
+  <a class="btn btn-primary" href="#" role="button">Placeholder</a>
+</div>

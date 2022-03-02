@@ -65,7 +65,6 @@ class SettingsController < ApplicationController
           :severity => it_remote['severity']
         )
       end
-
       { message: "Issue templates successfully imported / synced", type: 'success' }
     rescue => exception
       { message: exception, type: 'alert' }
@@ -79,17 +78,49 @@ class SettingsController < ApplicationController
       begin
         # remove old directories
         FileUtils.rm_rf("/tmp/envizon-methodologies-dest")
+
+        # destroy all database content
+        Methodology.destroy_all
+        MethodologyCategory.destroy_all
+        MethodologyBook.destroy_all
+        PlaceholderValue.destroy_all
+        Placeholder.destroy_all
+        PlaceholderSet.destroy_all
+
+        # error counter
+        template_errors = 0
+        template_count = 0
+
         # download zip file to temp location
         tempfile = Down.download(m_url)
         extract_zip(tempfile.path, "/tmp/envizon-methodologies-dest")
         Dir.glob("/tmp/envizon-methodologies-dest/**/*.yaml").each do |f|
-          temp_yml = YAML.load_file(f)
-          if temp_yml
-            temp_yml.deep_symbolize_keys!
-
+          begin
+            temp_yml = YAML.load_file(f)
+            if temp_yml
+              temp_yml.deep_symbolize_keys!
+              new_m = Methodology.new
+              new_m.name = temp_yml[:name]
+              new_m.title = temp_yml[:info][:title]
+              new_m.author = temp_yml[:info][:author]
+              new_m.content = temp_yml[:content]
+              new_m.refs = temp_yml[:info][:references]&.map{|ref| "<a target='_blank' href='#{ref}'>#{ref}</a>"}&.join("<br />")
+              new_m.methodology_category = MethodologyCategory.find_or_create_by(name: temp_yml[:info][:category])
+              new_m.methodology_book = MethodologyBook.find_or_create_by(name: temp_yml[:info][:book])
+              temp_yml[:info][:placeholder]&.each do |placeholder|
+                new_m.placeholders << Placeholder.find_or_create_by(name: placeholder)
+              end
+              new_m.save
+              template_count += 1
+            end
+          rescue => exception
+            # return { message: exception, type: 'alert' }
+            template_errors += 1
+            next
           end
         end
-        { message: tempfile.path, type: 'success' }
+        tempfile.delete
+        { message: "#{template_count} templates imported. #{template_errors} errors occurred.", type: 'success' }
       rescue => exception
         { message: exception, type: 'alert' }
       end

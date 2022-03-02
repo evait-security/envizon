@@ -52,7 +52,7 @@
     <div class="col">
       <p class="lead text-center mt-5">Methodologies</p>
       <div class="alert alert-warning p-2" role="alert">
-        All methodologies in local db / project will be wiped while importing."
+        All methodologies and placeholders in local db / project will be wiped during the import.
       </div>
       <%= simple_form_for :settings, url: update_settings_path, :remote => true do |f| %>
         <input type="hidden" name="methodologies_url" value="true">
