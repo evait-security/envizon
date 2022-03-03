@@ -4,7 +4,11 @@
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
   </div>
   <div class="modal-body methodology-modal-body">
-    <%= @methodology.content&.html_safe %>
+    <% if session[:current_placeholder_set].present? %>
+      <%= @methodology.content_with_placeholders(session[:current_placeholder_set])&.html_safe %>
+    <% else %>
+      <%= @methodology.content&.html_safe %>
+    <% end %>
     <hr>
     <span class="badge bg-primary small">Refereces</span><br>
     <span class="small"><%= @methodology.refs&.html_safe %></span>

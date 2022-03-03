@@ -35,5 +35,58 @@
   <% end %>
 </div>
 <div class="site-action">
-  <a class="btn btn-primary" href="#" role="button">Placeholder</a>
+  <div class="btn-group dropup">
+    <button type="button" class="btn btn-primary dropdown-toggle border border-white" data-bs-toggle="dropdown" id="actionDropdown" aria-expanded="false">
+      <i class="fas fa-terminal me-2"></i>Placeholder-Set
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="actionDropdown">
+      <% @placeholder_sets.each do |placeholder_set| %>
+        <li class="d-flex align-items-center">
+          <%= link_to placeholder_set_select_path(placeholder_set), class: "dropdown-item" do %>
+            <% if session[:current_placeholder_set] == placeholder_set.id %>
+              <span class="text-primary"><i class="far fa-check-square me-2"></i><%= placeholder_set.name %></span>
+            <% else %>
+              <i class="far fa-square me-2"></i><%= placeholder_set.name %>
+            <% end %>
+          <% end %>
+          <%= link_to placeholder_set_destroy_path(placeholder_set), class: "btn btn-sm btn-outline-danger border-0" do %>
+            <i class="fas fa-trash"></i>
+          <% end %>
+        </li>
+      <% end %>
+      <li>
+        <div class="dropdown-item pointer" data-bs-toggle="modal" data-bs-target="#placeholderModal">
+          <i class="fas fa-plus me-2"></i>Add placeholder set
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+<!-- Modal Placeholder -->
+<div class="modal fade" id="placeholderModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="staticBackdropLabel">Placeholder-Sets</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <%= simple_form_for @placeholder_set, url: placeholder_set_create_path,  wrapper: :floating_labels_form do |f| %>
+          <div class="row">
+            <div class="col">
+              <% @placeholders.each do |placeholder| %>
+                <%= f.simple_fields_for @placeholder_value do |b| %>
+                  <%= b.input :content, label: "@@#{placeholder.name}", placeholder: "content", input_html: { name: "placeholder_value[#{placeholder.id}]"} %>
+                <% end %>
+              <% end %>
+            </div>
+            <div class="col">
+              <%= f.input :name, label: "Name of placeholder set", placeholder: "e.g. Domain Admin credentials", hint: "e.g. Domain Admin credentials", required: true %>
+              <%= f.button :submit, 'Create placeholder set', :class => 'btn-success' %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
 </div>

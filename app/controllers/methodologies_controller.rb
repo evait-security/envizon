@@ -9,6 +9,12 @@ class MethodologiesController < ApplicationController
                                                  .includes(:methodology_category)
                                                  .order("methodology_categories.name")
                                                  .group_by(&:methodology_category)
+
+    @placeholder_set = PlaceholderSet.new
+    @placeholder_value = PlaceholderValue.new
+    @placeholders = Placeholder.all
+    @placeholder_sets = PlaceholderSet.all
+
     render :book
   end
 
@@ -18,6 +24,10 @@ class MethodologiesController < ApplicationController
                                                  .includes(:methodology_category)
                                                  .order('methodology_categories.name, methodologies.name')
                                                  .group_by(&:methodology_category)
+    @placeholder_set = PlaceholderSet.new
+    @placeholder_value = PlaceholderValue.new
+    @placeholders = Placeholder.all
+    @placeholder_sets = PlaceholderSet.all
   end
 
   def show

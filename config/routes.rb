@@ -87,6 +87,10 @@ Rails.application.routes.draw do
   get '/methodologies/:id/check' => 'methodologies#check', as: :methodologies_check
   get '/methodologies/:id' => 'methodologies#show', as: :methodologies_show
 
+  post '/placeholder_set/create' => 'placeholder#create', as: :placeholder_set_create
+  get '/placeholder_set/:id/select' => 'placeholder#select', as: :placeholder_set_select
+  get '/placeholder_set/:id/destroy' => 'placeholder#destroy', as: :placeholder_set_destroy
+
   authenticate :user do
     mount Sidekiq::Web => '/sidekiq'
   end
