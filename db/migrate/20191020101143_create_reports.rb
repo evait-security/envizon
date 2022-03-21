@@ -8,7 +8,6 @@ class CreateReports < ActiveRecord::Migration[5.2]
       t.string :company_name
       t.string :street
       t.string :postalcode
-      t.string :street
       t.string :city
 
       t.timestamps

@@ -1,6 +1,0 @@
---title "Envizon API"
---plugin restful
-    --markup markdown
---output-dir ./public/api
-app/models/**/*.rb
-app/controllers/**/*.rb
