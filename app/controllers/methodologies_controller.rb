@@ -7,7 +7,7 @@ class MethodologiesController < ApplicationController
     @current_book = MethodologyBook.first
     @current_methodologies_by_cat = @current_book.methodologies
                                                  .includes(:methodology_category)
-                                                 .order("methodology_categories.name")
+                                                 .order('methodology_categories.name, methodologies.name')
                                                  .group_by(&:methodology_category)
 
     @placeholder_set = PlaceholderSet.new
