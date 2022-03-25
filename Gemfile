@@ -28,7 +28,7 @@ gem 'jbuilder', '~> 2.5'
 # gem 'capistrano-rails', group: :development
 
 # nmap
-gem 'ruby-nmap', git: 'https://github.com/sophsec/ruby-nmap.git'
+gem 'ruby-nmap', git: 'https://github.com/postmodern/ruby-nmap.git'
 gem 'ipaddress', git: 'https://github.com/ipaddress-gem/ipaddress.git'
 
 # psych > 4 needed
