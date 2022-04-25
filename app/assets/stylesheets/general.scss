@@ -75,7 +75,10 @@ label {
     margin-bottom: 0.2rem !important;
   }
   code {
-    display: block;
     white-space: pre-wrap;
+  }
+  .highlight {
+    font-weight: 800;
+    color: $primary;
   }
 }
