@@ -38,6 +38,17 @@ class Port < ApplicationRecord
     "#{service_short}://#{client.hostname}:#{number}/"
   end
 
+  def web_urls
+    result = []
+    case service_short
+    when 'http', 'https'
+      result << url_ip
+      tmp_url_host = url_host
+      result << tmp_url_host if tmp_url_host.present?
+    end
+    result
+  end
+
   def screenshot
     return unless screenshotable?
 

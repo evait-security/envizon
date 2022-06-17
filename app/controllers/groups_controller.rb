@@ -311,6 +311,33 @@ class GroupsController < ApplicationController
     end
   end
 
+  # @url /groups/export_httpx_form
+  # @action POST
+  #
+  # Renders a form to export clients
+  def export_httpx_form
+    clients = Client.find(params[:clients]) if params.key?(:clients)
+
+    if clients.nil? || clients.empty?
+      respond_with_notify
+    else
+      locals = { clients: clients }
+      respond_root_path_js(:export_httpx, locals)
+    end
+  end
+
+  def export_httpx
+    file_name = (params[:group][:file_name].present? ? params[:group][:file_name] : 'exported_clients')
+    clients = Client.where(id: params[:selected_clients]) if params[:selected_clients].present?
+    if file_name && clients.present?
+      file_name << '.txt' unless file_name =~ /.+\.(txt)$/
+      data = clients.map{|client| client.ports.map{|port| port.web_urls}}.flatten.join("\n")
+      send_data data, filename: file_name, type: 'text/plain'
+    else
+      respond_with_notify('That didn\'t work.', 'alert')
+    end
+  end
+
   private
 
   def load_groups_and_segments
