@@ -55,6 +55,11 @@
             <% end %>
           </li>
           <li>
+            <%= link_to export_odt_path(@current_report, :blur => "true"), class: "dropdown-item" do %>
+              <i class="fas fa-file-word me-2"></i>Export current report as docx (blurred images)
+            <% end %>
+          </li>
+          <li>
             <%= link_to export_xlsx_path(@current_report), class: "dropdown-item" do %>
               <i class="fas fa-file-excel me-2"></i>Export current report as xlsx
             <% end %>
