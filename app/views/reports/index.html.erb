@@ -87,7 +87,13 @@
       switch (String.fromCharCode(event.which).toLowerCase()) {
       case 's':
           event.preventDefault();
-          $(".btn-save").trigger("click");
+          // submit closest form (screenshot or issue)
+          if ($(':focus').length > 0){
+            $(':focus').closest("form").submit()
+          } else {
+            // fallback if no input is focused
+            $(".btn-save").trigger("click");
+          }
           break;
       }
     }
