@@ -6,19 +6,16 @@ new bootstrap.Modal(document.getElementById('general-modal')).show();
   var blocks = document.querySelectorAll("code");
 
   blocks.forEach((block) => {
-    // only add button if browser supports Clipboard API
-    if (navigator.clipboard) {
-      var wrapper = document.createElement('div');
-      block.parentNode.insertBefore(wrapper, block);
-      wrapper.appendChild(block);
-      let button = document.createElement("i");
-      button.classList.add("fas");
-      button.classList.add("fa-copy");
-      button.classList.add("btn");
-      button.classList.add("btn-link");
-      button.addEventListener("click", copyCode);
-      wrapper.appendChild(button);
-    }
+    var wrapper = document.createElement('div');
+    block.parentNode.insertBefore(wrapper, block);
+    wrapper.appendChild(block);
+    let button = document.createElement("i");
+    button.classList.add("fas");
+    button.classList.add("fa-copy");
+    button.classList.add("btn");
+    button.classList.add("btn-link");
+    button.addEventListener("click", copyCode);
+    wrapper.appendChild(button);
   });
 
   async function copyCode(event) {
@@ -26,7 +23,7 @@ new bootstrap.Modal(document.getElementById('general-modal')).show();
     const pre = button.parentElement ;
     let code = pre.querySelector("code");
     let text = code.innerText;
-    await navigator.clipboard.writeText(text);
+    copyToClipboard(text);
     toastr.info("Codeblock copied to clipboard");
   }
 
