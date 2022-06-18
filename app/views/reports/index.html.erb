@@ -86,15 +86,15 @@
     if (event.ctrlKey || event.metaKey) {
       switch (String.fromCharCode(event.which).toLowerCase()) {
       case 's':
-          event.preventDefault();
-          // submit closest form (screenshot or issue)
-          if ($(':focus').length > 0){
-            $(':focus').closest("form").submit()
-          } else {
-            // fallback if no input is focused
-            $(".btn-save").trigger("click");
-          }
-          break;
+        event.preventDefault();
+        // submit closest form (screenshot or issue)
+        if ($(':focus').length > 0){
+          $(':focus').closest("form").find(".btn-save").trigger("click"); //submit the form with jquery will not submit your current values
+        } else {
+          // fallback if no input is focused and save the current issue or group
+          $(".btn-save-fallback").trigger("click");
+        }
+        break;
       }
     }
   });
