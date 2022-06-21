@@ -24,10 +24,14 @@ $utilities: map-merge(
   $utilities
 );
 
-@import "bootstrap";
+@import 'bootstrap/scss/bootstrap';
 @import "general";
 @import "extend";
 @import "datatable_bs";
-@import "fontawesome-iconpicker.min";
-@import 'font_awesome5_webfont';
-@import 'toastr_rails';
+$fa-font-path: '~@fortawesome/fontawesome-free/webfonts';
+// @import '@fortawesome/fontawesome-free/scss/fontawesome';
+@import '@fortawesome/fontawesome-free/scss/solid';
+@import '@fortawesome/fontawesome-free/scss/brands';
+@import '@fortawesome/fontawesome-free/scss/regular';
+@import 'toastr/toastr';
+@import "fontawesome-iconpicker/dist/css/fontawesome-iconpicker";
