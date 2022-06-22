@@ -88,6 +88,7 @@ gem 'selenium-webdriver'
 
 # jobs
 gem 'sidekiq'
+gem 'foreman'
 
 # gems needed for sidekiq, not bundled in Ruby 2.7 anymore
 gem 'e2mmap'

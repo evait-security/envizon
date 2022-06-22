@@ -157,6 +157,7 @@ GEM
     faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
     ffi (1.15.5)
+    foreman (0.87.2)
     git (1.11.0)
       rchardet (~> 1.8)
     github_api (0.16.0)
@@ -424,6 +425,7 @@ DEPENDENCIES
   diffy
   down
   e2mmap
+  foreman
   image_processing
   ipaddress!
   irb

@@ -140,7 +140,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_21_142229) do
     t.bigint "noteable_id"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.index ["noteable_type", "noteable_id"], name: "index_notes_on_noteable"
+    t.index ["noteable_type", "noteable_id"], name: "index_notes_on_noteable_type_and_noteable_id"
   end
 
   create_table "outputs", force: :cascade do |t|

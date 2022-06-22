@@ -8,7 +8,7 @@
     <%= action_cable_meta_tag %>
     <%= csrf_meta_tags %>
     <%= stylesheet_link_tag 'application_bootstrap', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'jquery', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application_bootstrap', 'data-turbolinks-track': 'reload' %>
   </head>
   <body>
     <% unless (controller.controller_name == "sessions" || ( controller.controller_name == "registrations" && controller.action_name == "new")) %>
@@ -18,7 +18,6 @@
   </body>
   <footer>
     <%= render 'toastr_rails/flash' %>
-    <%= javascript_include_tag 'application_bootstrap', 'data-turbolinks-track': 'reload' %>
     <div class="modal iframe-modal fade" id="sidekiq-modal" aria-hidden="true">
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
