@@ -11,7 +11,8 @@ module Envizon
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 
-    config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
+    # NOTE: this might've broken things.
+    # config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
     # config.assets.precompile << /\.(?:svg|eot|woff|ttf)$/
     config.active_job.queue_adapter = :sidekiq
 

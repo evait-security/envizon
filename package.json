@@ -22,7 +22,7 @@
     "whatwg-fetch": "^3.6.2"
   },
   "scripts": {
-    "build": "esbuild app/javascript/application_bootstrap.js --bundle --sourcemap --outdir=app/assets/builds",
-    "build:css": "sass ./app/assets/stylesheets/application_bootstrap.scss ./app/assets/builds/application.css --no-source-map --load-path=node_modules"
+    "build": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds",
+    "build:css": "sass ./app/assets/stylesheets/application.scss ./app/assets/builds/application.css --no-source-map --load-path=node_modules"
   }
 }

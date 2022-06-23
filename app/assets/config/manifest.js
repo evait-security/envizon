@@ -1,4 +1,4 @@
 //= link_tree ../images
-//= link application_bootstrap.js
-//= link application_bootstrap.scss
+//= link application.js
+//= link application.css
 //= link_directory ../stylesheets .scss

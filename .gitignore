@@ -17,8 +17,10 @@
 !/log/.keep
 !/tmp/.keep
 
-/node_modules
-/yarn-error.log
+# Ignore pidfiles, but keep the directory.
+/tmp/pids/*
+!/tmp/pids/
+!/tmp/pids/.keep
 
 .byebug_history
 vendor/bundle
@@ -42,6 +44,17 @@ config/secret
 
 # Ignore private Templates
 /report-templates/*
+/config/master.key
+
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity
+
+/app/assets/builds/*
+!/app/assets/builds/.keep
 
 **/.envizon_secret.env
 docker/*/envizon_backup
