@@ -41,5 +41,6 @@ if Label.all.empty?
                 { name: 'Anonymous FTP', description: 'Anonymous FTP login allowed', priority: 'warning' },
                 { name: 'MS17-010', description: 'A critical remote code execution vulnerability exists in Microsoft SMBv1', priority: 'danger' },
                 { name: 'MS08-067', description: 'A critical remote code execution vulnerability exists in Microsoft SMBv1', priority: 'danger' },
-                { name: 'WinRM', description: 'WinRM login enabled', priority: 'warning' }])
+                { name: 'WinRM', description: 'WinRM login enabled', priority: 'warning' },
+                { name: 'SMB guest user', description: 'Account "guest" with authentication level as user', priority: 'warning' }])
 end

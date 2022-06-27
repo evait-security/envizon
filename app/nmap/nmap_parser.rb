@@ -99,9 +99,10 @@ class NmapParser
           when 'smb-os-discovery'
             smb_os(client, data) if !data.empty?
           when 'smb-security-mode'
-            set_label(client, 'SMB Signing') if data['message_signing'].casecmp('disabled').zero? if !data.empty?
-          end
-
+            if !data.empty?
+              set_label(client, 'SMB Signing') if data['message_signing'].casecmp('disabled').zero?
+              set_label(client, 'SMB guest user') if data['account_used'].casecmp('guest').zero? && data['authentication_level'].casecmp('user').zero?
+            end
           check_vuln(client, name, data)
         end
       end
@@ -164,7 +165,7 @@ class NmapParser
         end
         if data.present?
           case name
-          when 'http-ntlm-info'
+          when 'http-ntlm-info', 'rdp-ntlm-info', 'ms-sql-ntlm-info'
             hostname = data['DNS_Computer_Name']
             hostname = data['NetBIOS_Computer_Name'] if hostname.blank?
             client.hostname = hostname unless hostname.blank?
