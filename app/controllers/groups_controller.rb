@@ -229,8 +229,7 @@ class GroupsController < ApplicationController
   # @optional [String] :search true/false, indicator if :selected_clients are a result of a search
   def delete_clients
     edited_groups = Array.new
-    search = ActiveModel::Type::Boolean.new.cast params[:search]
-
+    search = ActiveModel::Type::Boolean.new.cast params[:search] || params[:source_group] == "-1"
     search ? source_group = "-2" : source_group = Group.find(params[:source_group])
     selected_clients = params[:selected_clients]
 
