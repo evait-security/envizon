@@ -103,6 +103,7 @@ class NmapParser
               set_label(client, 'SMB Signing') if data['message_signing'].casecmp('disabled').zero?
               set_label(client, 'SMB guest user') if data['account_used'].casecmp('guest').zero? && data['authentication_level'].casecmp('user').zero?
             end
+          end
           check_vuln(client, name, data)
         end
       end
