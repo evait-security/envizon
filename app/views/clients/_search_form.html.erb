@@ -45,7 +45,17 @@
       </ul>
     </div>
     <a class="btn btn-outline-light me-2" onclick="addSearchOption('Output', 'Value', 0, '');"><i class="fas fa-file-code me-2"></i>Script output</a>
-    <a class="btn btn-light" onclick="load_port_entropy();"><i class="fas fa-chart-pie me-2"></i>Reload port entropy</a>
+    
+    <div class="btn-group me-2">
+      <button class="btn btn-light dropdown-toggle" type="button" id="dd_entropy" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-chart-pie me-2"></i>Load entropy
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dd_entropy">
+        <li><a class="dropdown-item" onclick="load_port_entropy();">Port entropy</a></li>
+        <li><a class="dropdown-item" onclick="load_service_entropy();">Service entropy</a></li>
+        <li><a class="dropdown-item" onclick="load_service_description_entropy();">Service description entropy</a></li>
+      </ul>
+    </div>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
   </div>
   <div class="modal-body">

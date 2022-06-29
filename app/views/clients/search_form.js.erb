@@ -8,6 +8,14 @@ function load_port_entropy(){
   pre_load();
   $("#search_result").html("<%= j(render('port_entropy')) %>");
 }
+function load_service_entropy(){
+  pre_load();
+  $("#search_result").html("<%= j(render('service_entropy')) %>");
+}
+function load_service_description_entropy(){
+  pre_load();
+  $("#search_result").html("<%= j(render('service_description_entropy')) %>");
+}
 
 $(document).on('click','.form_row_delete',function(){
   $(this).parents('.form_row').remove();

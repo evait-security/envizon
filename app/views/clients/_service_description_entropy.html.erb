@@ -1,0 +1,33 @@
+<table class="table w-100" id="datatable-pe">
+  <thead>
+    <tr>
+      <th>Port</th>
+      <th>Count</th>
+      <th>Percentage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% all_ports_count = Port.all.count %>
+    <% Port.where.not(description: [nil, ""]).group(:description).count.sort_by{|key, value| value}.each do |description, count| %>
+    <tr>
+      <td><a href="#" class="link-primary" onclick="addSearchOption('Port', 'Description', 0, '<%= description %>');"><%= description %></a></td>
+      <td><%= count %></td>
+      <td class="d-flex align-items-center">
+        <span class="me-2"><%= "#{(count.to_f / all_ports_count.to_f * 100).round()} %" %></span>
+        <div class="progress flex-fill" style="height: 8px;">
+          <div class="progress-bar" role="progressbar" style="width: <%= "#{(count.to_f / all_ports_count.to_f * 100).round()}" %>%;" aria-valuenow="<%= "#{(count.to_f / all_ports_count.to_f * 100).round()}" %>" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<script>
+$(document).ready(function() {
+  $('#datatable-pe').each(function() {
+    $( this ).DataTable({
+    });
+  });
+});
+</script>
