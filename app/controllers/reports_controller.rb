@@ -34,6 +34,7 @@ class ReportsController < ApplicationController
     @current_report = Report.first_or_create
     @report_parts = @current_report.report_parts
     @report_parts_ig = ReportPart.where(type: "IssueGroup")
+    @presentation_mode = current_user.settings.where(name: 'report_mode').first_or_create.value == 'presentation'
   end
 
   # GET /reports/1
