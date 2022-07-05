@@ -37,7 +37,7 @@ services:
     entrypoint: /entrypoint_development.sh
     # uncomment if using byebug:
     # docker-compose up -d, then attach to running container
-    # stdin_open: true
+    stdin_open: true
     # tty: true
   sidekiq-default:
     build:

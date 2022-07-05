@@ -1,3 +1,5 @@
+
+
 import Rails from "@rails/ujs"
 import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"
@@ -10,8 +12,12 @@ ActiveStorage.start()
 import * as bootstrap from 'bootstrap'
 import '@fortawesome/fontawesome-free/js/all'
 import 'fontawesome-iconpicker/dist/js/fontawesome-iconpicker'
+
 import Swal from 'sweetalert2'
 import toastr from 'toastr/toastr';
+import jquery from 'jquery';
+window.jQuery = jquery;
+window.$ = jquery;
 
 window.Swal = Swal
 window.bootstrap = bootstrap;
