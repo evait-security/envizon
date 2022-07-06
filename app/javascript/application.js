@@ -1,10 +1,8 @@
-
-
-import Rails from "@rails/ujs"
-import Turbolinks from "turbolinks"
-import * as ActiveStorage from "@rails/activestorage"
-// import "./channels/index.js"
-// import "./controllers"
+import Rails from "@rails/ujs";
+import Turbolinks from "turbolinks";
+import * as ActiveStorage from "@rails/activestorage";
+import './add_jquery';
+import './add_data_table';
 Rails.start()
 Turbolinks.start()
 ActiveStorage.start()
@@ -15,16 +13,11 @@ import 'fontawesome-iconpicker/dist/js/fontawesome-iconpicker'
 
 import Swal from 'sweetalert2'
 import toastr from 'toastr/toastr';
-import jquery from 'jquery';
-window.jQuery = jquery;
-window.$ = jquery;
 
 window.Swal = Swal
 window.bootstrap = bootstrap;
 window.toastr = toastr;
 window.Rails = Rails
-
-
 
 // custom swal rails confirm
 
@@ -59,7 +52,6 @@ Rails.confirm = function (message, element) {
 
 
 import "./global.js"
-import "./datatables_bs.js"
 import "./ip_address_datatable.js"
 import "./ckeditor.js"
 // import "./cable.js"

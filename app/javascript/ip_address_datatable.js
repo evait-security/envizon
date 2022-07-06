@@ -3,7 +3,7 @@
  * notation / colon. This can be most useful when using DataTables for a
  * networking application, and reporting information containing IP address.
  *
- *  @name IP addresses 
+ *  @name IP addresses
  *  @summary Sort IP addresses numerically
  *  @author Dominique Fournier
  *  @author Brad Wasson
