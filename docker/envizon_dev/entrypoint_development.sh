@@ -25,4 +25,5 @@ fi
 rm -f /usr/src/app/envizon/tmp/pids/server.pid
 bundle exec rails db:migrate
 bundle exec rails db:seed
+yarn install --check-files
 bundle exec foreman start -f Procfile.dev
