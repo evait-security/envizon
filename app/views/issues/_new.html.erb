@@ -18,15 +18,46 @@
             <td><i style="color: <%= issue_template.color_hex %>" class="fas fa-bug"></i></td>
             <td><%= issue_template.title %></td>
             <td>
-              <%= simple_form_for @issue do |f| %>
-                <% if @client %>
-                    <input type="hidden" name="client" value="<%= @client.id %>">
-                <% end %>
-                <input type="hidden" name="issue_template" value="<%= issue_template.id %>">
-                <button type="submit" class="btn btn-sm btn-outline-primary"><i class="fas fa-plus me-2"></i>create issue</button>
-              <% end %>
+              <div class="btn-toolbar" role="toolbar">
+                <div class="btn-group me-2" role="group">
+                  <%= simple_form_for @issue do |f| %>
+                    <% if @client %>
+                        <input type="hidden" name="client" value="<%= @client.id %>">
+                    <% end %>
+                    <input type="hidden" name="issue_template" value="<%= issue_template.id %>">
+                    <button type="submit" class="btn btn-sm btn-outline-primary me2"><i class="fas fa-plus me-2"></i>create</button>
+                  <% end %>
+                </div>
+                <div class="btn-group" role="group">
+                  <button class="btn btn-sm btn-inline btn-outline-primary" data-bs-toggle="modal" data-bs-target="#issue_template_preview_<%= issue_template.id %>"><i class="fas fa-eye"></i></button>
+                </div>
+              </div>
+
             </td>
           </tr>
+
+          <!-- Modal for issue_template preview -->
+          <div class="modal fade mt-5" aria-hidden="true" id="issue_template_preview_<%= issue_template.id %>">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header bg-secondary">
+                  <h5 class="modal-title text-white"><%= issue_template.title %></h5>
+                </div>
+                <div class="modal-body">
+                  <b>Severity</b>
+                  <p><i style="color: <%= issue_template.color_hex %>" class="fas fa-bug"></i></p>
+                  <b>Description</b>
+                  <p><%= issue_template.description %></p>
+                  <b>Rating</b>
+                  <p><%= issue_template.rating %></p>
+                  <b>Recommendation</b>
+                  <p><%= issue_template.recommendation %></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /Modal for issue_template preview -->
+
         <% end %>
       </tbody>
     </table>

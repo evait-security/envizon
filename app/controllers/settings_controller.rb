@@ -86,6 +86,7 @@ class SettingsController < ApplicationController
         PlaceholderValue.destroy_all
         Placeholder.destroy_all
         PlaceholderSet.destroy_all
+        session.delete(:current_placeholder_set)
 
         # error counter
         template_errors = 0
