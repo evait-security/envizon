@@ -1,4 +1,3 @@
-version: '2.1'
 volumes:
   socket-volume:
 services:
@@ -71,7 +70,7 @@ services:
       REDIS_URL: 'redis://127.0.0.1:6379/0'
   selenium:
     container_name: envizon_selenium_dev
-    image: selenium/standalone-chrome:3.141.59
+    image: selenium/standalone-chrome
     ports:
       - "4444:4444"
       - "9515:9515"
