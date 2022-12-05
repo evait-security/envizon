@@ -1,6 +1,7 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  mount Avo::Engine, at: Avo.configuration.root_path
   resources :notes, only: [:create, :destroy]
   resources :issue_groups
   resources :issues
