@@ -34,6 +34,7 @@ class ReportsController < ApplicationController
     @current_report = Report.first_or_create
     @report_parts = @current_report.report_parts
     @report_parts_ig = ReportPart.where(type: "IssueGroup")
+    @presentation_mode = current_user.settings.where(name: 'report_mode').first_or_create.value == 'presentation'
   end
 
   # GET /reports/1
@@ -129,12 +130,14 @@ class ReportsController < ApplicationController
                 HTML
                 ), # report.issue_groups->issues->recommendation
                 issue.screenshots.order(:description).each_with_index.map do |screenshot, index_screenshot|
+                  image_variant = params['blur'].present? ? screenshot.image.variant(blur: "0x6").processed.key : screenshot.image.key
                   s_image.new( # report.issue_groups->issues->screenshots
                     screenshot, # report.issue_groups->issues->screenshots->item
                     index_screenshot, # report.issue_groups->issues->screenshots->index
                     screenshot.description, # report.issue_groups->issues->screenshots->description
                     # Sablon.content(:image, '/usr/src/app/envizon/report-templates/test.png', properties: {height: '2cm', width: '2cm'})  #report.issue_groups->issues->screenshots->content
-                    Sablon.content(:image, StringIO.new(IO.binread(ActiveStorage::Blob.service.send(:path_for, screenshot.image.key))), filename: 'test.png', properties: { height: "#{screenshot.size_relation * 16.08}cm", width: '16.08cm' }) # report.issue_groups->issues->screenshots->content
+                    Sablon.content(:image, StringIO.new(IO.binread(ActiveStorage::Blob.service.send(:path_for, image_variant))), filename: 'test.png', properties: { height: "#{screenshot.size_relation * 16.08}cm", width: '16.08cm' }) # report.issue_groups->issues->screenshots->content
+
                     # use params like:
                     # Sablon.content(:image, 'path', filename: 'test.png', properties: {height: '2cm', width: '2cm'})
                   )

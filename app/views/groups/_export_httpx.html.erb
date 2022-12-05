@@ -1,0 +1,27 @@
+<%= simple_form_for :group, url: groups_export_httpx_path do |f| %>
+  <div class="modal-content">
+    <div class="modal-header bg-secondary">
+      <h5 class="modal-title text-white">Export a list of http based services as url from the selected clients to text file</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col">
+          <%= f.input :file_name, placeholder: "Provide your filename without extension", hint: '"exported_clients" will be default, .txt will be appended always' %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <%= f.label :selected_clients %>
+          <% clients.each do | temp_client | %>
+            <span class="badge bg-secondary"><%= temp_client.ip %></span>
+            <input type="hidden" name="selected_clients[]" value="<%= temp_client.id %>" />
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <%= f.button :submit, 'Export', :class => 'btn-primary', :onclick => "bootstrap.Modal.getInstance(document.getElementById('general-modal')).hide();" %>
+    </div>
+  </div>
+<% end %>

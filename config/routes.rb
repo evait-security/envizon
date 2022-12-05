@@ -39,6 +39,9 @@ Rails.application.routes.draw do
   post '/groups/export_form' => 'groups#export_form'
   post '/groups/export' => 'groups#export'
 
+  post '/groups/export_httpx_form' => 'groups#export_httpx_form'
+  post '/groups/export_httpx' => 'groups#export_httpx'
+
   post '/groups/delete_form' => 'groups#delete_form'
   post '/groups/delete' => 'groups#delete'
 

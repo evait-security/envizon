@@ -229,8 +229,7 @@ class GroupsController < ApplicationController
   # @optional [String] :search true/false, indicator if :selected_clients are a result of a search
   def delete_clients
     edited_groups = Array.new
-    search = ActiveModel::Type::Boolean.new.cast params[:search]
-
+    search = ActiveModel::Type::Boolean.new.cast params[:search] || params[:source_group] == "-1"
     search ? source_group = "-2" : source_group = Group.find(params[:source_group])
     selected_clients = params[:selected_clients]
 
@@ -311,6 +310,33 @@ class GroupsController < ApplicationController
     end
   end
 
+  # @url /groups/export_httpx_form
+  # @action POST
+  #
+  # Renders a form to export clients
+  def export_httpx_form
+    clients = Client.find(params[:clients]) if params.key?(:clients)
+
+    if clients.nil? || clients.empty?
+      respond_with_notify
+    else
+      locals = { clients: clients }
+      respond_root_path_js(:export_httpx, locals)
+    end
+  end
+
+  def export_httpx
+    file_name = (params[:group][:file_name].present? ? params[:group][:file_name] : 'exported_clients')
+    clients = Client.where(id: params[:selected_clients]) if params[:selected_clients].present?
+    if file_name && clients.present?
+      file_name << '.txt' unless file_name =~ /.+\.(txt)$/
+      data = clients.map{|client| client.ports.map{|port| port.web_urls}}.flatten.join("\n")
+      send_data data, filename: file_name, type: 'text/plain'
+    else
+      respond_with_notify('That didn\'t work.', 'alert')
+    end
+  end
+
   private
 
   def load_groups_and_segments
@@ -321,19 +347,19 @@ class GroupsController < ApplicationController
     # /24
     @segments_24 = []
     all_ips.group_by {|ip|ip.split('.')[0,3]}.each do |segment,clients|
-      @segments_24 << [segment.join('.'), clients.size, @all_clients.select{|c| c.ip.start_with?("#{segment.join('.')}.")}.map{|c|c.groups.pluck(:name)}.flatten.uniq.sort]
+      @segments_24 << [segment.join('.'), clients.uniq.size, @all_clients.select{|c| c.ip.start_with?("#{segment.join('.')}.")}.map{|c|c.groups.pluck(:name)}.flatten.uniq.sort]
     end
 
     # /16
     @segments_16 = []
     all_ips.group_by {|ip|ip.split('.')[0,2]}.each do |segment,clients|
-      @segments_16 << [segment.join('.'), clients.size, @all_clients.select{|c| c.ip.start_with?("#{segment.join('.')}.")}.map{|c|c.groups.pluck(:name)}.flatten.uniq.sort]
+      @segments_16 << [segment.join('.'), clients.uniq.size, @all_clients.select{|c| c.ip.start_with?("#{segment.join('.')}.")}.map{|c|c.groups.pluck(:name)}.flatten.uniq.sort]
     end
 
     # /8
     @segments_8 = []
     all_ips.group_by {|ip|ip.split('.')[0,1]}.each do |segment,clients|
-      @segments_8 << [segment.join('.'), clients.size, @all_clients.select{|c| c.ip.start_with?("#{segment.join('.')}.")}.map{|c|c.groups.pluck(:name)}.flatten.uniq.sort]
+      @segments_8 << [segment.join('.'), clients.uniq.size, @all_clients.select{|c| c.ip.start_with?("#{segment.join('.')}.")}.map{|c|c.groups.pluck(:name)}.flatten.uniq.sort]
     end
   end
 

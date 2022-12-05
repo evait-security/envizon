@@ -86,10 +86,12 @@ class SettingsController < ApplicationController
         PlaceholderValue.destroy_all
         Placeholder.destroy_all
         PlaceholderSet.destroy_all
+        session.delete(:current_placeholder_set)
 
         # error counter
         template_errors = 0
         template_count = 0
+        template_errors_array = []
 
         # download zip file to temp location
         tempfile = Down.download(m_url)
@@ -114,13 +116,17 @@ class SettingsController < ApplicationController
               template_count += 1
             end
           rescue => exception
-            # return { message: exception, type: 'alert' }
+            template_errors_array << exception.to_s
             template_errors += 1
             next
           end
         end
         tempfile.delete
-        { message: "#{template_count} templates imported. #{template_errors} errors occurred.", type: 'success' }
+        if template_errors_array.empty?
+          { message: "#{template_count} templates imported.", type: 'success' }
+        else
+          { message: "#{template_count} templates imported. #{template_errors} errors occurred. #{template_errors_array.join(";")}", type: 'alert' }
+        end
       rescue => exception
         { message: exception, type: 'alert' }
       end

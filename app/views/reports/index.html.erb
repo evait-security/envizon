@@ -55,6 +55,11 @@
             <% end %>
           </li>
           <li>
+            <%= link_to export_odt_path(@current_report, :blur => "true"), class: "dropdown-item" do %>
+              <i class="fas fa-file-word me-2"></i>Export current report as docx (blurred images)
+            <% end %>
+          </li>
+          <li>
             <%= link_to export_xlsx_path(@current_report), class: "dropdown-item" do %>
               <i class="fas fa-file-excel me-2"></i>Export current report as xlsx
             <% end %>
@@ -81,9 +86,15 @@
     if (event.ctrlKey || event.metaKey) {
       switch (String.fromCharCode(event.which).toLowerCase()) {
       case 's':
-          event.preventDefault();
-          $(".btn-save").trigger("click");
-          break;
+        event.preventDefault();
+        // submit closest form (screenshot or issue)
+        if ($(':focus').closest("form").length == 1) {
+          $(':focus').closest("form").find(".btn-save").trigger("click"); //submit the form with jquery will not submit your current values
+        } else {
+          // fallback if no input is focused and save the current issue or group
+          $(".btn-save-fallback").trigger("click");
+        }
+        break;
       }
     }
   });

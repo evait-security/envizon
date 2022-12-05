@@ -2,7 +2,7 @@
   <% if rp.is_a? Issue %>
     <div class="btn-group d-flex btn-group-action-wrapper" role="group">
       <%= link_to edit_issue_path(rp), class: "btn flex-grow-1 text-left list-group-item-action issue-#{rp.id}", remote: true do %>
-        <i style="color: <%= rp.color_hex %>" class="fas fa-bug me-2"></i><%= rp.title %><span class="badge bg-secondary ms-2"><%= rp.index %></span>
+        <i style="color: <%= rp.color_hex %>" class="fas fa-bug me-2"></i><%= rp.title %><span class="badge bg-secondary ms-2"><%= @presentation_mode ? '' : rp.index %></span>
       <% end %>
       <div class="btn-group" role="group">
         <button id="btnIDrpp<%= rp.id %>" type="button" class="btn dropdown-toggle btn-group-action" data-bs-toggle="dropdown" aria-expanded="false"></button>

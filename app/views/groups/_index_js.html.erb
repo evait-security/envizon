@@ -351,6 +351,29 @@
     $(this).blur();
   });
 
+  // export selected clients - group header
+  $(document).on("click", '.grp_export_httpx', function () {
+    var clients = new Array();
+    var id = $('.selected-group').attr('gid');
+    $("#datatable-" + id + "_wrapper").find(".ui-selectable tr a").each(function () {
+      if ($(this).parents(".ui-selectee").hasClass("ui-selected")) {
+        clients.push($(this).attr("id"));
+      }
+    });
+
+    $.ajax({
+      url: "<%= groups_export_httpx_form_path %>",
+      dataType: "script",
+      cache: true,
+      method: "post",
+      data: {
+        clients: clients
+      }
+    });
+
+    $(this).blur();
+  });
+
   // mark all clients in group - group header
   $(document).on("click", '.grp_mark_all', function () {
     var id = $('.selected-group').attr('gid');

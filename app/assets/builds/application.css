@@ -10203,8 +10203,11 @@ label {
   margin-bottom: 0.2rem !important;
 }
 .methodology-modal-body code {
-  display: block;
   white-space: pre-wrap;
+}
+.methodology-modal-body .highlight {
+  font-weight: 800;
+  color: #1565C0;
 }
 
 .hidden {
