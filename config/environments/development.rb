@@ -65,7 +65,15 @@ Rails.application.configure do
   config.assets.quiet = true
 
   # allow connections from all around docker in dev env
-  config.web_console.whitelisted_ips = %w[172.0.0.0/8]
+  # config.web_console.whitelisted_ips = %w[172.0.0.0/8]
+      
+  # allow web-console from docker
+    # https://stackoverflow.com/questions/29417328/how-to-disable-cannot-render-console-from-on-rails
+  if File.file?('/.dockerenv') == true
+    config.web_console.whitelisted_ips = Socket.ip_address_list.reduce([]) do |res, addrinfo|
+      addrinfo.ipv4? ? res << IPAddr.new(addrinfo.ip_address).mask(24) : res
+    end
+  end
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true

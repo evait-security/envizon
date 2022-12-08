@@ -58,7 +58,7 @@ class ScansController < ApplicationController
         scan.save
 
         args_parse = {
-          'xmlpath' => destination,
+          'xmlpath' => destination.to_s,
           'scan_id' => scan.id,
           'user_id' => current_user.id
         }

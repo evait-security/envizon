@@ -1,5 +1,5 @@
 class NmapParser
-  require 'nmap/program'
+  require 'nmap/command'
   require 'nmap/xml'
 
   attr_reader :result
@@ -11,9 +11,8 @@ class NmapParser
   end
 
   def parse
-    Nmap::XML.new(@xml) do |xml|
+    Nmap::XML.open(@xml) do |xml|
       @result = [xml.scanner.arguments, xml.scanner.start_time]
-
       xml.up_hosts.each do |host|
         client = prepare_client(host)
         os_info(host, client)
@@ -83,7 +82,7 @@ class NmapParser
 
   def scripts(host, client)
     begin
-      host.host_script.script_data.each_pair do |name, data|
+      host.host_script.scripts.each_pair do |name, data|
         if data.present?
           data.default = '' if data.is_a?(Hash)
           db_output = Output.where(client_id: client.id, name: name).first_or_create
@@ -144,7 +143,7 @@ class NmapParser
   def port_scripts(db_port, port)
     begin
       client = db_port.client
-      port.script_data.each_pair do |name, data|
+      port.scripts.each_pair do |name, data|
         if data.present?
           data.default = '' if data.is_a?(Hash)
           output = Output.where(port_id: db_port.id, name: name).first_or_create
