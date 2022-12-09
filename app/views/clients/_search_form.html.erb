@@ -6,11 +6,11 @@
        <i class="fas fa-laptop me-2"></i>Client
       </button>
       <ul class="dropdown-menu" aria-labelledby="dd_client">
-        <li><a class="dropdown-item" href="#" onclick="addSearchOption('Client', 'Hostname', 0, '');">Hostname</a></li>
-        <li><a class="dropdown-item" href="#" onclick="addSearchOption('Client', 'IP', 0, '');">IP Adress</a></li>
-        <li><a class="dropdown-item" href="#" onclick="addSearchOption('Client', 'MAC', 0, '');">MAC Adress</a></li>
-        <li><a class="dropdown-item" href="#" onclick="addSearchOption('Client', 'OS', 0, '');">Operating System</a></li>
-        <li><a class="dropdown-item" href="#" onclick="addSearchOption('Client', 'CPE', 0, '');">CPE</a></li>
+        <li><a class="dropdown-item" onclick="addSearchOption('Client', 'Hostname', 0, '');">Hostname</a></li>
+        <li><a class="dropdown-item" onclick="addSearchOption('Client', 'IP', 0, '');">IP Adress</a></li>
+        <li><a class="dropdown-item" onclick="addSearchOption('Client', 'MAC', 0, '');">MAC Adress</a></li>
+        <li><a class="dropdown-item" onclick="addSearchOption('Client', 'OS', 0, '');">Operating System</a></li>
+        <li><a class="dropdown-item" onclick="addSearchOption('Client', 'CPE', 0, '');">CPE</a></li>
       </ul>
     </div>
     <div class="btn-group me-2">
@@ -18,9 +18,9 @@
         <i class="fas fa-sitemap me-2"></i>Port
       </button>
       <ul class="dropdown-menu" aria-labelledby="dd_port">
-        <li><a class="dropdown-item" href="#" onclick="addSearchOption('Port', 'Number', 0, '');">Number</a></li>
-        <li><a class="dropdown-item" href="#" onclick="addSearchOption('Port', 'Service', 0, '');">Service</a></li>
-        <li><a class="dropdown-item" href="#" onclick="addSearchOption('Port', 'Description', 0, '');">Description</a></li>
+        <li><a class="dropdown-item" onclick="addSearchOption('Port', 'Number', 0, '');">Number</a></li>
+        <li><a class="dropdown-item" onclick="addSearchOption('Port', 'Service', 0, '');">Service</a></li>
+        <li><a class="dropdown-item" onclick="addSearchOption('Port', 'Description', 0, '');">Description</a></li>
       </ul>
     </div>
     <div class="btn-group me-2">
@@ -29,7 +29,7 @@
       </button>
       <ul class="dropdown-menu" aria-labelledby="dd_group">
         <% Group.all.pluck(:name).uniq.each do |grp| %>
-          <li><a class="dropdown-item" href="#" onclick="this.blur(); addSearchOption('Group', '<%= grp %>', 1);"><%= grp %></a></li>
+          <li><a class="dropdown-item" onclick="this.blur(); addSearchOption('Group', '<%= grp %>', 1);"><%= grp %></a></li>
         <% end %>
       </ul>
     </div>
@@ -40,7 +40,7 @@
       <ul class="dropdown-menu" aria-labelledby="dd_label">
         <% Label.all.uniq.each do |lbl| %>
           <% lbl_count = lbl.clients.size %>
-          <li><a class="dropdown-item" href="#" onclick="this.blur(); addSearchOption('Label', '<%= lbl.name %>', 1);"><%= lbl.name %><span class="badge ms-2 <%= lbl_count > 0 ? 'bg-primary': 'bg-secondary' %>"><%= lbl_count %></span></a></li>
+          <li><a class="dropdown-item" onclick="this.blur(); addSearchOption('Label', '<%= lbl.name %>', 1);"><%= lbl.name %><span class="badge ms-2 <%= lbl_count > 0 ? 'bg-primary': 'bg-secondary' %>"><%= lbl_count %></span></a></li>
         <% end %>
       </ul>
     </div>

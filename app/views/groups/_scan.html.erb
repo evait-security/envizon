@@ -13,7 +13,7 @@
         <ul class="dropdown-menu dropdown-menu-end">
           <% SavedScan.all.to_a.each do | saved_scan | %>
             <li>
-              <a class="dropdown-item" href="#" onclick="$('#command').val('<%= saved_scan.parameter %>');">
+              <a class="dropdown-item" onclick="$('#command').val('<%= saved_scan.parameter %>');">
                 <%= saved_scan.name %>
               </a>
             </li>

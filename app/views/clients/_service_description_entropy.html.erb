@@ -10,7 +10,7 @@
     <% all_ports_count = Port.all.count %>
     <% Port.where.not(description: [nil, ""]).group(:description).count.sort_by{|key, value| value}.each do |description, count| %>
     <tr>
-      <td><a href="#" class="link-primary" onclick="addSearchOption('Port', 'Description', 0, '<%= description %>');"><%= description %></a></td>
+      <td><a class="btn link-primary" onclick="addSearchOption('Port', 'Description', 0, '<%= description %>');"><%= description %></a></td>
       <td><%= count %></td>
       <td class="d-flex align-items-center">
         <span class="me-2"><%= "#{(count.to_f / all_ports_count.to_f * 100).round()} %" %></span>
