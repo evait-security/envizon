@@ -23,8 +23,13 @@ new bootstrap.Modal(document.getElementById('general-modal')).show();
     const pre = button.parentElement ;
     let code = pre.querySelector("code");
     let text = code.innerText;
-    copyToClipboard(text);
-    toastr.info("Codeblock copied to clipboard");
+    navigator.clipboard.writeText($("#hostview_ip").text()).then(function() {
+      // success copy to clipboard
+      toastr.info("Codeblock copied to clipboard");
+    }, function(err) {
+      toastr.error("Failed copy codeblock to clipboard");
+      // failed copy to clipboard
+    });    
   }
 
 // END: code block copy button
