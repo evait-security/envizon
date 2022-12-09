@@ -57,9 +57,9 @@ import "./ckeditor.js"
 // import "./cable.js"
 
 // fix problem of missing X-CSRF-Token on all ajax requests
-// https://stackoverflow.com/questions/7203304/warning-cant-verify-csrf-token-authenticity-rails
+// inspirated from https://stackoverflow.com/questions/7203304/warning-cant-verify-csrf-token-authenticity-rails
 $.ajaxSetup({
   headers: {
-    'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+    'X-CSRF-Token': Rails.csrfToken()
   }
 });
