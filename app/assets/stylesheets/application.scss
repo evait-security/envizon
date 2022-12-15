@@ -25,6 +25,7 @@ $utilities: map-merge(
 );
 
 @import 'bootstrap/scss/bootstrap';
+@import 'jquery-ui';
 @import "general";
 @import "extend";
 @import "datatable_bs";
