@@ -5,7 +5,7 @@ GIT
     ipaddress (0.8.3)
 
 GIT
-  remote: https://github.com/sophsec/ruby-nmap.git
+  remote: https://github.com/postmodern/ruby-nmap.git
   revision: 7868c37ee0f6ae8ef31301117a47a4a35fde684f
   specs:
     ruby-nmap (1.0.1)
@@ -127,7 +127,7 @@ GEM
     concurrent-ruby (1.1.10)
     connection_pool (2.3.0)
     crass (1.0.6)
-    cssbundling-rails (1.1.1)
+    cssbundling-rails (1.1.2)
       railties (>= 6.0.0)
     date (3.3.1)
     descendants_tracker (0.0.4)
@@ -190,7 +190,7 @@ GEM
       rake
       rdoc
       semver2
-    jsbundling-rails (1.0.3)
+    jsbundling-rails (1.1.1)
       railties (>= 6.0.0)
     json (2.6.3)
     jwt (2.5.0)
