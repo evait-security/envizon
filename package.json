@@ -2,7 +2,7 @@
   "name": "app",
   "private": "true",
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^6.1.0",
+    "@fortawesome/fontawesome-free": "^6.2.1",
     "@hotwired/stimulus": "^3.0.1",
     "@hotwired/turbo-rails": "^7.1.1",
     "@popperjs/core": "^2.11.4",
@@ -23,7 +23,7 @@
     "whatwg-fetch": "^3.6.2"
   },
   "scripts": {
-    "build": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds",
+    "build": "esbuild app/javascript/*.* --bundle --loader:.woff=file --loader:.woff2=file --sourcemap --outdir=app/assets/builds",
     "build:css": "sass ./app/assets/stylesheets/application.scss ./app/assets/builds/application.css --no-source-map --load-path=node_modules"
   }
 }

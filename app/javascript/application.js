@@ -7,17 +7,17 @@ Rails.start()
 Turbolinks.start()
 ActiveStorage.start()
 
-import * as bootstrap from 'bootstrap'
-import '@fortawesome/fontawesome-free/js/all'
-import 'fontawesome-iconpicker/dist/js/fontawesome-iconpicker'
+import * as bootstrap from 'bootstrap';
+import "@fortawesome/fontawesome-free/js/all";
+import 'fontawesome-iconpicker/dist/js/fontawesome-iconpicker';
 
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 import toastr from 'toastr/toastr';
 
-window.Swal = Swal
+window.Swal = Swal;
 window.bootstrap = bootstrap;
 window.toastr = toastr;
-window.Rails = Rails
+window.Rails = Rails;
 
 // custom swal rails confirm
 

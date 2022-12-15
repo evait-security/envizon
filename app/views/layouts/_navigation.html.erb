@@ -4,37 +4,37 @@
       <%= image_tag("logo/envizon-wide-export-white.svg", width: "140px") %>
     </a>
     <div class="d-flex">
-      <div class="nav-item <%= 'active' if current_page?(groups_path) %>">
+      <div class="me-2 nav-item <%= 'active' if current_page?(groups_path) %>">
         <%= link_to groups_path, class: "nav-link text-white" do %>
           <i class="fas fa-server me-2"></i>Groups
         <% end %>
       </div>
-      <div class="nav-item <%= 'active' if current_page?(images_path) %>">
+      <div class="me-2 nav-item <%= 'active' if current_page?(images_path) %>">
         <%= link_to images_path, class: "nav-link text-white" do %>
           <i class="fas fa-camera me-2"></i>Images
         <% end %>
       </div>
-      <div class="nav-item <%= 'active' if current_page?(new_scan_path) %>">
+      <div class="me-2 nav-item <%= 'active' if current_page?(new_scan_path) %>">
         <%= link_to new_scan_path, class: "nav-link text-white" do %>
           <i class="fas fa-project-diagram me-2"></i>Scanning
         <% end %>
       </div>
-      <div class="nav-item">
+      <div class="me-2 nav-item">
         <a class="nav-link text-white sidekiq_modal" href="#">
           <i class="fas fa-tasks me-2"></i>Tasks
         </a>
       </div>
-      <div class="nav-item <%= 'active' if controller_name == "methodologies" %>">
+      <div class="me-2 nav-item <%= 'active' if controller_name == "methodologies" %>">
         <%= link_to methodologies_index_path, class: "nav-link text-white" do %>
           <i class="fas fa-book me-2"></i>Methodologies
         <% end %>
       </div>
-      <div class="nav-item <%= 'active' if current_page?(reports_path) %>">
+      <div class="me-2 nav-item <%= 'active' if current_page?(reports_path) %>">
         <%= link_to reports_path, class: "nav-link text-white" do %>
           <i class="fas fa-book-open me-2"></i>Reporting
         <% end %>
       </div>
-      <div class="nav-item dropdown">
+      <div class="me-2 nav-item dropdown">
         <a class="nav-link dropdown-toggle text-white" data-bs-toggle="dropdown" id="userDropdown" href="#"><i class="fas fa-user-ninja me-2"></i></a>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
           <li>
