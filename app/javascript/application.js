@@ -2,7 +2,7 @@ import Rails from "@rails/ujs";
 import Turbolinks from "turbolinks";
 import * as ActiveStorage from "@rails/activestorage";
 import './add_jquery';
-import './add_data_table';
+//import './add_data_table';
 Rails.start()
 Turbolinks.start()
 ActiveStorage.start()
@@ -52,7 +52,7 @@ Rails.confirm = function (message, element) {
 
 
 import "./global.js"
-import "./ip_address_datatable.js"
+// import "./ip_address_datatable.js"
 import "./ckeditor.js"
 // import "./cable.js"
 
