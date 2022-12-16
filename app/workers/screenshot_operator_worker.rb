@@ -23,7 +23,7 @@ class ScreenshotOperatorWorker
         end
       end
       # ScreenshotWorker.wait_until_finish
-      ActionCable.server.broadcast 'notification_channel', message: 'Screenshot jobs scheduled'
+      ActionCable.server.broadcast 'notification_channel', { message: 'Screenshot jobs scheduled' }
     end
   end
 end

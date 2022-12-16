@@ -8,6 +8,6 @@ class NotificationChannel < ApplicationCable::Channel
   def unsubscribed; end
 
   def notify(data)
-    ActionCable.server.broadcast 'notification_channel', { body: data['message']}
+    ActionCable.server.broadcast 'notification_channel', { message: data['message'] }
   end
 end

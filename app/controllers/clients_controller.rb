@@ -268,11 +268,11 @@ class ClientsController < ApplicationController
 
   def respond_with_refresh(message, mod_gids, delete, type = 'notice')
     if current_user.settings.find_by_name('global_notify').value.include? "true"
-      ActionCable.server.broadcast 'notification_channel', message: message
+      ActionCable.server.broadcast 'notification_channel', { message: message }
     end
     @message = message
     @type = type
-    ActionCable.server.broadcast 'update_channel', ids: mod_gids
+    ActionCable.server.broadcast 'update_channel', { ids: mod_gids }
     respond_to do |format|
       format.html { redirect_to root_path }
       format.js { render 'groups/group_refresh', locals: { delete: delete } }

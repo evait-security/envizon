@@ -20,7 +20,7 @@ class ScanParseWorker
         user.save
         # let's catch everything, because we want to just signal all kinds of failed scans
       rescue
-        ActionCable.server.broadcast('notification_channel', { body: "Scan '#{scan.name}' Part #{args['run_counter']}/#{args['max_run_counter']} failed" })
+        ActionCable.server.broadcast('notification_channel', { message: "Scan '#{scan.name}' Part #{args['run_counter']}/#{args['max_run_counter']} failed" })
       ensure
         FileUtils.rm_f(args['xmlpath'])
       end

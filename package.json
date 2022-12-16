@@ -6,7 +6,7 @@
     "@hotwired/stimulus": "^3.0.1",
     "@hotwired/turbo-rails": "^7.1.1",
     "@popperjs/core": "^2.11.4",
-    "@rails/actioncable": "7.0.3",
+    "@rails/actioncable": "^7.0.3",
     "@rails/activestorage": "7.0.3",
     "@rails/ujs": "7.0.3",
     "bootstrap": "^5.1.3",

@@ -26,7 +26,7 @@ class ScanWorker
             next unless User.first.settings.where(name: 'global_notify').first.value.include? 'true'
 
             message = "Scan '#{scan.name}' Part #{args['run_counter']}/#{args['max_run_counter']} is #{c} done."
-            ActionCable.server.broadcast 'notification_channel', message: message
+            ActionCable.server.broadcast 'notification_channel', { message: message }
           end
           # TODO: message on fail?
           # exception?
@@ -52,7 +52,7 @@ class ScanWorker
       else
         # send error message
         message = "Nmap threw an error: #{return_value.exitstatus}! - Scan '#{scan.name}' Part #{args['run_counter']}/#{args['max_run_counter']}"
-        ActionCable.server.broadcast 'notification_channel', message: message
+        ActionCable.server.broadcast 'notification_channel', { message: message }
         scan.command = 'Scan failed.'
         scan.save
       end

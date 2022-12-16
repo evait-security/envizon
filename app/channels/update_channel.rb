@@ -8,6 +8,6 @@ class UpdateChannel < ApplicationCable::Channel
   def unsubscribed; end
 
   def notify(data)
-    ActionCable.server.broadcast 'update_channel', ids: data['ids']
+    ActionCable.server.broadcast 'update_channel', { ids: data['ids'] }
   end
 end
