@@ -55,7 +55,8 @@ Rails.confirm = function (message, element) {
 import "./global.js"
 // import "./ip_address_datatable.js"
 import "./ckeditor.js"
-// import "./cable.js"
+import "./channels/notification.js"
+import "./channels/update.js"
 
 // fix problem of missing X-CSRF-Token on all ajax requests
 // inspirated from https://stackoverflow.com/questions/7203304/warning-cant-verify-csrf-token-authenticity-rails

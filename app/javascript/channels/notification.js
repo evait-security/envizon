@@ -1,4 +1,6 @@
-App.notification = App.cable.subscriptions.create("NotificationChannel", {
+import consumer from "./consumer"
+
+consumer.subscriptions.create({ channel: "NotificationChannel" }, {
   connected: function() {
     // Called when the subscription is ready for use on the server
   },
