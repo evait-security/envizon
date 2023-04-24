@@ -1,4 +1,8 @@
 # envizon - by evait security
+
+## EOL
+https://github.com/evait-security/envizon/issues/130
+
 ## network visualization & pentest reporting
 Version 5.0
 
